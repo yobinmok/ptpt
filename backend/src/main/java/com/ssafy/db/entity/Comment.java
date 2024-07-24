@@ -21,7 +21,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "evaluate_no")
-    private Evaluate evaluate;
+    private Evaluation evaluation;
 
     private String commentContent;
 }

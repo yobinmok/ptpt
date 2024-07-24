@@ -28,6 +28,6 @@ public class Profile {
     private Statistic statistic;
 
     private int presentationNo;
-    private int evaluateNo;
+    private int evaluationNo;
     private int studyroomNo;
 }
