@@ -10,10 +10,10 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Evaluate {
+public class Evaluation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int evaluateNo;
+    private int evaluationNo;
 
     private String presentationName;
     private int delivery;
