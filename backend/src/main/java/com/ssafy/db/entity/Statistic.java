@@ -15,10 +15,10 @@ public class Statistic {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int statisticNo;
 
-    private Integer totalDelivery;
-    private Integer totalExpression;
-    private Integer totalPreparation;
-    private Integer totalLogic;
-    private Integer totalSuitability;
-    private Integer evaluateQuantity;
+    private int totalDelivery;
+    private int totalExpression;
+    private int totalPreparation;
+    private int totalLogic;
+    private int totalSuitability;
+    private int evaluateQuantity;
 }

@@ -16,9 +16,9 @@ public class Evaluate {
     private int evaluateNo;
 
     private String presentationName;
-    private Integer delivery;
-    private Integer expression;
-    private Integer preparation;
-    private Integer logic;
-    private Integer suitability;
+    private int delivery;
+    private int expression;
+    private int preparation;
+    private int logic;
+    private int suitability;
 }
