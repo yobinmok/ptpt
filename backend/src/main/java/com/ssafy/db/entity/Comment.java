@@ -20,7 +20,7 @@ public class Comment {
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "evaluate_no")
+    @JoinColumn(name = "evaluation_no")
     private Evaluation evaluation;
 
     private String commentContent;
