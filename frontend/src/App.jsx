@@ -1,8 +1,8 @@
-// import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/LoginPage/LoginPage'
 import SignupPage from './pages/SignupPage'
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
