@@ -16,9 +16,11 @@ const Button = styled.button`
 `;
 
 const LoginPage = () => {
-    // const REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
+    // .env 파일에서 관리할 key , uri
+    // const Rest_api_key = process.env.REACT_APP_KAKAO_REST_API_KEY;
+    // const redirect_uri = process.env.REACT_APP_KAKAO_REDIRECT_URI;
     const REST_API_KEY = '5ecb22966f2e7ecdd957524875aea32e';
-
+    
     // 로그인 성공하면 이동할 REDIRECT URI
     const REDIRECT_URI = 'http://localhost:5173/auth';
     const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;

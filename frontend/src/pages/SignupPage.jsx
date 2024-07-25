@@ -3,9 +3,9 @@ import LoginForm from '../components/organisms/LoginForm';
 import LoginContextProvider from '../contexts/LoginContext';
 
 const SignupPage = () => (
-    <LoginContextProvider>
-        <LoginForm />
-    </LoginContextProvider>
+  <LoginContextProvider>
+    <LoginForm />
+  </LoginContextProvider>
 );
 
 export default SignupPage;
