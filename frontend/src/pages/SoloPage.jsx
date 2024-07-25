@@ -1,7 +1,13 @@
+import { Button } from '@mui/material';
+
 const SoloPage = () => {
-    return (
-        <div>혼자하기 화면</div>
-    );
+  return (
+    <>
+      <Button variant='outlined' disableElevation color='primary'>
+        버튼
+      </Button>
+    </>
+  );
 };
 
 export default SoloPage;
