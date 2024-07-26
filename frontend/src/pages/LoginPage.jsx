@@ -1,18 +1,14 @@
 import React from 'react';
-import LoginForm from '../components/organisms/LoginForm';
-import LoginContextProvider from '../contexts/LoginContext'
 import styled from 'styled-components';
+import KakaoButton from '../components/atoms/KakaoButton'
 
-// 버튼 디자인 대충 만들기
-const Button = styled.button`
-  background-color: #fee500;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  color: #3c1e1e;
-  margin-top: 160px; /* 상단 여백 추가 */
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 20px;
 `;
 
 const LoginPage = () => {
@@ -30,10 +26,13 @@ const LoginPage = () => {
     }
 
     return (
-        <Button type='button' onClick={loginHandler}>
-            카카오로그인버튼컴포넌트
-        </Button>
-    )
+        <Container>
+          <h1>Login Page</h1>
+          <KakaoButton onClick={loginHandler} symbolSize="24px" symbolMargin="8px">
+            카카오 로그인
+          </KakaoButton>
+        </Container>
+      );
 }
 
 export default LoginPage;

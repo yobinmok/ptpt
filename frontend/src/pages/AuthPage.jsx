@@ -22,27 +22,41 @@ const AuthPage = () => {
         console.log(PARAMS);
         console.log(KAKAO_CODE);
     
-        // if (code) {
-        //   fetchAccessToken(code);
-        // }
+        if (code) {
+          fetchAccessToken(code);
+        }
            
     }, []);
 
     // Access Token 요청 함수
-    // const fetchAccessToken = async (authorizationCode) => {
-    //   try {
-    //     const response = await axios.post('백엔드 포트 번호', {
-    //       code : authorizationCode
-    //     });
-    //     // 백엔드 응답 데이터
-    //     const data = response.data;
-    //     // Access Token 상태에 저장
-    //     setAccessToken(data.accessToken);
-    //     console.log('Access Token:', data.accessToken);
-    //   } catch (error) {
-    //     console.error('Error fetching access token', error);
-    //   }
-    // };
+    const fetchAccessToken = async (authorizationCode) => {
+      try {
+        const response = await axios.post('백엔드 포트 번호', {
+          code : authorizationCode
+        });
+        // 백엔드 응답 데이터
+        const data = response.data;
+        // Access Token 상태에 저장
+        setAccessToken(data.accessToken);
+        console.log('Access Token:', data.accessToken);
+      } catch (error) {
+        console.error('Error fetching access token', error);
+      }
+    };
 
+    return (
+        <div>
+            <h1>Auth Page</h1>
+            { code ? (
+                <p>Authorization Code : {code}</p>
+
+            ) : (
+                <p>Loading...</p>
+            )}
+            {accessToken && (
+                <p>Access Token: {accessToken}</p>
+            )}
+        </div>
+    );
 };
 export default AuthPage
