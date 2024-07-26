@@ -13,6 +13,7 @@ const Container = styled.div`
 
 const LoginPage = () => {
     // .env 파일에서 관리할 key , uri
+    //
     // const Rest_api_key = process.env.REACT_APP_KAKAO_REST_API_KEY;
     // const redirect_uri = process.env.REACT_APP_KAKAO_REDIRECT_URI;
     const REST_API_KEY = '5ecb22966f2e7ecdd957524875aea32e';
