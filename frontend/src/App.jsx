@@ -8,7 +8,7 @@ import Nav from './components/organisms/Nav';
 
 function App() {
   return (
-    <div className='App' style={{ marginTop: '80px' }}>
+    <div className='App' style={{ paddingTop: '64px' }}>
       <Nav />
       <Routes>
         <Route exact path='/' element={<MainPage />} />
