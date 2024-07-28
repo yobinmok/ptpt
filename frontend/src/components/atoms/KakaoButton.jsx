@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import kakaoSymbolImage from '../../assets/images/kakao-symbol.svg'; // SVG 파일을 가져옵니다
+import kakaoSymbolImage from '../../assets/images/kakao-symbol.svg';
 
 const ButtonContainer = styled.button`
   display: flex;
