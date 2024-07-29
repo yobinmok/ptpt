@@ -25,13 +25,13 @@ const ButtonGroup = styled.div`
 
 const LoginPage = () => {
   // 환경 변수에서 API 키와 리디렉트 URI를 가져옴
-  // const KAKAO_REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
-  // const KAKAO_REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
-  // const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-  // const GOOGLE_REDIRECT_URI = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
+  const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
+  const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
+  // const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  // const GOOGLE_REDIRECT_URI = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
 
   // 카카오 로그인 URL 생성
-  // const kakaoLink = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
+  const kakaoLink = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
   // 구글 로그인 URL 생성
   // const googleLink = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile`;
 
@@ -40,7 +40,7 @@ const LoginPage = () => {
     window.location.href = kakaoLink; // 카카오 로그인 페이지로 리디렉트
   };
 
-  // 구글 로그인 핸들러 함수
+  // 구글 로그인 핸들러 함수 
   const googleLoginHandler = () => {
     window.location.href = googleLink; // 구글 로그인 페이지로 리디렉트
   };

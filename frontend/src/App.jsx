@@ -16,7 +16,8 @@ function App() {
         <Route exact path='/' element={<MainPage />} />
         <Route path='/signup' element={<SignupPage />} />
         <Route path='/login' element={<LoginPage />} />
-        <Route path='/auth' element={<AuthPage />} />
+        <Route path='/auth/kakao' element={<AuthPage />} />
+        <Route path='/auth/google' element={<AuthPage />} />
         <Route path='/practice' element={<PracticePage />} />
         <Route path='/solo' element={<SoloPage />} />
       </Routes>
