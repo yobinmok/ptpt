@@ -1,27 +1,24 @@
 import React from 'react';
-import { Drawer, Box, Typography } from '@mui/material';
-
-const Sidebar = ({ isDrawerOpen, handleDrawerToggle }) => {
+import { Box } from '@mui/material';
+import IconButton from '../atoms/IconButton';
+const Sidebar = ({ tabItem, isSidebarOpen, handleSidebarToggle }) => {
   return (
-    <Drawer
-      anchor='right'
-      open={isDrawerOpen}
-      onClose={handleDrawerToggle}
-      variant='persistent'
-      sx={{
-        transition: 'width 0.3s',
-        '& .MuiDrawer-paper': {
-          width: '20%',
-          boxSizing: 'border-box',
-          marginTop: 8, // 내비게이션 바 높이만큼 마진을 줌
-        },
-      }}
-    >
-      <Box p={2} width='100%'>
-        <Typography variant='h6'>우측 사이드탭</Typography>
-        {/* 여기에 사이드탭 컨텐츠를 추가할 수 있습니다 */}
+    <>
+      <Box
+        width={80} // 고정된 너비
+        backgroundColor='#e0e0e0'
+      >
+        {tabItem.map((item, index) => (
+          <IconButton
+            handleSidebarToggle={handleSidebarToggle}
+            key={index}
+            icon={item.icon}
+            text={item.text}
+          />
+        ))}
+        {/* 여기에 세로 탭 컨텐츠 추가 */}
       </Box>
-    </Drawer>
+    </>
   );
 };
 
