@@ -28,7 +28,7 @@ const GoogleButton = ({ onClick, ...styleProps }) => {
    */
   return (
     <ButtonContainer onClick={onClick} {...styleProps}>
-      <ButtonImage src={googleButtonImage} alt="Google Login Button" />
+      <ButtonImage src={googleButtonImage} alt='Google Login Button' />
     </ButtonContainer>
   );
 };
