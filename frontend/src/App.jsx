@@ -1,12 +1,14 @@
 import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import LoginPage from './pages/LoginPage';
 import AuthPage from './pages/AuthPage';
 import SignupPage from './pages/SignupPage';
 import PracticePage from './pages/PracticePage';
 import SoloPage from './pages/SoloPage';
-import Nav from './components/organisms/Nav';
-import { Route, Routes } from 'react-router-dom';
+import MultiPage from './pages/MultiPage';
+import MyInfo from './pages/MyInfo';
+import Nav from './components/organisms/Navbar';
 
 function App() {
   return (
@@ -14,11 +16,13 @@ function App() {
       <Nav />
       <Routes>
         <Route exact path='/' element={<MainPage />} />
-        <Route path='/signup' element={<SignupPage />} />
         <Route path='/login' element={<LoginPage />} />
+        <Route path='/signup' element={<SignupPage />} />
         <Route path='/auth' element={<AuthPage />} />
         <Route path='/practice' element={<PracticePage />} />
         <Route path='/solo' element={<SoloPage />} />
+        <Route path='/multi' element={<MultiPage />} />
+        <Route path='/myinfo/*' element={<MyInfo />} />
       </Routes>
     </div>
   );

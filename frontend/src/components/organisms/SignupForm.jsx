@@ -11,6 +11,8 @@ const Form = styled.form`
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 400px; // 가로 길이 제한
+  margin: 0 auto; // 가운데 정렬
 `;
 
 const Input = styled.input`
@@ -43,24 +45,38 @@ const Message = styled.p`
   color: ${(props) => (props.isValid ? 'green' : 'red')};
 `;
 
+const NicknamePreview = styled.p`
+  font-size: 16px;
+  color: #555;
+  margin-top: 10px;
+`;
+
+// 회원가입 폼 컴포넌트
 const SignupForm = ({ onSubmit }) => {
+  // formData: 닉네임과 프로필 이미지를 저장하는 상태
   const [formData, setFormData] = useState({
     nickname: '',
     profileImage: null,
     selectedProfileImage: null,
   });
+
+  // nicknameMessage: 닉네임 중복 확인 메시지를 저장하는 상태
+  // isNicknameValid: 닉네임 유효성을 저장하는 상태
   const [nicknameMessage, setNicknameMessage] = useState('');
   const [isNicknameValid, setIsNicknameValid] = useState(false);
 
+  // 입력값 변경 핸들러
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === 'profileImage') {
+      // 프로필 이미지가 변경된 경우
       setFormData({
         ...formData,
         profileImage: files[0],
         selectedProfileImage: null, // 파일 업로드 시 기존 선택 이미지 초기화
       });
     } else {
+      // 닉네임이 변경된 경우
       setFormData({
         ...formData,
         [name]: value,
@@ -68,8 +84,10 @@ const SignupForm = ({ onSubmit }) => {
     }
   };
 
+  // 닉네임 중복 확인을 위한 useEffect
   useEffect(() => {
     if (formData.nickname) {
+      // 닉네임 중복 확인 함수
       const checkNickname = async () => {
         try {
           const response = await axios.post(
@@ -92,15 +110,18 @@ const SignupForm = ({ onSubmit }) => {
         }
       };
 
+      // 닉네임 중복 확인 디바운싱
       const debounceCheck = setTimeout(checkNickname, 500);
 
       return () => clearTimeout(debounceCheck);
     } else {
+      // 닉네임이 비어있는 경우 메시지 초기화
       setNicknameMessage('');
       setIsNicknameValid(false);
     }
   }, [formData.nickname]);
 
+  // 폼 제출 핸들러
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!isNicknameValid) {
@@ -136,6 +157,7 @@ const SignupForm = ({ onSubmit }) => {
       {nicknameMessage && (
         <Message isValid={isNicknameValid}>{nicknameMessage}</Message>
       )}
+      <NicknamePreview>입력된 닉네임: {formData.nickname}</NicknamePreview>
       <Label htmlFor='profileImage'>프로필 사진 업로드</Label>
       <Input
         type='file'

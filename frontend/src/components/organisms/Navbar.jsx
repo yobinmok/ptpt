@@ -44,6 +44,15 @@ const NavLink = styled(Link)`
   }
 `;
 
+// 프로필 이미지 스타일 정의
+const ProfileImage = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-left: 10px;
+`;
+
 function Navbar() {
   return (
     <StyledNavbar>
@@ -53,7 +62,12 @@ function Navbar() {
       <RightContainer>
         <NavLink to='/login'>Login</NavLink>
         <NavLink to='/practice'>Start</NavLink>
-        <span>프로필 사진</span>
+        <NavLink to='/myinfo'>
+          <ProfileImage
+            // src={require('../assets/images/profile.png')}
+            alt='Profile'
+          />
+        </NavLink>
       </RightContainer>
     </StyledNavbar>
   );
