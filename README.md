@@ -21,9 +21,9 @@
 
 - Git Flow
     - master / develop / feature / release / hotfix
-    - `feature/개발파트/이름/기능` 형식
+    - `feature/개발파트/기능` 형식
         
-        ex) `feature/fe/dyqls1214/component`
+        ex) `feature/fe/component`
         
 
 ### 3. 커밋 컨벤션

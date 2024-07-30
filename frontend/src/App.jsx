@@ -5,10 +5,15 @@ import LoginPage from './pages/LoginPage';
 import AuthPage from './pages/AuthPage';
 import SignupPage from './pages/SignupPage';
 import PracticePage from './pages/PracticePage';
+import VoiceTestPage from './pages/VoiceTestPage';
 import SoloPage from './pages/SoloPage';
 import MultiPage from './pages/MultiPage';
 import MyInfo from './pages/MyInfo';
-import Nav from './components/organisms/Navbar';
+import Nav from './components/organisms/Nav';
+// import VideoRoomComponent from './components/room/openVidu/VideoRoomComponent';
+import CreateRoom from './pages/room/CreateRoom';
+import VideoRoomComponent from './pages/room/openVidu/VideoRoomComponent';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
@@ -23,6 +28,8 @@ function App() {
         <Route path='/solo' element={<SoloPage />} />
         <Route path='/multi' element={<MultiPage />} />
         <Route path='/myinfo/*' element={<MyInfo />} />
+        <Route path="/createroom" element={<CreateRoom />} />
+        <Route path="/room/detail" element={<VideoRoomComponent />} />
       </Routes>
     </div>
   );
