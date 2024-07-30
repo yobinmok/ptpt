@@ -19,7 +19,7 @@ import java.util.List;
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int memberNo;
+    private Long memberNo;
 
     private String nickname;
     private String memberPicture;

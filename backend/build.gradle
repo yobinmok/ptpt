@@ -44,6 +44,16 @@ dependencies {
 
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'	//Swagger
 
+	// query dsl 추가
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	annotationProcessor "com.querydsl:querydsl-apt:" +
+			"${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+	// 쿼리 파라미터 로그 생성
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+
 //	implementation("io.springfox:springfox-swagger2:3.0.0")
 //	implementation("io.springfox:springfox-swagger-ui:3.0.0")
 //	implementation("io.springfox:springfox-data-rest:3.0.0")

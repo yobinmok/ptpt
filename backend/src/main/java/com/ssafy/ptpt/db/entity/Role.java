@@ -17,7 +17,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int roleNo;
+    private Long roleNo;
 
     @ManyToOne
     @JoinColumn(name = "member_no")
