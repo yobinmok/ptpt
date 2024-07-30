@@ -9,15 +9,14 @@ import VoiceTestPage from './pages/VoiceTestPage';
 import SoloPage from './pages/SoloPage';
 import MultiPage from './pages/MultiPage';
 import MyInfo from './pages/MyInfo';
-import Nav from './components/organisms/Nav';
+import Nav from './components/organisms/Navbar';
 // import VideoRoomComponent from './components/room/openVidu/VideoRoomComponent';
 import CreateRoom from './pages/room/CreateRoom';
 import VideoRoomComponent from './pages/room/openVidu/VideoRoomComponent';
-import { Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
-    <div className='App' style={{ marginTop: '80px' }}>
+    <div className='App' style={{ paddingTop: '64px' }}>
       <Nav />
       <Routes>
         <Route exact path='/' element={<MainPage />} />
@@ -28,8 +27,8 @@ function App() {
         <Route path='/solo' element={<SoloPage />} />
         <Route path='/multi' element={<MultiPage />} />
         <Route path='/myinfo/*' element={<MyInfo />} />
-        <Route path="/createroom" element={<CreateRoom />} />
-        <Route path="/room/detail" element={<VideoRoomComponent />} />
+        <Route path='/createroom' element={<CreateRoom />} />
+        <Route path='/room/detail' element={<VideoRoomComponent />} />
       </Routes>
     </div>
   );
