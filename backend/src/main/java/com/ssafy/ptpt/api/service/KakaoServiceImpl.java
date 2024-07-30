@@ -50,6 +50,11 @@ public class KakaoServiceImpl implements KakaoService {
         return new RedirectView("/index.html");
     }
 
+    public String getProfile() {
+        String uri = KAKAO_API_HOST + "/v2/user/me";
+        return httpCallService.CallwithToken("GET", uri, httpSession.getAttribute("token").toString());
+    }
+
     public String logout() {
         String uri = KAKAO_API_HOST + "/v1/user/logout";
         return httpCallService.CallwithToken("POST", uri, httpSession.getAttribute("token").toString());

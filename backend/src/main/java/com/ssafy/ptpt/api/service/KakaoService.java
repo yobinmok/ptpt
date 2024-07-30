@@ -8,4 +8,5 @@ public interface KakaoService {
     public RedirectView goKakaoOAuth(String scope);
     public RedirectView loginCallback(String code);
     public String logout();
+    String getProfile();
 }
