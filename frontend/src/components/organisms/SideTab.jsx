@@ -1,10 +1,7 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
-import { useTheme } from '@emotion/react';
+import { Divider, Box } from '@mui/material';
 
-const SideTab = ({ isSidebarOpen }) => {
-  const theme = useTheme();
-
+const SideTab = ({ item, isSidebarOpen }) => {
   return (
     <Box
       sx={{
@@ -17,9 +14,17 @@ const SideTab = ({ isSidebarOpen }) => {
         borderLeft: '1px solid #ddd', // 왼쪽 테두리
       }}
     >
-      <Box p={2}>
-        <Typography variant='h6'>커스텀 사이드바</Typography>
-        {/* 여기에 사이드바 컨텐츠를 추가할 수 있습니다 */}
+      <Box display='flex' flexDirection='column'>
+        <div
+          style={{ padding: '25px 15px', fontSize: '20px', fontWeight: 'bold' }}
+        >
+          {item.text}
+        </div>
+        <Divider />
+        <div style={{ padding: '15px' }}>
+          {/* 탭 별 content는 하단에 위치 */}
+          {item.content}
+        </div>
       </Box>
     </Box>
   );

@@ -2,14 +2,24 @@ import React, { useState } from 'react';
 import { Box, easing } from '@mui/material';
 import { useTheme } from '@emotion/react';
 
-const IconButton = ({ icon: IconComponent, text, handleSidebarToggle }) => {
+const IconButton = ({
+  icon: IconComponent,
+  text,
+  handleSidebarToggle,
+  isSelected,
+}) => {
   const theme = useTheme();
-  const [isClicked, setIsClicked] = useState(false);
+  // const [isClicked, setIsClicked] = useState(false);
+
+  // const handleClicked = () => {
+  //   setIsClicked(!isClicked);
+  //   handleSidebarToggle();
+  // };
 
   const handleClicked = () => {
-    setIsClicked(!isClicked);
     handleSidebarToggle();
   };
+
   return (
     <Box
       display='flex'
@@ -20,7 +30,7 @@ const IconButton = ({ icon: IconComponent, text, handleSidebarToggle }) => {
         cursor: 'pointer',
         marginRight: '3px',
         borderRadius: '0 15px 15px 0',
-        backgroundColor: isClicked ? 'white' : '#e0e0e0',
+        backgroundColor: isSelected ? 'white' : '#e0e0e0',
         '&:hover': {
           backgroundColor: '#f5f5f5', // 부모 요소가 hover 상태일 때 적용
           '& svg': {
@@ -35,13 +45,13 @@ const IconButton = ({ icon: IconComponent, text, handleSidebarToggle }) => {
     >
       <IconComponent
         style={{
-          color: isClicked ? theme.palette.primary.main : '#B0B0B0',
+          color: isSelected ? theme.palette.primary.main : '#B0B0B0',
           fontSize: 30,
         }}
       />
       <div
         style={{
-          color: isClicked ? theme.palette.primary.main : '#B0B0B0',
+          color: isSelected ? theme.palette.primary.main : '#B0B0B0',
           fontSize: 14,
           fontWeight: 'bold',
           paddingTop: 3,

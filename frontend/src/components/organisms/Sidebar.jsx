@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import IconButton from '../atoms/IconButton';
-const Sidebar = ({ tabItem, isSidebarOpen, handleSidebarToggle }) => {
+const Sidebar = ({ tabItem, handleTabClick, selectedTab }) => {
   return (
     <>
       <Box
@@ -10,10 +10,13 @@ const Sidebar = ({ tabItem, isSidebarOpen, handleSidebarToggle }) => {
       >
         {tabItem.map((item, index) => (
           <IconButton
-            handleSidebarToggle={handleSidebarToggle}
+            handleSidebarToggle={() => {
+              handleTabClick(index);
+            }}
             key={index}
             icon={item.icon}
             text={item.text}
+            isSelected={selectedTab === index}
           />
         ))}
         {/* 여기에 세로 탭 컨텐츠 추가 */}
