@@ -1,84 +1,173 @@
-import React, { useState, useContext } from 'react';
-import { LoginContext } from '../../contexts/LoginContext';
-import InputGroup from '../molecules/InputGroup';
-import Button from '../atoms/Button';
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import axios from 'axios';
 
-const SignupForm = () => {
-  const { signup } = useContext(LoginContext);
+// 스타일 정의
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 400px; // 가로 길이 제한
+  margin: 0 auto; // 가운데 정렬
+`;
+
+const Input = styled.input`
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+`;
+
+const Label = styled.label`
+  font-size: 16px;
+`;
+
+const Button = styled.button`
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+const Message = styled.p`
+  font-size: 14px;
+  color: ${(props) => (props.isValid ? 'green' : 'red')};
+`;
+
+const NicknamePreview = styled.p`
+  font-size: 16px;
+  color: #555;
+  margin-top: 10px;
+`;
+
+// 회원가입 폼 컴포넌트
+const SignupForm = ({ onSubmit }) => {
+  // formData: 닉네임과 프로필 이미지를 저장하는 상태
   const [formData, setFormData] = useState({
-    department: '',
-    position: '',
-    name: '',
-    userId: '',
-    password: '',
-    confirmPassword: '',
+    nickname: '',
+    profileImage: null,
+    selectedProfileImage: null,
   });
 
-  const [formErrors, setFormErrors] = useState({});
+  // nicknameMessage: 닉네임 중복 확인 메시지를 저장하는 상태
+  // isNicknameValid: 닉네임 유효성을 저장하는 상태
+  const [nicknameMessage, setNicknameMessage] = useState('');
+  const [isNicknameValid, setIsNicknameValid] = useState(false);
 
+  // 입력값 변경 핸들러
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, files } = e.target;
+    if (name === 'profileImage') {
+      // 프로필 이미지가 변경된 경우
+      setFormData({
+        ...formData,
+        profileImage: files[0],
+        selectedProfileImage: null, // 파일 업로드 시 기존 선택 이미지 초기화
+      });
+    } else {
+      // 닉네임이 변경된 경우
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
+  // 닉네임 중복 확인을 위한 useEffect
+  useEffect(() => {
+    if (formData.nickname) {
+      // 닉네임 중복 확인 함수
+      const checkNickname = async () => {
+        try {
+          const response = await axios.post(
+            'http://localhost:8080/api/v1/check-nickname',
+            {
+              nickname: formData.nickname,
+            }
+          );
+          if (response.data.isValid) {
+            setNicknameMessage('사용 가능한 닉네임입니다.');
+            setIsNicknameValid(true);
+          } else {
+            setNicknameMessage('이미 사용 중인 닉네임입니다.');
+            setIsNicknameValid(false);
+          }
+        } catch (error) {
+          console.error('Error checking nickname:', error);
+          setNicknameMessage('닉네임 확인 중 오류가 발생했습니다.');
+          setIsNicknameValid(false);
+        }
+      };
+
+      // 닉네임 중복 확인 디바운싱
+      const debounceCheck = setTimeout(checkNickname, 500);
+
+      return () => clearTimeout(debounceCheck);
+    } else {
+      // 닉네임이 비어있는 경우 메시지 초기화
+      setNicknameMessage('');
+      setIsNicknameValid(false);
+    }
+  }, [formData.nickname]);
+
+  // 폼 제출 핸들러
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('aa');
-    const errors = validate(formData);
-    if (Object.keys(errors).length > 0) {
-      console.log('bb');
-      setFormErrors(errors);
+    if (!isNicknameValid) {
+      alert('닉네임을 확인해 주세요.');
+      return;
+    }
+
+    const data = new FormData();
+    data.append('nickname', formData.nickname);
+    if (formData.profileImage) {
+      data.append('profileImage', formData.profileImage);
     } else {
-      signup(formData);
+      alert('프로필 이미지를 선택하세요.');
+      return;
     }
-  };
 
-  const validate = (data) => {
-    const errors = {};
-    if (!data.department) errors.department = '소속을 입력하세요.';
-    if (!data.position) errors.position = '직책을 입력하세요.';
-    if (!data.name) errors.name = '이름을 입력하세요.';
-    if (!data.userId) errors.userId = '아이디를 입력하세요.';
-    if (!data.password) {
-      errors.password = '비밀번호를 입력하세요.';
-    } else if (data.password.length < 9 || data.password.length > 16) {
-      errors.password = '비밀번호는 9자 이상 16자 이하이어야 합니다.';
-    }
-    if (data.password !== data.confirmPassword) {
-      errors.confirmPassword = '비밀번호가 일치하지 않습니다.';
-    }
-    return errors;
+    console.log('회원가입 요청 데이터:', data);
+    onSubmit(data);
   };
-
-  const fields = [
-    { label: '소속', type: 'text', name: 'department' },
-    { label: '직책', type: 'text', name: 'position' },
-    { label: '이름', type: 'text', name: 'name' },
-    { label: '아이디', type: 'text', name: 'userId' },
-    { label: '비밀번호', type: 'password', name: 'password' },
-    { label: '비밀번호 확인', type: 'password', name: 'confirmPassword' },
-  ];
 
   return (
-    <div className='signup-form'>
-      <h1 className='signup-title'>회원가입</h1>
-      <form onSubmit={handleSubmit}>
-        {fields.map((field) => (
-          <InputGroup
-            key={field.name}
-            label={field.label}
-            type={field.type}
-            name={field.name}
-            value={formData[field.name]}
-            onChange={handleChange}
-            error={formErrors[field.name]}
-          />
-        ))}
-        <Button type='submit' className='btn btn--form'>
-          가입하기
-        </Button>
-      </form>
-    </div>
+    <Form onSubmit={handleSubmit}>
+      <Label htmlFor='nickname'>닉네임</Label>
+      <Input
+        type='text'
+        id='nickname'
+        name='nickname'
+        placeholder='닉네임'
+        value={formData.nickname}
+        onChange={handleChange}
+        maxLength='30'
+      />
+      {nicknameMessage && (
+        <Message isValid={isNicknameValid}>{nicknameMessage}</Message>
+      )}
+      <NicknamePreview>입력된 닉네임: {formData.nickname}</NicknamePreview>
+      <Label htmlFor='profileImage'>프로필 사진 업로드</Label>
+      <Input
+        type='file'
+        id='profileImage'
+        name='profileImage'
+        accept='image/*'
+        onChange={handleChange}
+      />
+      <Button type='submit'>가입하기</Button>
+    </Form>
   );
 };
 
