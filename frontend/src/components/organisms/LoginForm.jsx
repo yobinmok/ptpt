@@ -1,9 +1,7 @@
 import React, { useContext } from 'react';
 import { LoginContext } from '../../contexts/LoginContext';
 import InputGroup from '../molecules/InputGroup';
-// import Button from '../atoms/Button1';
 import { Button } from '@mui/material';
-// import './LoginForm.css';
 
 const LoginForm = () => {
   const { login } = useContext(LoginContext);
