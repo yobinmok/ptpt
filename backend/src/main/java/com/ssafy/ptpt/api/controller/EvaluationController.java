@@ -1,6 +1,6 @@
 package com.ssafy.ptpt.api.controller;
 
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,19 +10,19 @@ import org.springframework.web.bind.annotation.*;
 public class EvaluationController {
 
     @PostMapping()
-    @ApiOperation(value = "평가 등록")
+    @Operation(summary = "평가 등록")
     public ResponseEntity<?> createEvaluation(){
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping()
-    @ApiOperation(value = "평가 조회")
+//    @ApiOperation(value = "평가 조회")
     public ResponseEntity<?> viewEvaluation(){
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping()
-    @ApiOperation(value = "평가 삭제")
+//    @ApiOperation(value = "평가 삭제")
     public ResponseEntity<?> deleteEvaluation(){
         return new ResponseEntity<>(HttpStatus.OK);
     }
