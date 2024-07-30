@@ -3,6 +3,7 @@ package com.ssafy.ptpt.api.controller;
 import com.ssafy.ptpt.api.model.response.BaseResponseBody;
 import com.ssafy.ptpt.api.model.response.TokenResponseBody;
 import com.ssafy.ptpt.api.service.GoogleAuthService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,19 +58,19 @@ public class MemberController {
     }
 
     @PutMapping("/signout")
-//    @ApiOperation(value = "로그아웃")
+    @Operation(summary = "로그아웃")
     public ResponseEntity<?> signout(){
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{memberNo}")
-//    @ApiOperation(value = "회원 탈퇴")
+    @Operation(summary = "회원 탈퇴")
     public ResponseEntity<?> deleteMember(){
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/{memberNo}")
-//    @ApiOperation(value = "회원 정보 수정")
+    @Operation(summary = "회원 정보 수정")
     public ResponseEntity<?> modifyMemberInfo(){
         return new ResponseEntity<>(HttpStatus.OK);
     }

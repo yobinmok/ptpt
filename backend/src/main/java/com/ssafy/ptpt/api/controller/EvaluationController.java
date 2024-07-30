@@ -16,13 +16,13 @@ public class EvaluationController {
     }
 
     @GetMapping()
-//    @ApiOperation(value = "평가 조회")
+    @Operation(summary = "평가 조회")
     public ResponseEntity<?> viewEvaluation(){
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping()
-//    @ApiOperation(value = "평가 삭제")
+    @Operation(summary = "평가 삭제")
     public ResponseEntity<?> deleteEvaluation(){
         return new ResponseEntity<>(HttpStatus.OK);
     }
