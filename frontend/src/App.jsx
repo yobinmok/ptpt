@@ -5,6 +5,9 @@ import SignupPage from './pages/SignupPage';
 import PracticePage from './pages/PracticePage';
 import SoloPage from './pages/SoloPage';
 import Nav from './components/organisms/Nav';
+// import VideoRoomComponent from './components/room/openVidu/VideoRoomComponent';
+import CreateRoom from './pages/room/CreateRoom';
+import VideoRoomComponent from './pages/room/openVidu/VideoRoomComponent';
 
 function App() {
   return (
@@ -16,6 +19,9 @@ function App() {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/practice' element={<PracticePage />} />
         <Route path='/solo' element={<SoloPage />} />
+
+        <Route path="/createroom" element={<CreateRoom />} />
+        <Route path="/room/detail" element={<VideoRoomComponent />} />
       </Routes>
     </div>
   );
