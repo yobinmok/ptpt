@@ -1,10 +1,12 @@
 package com.ssafy.ptpt.db.entity;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -12,6 +14,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@EntityScan
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
