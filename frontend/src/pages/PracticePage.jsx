@@ -1,9 +1,17 @@
-import { Link } from 'react-router-dom';
+import React from 'react';
+import PracticeOption from '../components/organisms/PracticeOption';
 
 const PracticePage = () => {
   return (
-    <div>
-      <Link to='/solo'>혼자 하기</Link>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+      }}
+    >
+      <PracticeOption />
     </div>
   );
 };

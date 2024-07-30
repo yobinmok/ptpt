@@ -1,12 +1,10 @@
-import { Button } from '@mui/material';
+import React from 'react';
 
 const SoloPage = () => {
   return (
-    <>
-      <Button variant='outlined' disableElevation color='primary'>
-        버튼
-      </Button>
-    </>
+    <div>
+      <h1>혼자 하기 페이지</h1>
+    </div>
   );
 };
 
