@@ -17,7 +17,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int profileNo;
+    private Long profileNo;
 
     @ManyToOne
     @JoinColumn(name = "member_no")
@@ -25,7 +25,7 @@ public class Profile {
 
     @ManyToOne
     @JoinColumn(name = "voicemodel_no")
-    private Voicemodel voiceModel;
+    private VoiceModel voiceModel;
 
     @ManyToOne
     @JoinColumn(name = "statisitc_no")
@@ -33,5 +33,5 @@ public class Profile {
 
     private int presentationNo;
     private int evaluationNo;
-    private int studyroomNo;
+    private int studyRoomNo;
 }
