@@ -28,7 +28,7 @@ const StyledLayoutBounds = styled.div`
 `;
 
 var localUser = new UserModel();
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080/room/';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080/';
 function withNavigation(Component) {
     return (props) => <Component navigate={useNavigate()} {...props} />;
   }

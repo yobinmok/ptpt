@@ -1,27 +1,8 @@
-<<<<<<< HEAD
-import { Create } from "@mui/icons-material";
-import CreateRoom from "./room/CreateRoom";
-import Button from "../components/atoms/Button";
-import { useNavigate } from "react-router";
-
-const MainPage = () => {
-    const navigate = useNavigate();
-    const MoveCreateRoom = () => {
-        navigate("/createroom")
-    }
-
-    return (
-        <div>메인페이지
-            <div>
-                <Button onClick={(MoveCreateRoom)}>방 생성하기 </Button>
-            </div>
-
-        </div>
-    );
-=======
 import React from 'react';
 import styled from 'styled-components';
 import ThreeDImage from '../assets/images/new_main.png'; // 3D 이미지 파일 경로
+import { useNavigate } from 'react-router';
+import Button from '../components/atoms/Button';
 
 // 컨테이너 스타일 정의
 const Container = styled.div`
@@ -59,7 +40,12 @@ const Content = styled.div`
 `;
 
 const MainPage = () => {
+  const navigate = useNavigate();
   const isLoggedIn = false; // 임의로 로그인 상태를 설정
+
+  const MoveCreateRoom = () => {
+    navigate("/createroom");
+  }
 
   return (
     <Container>
@@ -71,9 +57,12 @@ const MainPage = () => {
           <p>{isLoggedIn ? "This is your main page content for logged in users." : "Please log in to access more features."}</p>
 
       </Content>
+      <Content>
+        <Button onClick={MoveCreateRoom}>방 생성하기</Button>
+      </Content>
     </Container>
+    
   );
->>>>>>> db5f70f95027b31668f753ba3642c9161e437a57
 };
 
 export default MainPage;
