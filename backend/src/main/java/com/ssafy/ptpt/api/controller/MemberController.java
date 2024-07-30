@@ -1,5 +1,7 @@
 package com.ssafy.ptpt.api.controller;
 
+import com.ssafy.ptpt.api.model.request.AccessTokenRequestBody;
+import com.ssafy.ptpt.api.model.request.AuthorizationCodeRequestBody;
 import com.ssafy.ptpt.api.model.response.BaseResponseBody;
 import com.ssafy.ptpt.api.model.response.TokenResponseBody;
 import com.ssafy.ptpt.api.service.GoogleAuthService;
@@ -36,10 +38,11 @@ public class MemberController {
 
     @PostMapping("/signin/google")
 //    @ApiOperation(value = "Google 로그인")
-    public ResponseEntity<?> googleSignIn(@RequestBody String authorizationCode) {
+    public ResponseEntity<?> googleSignIn(@RequestBody AuthorizationCodeRequestBody authorizationCode) {
         //TODO: 최초 로그인이면 회원가입 진행하기, 데이터베이스랑 연결하기
         System.out.println("TEST!");
-        String aceessToken = googleAuthService.getAccessToken(authorizationCode);
+//        String aceessToken = googleAuthService.getAccessToken(URLDecoder.decode(authorizationCode.getAuthorizationCode(), StandardCharsets.UTF_8));
+        String aceessToken = googleAuthService.getAccessToken(authorizationCode.getAuthorizationCode());
         return ResponseEntity.ok(TokenResponseBody.of(200, "Success", aceessToken));
     }
 
@@ -50,9 +53,10 @@ public class MemberController {
 
     @PostMapping("/auth/google")
 //    @ApiOperation(value = "Google Access Token 검증")
-    public ResponseEntity<?> googleAuthVerify(@RequestBody String accessToken) throws GeneralSecurityException, IOException {
-        if(googleAuthService.verifyAccessToken(accessToken)) {
-            return ResponseEntity.ok(BaseResponseBody.of(200, "Success"));
+    public ResponseEntity<?> googleAuthVerify(@RequestBody AccessTokenRequestBody accessToken) throws GeneralSecurityException, IOException {
+        System.out.println("ACCESS = " + accessToken.getAccessToken());
+        if(googleAuthService.verifyAccessToken(accessToken.getAccessToken())) {
+            return ResponseEntity.ok(BaseResponseBody.of(200, "Valid Token"));
         }
         return ResponseEntity.ok(BaseResponseBody.of(401, "Invalid Token"));
     }

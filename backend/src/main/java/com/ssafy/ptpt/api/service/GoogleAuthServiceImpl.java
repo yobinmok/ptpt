@@ -57,7 +57,9 @@ public class GoogleAuthServiceImpl implements GoogleAuthService {
         ResponseEntity<JsonNode> responseNode = restTemplate.exchange(TOKEN_URI, HttpMethod.POST, entity, JsonNode.class);
         JsonNode accessTokenNode = responseNode.getBody();
 
-        return accessTokenNode.get("access_token").asText();
+//        return accessTokenNode.get("access_token").asText();
+        return accessTokenNode.get("id_token").asText();    //구글에서 액세스 토큰과 이이디 토큰을 둘다 반환해주는데 구글의 액세스토큰은 jwt가 아니다. 따라서 id토큰을 사용하였다.
+
     }
 
     /**
@@ -92,6 +94,7 @@ public class GoogleAuthServiceImpl implements GoogleAuthService {
      */
     @Override
     public boolean verifyAccessToken(String accessToken) throws GeneralSecurityException, IOException {
+        System.out.println("ACCESSTOKEN 2 = " + accessToken);
         HttpTransport transport = new NetHttpTransport();
 //        JsonFactory jsonFactory = JacksonFactory.getDefaultInstance(); deprecated 공식 문서에서는 Gson사용을 권장
         JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
