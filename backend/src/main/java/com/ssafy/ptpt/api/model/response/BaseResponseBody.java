@@ -1,5 +1,6 @@
 package com.ssafy.ptpt.api.model.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,8 +9,11 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Schema(name = "BaseResponseBody", description = "기본 응답 객체")
 public class BaseResponseBody {
+	@Schema(name = "message", description = "결과에 대한 설명", example = "Success")
 	String message = null;
+	@Schema(name = "statusCode", description = "결과코드. 200이면 정상처리", example = "200")
 	Integer statusCode = null;
 	
 	public BaseResponseBody() {}

@@ -6,8 +6,13 @@ import com.ssafy.ptpt.api.model.response.BaseResponseBody;
 import com.ssafy.ptpt.api.model.response.TokenResponseBody;
 import com.ssafy.ptpt.api.service.GoogleAuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.SchemaProperty;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +41,23 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
+
+    @Operation(
+            summary = "구글 액세스 토큰 발급",
+            description = "구글 액세스 토큰 발급 (구글에서는 ID_Token이라 명명.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "액세스 토큰 반환",
+                            content = @Content(
+                                    schemaProperties = {
+                                            @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message")),
+                                            @SchemaProperty(name = "accessToken", schema = @Schema(type = "string", description = "액세스 토큰"))
+                                    }
+                            )
+                    )
+            }
+    )
     @PostMapping("/signin/google")
 //    @ApiOperation(value = "Google 로그인")
     public ResponseEntity<?> googleSignIn(@RequestBody AuthorizationCodeRequestBody authorizationCode) {
@@ -46,11 +68,26 @@ public class MemberController {
         return ResponseEntity.ok(TokenResponseBody.of(200, "Success", aceessToken));
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<?> test() {
-        return ResponseEntity.ok(BaseResponseBody.of(200, "Success"));
-    }
-
+    @Operation(
+            summary = "구글 액세스 토큰 검증",
+            description = "구글 액세스 토큰 검증",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            description = "유효한 토큰",
+                            content = @Content(
+                                    schemaProperties = {
+                                            @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message"))
+                                    }
+                            )),
+                    @ApiResponse(responseCode = "401",
+                            description = "유효하지 않은 토큰",
+                            content = @Content(
+                                    schemaProperties = {
+                                            @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message"))
+                                    }
+                            ))
+            }
+    )
     @PostMapping("/auth/google")
 //    @ApiOperation(value = "Google Access Token 검증")
     public ResponseEntity<?> googleAuthVerify(@RequestBody AccessTokenRequestBody accessToken) throws GeneralSecurityException, IOException {
