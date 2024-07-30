@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import KakaoButton from '../components/atoms/Button_kakao';
-import GoogleButton from '../components/atoms/Button_google';
+import KakaoButton from '../components/atoms/KakaoButton';
+import GoogleButton from '../components/atoms/GoogleButton';
 
 // 컨테이너 스타일 정의
 const Container = styled.div`
@@ -16,7 +16,7 @@ const Container = styled.div`
   box-sizing: border-box; /* 패딩과 테두리를 포함한 박스 크기 설정 */
 `;
 
-// 버튼 그룹 스타일 정의 (수직 배치)
+// 버튼
 const ButtonGroup = styled.div`
   display: flex;
   flex-direction: column; /* 버튼을 수직으로 배치 */
@@ -50,7 +50,13 @@ const LoginPage = () => {
       <h1>Login Page</h1>
       <ButtonGroup>
         {/* 구글 로그인 버튼 */}
-        <GoogleButton onClick={googleLoginHandler}></GoogleButton>
+        <GoogleButton
+          onClick={googleLoginHandler}
+          symbolSize='24px'
+          symbolMargin='8px'
+        >
+          Sign in with Google
+        </GoogleButton>
 
         {/* 카카오 로그인 버튼 */}
         <KakaoButton

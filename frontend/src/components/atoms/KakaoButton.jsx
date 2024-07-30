@@ -30,7 +30,7 @@ const Label = styled.span`
 const KakaoButton = ({ onClick, children, ...styleProps }) => {
   return (
     <ButtonContainer onClick={onClick} {...styleProps}>
-      <Symbol src={kakaoSymbolImage} alt="Kakao Symbol" />
+      <Symbol src={kakaoSymbolImage} alt='Kakao Symbol' />
       <Label>{children}</Label>
     </ButtonContainer>
   );

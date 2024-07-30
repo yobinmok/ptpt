@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 
 const AuthPage = () => {
   const [code, setCode] = useState(null); // 인가 코드 상태 변수
@@ -21,17 +20,10 @@ const AuthPage = () => {
     }
   }, []);
 
-  // Access Token 요청 함수
-  const fetchAccessToken = async (authorizationCode, provider) => {
+  // 엑세스 토큰을 가져오는 함수
+  const getAccessToken = async (authorizationCode, provider) => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/oauth/${provider}`,
-        {
-          code: authorizationCode,
-        }
-      );
-      // 백엔드 응답 데이터
-      const data = response.data;
+      const data = await fetchAccessToken(authorizationCode, provider);
       // Access Token 상태에 저장
       setAccessToken(data.access_token); // 백엔드에서 받은 액세스 토큰 저장
       console.log('Access Token:', data.access_token);
