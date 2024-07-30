@@ -2,6 +2,10 @@ import { Button } from '@mui/material';
 import { textToSpeeachApi } from '../apis/voice';
 
 const VoiceTestPage = () => {
+  // params로 받아야하는 값
+  // voice -> name
+  // input -> text
+  // audioConfig -> pitch, speakingRate
   const param = {
     voice: {
       languageCode: 'ko-KR',
@@ -12,6 +16,8 @@ const VoiceTestPage = () => {
     },
     audioConfig: {
       audioEncoding: 'linear16',
+      pitch: 0,
+      speakingRate: 1,
     },
   };
   const textToSpeeach = () => {
@@ -20,10 +26,11 @@ const VoiceTestPage = () => {
       ({ data }) => {
         // audioContet는 base64로 인코딩된 문자열을 반환함
         console.log(data);
+        // data를 바로 서버로 업로드
+        // 서버에서 data -> wav 파일로 변환 후 업로드
         var audioFile = new Audio();
         let audioBlob = base64ToBlob(data.audioContent, 'wav');
         audioFile.src = window.URL.createObjectURL(audioBlob);
-        console.log(audioFile.src);
         audioFile.playbackRate = 1; //재생속도
         audioFile.play();
         downloadURI(audioFile.src, 'audio.wav');

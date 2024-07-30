@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const { VITE_GOOGLE_API_KEY, VITE_GOOGLE_API_URL } = import.meta.env;
+const { VITE_GOOGLE_API_KEY, VITE_GOOGLE_TTS_API_URL } = import.meta.env;
 
 const Axios = axios.create();
 // function Axios() {
@@ -17,7 +17,7 @@ const Axios = axios.create();
 function Google() {
   const instance = axios.create({
     baseURL:
-      VITE_GOOGLE_API_URL + '/text:synthesize?key=' + VITE_GOOGLE_API_KEY,
+      VITE_GOOGLE_TTS_API_URL + '/text:synthesize?key=' + VITE_GOOGLE_API_KEY,
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
     },
@@ -26,4 +26,15 @@ function Google() {
   return instance;
 }
 
-export { Axios, Google };
+function Google_STT() {
+  const instance = axios.create({
+    baseURL: VITE_GOOGLE_TTS_API_URL + '/?key=' + VITE_GOOGLE_API_KEY,
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+  });
+
+  return instance;
+}
+
+export { Axios, Google, Google_STT };
