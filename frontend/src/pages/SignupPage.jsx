@@ -1,10 +1,10 @@
 import React from 'react';
-import LoginForm from '../components/organisms/LoginForm';
 import LoginContextProvider from '../contexts/LoginContext';
+import SignupForm from '../components/organisms/SignupForm';
 
 const SignupPage = () => (
   <LoginContextProvider>
-    <LoginForm />
+    <SignupForm />
   </LoginContextProvider>
 );
 
