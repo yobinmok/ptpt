@@ -24,7 +24,12 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(180deg, white 0%, white 49px, rgba(255, 255, 255, 0) 200px);
+  background: linear-gradient(
+    180deg,
+    white 0%,
+    white 49px,
+    rgba(255, 255, 255, 0) 200px
+  );
   pointer-events: none; /* 오버레이가 클릭 등의 이벤트를 차단하지 않도록 설정 */
 `;
 
@@ -44,8 +49,8 @@ const MainPage = () => {
   const isLoggedIn = false; // 임의로 로그인 상태를 설정
 
   const MoveCreateRoom = () => {
-    navigate("/createroom");
-  }
+    navigate('/createroom');
+  };
 
   return (
     <Container>
@@ -53,15 +58,17 @@ const MainPage = () => {
       <Content>
         <h1>Main Page</h1>
 
-          <h2>{isLoggedIn ? "Welcome, User!" : "Welcome to Our Site"}</h2>
-          <p>{isLoggedIn ? "This is your main page content for logged in users." : "Please log in to access more features."}</p>
-
+        <h2>{isLoggedIn ? 'Welcome, User!' : 'Welcome to Our Site'}</h2>
+        <p>
+          {isLoggedIn
+            ? 'This is your main page content for logged in users.'
+            : 'Please log in to access more features.'}
+        </p>
       </Content>
       <Content>
         <Button onClick={MoveCreateRoom}>방 생성하기</Button>
       </Content>
     </Container>
-    
   );
 };
 

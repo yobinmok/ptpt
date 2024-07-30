@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
-import SideTab from '../components/organisms/SideTab';
-import Sidebar from '../components/organisms/Sidebar';
+import SideTab from '../../components/organisms/SideTab';
+import Sidebar from '../../components/organisms/Sidebar';
 import VoiceIcon from '@mui/icons-material/SpatialAudioOffOutlined';
 import ScriptIcon from '@mui/icons-material/DescriptionOutlined';
-import VoiceTab from '../components/organisms/solo/VoiceTab';
+import VoiceTab from '../../components/organisms/solo/VoiceTab';
 
 const SoloPage = () => {
   const tabItem = [
