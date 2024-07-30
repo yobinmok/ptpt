@@ -19,8 +19,8 @@ function App() {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/auth' element={<AuthPage />} />
         <Route path='/practice' element={<PracticePage />} />
-        {/* <Route path='/solo' element={<SoloPage />} /> */}
-        <Route path='/solo' element={<VoiceTestPage />} />
+        <Route path='/solo' element={<SoloPage />} />
+        {/* <Route path='/solo' element={<VoiceTestPage />} /> */}
       </Routes>
     </div>
   );
