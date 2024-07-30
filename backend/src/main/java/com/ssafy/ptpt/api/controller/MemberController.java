@@ -63,9 +63,9 @@ public class MemberController {
     public ResponseEntity<?> googleSignIn(@RequestBody AuthorizationCodeRequestBody authorizationCode) {
         //TODO: 최초 로그인이면 회원가입 진행하기, 데이터베이스랑 연결하기
         System.out.println("TEST!");
-//        String aceessToken = googleAuthService.getAccessToken(URLDecoder.decode(authorizationCode.getAuthorizationCode(), StandardCharsets.UTF_8));
-        String aceessToken = googleAuthService.getAccessToken(authorizationCode.getAuthorizationCode());
-        return ResponseEntity.ok(TokenResponseBody.of(200, "Success", aceessToken));
+//        String accessToken = googleAuthService.getAccessToken(URLDecoder.decode(authorizationCode.getAuthorizationCode(), StandardCharsets.UTF_8));
+        String accessToken = googleAuthService.getAccessToken(authorizationCode.getAuthorizationCode());
+        return ResponseEntity.ok(TokenResponseBody.of(200, "Success", accessToken));
     }
 
     @Operation(
