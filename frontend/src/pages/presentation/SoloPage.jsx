@@ -1,18 +1,25 @@
-// src/pages/SoloPage.jsx
 import React from 'react';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import SideTab from '../../components/organisms/SideTab';
 import Sidebar from '../../components/organisms/Sidebar';
 import VoiceIcon from '@mui/icons-material/SpatialAudioOffOutlined';
 import ScriptIcon from '@mui/icons-material/DescriptionOutlined';
+import CompareIcon from '@mui/icons-material/MicNone';
+import SettingIcon from '@mui/icons-material/SettingsOutlined';
 import VoiceTab from '../../components/organisms/solo/VoiceTab';
+import ScriptTab from '../../components/organisms/solo/ScrpitTab';
+import CompareTab from '../../components/organisms/solo/CompareTab';
+import SettingTab from '../../components/organisms/solo/SettingTab';
+import PresentationMain from '../../components/organisms/solo/PresentationMain';
 import { toggleSidebar, selectTab, clearTab } from '../../store/actions/room';
 
 const SoloPage = () => {
   const tabItem = [
     { icon: VoiceIcon, text: '음성', content: <VoiceTab /> },
-    { icon: ScriptIcon, text: '스크립트', content: 'script' },
+    { icon: ScriptIcon, text: '스크립트', content: <ScriptTab /> },
+    { icon: CompareIcon, text: '비교', content: <CompareTab /> },
+    { icon: SettingIcon, text: '설정', content: <SettingTab /> },
   ];
 
   const dispatch = useDispatch();
@@ -55,8 +62,7 @@ const SoloPage = () => {
               flexDirection: 'column',
             }}
           >
-            발표자료 업로드
-            <Box backgroundColor='black'></Box>
+            <PresentationMain />
           </Box>
 
           <Box height={60} sx={{ margin: '10px', backgroundColor: '#d9d9d9' }}>
