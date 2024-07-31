@@ -1,44 +1,62 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { useLocation } from 'react-router-dom';
+import { googleSignin, verifyGoogleAccessToken } from '../apis/auth';
 
 const AuthPage = () => {
-  const [code, setCode] = useState(null); // 인가 코드 상태 변수
-  const [provider, setProvider] = useState(null); // 로그인 사용자 상태 변수
-  const [accessToken, setAccessToken] = useState(null); // accessToken 상태 변수
+  const location = useLocation();
+  const [authCode, setAuthCode] = useState(null); // 인가 코드 상태
+  const [token, setToken] = useState(null); // 액세스 토큰 및 ID 토큰 상태
+  const [tokenVerified, setTokenVerified] = useState(null); // 토큰 검증 상태
 
   useEffect(() => {
-    // URL에서 인가 코드와 로그인 제공자 추출
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-    const provider = urlParams.get('provider');
+    // URL에서 authorization code를 추출
+    const query = new URLSearchParams(location.search);
+    const code = query.get('code');
 
-    setCode(code);
-    setProvider(provider);
+    if (code) {
+      console.log('Authorization code:', code);
+      setAuthCode(code); // 인가 코드를 상태에 저장
 
-    if (code && provider) {
-      fetchAccessToken(code, provider);
+      // authorization code를 사용하여 백엔드에서 access token과 id token을 요청
+      googleSignin(code)
+        .then((data) => {
+          console.log('Token received:', data);
+          setToken(data); // 받은 토큰 데이터를 상태에 저장
+
+          // access token을 검증
+          return verifyGoogleAccessToken(data.accessToken);
+        })
+        .then((verificationResult) => {
+          console.log('Token verification result:', verificationResult);
+          setTokenVerified(verificationResult.message === 'Valid Token');
+        })
+        .catch((error) => {
+          console.error('Error during Google sign-in:', error);
+        });
     }
-  }, []);
-
-  // 엑세스 토큰을 가져오는 함수
-  const getAccessToken = async (authorizationCode, provider) => {
-    try {
-      const data = await fetchAccessToken(authorizationCode, provider);
-      // Access Token 상태에 저장
-      setAccessToken(data.access_token); // 백엔드에서 받은 액세스 토큰 저장
-      console.log('Access Token:', data.access_token);
-    } catch (error) {
-      console.error('Error fetching access token', error);
-    }
-  };
+  }, [location]); // location 값이 변경될 때마다 useEffect 훅 실행
 
   return (
     <div>
-      <h1>Auth Page</h1>
-      {code && <p>Authorization Code: {code}</p>}
-      {provider && <p>Provider: {provider}</p>}
-      {accessToken && <p>Access Token: {accessToken}</p>}
+      <h1>Processing Authentication...</h1>
+      {authCode && (
+        <div>
+          <p>Authorization code: {authCode}</p>
+        </div>
+      )}
+      {token && (
+        <div>
+          <p>Access Token: {token.accessToken}</p>
+          <p>ID Token: {token.id_token}</p>
+        </div>
+      )}
+      {tokenVerified !== null && (
+        <div>
+          <p>Token Verified: {tokenVerified ? 'Yes' : 'No'}</p>
+        </div>
+      )}
     </div>
   );
 };
+
 export default AuthPage;
