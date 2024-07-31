@@ -9,3 +9,4 @@ import { persistStore } from "redux-persist";
 const store = createStore(reducer);
 export const persistor = persistStore(store);
 export default store;
+

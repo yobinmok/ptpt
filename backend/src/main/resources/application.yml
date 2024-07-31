@@ -20,10 +20,10 @@ spring:
         registration:
           google:
             resource-uri: https://www.googleapis.com/oauth2/v2/userinfo
-            redirect-uri: http://localhost:5173/auth/google
+            redirect-uri: http://localhost:5173/auth?provider=google
             token-uri: https://oauth2.googleapis.com/token
-            clientId: 880467429579-7jotat5m39rfgdnrnpleinfijd0pf5c9.apps.googleusercontent.com
-            clientSecret: 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
+            clientId: 441652887214-f1qrkib87cpuo74qvu17ag1bm2vsm7ih.apps.googleusercontent.com
+            clientSecret: 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
   redis:
     host: localhost
     port: '6379'
