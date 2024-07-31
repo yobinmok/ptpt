@@ -28,7 +28,7 @@ public class StudyRoomCreateRequest {
     private String subject;
 
     // 설명
-    private String explanation;
+    private String description;
 
     // 익명여부
     private boolean anonymity;

@@ -46,13 +46,19 @@ public class StudyRoom {
     private String subject;
 
     // 설명
-    private String explanation;
+    private String description;
 
     // 익명여부
     private boolean anonymity;
 
     // 방 수정하기 - jpa 변경감지를 통해 entity 값 update
-    public void updateStudyRoom(String studyRoomName){
-        this.studyRoomName = studyRoomName;
+    public void updateStudyRoom(StudyRoom studyRoom){
+        this.studyRoomName = studyRoom.getStudyRoomName();
+        this.isPublic = studyRoom.isPublic;
+        this.studyRoomPw = studyRoom.getStudyRoomPw();
+        this.presentationTime = studyRoom.getPresentationTime();
+        this.subject = studyRoom.getSubject();
+        this.description = studyRoom.getDescription();
+        this.anonymity = studyRoom.isAnonymity();
     }
 }

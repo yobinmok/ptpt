@@ -1,19 +1,19 @@
 package com.ssafy.ptpt.api.studyroom.controller;
 
-//import io.swagger.annotations.ApiOperation;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomConnectRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomCreateRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomUpdateRequest;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomInfoResponse;
+import com.ssafy.ptpt.api.studyroom.response.StudyRoomListResponse;
 import com.ssafy.ptpt.api.studyroom.service.StudyRoomService;
 import com.ssafy.ptpt.config.LoginMember;
 import com.ssafy.ptpt.db.entity.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/studyRoom")
@@ -56,22 +56,13 @@ public class StudyRoomController {
     }
 
 
-    // localhost:8080/members?page=0&size=3&sort=createdDate,asc
     //화상방 리스트 전체 조회
-    //페이징
-//    @GetMapping
-//    public ResponseEntity<Page<RoomListResponse>> findBySearchRequest(@LoginUser User user,
-//                                                                      @Valid RoomSearchRequest request,
-//                                                                      @PageableDefault(size = 9) Pageable pageable) {
-//        Page<RoomListResponse> body = roomService.findBySearchRequest(user, request, pageable);
-//        return ResponseEntity.ok().body(body);
-//    }
-
-
-
-
-
-
+    //페이징 처리 전  -----------------------------------------
+    @GetMapping
+    public ResponseEntity<List<StudyRoomListResponse>> findBySearchRequest(@LoginMember Member member){
+        List<StudyRoomListResponse> body = studyRoomService.findBySearchRequest();
+        return ResponseEntity.ok().body(body);
+    }
 
     // 방 비밀번호 확인
     @PostMapping("/pwCheck")
