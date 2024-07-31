@@ -1,5 +1,5 @@
 import React from 'react';
-import PracticeOption from '../components/organisms/PracticeOption';
+import PracticeOption from '../../components/organisms/PracticeOption';
 
 const PracticePage = () => {
   return (
