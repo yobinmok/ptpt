@@ -19,23 +19,27 @@ import java.util.List;
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int memberNo;
+    private Long memberId;
 
     private String nickname;
     private String memberPicture;
     private String oauthProvider;
-    private int oauthNo;
+    private int oauthId;
     private String oauthEmail;
     private Timestamp registerTime;
     private boolean isWithdraw;
     private Timestamp withdrawTime;
 
-    @OneToMany(mappedBy = "member")
-    private List<Profile> profiles;
+    @OneToOne(mappedBy = "member")
+    private Profile profile;
 
-    @OneToMany(mappedBy = "member")
-    private List<Role> roles;
+    @OneToOne(mappedBy = "member")
+    private Role role;
 
     @OneToMany(mappedBy = "member")
     private List<Comment> comments;
+
+    @ManyToOne
+    @JoinColumn(name = "entryList")
+    private StudyRoom studyRoom;
 }

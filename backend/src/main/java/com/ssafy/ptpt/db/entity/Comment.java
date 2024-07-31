@@ -17,14 +17,14 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int commentNo;
+    private Long commentId;
 
     @ManyToOne
-    @JoinColumn(name = "member_no")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "evaluation_no")
+    @JoinColumn(name = "evaluation_id")
     private Evaluation evaluation;
 
     private String commentContent;
