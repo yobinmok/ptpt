@@ -1,11 +1,37 @@
-//package com.ssafy.ptpt.api.studyroom.response;
-//
-//import lombok.AllArgsConstructor;
-//import lombok.Data;
-//import lombok.NoArgsConstructor;
-//
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//public class StudyRoomInfoResponse {
-//}
+package com.ssafy.ptpt.api.studyroom.response;
+
+import com.ssafy.ptpt.api.member.MemberInfoResponse;
+import com.ssafy.ptpt.db.entity.StudyRoom;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class StudyRoomInfoResponse {
+    private Long studyRoomId;
+    private String studyRoomTitle;
+    private List<MemberInfoResponse> memberInfoResponse;
+    private String studyRoomCode;
+    private String studyRoomPw;
+    private Long memberId;
+    private String presentationHost;
+
+    public static StudyRoomInfoResponse from(StudyRoom studyRoom){
+        StudyRoomInfoResponse studyRoomInfoResponse = new StudyRoomInfoResponse();
+        studyRoomInfoResponse.studyRoomId = studyRoom.getStudyRoomId();
+        studyRoomInfoResponse.studyRoomTitle = studyRoom.getStudyRoomName();
+        studyRoomInfoResponse.memberInfoResponse = Collections.singletonList((MemberInfoResponse) studyRoom.getEntryList());
+        studyRoomInfoResponse.studyRoomCode = studyRoom.getStudyRoomCode();
+        studyRoomInfoResponse.studyRoomPw = studyRoom.getStudyRoomPw();
+        studyRoomInfoResponse.memberId = studyRoom.getMemberId();
+        studyRoomInfoResponse.presentationHost = studyRoom.getPresentationHost();
+
+        return studyRoomInfoResponse;
+    }
+}

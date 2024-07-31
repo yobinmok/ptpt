@@ -17,10 +17,10 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roleNo;
+    private Long roleId;
 
-    @ManyToOne
-    @JoinColumn(name = "member_no")
+    @OneToOne
+    @JoinColumn(name = "member_id")
     private Member member;
 
     private String roleType;

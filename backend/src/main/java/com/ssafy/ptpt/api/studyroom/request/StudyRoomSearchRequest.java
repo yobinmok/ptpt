@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class StudyRoomSearchRequest {
 
     // 방제목 검색
-    private String searchKeyword;
+    private String StudyRoomName;
 }

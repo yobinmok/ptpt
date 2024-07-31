@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/statistic")
 public class StatisticController {
 
-    @GetMapping("/{statisticNo}")
+    @GetMapping("/{statisticId}")
     @Operation(summary = "통계 조회")
     public ResponseEntity<?> viewStatistic(){
         return new ResponseEntity<>(HttpStatus.OK);

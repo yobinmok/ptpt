@@ -20,7 +20,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 public class VoiceModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long voiceModelNo;
+    private Long voiceModelId;
 
     private String voiceModelPath;
 }
