@@ -32,6 +32,7 @@
     "react-router-dom": "^6.25.1",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
+    "redux-thunk": "^3.1.0",
     "styled-components": "^6.1.12",
     "vite-plugin-svgr": "^4.2.0"
   },
