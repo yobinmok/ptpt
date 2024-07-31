@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { googleSignin, verifyGoogleAccessToken } from '../apis/auth';
+import { googleSignin, verifyGoogleAccessToken } from '../../apis/auth';
 
 const AuthPage = () => {
   const location = useLocation();
