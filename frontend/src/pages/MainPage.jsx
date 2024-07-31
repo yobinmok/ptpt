@@ -29,6 +29,12 @@ const Overlay = styled.div`
     white 49px,
     rgba(255, 255, 255, 0) 200px
   );
+  background: linear-gradient(
+    180deg,
+    white 0%,
+    white 49px,
+    rgba(255, 255, 255, 0) 200px
+  );
   pointer-events: none; /* 오버레이가 클릭 등의 이벤트를 차단하지 않도록 설정 */
 `;
 

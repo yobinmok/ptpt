@@ -1,8 +1,6 @@
-// src/components/molecules/MyInfoSidebar.jsx
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import MyInfoSidebarOption from '../molecules/MyInfoSidebarOption';
-import ProfileEditModal from '../organisms/ProfileEditModal';
+import MyInfoSidebarOption from '../../molecules/MyInfoSidebarOption';
 
 const SidebarContainer = styled.div`
   width: 250px;
@@ -33,29 +31,13 @@ const ProfileName = styled.h2`
   margin: 0;
 `;
 
-const EditButton = styled.button`
-  margin-top: 10px;
-  padding: 5px 10px;
-  cursor: pointer;
-`;
-
 const MyInfoSidebar = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
   return (
     <SidebarContainer>
       <ProfileSection>
         <ProfileImage src='/path-to-profile-image' alt='Profile' />
         <ProfileName>황용주전자</ProfileName>
-        <EditButton onClick={openModal}>Edit profile</EditButton>
+        <button>Edit profile</button>
       </ProfileSection>
       <MyInfoSidebarOption to='/myinfo/statistics' icon='📊'>
         통계
@@ -66,7 +48,6 @@ const MyInfoSidebar = () => {
       <MyInfoSidebarOption to='/myinfo/voice-model' icon='🎙️'>
         음성 모델 등록
       </MyInfoSidebarOption>
-      <ProfileEditModal isOpen={isModalOpen} onClose={closeModal} />
     </SidebarContainer>
   );
 };
