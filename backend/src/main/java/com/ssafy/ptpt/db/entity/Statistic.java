@@ -20,7 +20,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 public class Statistic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long statisticNo;
+    private Long statisticId;
 
     private int totalDelivery;
     private int totalExpression;

@@ -19,7 +19,7 @@ public class VoicemodelController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/{voicemodelNo}")
+    @GetMapping("/{voicemodelId}")
     @Operation(summary = "음성모델 조회")
     public ResponseEntity<?> viewVoicemodel(){
         return new ResponseEntity<>(HttpStatus.OK);

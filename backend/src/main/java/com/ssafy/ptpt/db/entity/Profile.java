@@ -17,21 +17,21 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long profileNo;
+    private Long profileId;
 
-    @ManyToOne
-    @JoinColumn(name = "member_no")
+    @OneToOne
+    @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne
-    @JoinColumn(name = "voicemodel_no")
+    @OneToOne
+    @JoinColumn(name = "voicemodel_id")
     private VoiceModel voiceModel;
 
-    @ManyToOne
-    @JoinColumn(name = "statisitc_no")
+    @OneToOne
+    @JoinColumn(name = "statisitc_id")
     private Statistic statistic;
 
-    private int presentationNo;
-    private int evaluationNo;
-    private int studyRoomNo;
+    private int presentationId;
+    private int evaluationId;
+    private int studyRoomId;
 }

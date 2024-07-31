@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyRoomConnectRequest {
-    private Integer studyRoomId;
+    private Long studyRoomId;
     private String studyRoomPw;
 }

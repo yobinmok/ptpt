@@ -20,7 +20,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 public class Evaluation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long evaluationNo;
+    private Long evaluationId;
 
     private String presentationName;
     private int delivery;

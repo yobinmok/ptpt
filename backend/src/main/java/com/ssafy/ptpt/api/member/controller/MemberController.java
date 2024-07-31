@@ -103,13 +103,13 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{memberNo}")
+    @DeleteMapping("/{memberId}")
     @Operation(summary = "회원 탈퇴")
     public ResponseEntity<?> deleteMember(){
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/{memberNo}")
+    @PutMapping("/{memberId}")
     @Operation(summary = "회원 정보 수정")
     public ResponseEntity<?> modifyMemberInfo(){
         return new ResponseEntity<>(HttpStatus.OK);
