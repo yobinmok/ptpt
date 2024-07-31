@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import KakaoButton from '../components/atoms/KakaoButton';
-import GoogleButton from '../components/atoms/GoogleButton';
+import KakaoButton from '../../components/atoms/KakaoButton';
+import GoogleButton from '../../components/atoms/GoogleButton';
 
 // 컨테이너 스타일 정의
 const Container = styled.div`
@@ -72,4 +72,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
