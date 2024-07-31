@@ -32,11 +32,13 @@ public class KakaoServiceImpl implements KakaoService {
     private String KAKAO_API_HOST;
 
     public RedirectView goKakaoOAuth() {
+        System.out.println("그냥로그인");
         return goKakaoOAuth("");
     }
 
     public RedirectView goKakaoOAuth(String scope) {
 
+        System.out.println("권한설정");
         String uri = AUTHORIZE_URI+"?redirect_uri="+REDIRECT_URI+"&response_type=code&client_id="+REST_API_KEY;
         if(!scope.isEmpty()) uri += "&scope="+scope;
 
@@ -44,6 +46,7 @@ public class KakaoServiceImpl implements KakaoService {
     }
 
     public RedirectView loginCallback(String code) {
+        System.out.println("콜백");
         String param = "grant_type=authorization_code&client_id="+REST_API_KEY+"&redirect_uri="+REDIRECT_URI+"&client_secret="+CLIENT_SECRET+"&code="+code;
         String rtn = httpCallService.Call("POST", TOKEN_URI, "", param);
         httpSession.setAttribute("token", Trans.token(rtn, new JsonParser()));
@@ -56,6 +59,7 @@ public class KakaoServiceImpl implements KakaoService {
     }
 
     public String logout() {
+        System.out.println("그냥로그아웃");
         String uri = KAKAO_API_HOST + "/v1/user/logout";
         return httpCallService.CallwithToken("POST", uri, httpSession.getAttribute("token").toString());
     }

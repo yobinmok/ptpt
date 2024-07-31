@@ -5,6 +5,7 @@ import com.ssafy.ptpt.api.model.request.AuthorizationCodeRequestBody;
 import com.ssafy.ptpt.api.model.response.BaseResponseBody;
 import com.ssafy.ptpt.api.model.response.TokenResponseBody;
 import com.ssafy.ptpt.api.service.GoogleAuthService;
+import com.ssafy.ptpt.api.service.KakaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -29,6 +31,9 @@ public class MemberController {
     @Autowired
     GoogleAuthService googleAuthService;
 
+    @Autowired
+    public KakaoService kakaoService;
+
     @PostMapping("/signup")
 //    @ApiOperation(value = "회원가입")
     public ResponseEntity<?> signup(){
@@ -39,6 +44,37 @@ public class MemberController {
 //    @ApiOperation(value = "로그인")
     public ResponseEntity<?> signin(){
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+
+//    @Operation(summary = "카카오 로그인")
+//    @GetMapping("/login/kakao")
+//    public RedirectView goKakaoOAuth() {
+//        return kakaoService.goKakaoOAuth();
+//    }
+
+    @Operation(summary = "카카오 로그인")
+    @GetMapping("/signin/kakao")
+    public RedirectView loginCallback(@RequestParam("code") String code) {
+        return kakaoService.loginCallback(code);
+    }
+
+    @Operation(summary = "카카오 권한요청")
+    @GetMapping("/authorize/kakao")
+    public RedirectView goKakaoOAuth(@RequestParam("scope") String scope) {
+        return kakaoService.goKakaoOAuth(scope);
+    }
+
+    @Operation(summary = "카카오 프로필")
+    @GetMapping("/profile/kakao")
+    public String getProfile() {
+        return kakaoService.getProfile();
+    }
+
+    @Operation(summary = "카카오 로그아웃")
+    @PostMapping("/signout/kakao")
+    public String logout() {
+        return kakaoService.logout();
     }
 
 
