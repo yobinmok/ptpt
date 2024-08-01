@@ -1,17 +1,50 @@
 import axios from 'axios';
 
-// 엑세스 토큰 요청 함수
-export const fetchAccessToken = async (authorizationCode, provider) => {
+// Axios 인스턴스를 생성하여 기본 설정 지정
+const instance = axios.create({
+  baseURL: 'http://localhost:8080', // 백엔드 서버 주소
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// authorization code를 사용하여 백엔드에서 access token과 id token을 요청
+// 구글 로그인 요청 함수
+export const googleSignin = async (code) => {
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_BACKEND_URL}/oauth/${provider}`,
-      {
-        code: authorizationCode,
-      }
-    );
+    const response = await instance.post('/member/signin/google', {
+      authorizationCode: code,
+    });
     return response.data;
   } catch (error) {
-    console.error('Error fetching access token:', error);
+    console.error('Error during Google sign-in:', error);
+    throw error;
+  }
+};
+
+// 구글 액세스 토큰을 검증하는 함수
+export const verifyGoogleAccessToken = async (accessToken) => {
+  try {
+    const response = await instance.post('/member/auth/google', {
+      accessToken,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error during Google access token verification:', error);
+    throw error;
+  }
+};
+
+// 카카오 로그인 요청 함수
+export const kakaoSignin = async (code) => {
+  try {
+    // 백엔드에 카카오 인가 코드를 보내 액세스 토큰 요청
+    const response = await instance.post('/member/signin/kakao', {
+      authorizationCode: code,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error during Kakao sign-in:', error);
     throw error;
   }
 };
