@@ -1,5 +1,14 @@
-import { SET_ROOM_SESSION, CLEAR_ROOM_SESSION } from "../types/room";
-import { TOGGLE_SIDEBAR, SELECT_TAB, CLEAR_TAB  } from "../types/room";
+import { SET_ROOM_SESSION, CLEAR_ROOM_SESSION } from '../types/room';
+import {
+  TOGGLE_SIDEBAR,
+  SELECT_TAB,
+  CLEAR_TAB,
+  TOGGLE_SCRIPT_SELECT,
+} from '../types/room';
+
+const toggleScriptSelect = () => ({
+  type: TOGGLE_SCRIPT_SELECT,
+});
 
 const setRoomSession = (data) => {
   return {
@@ -33,4 +42,11 @@ const clearTab = () => {
   };
 };
 
-export { setRoomSession, clearRoomSession, toggleSidebar, selectTab, clearTab };
+export {
+  setRoomSession,
+  clearRoomSession,
+  toggleSidebar,
+  selectTab,
+  clearTab,
+  toggleScriptSelect,
+};

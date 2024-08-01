@@ -3,8 +3,11 @@ import { Box } from '@mui/material';
 import CustomSelect from '../../molecules/CustomSelect';
 import CustomTextarea from '../../molecules/CustomTextarea';
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
+import { useDispatch } from 'react-redux';
+import { toggleScriptSelect } from '../../../store/actions/room';
 
-const SelectScriptTab = ({ options, handleAddCircleClick }) => {
+const SelectScriptTab = ({ options }) => {
+  const dispatch = useDispatch();
   return (
     <Box>
       <Box
@@ -25,7 +28,9 @@ const SelectScriptTab = ({ options, handleAddCircleClick }) => {
             marginLeft: '10px',
             cursor: 'pointer',
           }}
-          onClick={handleAddCircleClick}
+          onClick={() => {
+            dispatch(toggleScriptSelect());
+          }}
         />
       </Box>
 

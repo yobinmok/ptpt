@@ -20,8 +20,6 @@ const soloReducer = (state = initialState, action) => {
   // STATE를 수정하는 방식을 다 정해둠 -> type : type에 따른 처리
   switch (action.type) {
     case 'REGISTER_GUIDELINE':
-      console.log(action);
-      console.log(state);
       return {
         ...state,
         script: state.script.map((item, index) =>

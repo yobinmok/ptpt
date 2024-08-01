@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { TextField, styled, Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-
+import { useDispatch } from 'react-redux';
+import { toggleScriptSelect } from '../../store/actions/room';
 // 경계선 없는 텍스트 필드를 위한 스타일
 export const CustomTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
@@ -16,9 +17,6 @@ export const CustomTextField = styled(TextField)(({ theme }) => ({
       border: 'none', // 포커스 시 경계선 제거
     },
   },
-  '& .MuiInputLabel-root': {
-    display: 'none', // 레이블 숨기기
-  },
 }));
 
 // 스크립트 컨테이너를 위한 스타일
@@ -28,8 +26,9 @@ const ScriptContainer = styled(Box)(({ theme }) => ({
   padding: '2px', // 패딩
 }));
 
-function CustomTextarea({ placeholder, editFlag }) {
-  const [content, setContent] = useState(''); // 상태 추가
+function CustomTextarea({ defaultContent, placeholder, editFlag }) {
+  const dispatch = useDispatch();
+  const [content, setContent] = useState(defaultContent); // 상태 추가
 
   const handleChange = (event) => {
     setContent(event.target.value); // 상태 업데이트
@@ -55,13 +54,20 @@ function CustomTextarea({ placeholder, editFlag }) {
           }}
         >
           <DeleteIcon
+            onClick={() => {
+              '클릭하면 삭제 모달 띄우기';
+            }}
             sx={{
               color: '#7A7A7A',
               marginRight: '5px',
             }}
           />
           <EditIcon
+            onClick={() => {
+              dispatch(toggleScriptSelect());
+            }}
             sx={{
+              cursor: 'pointer',
               color: '#7A7A7A',
               marginRight: '5px',
             }}
