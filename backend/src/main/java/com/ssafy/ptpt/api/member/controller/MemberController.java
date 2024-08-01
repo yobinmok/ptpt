@@ -163,8 +163,8 @@ public class MemberController {
 
     @Operation(summary = "카카오 프로필")
     @GetMapping("/profile/kakao")
-    public String getProfile() {
-        return kakaoService.getProfile();
+    public String getProfile(@RequestBody String accessToken) { //TODO: 버그 발생으로 임의로 추가한 RequestBody입니다. 수정해주세요.
+        return kakaoService.getProfile(accessToken);
     }
 
 //     @Operation(
