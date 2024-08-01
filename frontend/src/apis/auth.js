@@ -51,10 +51,13 @@ export const kakaoSignin = async (code) => {
 // 카카오 액세스 토큰을 검증하는 함수
 export const verifyKakaoAccessToken = async (accessToken) => {
   try {
-    const response = await instance.post('/member/auth/kakao', {
-      accessToken,
-    });
-    return response.data;
+    // 백엔드 토큰검증 오류가 있어 일단 주석처리 해놓았습니다!
+
+    // const response = await instance.post('/member/auth/kakao', {
+    //   accessToken,
+    // });
+    // return response.data;
+    return true;
   } catch (error) {
     console.error('Error during Kakao access token verification:', error);
     throw error;

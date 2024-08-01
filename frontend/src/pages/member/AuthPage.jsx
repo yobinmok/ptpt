@@ -47,6 +47,7 @@ const AuthPage = () => {
       {token && (
         <div>
           <p>Access Token: {token.accessToken}</p>
+          <p>Member Id: {token.memberId}</p>
           <p>ID Token: {token.id_token}</p>
         </div>
       )}
