@@ -39,10 +39,4 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "member")
-    private List<Evaluation> evaluation;
-
-    @ManyToOne
-    @JoinColumn(name = "studyroom_id")
-    private StudyRoom studyRoom;
 }

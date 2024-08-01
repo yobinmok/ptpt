@@ -2,7 +2,6 @@ package com.ssafy.ptpt.api.studyroom.service;
 
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomConnectRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomCreateRequest;
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomSearchRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomUpdateRequest;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomInfoResponse;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomListResponse;
@@ -18,7 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,41 +62,33 @@ public class StudyRoomService {
 
     //방 생성
     @Transactional
-    public Long createStudyRoom(Member member, StudyRoomCreateRequest studyRoomCreateRequest) {
-        Member findMember = memberRepository.findById(member.getMemberId())
+    public void createStudyRoom(StudyRoomCreateRequest studyRoomCreateRequest) {
+        memberRepository.findById(studyRoomCreateRequest.getMemberId())
                 .orElseThrow(() -> new NotFoundException(MEMBER_NOT_FOUND));
 
         // 공개 여부에 따른 코드 추가 필요
         StudyRoom studyRoom = new StudyRoom();
 
         studyRoomRepository.save(studyRoom);
-        return studyRoom.getStudyRoomId();
     }
 
     //방 수정
     @Transactional
-    public void updateStudyRoom(Member member, Long studyRoomId, StudyRoomUpdateRequest studyRoomUpdateRequest) {
+    public void updateStudyRoom(Long studyRoomId, StudyRoomUpdateRequest studyRoomUpdateRequest) {
         StudyRoom findStudyRoom = studyRoomRepository.findById(studyRoomId)
                 .orElseThrow(() -> new NotFoundException(NotFoundException.STUDY_ROOM_NOT_FOUND));
 
-
-        if (!member.getMemberId().equals(findStudyRoom.getMemberId())) {
-            throw new NotMatchException(MEMBER_NOT_MATCH);
-        }
-
 //        호출을 위한 코드 추가 필요
-//        findStudyRoom.updateStudyRoom();
+        findStudyRoom.updateStudyRoom(studyRoomUpdateRequest);
     }
 
     //방 삭제
     @Transactional
-    public void deleteStudyRoom(Member member, Long studyRoomId) {
-        StudyRoom findStudyRoom = studyRoomRepository.findById(studyRoomId)
+    public void deleteStudyRoom(Long memberId) {
+        StudyRoom findStudyRoom = studyRoomRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(NotFoundException.STUDY_ROOM_NOT_FOUND));
-        if (!member.getMemberId().equals(findStudyRoom.getMemberId())) {
-            throw new NotMatchException(MEMBER_NOT_MATCH);
-        }
-        studyRoomRepository.deleteById(studyRoomId);
+
+        studyRoomRepository.deleteById(findStudyRoom.getStudyRoomId());
     }
 
     // 방 비밀번호 일치여부 확인

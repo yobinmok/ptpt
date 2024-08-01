@@ -17,7 +17,7 @@ public class StudyRoomListResponse {
 
     private String studyRoomTitle;
 
-    private List<Member> entryList;
+    private List<Integer> entryList;
 
     private String studyRoomCode;
 
@@ -36,7 +36,7 @@ public class StudyRoomListResponse {
     private String description;
 
     // 익명여부
-    private boolean anonymity;
+    private int anonymity;
 
     // StudyRoom 객체를 StudyRoomListResponse 로 변환하는 정적 메서드
     public static StudyRoomListResponse from(StudyRoom studyRoom) {
@@ -50,7 +50,7 @@ public class StudyRoomListResponse {
         studyRoomListResponse.presentationTime = studyRoom.getPresentationTime();
         studyRoomListResponse.subject = studyRoom.getSubject();
         studyRoomListResponse.description = studyRoom.getDescription();
-        studyRoomListResponse.anonymity = studyRoom.isAnonymity();
+        studyRoomListResponse.anonymity = studyRoom.getAnonymity();
 
         return studyRoomListResponse;
     }

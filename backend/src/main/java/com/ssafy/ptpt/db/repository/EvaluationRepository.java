@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
-    @Query("SELECT e FROM Evaluation e WHERE e.member.id = :memberId")
+    @Query("SELECT e FROM Evaluation e WHERE e.studyRoom.memberId = :memberId")
     List<Evaluation> findByMemberId(@Param("memberId") Long memberId);
+
 }

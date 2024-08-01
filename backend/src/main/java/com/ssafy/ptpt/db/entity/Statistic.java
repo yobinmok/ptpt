@@ -1,24 +1,20 @@
 package com.ssafy.ptpt.db.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.List;
 
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Statistic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "statistic_id")
     private Long statisticId;
 
     private int totalDelivery;
@@ -26,5 +22,24 @@ public class Statistic {
     private int totalPreparation;
     private int totalLogic;
     private int totalSuitability;
+
     private int evaluateQuantity;
+    public void createStatistic(int totalDelivery, int totalExpression, int totalPreparation, int totalLogic, int totalSuitability) {
+        this.totalDelivery = totalDelivery;
+        this.totalExpression = totalExpression;
+        this.totalPreparation = totalPreparation;
+        this.totalLogic = totalLogic;
+        this.totalSuitability = totalSuitability;
+        this.evaluateQuantity++;
+    }
+
+    public void updateStatistic(Evaluation evaluation){
+        this.totalDelivery += evaluation.getDelivery();
+        this.totalExpression += evaluation.getExpression();
+        this.totalPreparation += evaluation.getPreparation();
+        this.totalLogic += evaluation.getLogic();
+        this.totalSuitability += evaluation.getSuitability();
+        this.evaluateQuantity++;
+    }
+
 }

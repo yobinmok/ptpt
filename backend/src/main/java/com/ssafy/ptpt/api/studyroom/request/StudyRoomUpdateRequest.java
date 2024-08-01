@@ -13,12 +13,17 @@ public class StudyRoomUpdateRequest {
 
     // 방 이름
     @NotBlank(message = "이름은 필수")
-    private String StudyRoomName;
+    private String StudyRoomTitle;
 
-    // 방장
-    private Long StudyRoomAdminId;
+    private int isPublic;
 
-    // 인원
-    @NotNull(message = "인원 설정")
-    private Integer entryListLimit;
+    private String studyRoomPw;
+    private String presentationTime;
+    private String subject;
+    private String description;
+
+    // 익명여부
+    private int anonymity;
+
+
 }

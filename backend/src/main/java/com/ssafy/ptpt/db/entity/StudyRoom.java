@@ -1,5 +1,6 @@
 package com.ssafy.ptpt.db.entity;
 
+import com.ssafy.ptpt.api.studyroom.request.StudyRoomUpdateRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,8 +25,8 @@ public class StudyRoom {
 
     private String studyRoomTitle;
 
-    @OneToMany(mappedBy = "studyRoom")
-    private List<Member> entryList;
+    @ElementCollection
+    private List<Integer> entryList = new ArrayList<>();
 
     @OneToMany(mappedBy = "studyRoom")
     private List<Evaluation> Evaluation;
@@ -51,16 +53,16 @@ public class StudyRoom {
     private String description;
 
     // 익명여부
-    private boolean anonymity;
+    private int anonymity;
 
     // 방 수정하기 - jpa 변경감지를 통해 entity 값 update
-    public void updateStudyRoom(StudyRoom studyRoom){
-        this.studyRoomTitle = studyRoom.getStudyRoomTitle();
-        this.isPublic = studyRoom.getIsPublic();
-        this.studyRoomPw = studyRoom.getStudyRoomPw();
-        this.presentationTime = studyRoom.getPresentationTime();
-        this.subject = studyRoom.getSubject();
-        this.description = studyRoom.getDescription();
-        this.anonymity = studyRoom.isAnonymity();
+    public void updateStudyRoom(StudyRoomUpdateRequest studyRoomUpdateRequest){
+        this.studyRoomTitle = studyRoomUpdateRequest.getStudyRoomTitle();
+        this.isPublic = studyRoomUpdateRequest.getIsPublic();
+        this.studyRoomPw = studyRoomUpdateRequest.getStudyRoomPw();
+        this.presentationTime = studyRoomUpdateRequest.getPresentationTime();
+        this.subject = studyRoomUpdateRequest.getSubject();
+        this.description = studyRoomUpdateRequest.getDescription();
+        this.anonymity = studyRoomUpdateRequest.getAnonymity();
     }
 }
