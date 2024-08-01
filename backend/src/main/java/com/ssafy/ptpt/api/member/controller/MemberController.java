@@ -46,11 +46,11 @@ public class MemberController {
     }
 
 
-    @Operation(summary = "카카오 로그인")
-    @GetMapping("/login/kakao")
-    public RedirectView goKakaoOAuth() {
-        return kakaoService.goKakaoOAuth();
-    }
+//    @Operation(summary = "카카오 로그인")
+//    @GetMapping("/login/kakao")
+//    public RedirectView goKakaoOAuth() {
+//        return kakaoService.goKakaoOAuth();
+//    }
 
     @Operation(summary = "카카오 로그인")
     @GetMapping("/signin/kakao")
