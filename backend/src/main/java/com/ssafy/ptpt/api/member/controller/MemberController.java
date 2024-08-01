@@ -42,7 +42,6 @@ public class MemberController {
     @Autowired
     public KakaoService kakaoService;
 
-<<<<<<< backend/src/main/java/com/ssafy/ptpt/api/member/controller/MemberController.java
     @Autowired
     private MemberService memberService;
 
@@ -58,21 +57,16 @@ public class MemberController {
 //        return new ResponseEntity<>(HttpStatus.ACCEPTED);
 //    }
 
-
-=======
     @PostMapping("/signup")
     @Operation(summary = "회원가입")
     public ResponseEntity<Void> signup(@RequestParam("ACCESS_TOKEN") String ACCESS_TOKEN){
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
->>>>>>> backend/src/main/java/com/ssafy/ptpt/api/member/controller/MemberController.java
 //    @Operation(summary = "카카오 로그인")
 //    @GetMapping("/login/kakao")
 //    public RedirectView goKakaoOAuth() {
 //        return kakaoService.goKakaoOAuth();
 //    }
-<<<<<<< backend/src/main/java/com/ssafy/ptpt/api/member/controller/MemberController.java
 
     @Operation(summary = "카카오 로그인")
     @PostMapping("/signin/kakao")
@@ -115,8 +109,7 @@ public class MemberController {
 //        return kakaoService.logout();
 //    }
 
-    @Operation(summary = "카카오 액세스 토큰 검증")
-=======
+
     @Operation(
             summary = "카카오톡 로그인",
             description = "카카오톡 OAuth2.0 인증을 통해 사용자를 로그인합니다.",
@@ -174,23 +167,23 @@ public class MemberController {
         return kakaoService.getProfile();
     }
 
-    @Operation(
-            summary = "카카오 액세스 토큰 발급",
-            description = "카카오 액세스 토큰 발급.",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "액세스 토큰 반환",
-                            content = @Content(
-                                    schemaProperties = {
-                                            @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message")),
-                                            @SchemaProperty(name = "accessToken", schema = @Schema(type = "string", description = "액세스 토큰"))
-                                    }
-                            )
-                    )
-            }
-    )
->>>>>>> backend/src/main/java/com/ssafy/ptpt/api/member/controller/MemberController.java
+//     @Operation(
+//             summary = "카카오 액세스 토큰 발급",
+//             description = "카카오 액세스 토큰 발급.",
+//             responses = {
+//                     @ApiResponse(
+//                             responseCode = "200",
+//                             description = "액세스 토큰 반환",
+//                             content = @Content(
+//                                     schemaProperties = {
+//                                             @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message")),
+//                                             @SchemaProperty(name = "accessToken", schema = @Schema(type = "string", description = "액세스 토큰"))
+//                                     }
+//                             )
+//                     )
+//             }
+//     )
+    @Operation(summary = "카카오 액세스 토큰 검증")
     @PostMapping("/auth/kakao")
     public ResponseEntity<?> kakaoAuthVerify(@RequestBody AccessTokenRequestBody accessToken) {
         System.out.println("토큰검증 API");
