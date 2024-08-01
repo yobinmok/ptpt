@@ -1,5 +1,6 @@
-import CustomSelect from '../../molecules/CustomSelect';
-import CustomTextarea from '../../molecules/CustomTextarea';
+import { useState } from 'react';
+import RegisterScriptTab from './RegisterScrpitTab';
+import SelectScriptTab from './SelectScriptTab';
 const ScriptTab = () => {
   // 옵션들은 store에서 가져와야 함
   const options = [
@@ -7,17 +8,23 @@ const ScriptTab = () => {
     { value: 1, label: '스크립트 갈아엎음' },
     { value: 2, label: '최종최종' },
   ];
+
+  const [showRegisterTab, setShowRegisterTab] = useState(false);
+
+  const handleAddCircleClick = () => {
+    setShowRegisterTab(true); // 클릭 시 RegisterScriptTab을 표시
+  };
+
   return (
     <>
-      <CustomSelect
-        label='스크립트 선택'
-        options={options}
-        onChange={() => {}}
-      ></CustomSelect>
-      <CustomTextarea></CustomTextarea>
-      <div>- textarea(수정 및 삭제버튼)</div>
-      <div>- 작성 화면</div>
-      <div> 등록 및 취소 버튼</div>
+      {showRegisterTab ? (
+        <RegisterScriptTab /> // 클릭 시 RegisterScriptTab 컴포넌트 표시
+      ) : (
+        <SelectScriptTab
+          options={options}
+          handleAddCircleClick={handleAddCircleClick}
+        />
+      )}
     </>
   );
 };

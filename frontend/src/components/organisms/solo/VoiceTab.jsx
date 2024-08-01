@@ -13,7 +13,7 @@ const VoiceTab = () => {
   ];
 
   let stateSoloPreset = useSelector((state) => state.solo);
-
+  console.log(stateSoloPreset);
   let scriptIdx = 0;
   const voiceSetting = {
     model: 0,
@@ -27,7 +27,7 @@ const VoiceTab = () => {
         label='음성모델 선택'
         options={options}
         onChange={(value) => {
-          voiceSetting.modelIdx = value;
+          voiceSetting.model = value;
         }}
       />
       <CustomSelect
@@ -86,9 +86,6 @@ const VoiceTab = () => {
         </Button>
         <Button
           onClick={() => {
-            console.log('전송할 데이터 확인!!!!!!!!');
-            console.log(scriptIdx);
-            console.log(voiceSetting);
             dispatch(registerGuideline(scriptIdx, voiceSetting));
           }}
           variant='contained'

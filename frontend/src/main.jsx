@@ -20,6 +20,10 @@ const theme = createTheme({
       main: '#76AE95',
       contrastText: '#fff',
     },
+    neutral: {
+      main: '#EEEEEE', // 새로운 색상 추가
+      contrastText: '#747474', // 새로운 색상 추가
+    },
   },
 });
 

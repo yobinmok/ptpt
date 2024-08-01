@@ -26,7 +26,7 @@ const soloReducer = (state = initialState, action) => {
         ...state,
         script: state.script.map((item, index) =>
           index === action.payload.index
-            ? { ...item, voiceSettig: action.payload.newVoiceSetting }
+            ? { ...item, voiceSetting: action.payload.newVoiceSetting }
             : item
         ),
       };

@@ -1,9 +1,10 @@
-import React from 'react';
-import TextField from '@mui/material/TextField';
-import { styled, Box } from '@mui/material';
+import React, { useState } from 'react';
+import { TextField, styled, Box } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 // 경계선 없는 텍스트 필드를 위한 스타일
-const CustomTextField = styled(TextField)(({ theme }) => ({
+export const CustomTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
       border: 'none', // 경계선 제거
@@ -18,9 +19,6 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
   '& .MuiInputLabel-root': {
     display: 'none', // 레이블 숨기기
   },
-  //   '& .MuiInputBase-input': {
-  //     padding: '16.5px 14px', // 플레이스홀더가 잘 보이도록 패딩 조정
-  //   },
 }));
 
 // 스크립트 컨테이너를 위한 스타일
@@ -30,17 +28,46 @@ const ScriptContainer = styled(Box)(({ theme }) => ({
   padding: '2px', // 패딩
 }));
 
-function CustomTextarea() {
+function CustomTextarea({ placeholder, editFlag }) {
+  const [content, setContent] = useState(''); // 상태 추가
+
+  const handleChange = (event) => {
+    setContent(event.target.value); // 상태 업데이트
+  };
+
   return (
     <ScriptContainer>
       <CustomTextField
-        placeholder='스크립트를 입력하세요'
+        placeholder={placeholder}
         multiline
-        rows={4}
+        rows={13}
+        value={content}
+        onChange={handleChange} // onChange 핸들러 추가
         variant='outlined'
         fullWidth
       />
-      <Box>여기에 버튼 두개</Box>
+      {!editFlag && (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            padding: '8px 0', // 위아래 패딩 추가
+          }}
+        >
+          <DeleteIcon
+            sx={{
+              color: '#7A7A7A',
+              marginRight: '5px',
+            }}
+          />
+          <EditIcon
+            sx={{
+              color: '#7A7A7A',
+              marginRight: '5px',
+            }}
+          />
+        </Box>
+      )}
     </ScriptContainer>
   );
 }

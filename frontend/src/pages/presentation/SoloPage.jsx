@@ -1,12 +1,13 @@
 import React from 'react';
 import { Box, Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import SideTab from '../../components/organisms/SideTab';
-import Sidebar from '../../components/organisms/Sidebar';
 import VoiceIcon from '@mui/icons-material/SpatialAudioOffOutlined';
 import ScriptIcon from '@mui/icons-material/DescriptionOutlined';
 import CompareIcon from '@mui/icons-material/MicNone';
 import SettingIcon from '@mui/icons-material/SettingsOutlined';
+
+import SideTab from '../../components/organisms/SideTab';
+import Sidebar from '../../components/organisms/Sidebar';
 import VoiceTab from '../../components/organisms/solo/VoiceTab';
 import ScriptTab from '../../components/organisms/solo/ScrpitTab';
 import CompareTab from '../../components/organisms/solo/CompareTab';
