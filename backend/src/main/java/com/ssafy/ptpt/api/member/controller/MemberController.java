@@ -1,6 +1,7 @@
 package com.ssafy.ptpt.api.member.controller;
 
 import com.google.gson.JsonParser;
+import com.ssafy.ptpt.api.member.service.MemberService;
 import com.ssafy.ptpt.api.security.model.request.AccessTokenRequestBody;
 import com.ssafy.ptpt.api.security.model.request.AuthorizationCodeRequestBody;
 import com.ssafy.ptpt.api.security.model.response.BaseResponseBody;
@@ -8,6 +9,7 @@ import com.ssafy.ptpt.api.security.model.response.TokenResponseBody;
 import com.ssafy.ptpt.api.security.service.GoogleAuthService;
 import com.ssafy.ptpt.api.security.service.KakaoService;
 import com.ssafy.ptpt.api.transformer.Trans;
+import com.ssafy.ptpt.db.entity.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,17 +37,20 @@ public class MemberController {
     @Autowired
     public KakaoService kakaoService;
 
-    @PostMapping("/signup")
-//    @ApiOperation(value = "회원가입")
-    public ResponseEntity<?> signup(){
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
+    @Autowired
+    private MemberService memberService;
 
-    @PostMapping("/signin")
-//    @ApiOperation(value = "로그인")
-    public ResponseEntity<?> signin(){
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
+//    @PostMapping("/signup")
+////    @ApiOperation(value = "회원가입")
+//    public ResponseEntity<?> signup(){
+//        return new ResponseEntity<>(HttpStatus.CREATED);
+//    }
+//
+//    @PostMapping("/signin")
+////    @ApiOperation(value = "로그인")
+//    public ResponseEntity<?> signin(){
+//        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+//    }
 
 
 //    @Operation(summary = "카카오 로그인")
@@ -62,7 +67,15 @@ public class MemberController {
         String accessToken = kakaoService.getAccessToken(authorizationCode.getAuthorizationCode());
         System.out.println("!!!!!!!!!!!!!!!!!" + accessToken);
         String tokenString = Trans.token(accessToken, new JsonParser());
-        String memberId = Trans.id(kakaoService.getProfile(tokenString), new JsonParser());
+        String memberId = "K"+Trans.id(kakaoService.getProfile(tokenString), new JsonParser());
+
+        Member member = memberService.findMemberByOauthId(memberId);
+        if (member == null) {
+            member = new Member();
+            member.setOauthId(memberId);
+            memberService.saveMember(member);
+        }
+
         return ResponseEntity.ok(TokenResponseBody.of(200, "Success", tokenString, memberId));
     }
 
@@ -122,8 +135,15 @@ public class MemberController {
 //        String accessToken = googleAuthService.getAccessToken(URLDecoder.decode(authorizationCode.getAuthorizationCode(), StandardCharsets.UTF_8));
         String[] tokens = googleAuthService.getAccessToken(authorizationCode.getAuthorizationCode());
         String accessToken = tokens[1];
-        String memberId = googleAuthService.getUserResource(tokens[0]).get("id").asText();
-//        System.out.println(googleAuthService.getUserResource(accessToken));
+        String memberId = "G"+googleAuthService.getUserResource(tokens[0]).get("id").asText();
+
+        Member member = memberService.findMemberByOauthId(memberId);
+        if (member == null) {
+            member = new Member();
+            member.setOauthId(memberId);
+            memberService.saveMember(member);
+        }
+
         return ResponseEntity.ok(TokenResponseBody.of(200, "Success", accessToken, memberId));
     }
 
