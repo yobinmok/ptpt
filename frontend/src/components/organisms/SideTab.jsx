@@ -6,7 +6,6 @@ import { Divider, Box } from '@mui/material';
 const SideTab = ({ item }) => {
   const isSidebarOpen = useSelector((state) => state.room.isSidebarOpen);
   const selectedTab = useSelector((state) => state.room.selectedTab);
-  console.log(item)
 
   return (
     <Box

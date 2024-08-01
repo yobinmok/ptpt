@@ -25,8 +25,6 @@ const SoloPage = () => {
   const dispatch = useDispatch();
   const isSidebarOpen = useSelector((state) => state.room.isSidebarOpen);
   const selectedTab = useSelector((state) => state.room.selectedTab);
-  console.log("isSidebarOpen  " + isSidebarOpen)
-  console.log("selecte tab index  " + selectedTab)
 
   // 탭 클릭 시 호출되는 핸들러
   const handleTabClick = (index) => {
@@ -43,7 +41,6 @@ const SoloPage = () => {
 
   // 탭 별 content 처리
   const getTabContent = (index) => {
-    console.log(index !== null ? tabItem[index] : tabItem[0])
     return index !== null ? tabItem[index] : tabItem[0];
   };
 

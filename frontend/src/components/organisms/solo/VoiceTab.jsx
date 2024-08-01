@@ -1,26 +1,44 @@
 import React, { useState } from 'react';
-import { Button, Box, Divider, Slider } from '@mui/material';
+import { Button, Box, Divider } from '@mui/material';
 import CustomSelect from '../../molecules/CustomSelect';
 import CustomSlider from '../../molecules/CustomSlider';
+import { useSelector, useDispatch } from 'react-redux';
+import { registerGuideline } from '../../../store/actions/solo';
 const VoiceTab = () => {
+  const dispatch = useDispatch();
   const options = [
-    { value: 'Neural-FEMALE10', label: 'Neural-FEMALE10' },
-    { value: 'WAVENET-20', label: 'WAVENET-20' },
-    { value: '내 음성모델', label: '내 음성모델' },
+    { value: 0, label: 'Neural-FEMALE10' },
+    { value: 1, label: 'WAVENET-20' },
+    { value: 2, label: '내 음성모델' },
   ];
 
-  const handleSelectChange = (value) => {};
+  let stateSoloPreset = useSelector((state) => state.solo);
+
+  let scriptIdx = 0;
+  const voiceSetting = {
+    model: 0,
+    speed: 0,
+    tone: 0,
+  };
+
   return (
     <>
       <CustomSelect
         label='음성모델 선택'
         options={options}
-        onChange={handleSelectChange}
+        onChange={(value) => {
+          voiceSetting.modelIdx = value;
+        }}
       />
       <CustomSelect
         label='스크립트 선택'
-        options={options}
-        onChange={handleSelectChange}
+        options={stateSoloPreset.script.map((item, index) => ({
+          value: index,
+          label: item.title,
+        }))}
+        onChange={(value) => {
+          scriptIdx = value;
+        }}
         style={{ marginTop: '10px' }}
       />
       <Divider style={{ margin: '20px 0px' }} />
@@ -30,7 +48,9 @@ const VoiceTab = () => {
         step={10}
         min={10}
         max={110}
-        handleChange={() => {}}
+        handleChange={(event, newValue) => {
+          voiceSetting.tone = newValue;
+        }}
         labels={['낮음', '보통', '높음']}
       ></CustomSlider>
 
@@ -49,7 +69,9 @@ const VoiceTab = () => {
         step={10}
         min={10}
         max={110}
-        handleChange={() => {}}
+        handleChange={(event, newValue) => {
+          voiceSetting.speed = newValue;
+        }}
         labels={['느림', '보통', '빠름']}
       ></CustomSlider>
 
@@ -62,7 +84,16 @@ const VoiceTab = () => {
         <Button variant='contained' color='secondary'>
           ▶ &nbsp;재생
         </Button>
-        <Button variant='contained' color='secondary'>
+        <Button
+          onClick={() => {
+            console.log('전송할 데이터 확인!!!!!!!!');
+            console.log(scriptIdx);
+            console.log(voiceSetting);
+            dispatch(registerGuideline(scriptIdx, voiceSetting));
+          }}
+          variant='contained'
+          color='secondary'
+        >
           등록
         </Button>
       </Box>
