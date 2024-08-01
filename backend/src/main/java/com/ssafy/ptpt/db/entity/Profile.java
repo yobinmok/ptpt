@@ -13,7 +13,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityScan
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

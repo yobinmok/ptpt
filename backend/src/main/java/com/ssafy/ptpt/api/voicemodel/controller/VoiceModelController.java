@@ -4,24 +4,21 @@ package com.ssafy.ptpt.api.voicemodel.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/voicemodel")
-public class VoicemodelController {
+@RequestMapping("/voiceModel")
+public class VoiceModelController {
 
     @PostMapping()
     @Operation(summary = "음성모델 등록")
-    public ResponseEntity<?> createVoicemodel(){
+    public ResponseEntity<?> createVoiceModel(){
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/{voicemodelId}")
+    @GetMapping("/{voiceModelId}")
     @Operation(summary = "음성모델 조회")
-    public ResponseEntity<?> viewVoicemodel(){
+    public ResponseEntity<?> viewVoiceModel(@PathVariable String voiceModelId){
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
