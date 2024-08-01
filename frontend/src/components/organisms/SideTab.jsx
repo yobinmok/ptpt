@@ -1,7 +1,13 @@
+// src/components/organisms/SideTab.jsx
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Divider, Box } from '@mui/material';
 
-const SideTab = ({ item, isSidebarOpen }) => {
+const SideTab = ({ item }) => {
+  const isSidebarOpen = useSelector((state) => state.room.isSidebarOpen);
+  const selectedTab = useSelector((state) => state.room.selectedTab);
+  console.log(item)
+
   return (
     <Box
       sx={{

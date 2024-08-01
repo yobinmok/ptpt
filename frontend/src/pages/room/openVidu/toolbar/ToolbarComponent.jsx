@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import './ToolbarComponent.css';
 import styled from 'styled-components';
+import ScreenShareIcon from '@mui/icons-material/ScreenShare';
+import StopScreenShareIcon from '@mui/icons-material/StopScreenShare';
+import VideocamIcon from '@mui/icons-material/Videocam';
+import VideocamOffIcon from '@mui/icons-material/VideocamOff';
+import MicIcon from '@mui/icons-material/Mic';
+import MicOffIcon from '@mui/icons-material/MicOff';
 
 const ToolBar = styled.div`
   width: 100%;
@@ -56,7 +62,7 @@ const RoomContentButton = styled.button`
 `;
 
 RoomContentButton.default = {
-  position: "static",
+  position: 'static',
 };
 
 const ChatAlertPoint = styled.div`
@@ -74,11 +80,11 @@ const ChatAlertPoint = styled.div`
 const FontAwesomeStyled = styled.i`
   font-size: ${({ fontSize }) => fontSize};
   font-weight: 50;
-  font-family: "Font Awesome 5 Free";
+  font-family: 'Font Awesome 5 Free';
 `;
 
 FontAwesomeStyled.defaultProps = {
-  fontSize: "32px",
+  fontSize: '32px',
 };
 const MicVideoIconWrapper = styled.div`
   width: 70px;
@@ -93,108 +99,121 @@ const MicVideoIconWrapper = styled.div`
 // const logo = require('../../assets/images/openvidu_logo.png');
 
 export default class ToolbarComponent extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { fullscreen: false };
-        this.camStatusChanged = this.camStatusChanged.bind(this);
-        this.micStatusChanged = this.micStatusChanged.bind(this);
-        this.screenShare = this.screenShare.bind(this);
-        this.stopScreenShare = this.stopScreenShare.bind(this);
-        this.toggleFullscreen = this.toggleFullscreen.bind(this);
-        this.switchCamera = this.switchCamera.bind(this);
-        this.leaveSession = this.leaveSession.bind(this);
-        this.toggleChat = this.toggleChat.bind(this);
-    }
+  constructor(props) {
+    super(props);
+    this.state = { fullscreen: false };
+    this.camStatusChanged = this.camStatusChanged.bind(this);
+    this.micStatusChanged = this.micStatusChanged.bind(this);
+    this.screenShare = this.screenShare.bind(this);
+    this.stopScreenShare = this.stopScreenShare.bind(this);
+    this.toggleFullscreen = this.toggleFullscreen.bind(this);
+    this.switchCamera = this.switchCamera.bind(this);
+    this.leaveSession = this.leaveSession.bind(this);
+    this.toggleChat = this.toggleChat.bind(this);
+  }
 
+  micStatusChanged() {
+    //
+    this.props.micStatusChanged();
+  }
 
-    micStatusChanged() {//
-        this.props.micStatusChanged();
-    }
+  camStatusChanged() {
+    //
+    this.props.camStatusChanged();
+  }
 
-    camStatusChanged() {//
-        this.props.camStatusChanged();
-    }
+  screenShare() {
+    //
+    this.props.screenShare();
+  }
 
-    screenShare() {//
-        this.props.screenShare();
-    }
+  stopScreenShare() {
+    //
+    this.props.stopScreenShare();
+  }
 
-    stopScreenShare() {//
-        this.props.stopScreenShare();
-    }
+  toggleFullscreen() {
+    //
+    this.setState({ fullscreen: !this.state.fullscreen });
+    this.props.toggleFullscreen();
+  }
 
-    toggleFullscreen() {//
-        this.setState({ fullscreen: !this.state.fullscreen });
-        this.props.toggleFullscreen();
-    }
+  switchCamera() {
+    //
+    this.props.switchCamera();
+  }
 
-    switchCamera() {//
-        this.props.switchCamera();
-    }
+  leaveSession() {
+    //
+    this.props.leaveSession();
+  }
 
-    leaveSession() {//
-        this.props.leaveSession();
-    }
+  toggleChat() {
+    //
+    this.props.toggleChat();
+  }
 
-    toggleChat() {//
-        this.props.toggleChat();
-    }
-
-    render() {
-        const mySessionId = this.props.sessionId;
-        const localUser = this.props.user;
-        return (
-            <ToolBar>
-                <ToolbarMenuWrapper>
-                  <RoomContentWrapper>
-                    <RoomContentButton 
-                        onClick={this.toggleChat}
-                        // position={"relative"}
-                    />
-                  </RoomContentWrapper>
-                  <RoomContentWrapper>
-                      <RoomContentButton onClick={this.leaveSession}>
-                        나가
-                      </RoomContentButton>
-                  </RoomContentWrapper>
-                  <RoomContentWrapper>
-                      <RoomContentButton onClick={this.micStatusChanged}>
-                          {/* 온오프에 따른 style */}
-                          {localUser !== undefined && localUser.isAudioActive() ? (
-                            <FontAwesomeStyled className="fas fa-microphone" />
-                          ) : (
-                            <FontAwesomeStyled className="fas fa-microphone-slash" />
-                          )}
-                          {/* 마이크 */}
-                      </RoomContentButton>
-                  </RoomContentWrapper>
-                  <RoomContentWrapper>
-                      <RoomContentButton onClick={this.camStatusChanged}>
-                          {/* 온오프에 따른 style */}
-                          {localUser !== undefined && localUser.isVideoActive() ? (
-                            <FontAwesomeStyled className="fas fa-video" />
-                          ) : (
-                            <FontAwesomeStyled className="fas fa-video-slash" />
-                          )}
-                          {/* 캠 */}
-                      </RoomContentButton>
-                  </RoomContentWrapper>
-                  <RoomContentWrapper>
-                          {localUser !== undefined && localUser.isScreenShareActive() ? (
-                            <RoomContentButton
-                              onClick={this.stopScreenShare}
-                              className="active"
-                            >
-                              <FontAwesomeStyled className="fas fa-desktop active" />
-                            </RoomContentButton>
-                          ) : (
-                            <RoomContentButton onClick={this.screenShare}>
-                              <FontAwesomeStyled className="fas fa-desktop" />
-                            </RoomContentButton>
-                          )}
-                  </RoomContentWrapper>
-                </ToolbarMenuWrapper>
-            </ToolBar>
-        );
-    }
+  render() {
+    const mySessionId = this.props.sessionId;
+    const localUser = this.props.user;
+    return (
+      <ToolBar>
+        <ToolbarMenuWrapper>
+          <RoomContentWrapper>
+            <RoomContentButton
+              onClick={this.toggleChat}
+              // position={"relative"}
+            />
+          </RoomContentWrapper>
+          <RoomContentWrapper>
+            <RoomContentButton onClick={this.leaveSession}>
+              나가
+            </RoomContentButton>
+          </RoomContentWrapper>
+          <RoomContentWrapper>
+            <RoomContentButton onClick={this.micStatusChanged}>
+              {/* 온오프에 따른 style */}
+              {localUser !== undefined && localUser.isAudioActive() ? (
+                // <FontAwesomeStyled className="fas fa-microphone" />
+                <img src={MicIcon} alt='' />
+              ) : (
+                // <FontAwesomeStyled className="fas fa-microphone-slash" />
+                <img src={MicOffIcon} alt='' />
+              )}
+              {/* 마이크 */}
+            </RoomContentButton>
+          </RoomContentWrapper>
+          <RoomContentWrapper>
+            <RoomContentButton onClick={this.camStatusChanged}>
+              {/* 온오프에 따른 style */}
+              {localUser !== undefined && localUser.isVideoActive() ? (
+                // <FontAwesomeStyled className="fas fa-video" />
+                <img src={VideocamIcon} alt='' />
+              ) : (
+                // <FontAwesomeStyled className="fas fa-video-slash" />
+                <img src={VideocamOffIcon} alt='' />
+              )}
+              {/* 캠 */}
+            </RoomContentButton>
+          </RoomContentWrapper>
+          <RoomContentWrapper>
+            {localUser !== undefined && localUser.isScreenShareActive() ? (
+              <RoomContentButton
+                onClick={this.stopScreenShare}
+                className='active'
+              >
+                {/* <FontAwesomeStyled className="fas fa-desktop active" /> */}
+                <img src={ScreenShareIcon} alt='' />
+              </RoomContentButton>
+            ) : (
+              <RoomContentButton onClick={this.screenShare}>
+                {/* <FontAwesomeStyled className="fas fa-desktop" /> */}
+                <img src={StopScreenShareIcon} alt='' />
+              </RoomContentButton>
+            )}
+          </RoomContentWrapper>
+        </ToolbarMenuWrapper>
+      </ToolBar>
+    );
+  }
 }

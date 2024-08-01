@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import MyInfoSidebarOption from '../molecules/MyInfoSidebarOption';
+import MyInfoSidebarOption from '../../molecules/MyInfoSidebarOption';
 
 const SidebarContainer = styled.div`
   width: 250px;
