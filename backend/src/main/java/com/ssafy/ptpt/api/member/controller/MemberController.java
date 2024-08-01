@@ -53,9 +53,11 @@ public class MemberController {
 //    }
 
     @Operation(summary = "카카오 로그인")
-    @GetMapping("/signin/kakao")
-    public RedirectView loginCallback(@RequestParam("code") String code) {
-        return kakaoService.loginCallback(code);
+    @PostMapping("/signin/kakao")
+    public ResponseEntity<?> kakaoSignIn(@RequestBody AuthorizationCodeRequestBody authorizationCode) {
+        String accessToken = kakaoService.getAccessToken(authorizationCode.getAuthorizationCode());
+        System.out.println("!!!!!!!!!!!!!!!!!" + accessToken);
+        return ResponseEntity.ok(TokenResponseBody.of(200, "Success", accessToken));
     }
 
     @Operation(summary = "카카오 권한요청")
