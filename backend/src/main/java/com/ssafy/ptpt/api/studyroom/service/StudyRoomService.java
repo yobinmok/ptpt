@@ -87,7 +87,7 @@ public class StudyRoomService {
         }
 
 //        호출을 위한 코드 추가 필요
-//        findStudyRoom.updateStudyRoom();
+        findStudyRoom.updateStudyRoom(studyRoomUpdateRequest);
     }
 
     //방 삭제

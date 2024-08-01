@@ -34,6 +34,9 @@ public class Member {
     private Profile profile;
 
     @OneToOne(mappedBy = "member")
+    private Statistic statistic;
+
+    @OneToOne(mappedBy = "member")
     private Role role;
 
     @OneToMany(mappedBy = "member")
