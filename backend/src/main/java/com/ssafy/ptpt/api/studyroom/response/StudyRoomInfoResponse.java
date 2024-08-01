@@ -25,7 +25,7 @@ public class StudyRoomInfoResponse {
     public static StudyRoomInfoResponse from(StudyRoom studyRoom){
         StudyRoomInfoResponse studyRoomInfoResponse = new StudyRoomInfoResponse();
         studyRoomInfoResponse.studyRoomId = studyRoom.getStudyRoomId();
-        studyRoomInfoResponse.studyRoomTitle = studyRoom.getStudyRoomName();
+        studyRoomInfoResponse.studyRoomTitle = studyRoom.getStudyRoomTitle();
         studyRoomInfoResponse.memberInfoResponse = Collections.singletonList((MemberInfoResponse) studyRoom.getEntryList());
         studyRoomInfoResponse.studyRoomCode = studyRoom.getStudyRoomCode();
         studyRoomInfoResponse.studyRoomPw = studyRoom.getStudyRoomPw();

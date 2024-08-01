@@ -37,9 +37,9 @@ public class StudyRoomService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     //방 상세 조회
-    public StudyRoomInfoResponse findByStudyRoomId(Long studyRoomId) {
-        //아이디를 통해 화상방정보를 조회해온다
-        StudyRoom studyRoom = studyRoomRepository.findById(studyRoomId)
+    public StudyRoomInfoResponse findByStudyRoomTitle(String studyRoomTitle) {
+        //제목을 통해 정보를 조회해온다
+        StudyRoom studyRoom = studyRoomRepository.findByStudyRoomTitle(studyRoomTitle)
                 .orElseThrow(() -> new NotFoundException(NotFoundException.STUDY_ROOM_NOT_FOUND));
         return StudyRoomInfoResponse.from(studyRoom);
     }

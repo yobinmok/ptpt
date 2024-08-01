@@ -21,7 +21,7 @@ public class StudyRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long studyRoomId;
 
-    private String studyRoomName;
+    private String studyRoomTitle;
 
     @OneToMany(mappedBy = "studyRoom")
     private List<Member> entryList;
@@ -39,7 +39,7 @@ public class StudyRoom {
     private String presentationHost;
 
     // 방 공개 여부
-    private boolean isPublic;
+    private int isPublic;
 
     // 발표 시간
     private String presentationTime;
@@ -55,8 +55,8 @@ public class StudyRoom {
 
     // 방 수정하기 - jpa 변경감지를 통해 entity 값 update
     public void updateStudyRoom(StudyRoom studyRoom){
-        this.studyRoomName = studyRoom.getStudyRoomName();
-        this.isPublic = studyRoom.isPublic;
+        this.studyRoomTitle = studyRoom.getStudyRoomTitle();
+        this.isPublic = studyRoom.getIsPublic();
         this.studyRoomPw = studyRoom.getStudyRoomPw();
         this.presentationTime = studyRoom.getPresentationTime();
         this.subject = studyRoom.getSubject();

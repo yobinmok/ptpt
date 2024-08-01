@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/evaluation")
 @RequiredArgsConstructor
@@ -32,10 +34,9 @@ public class EvaluationController {
 
     @GetMapping()
     @Operation(summary = "평가 조회")
-    public ResponseEntity<?> viewEvaluation(@LoginMember Member member,
-                                            @PathVariable("evaluationId") Long evaluationId){
+    public ResponseEntity<?> viewEvaluation(@PathVariable("memberId") Long memberId){
 
-        EvaluationInfoResponse evaluationInfoResponse = evaluationService.findEvaluationById(evaluationId);
+        List<EvaluationInfoResponse> evaluationInfoResponse = evaluationService.findEvaluationById(memberId);
         return ResponseEntity.ok().body(evaluationInfoResponse);
     }
 

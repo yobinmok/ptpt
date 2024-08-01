@@ -15,6 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.ssafy.ptpt.exception.NotMatchException.MEMBER_NOT_MATCH;
 
 @Slf4j
@@ -40,13 +43,16 @@ public class EvaluationService {
         return evaluation.getEvaluationId();
     }
 
-    // 단일 평가 조회
+    // 평가 조회
     @Transactional
-    public EvaluationInfoResponse findEvaluationById(Long evaluationId) {
-        Evaluation evaluation = evaluationRepository.findById(evaluationId)
-                .orElseThrow(() -> new NotFoundException(NotFoundException.EVALUATION_NOT_FOUND));
-        return EvaluationInfoResponse.from(evaluation);
+    public List<EvaluationInfoResponse> findEvaluationById(Long memberId) {
+        List<Evaluation> evaluation = evaluationRepository.findByMemberId(memberId);
+
+        return evaluation.stream()
+                .map(EvaluationInfoResponse::from)
+                .collect(Collectors.toList());
     }
+
     // 평가 삭제
     @Transactional
     public void deleteEvaluation(Member member, Long evaluationId) {
@@ -57,13 +63,5 @@ public class EvaluationService {
         }
         evaluationRepository.deleteById(evaluationId);
     }
-
-    // 평가 삭제
-    @Transactional
-    public void deleteEvaluationTest(Long evaluationId) {
-        Evaluation evaluation = evaluationRepository.findById(evaluationId)
-                .orElseThrow(() -> new NotFoundException(NotFoundException.EVALUATION_NOT_FOUND));
-
-        evaluationRepository.deleteById(evaluationId);
-    }
+    
 }
