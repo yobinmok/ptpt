@@ -14,4 +14,6 @@ public class EvaluationCreateRequest {
     private int logic;
     private int suitability;
     private Long memberId;
+    private String commentContent;
+    private int isAnonymous;
 }

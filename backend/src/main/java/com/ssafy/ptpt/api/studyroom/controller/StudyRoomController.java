@@ -79,6 +79,7 @@ public class StudyRoomController {
     //화상방 리스트 전체 조회
     //페이징 처리 전  -----------------------------------------
     @GetMapping
+    @Operation(summary = "스터디룸 전체 조회")
     public ResponseEntity<List<StudyRoomListResponse>> findBySearchRequest(){
         List<StudyRoomListResponse> body = studyRoomService.findBySearchRequest();
         return ResponseEntity.ok().body(body);
@@ -86,6 +87,7 @@ public class StudyRoomController {
 
     // 방 비밀번호 확인
     @PostMapping("/pwCheck")
+    @Operation(summary = "스터디방 비밀번호 체크")
     public ResponseEntity<Void> findById(@RequestBody @Valid StudyRoomConnectRequest studyRoomConnectRequest) {
         studyRoomService.findById(studyRoomConnectRequest);
         return ResponseEntity.ok().build();

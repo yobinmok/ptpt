@@ -84,12 +84,10 @@ public class EvaluationService {
 
     // 평가 삭제
     @Transactional
-    public void deleteEvaluation(Member member, Long evaluationId) {
-        Evaluation evaluation = evaluationRepository.findById(evaluationId)
+    public void deleteEvaluation(Long evaluationId) {
+        evaluationRepository.findById(evaluationId)
                 .orElseThrow(() -> new NotFoundException(NotFoundException.EVALUATION_NOT_FOUND));
-        if (!member.getMemberId().equals(evaluation.getStudyRoom().getMemberId())) {
-            throw new NotMatchException(MEMBER_NOT_MATCH);
-        }
+
         evaluationRepository.deleteById(evaluationId);
     }
     
