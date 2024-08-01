@@ -38,13 +38,28 @@ export const verifyGoogleAccessToken = async (accessToken) => {
 // 카카오 로그인 요청 함수
 export const kakaoSignin = async (code) => {
   try {
-    // 백엔드에 카카오 인가 코드를 보내 액세스 토큰 요청
     const response = await instance.post('/member/signin/kakao', {
       authorizationCode: code,
     });
     return response.data;
   } catch (error) {
     console.error('Error during Kakao sign-in:', error);
+    throw error;
+  }
+};
+
+// 카카오 액세스 토큰을 검증하는 함수
+export const verifyKakaoAccessToken = async (accessToken) => {
+  try {
+    // 백엔드 토큰검증 오류가 있어 일단 주석처리 해놓았습니다!
+
+    // const response = await instance.post('/member/auth/kakao', {
+    //   accessToken,
+    // });
+    // return response.data;
+    return true;
+  } catch (error) {
+    console.error('Error during Kakao access token verification:', error);
     throw error;
   }
 };

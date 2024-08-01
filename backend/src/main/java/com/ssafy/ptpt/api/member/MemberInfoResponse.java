@@ -18,7 +18,7 @@ public class MemberInfoResponse {
     private String nickName;
     private String memberPicture;
     private String oauthProvider;
-    private Integer oauthId;
+    private String oauthId;
     private LocalDateTime registerTime;
     private String isWithDraw;
     private String withDrawTime;

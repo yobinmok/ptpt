@@ -9,4 +9,9 @@ public class Trans {
         JsonElement element = parser.parse(rtn);
         return element.getAsJsonObject().get("access_token").getAsString();
     }
+
+    public static String id(String rtn, JsonParser parser) {
+        JsonElement element = parser.parse(rtn);
+        return element.getAsJsonObject().get("id").getAsString();
+    }
 }

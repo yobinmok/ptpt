@@ -1,5 +1,7 @@
 package com.ssafy.ptpt.api.member.controller;
 
+import com.google.gson.JsonParser;
+import com.ssafy.ptpt.api.member.service.MemberService;
 import com.ssafy.ptpt.api.member.MemberUpdateRequest;
 import com.ssafy.ptpt.api.member.response.MemberProfileResponse;
 import com.ssafy.ptpt.api.security.model.request.AccessTokenRequestBody;
@@ -8,6 +10,8 @@ import com.ssafy.ptpt.api.security.model.response.BaseResponseBody;
 import com.ssafy.ptpt.api.security.model.response.TokenResponseBody;
 import com.ssafy.ptpt.api.security.service.GoogleAuthService;
 import com.ssafy.ptpt.api.security.service.KakaoService;
+import com.ssafy.ptpt.api.transformer.Trans;
+import com.ssafy.ptpt.db.entity.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -38,17 +42,81 @@ public class MemberController {
     @Autowired
     public KakaoService kakaoService;
 
+<<<<<<< backend/src/main/java/com/ssafy/ptpt/api/member/controller/MemberController.java
+    @Autowired
+    private MemberService memberService;
+
+//    @PostMapping("/signup")
+////    @ApiOperation(value = "회원가입")
+//    public ResponseEntity<?> signup(){
+//        return new ResponseEntity<>(HttpStatus.CREATED);
+//    }
+//
+//    @PostMapping("/signin")
+////    @ApiOperation(value = "로그인")
+//    public ResponseEntity<?> signin(){
+//        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+//    }
+
+
+=======
     @PostMapping("/signup")
     @Operation(summary = "회원가입")
     public ResponseEntity<Void> signup(@RequestParam("ACCESS_TOKEN") String ACCESS_TOKEN){
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+>>>>>>> backend/src/main/java/com/ssafy/ptpt/api/member/controller/MemberController.java
 //    @Operation(summary = "카카오 로그인")
 //    @GetMapping("/login/kakao")
 //    public RedirectView goKakaoOAuth() {
 //        return kakaoService.goKakaoOAuth();
 //    }
+<<<<<<< backend/src/main/java/com/ssafy/ptpt/api/member/controller/MemberController.java
+
+    @Operation(summary = "카카오 로그인")
+    @PostMapping("/signin/kakao")
+    public ResponseEntity<?> kakaoSignIn(@RequestBody AuthorizationCodeRequestBody authorizationCode) {
+//        System.out.println(kakaoService.getProfile());
+        System.out.println("로그인 API");
+        String accessToken = kakaoService.getAccessToken(authorizationCode.getAuthorizationCode());
+        System.out.println("!!!!!!!!!!!!!!!!!" + accessToken);
+        String tokenString = Trans.token(accessToken, new JsonParser());
+        String memberId = "K"+Trans.id(kakaoService.getProfile(tokenString), new JsonParser());
+
+        Member member = memberService.findMemberByOauthId(memberId);
+        if (member == null) {
+            member = new Member();
+            member.setOauthId(memberId);
+            memberService.saveMember(member);
+        }
+
+        return ResponseEntity.ok(TokenResponseBody.of(200, "Success", tokenString, memberId));
+    }
+
+//    @Operation(summary = "카카오 권한요청")
+//    @GetMapping("/authorize/kakao")
+//    public RedirectView goKakaoOAuth(@RequestParam("scope") String scope) {
+//        System.out.println("권한요청 API");
+//        return kakaoService.goKakaoOAuth(scope);
+//    }
+//
+//    @Operation(summary = "카카오 프로필")
+//    @GetMapping("/profile/kakao")
+//    public String getProfile() {
+//        System.out.println("프로필 API");
+//        return kakaoService.getProfile();
+//    }
+
+//    @Operation(summary = "카카오 로그아웃")
+//    @PostMapping("/signout/kakao")
+//    public String logout() {
+//        System.out.println("로그아웃 API");
+//        return kakaoService.logout();
+//    }
+
+    @Operation(summary = "카카오 액세스 토큰 검증")
+=======
     @Operation(
             summary = "카카오톡 로그인",
             description = "카카오톡 OAuth2.0 인증을 통해 사용자를 로그인합니다.",
@@ -122,8 +190,10 @@ public class MemberController {
                     )
             }
     )
+>>>>>>> backend/src/main/java/com/ssafy/ptpt/api/member/controller/MemberController.java
     @PostMapping("/auth/kakao")
     public ResponseEntity<?> kakaoAuthVerify(@RequestBody AccessTokenRequestBody accessToken) {
+        System.out.println("토큰검증 API");
         if (kakaoService.verifyAccessToken(accessToken.getAccessToken())) {
             return ResponseEntity.ok(BaseResponseBody.of(200, "Valid Token"));
         }
@@ -153,8 +223,18 @@ public class MemberController {
         //TODO: 최초 로그인이면 회원가입 진행하기, 데이터베이스랑 연결하기
         System.out.println("TEST!");
 //        String accessToken = googleAuthService.getAccessToken(URLDecoder.decode(authorizationCode.getAuthorizationCode(), StandardCharsets.UTF_8));
-        String accessToken = googleAuthService.getAccessToken(authorizationCode.getAuthorizationCode());
-        return ResponseEntity.ok(TokenResponseBody.of(200, "Success", accessToken));
+        String[] tokens = googleAuthService.getAccessToken(authorizationCode.getAuthorizationCode());
+        String accessToken = tokens[1];
+        String memberId = "G"+googleAuthService.getUserResource(tokens[0]).get("id").asText();
+
+        Member member = memberService.findMemberByOauthId(memberId);
+        if (member == null) {
+            member = new Member();
+            member.setOauthId(memberId);
+            memberService.saveMember(member);
+        }
+
+        return ResponseEntity.ok(TokenResponseBody.of(200, "Success", accessToken, memberId));
     }
 
     @Operation(

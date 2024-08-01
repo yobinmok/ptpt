@@ -24,7 +24,7 @@ public class Member {
     private String nickname;
     private String memberPicture;
     private String oauthProvider;
-    private int oauthId;
+    private String oauthId;
     private String oauthEmail;
     private Timestamp registerTime;
     private boolean isWithdraw;

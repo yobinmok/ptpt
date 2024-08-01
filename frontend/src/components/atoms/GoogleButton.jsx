@@ -1,30 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
-import googleSymbolImage from '../../assets/images/google-symbol.svg'; // 투명 배경의 구글 로고 이미지 파일 경로
+import googleSymbolImage from '../../assets/images/google-symbol.svg';
 
 const ButtonContainer = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ffffff; // 구글 로그인 버튼의 배경색
+  background-color: #ffffff;
   color: #000000;
   padding: 10px 20px;
-  border-radius: 12px; // Kakao 버튼과 동일한 라운드 처리
+  border-radius: 12px;
   font-size: 16px;
-  border: 1px solid #e0e0e0; // 구글 버튼 테두리 색상
+  border: 1px solid #e0e0e0;
   cursor: pointer;
-  width: 215px; // Kakao 버튼과 동일한 폭
-  height: 44px; // Kakao 버튼과 동일한 높이
-
-  &:hover {
-    background-color: #f0f0f0; // hover 시 색상
-  }
+  width: 215px;
+  height: 44px;
 `;
 
 const Symbol = styled.img`
-  width: 24px; // Kakao 버튼과 동일한 로고 크기
-  height: 24px; // Kakao 버튼과 동일한 로고 크기
-  margin-right: 8px; // Kakao 버튼과 동일한 마진
+  width: ${(props) => props.$symbolSize || '24px'};
+  height: ${(props) => props.$symbolSize || '24px'};
+  margin-right: ${(props) => props.$symbolMargin || '8px'};
 `;
 
 const Label = styled.span`
@@ -32,10 +28,21 @@ const Label = styled.span`
   font-size: 16px;
 `;
 
-const GoogleButton = ({ onClick, children, ...styleProps }) => {
+const GoogleButton = ({
+  onClick,
+  children,
+  symbolSize,
+  symbolMargin,
+  ...styleProps
+}) => {
   return (
     <ButtonContainer onClick={onClick} {...styleProps}>
-      <Symbol src={googleSymbolImage} alt='Google Symbol' />
+      <Symbol
+        src={googleSymbolImage}
+        alt='Google Symbol'
+        $symbolSize={symbolSize}
+        $symbolMargin={symbolMargin}
+      />
       <Label>{children}</Label>
     </ButtonContainer>
   );
