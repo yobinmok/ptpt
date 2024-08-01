@@ -14,7 +14,7 @@ public class StudyRoomCreateRequest {
     @NotBlank(message = "방제목 필수 입력")
     private String studyRoomName;
 
-    private boolean isPublic;
+    private int isPublic;
 
     private String studyRoomPw;
 

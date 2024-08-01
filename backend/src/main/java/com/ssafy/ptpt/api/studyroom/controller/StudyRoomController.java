@@ -43,7 +43,7 @@ public class StudyRoomController {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping("/{studyRoomTitle}")
-    @Operation(summary = "스터디룸 조회")
+    @Operation(summary = "스터디룸 검색")
     public ResponseEntity<StudyRoomInfoResponse> findByRoomId(@PathVariable("studyRoomTitle") String studyRoomTitle) {
         StudyRoomInfoResponse studyRoomInfoResponse = studyRoomService.findByStudyRoomTitle(studyRoomTitle);
         return ResponseEntity.ok().body(studyRoomInfoResponse);
@@ -54,9 +54,9 @@ public class StudyRoomController {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
     })
-    @DeleteMapping("/{memberId}")
+    @DeleteMapping("/{studyRoomId}")
     @Operation(summary = "스터디룸 삭제")
-    public ResponseEntity<Void> deleteRoom(@PathVariable("memberId") @RequestBody Long memberId) {
+    public ResponseEntity<Void> deleteRoom(@PathVariable("studyRoomId") @RequestBody Long memberId) {
         studyRoomService.deleteStudyRoom(memberId);
         return ResponseEntity.ok().build();
     }
