@@ -20,7 +20,7 @@ public class Evaluation {
     @JoinColumn(name = "studyroom_id")
     private StudyRoom studyRoom;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     private Member member;
 

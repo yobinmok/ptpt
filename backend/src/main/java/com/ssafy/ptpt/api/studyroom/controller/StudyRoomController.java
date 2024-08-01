@@ -30,10 +30,10 @@ public class StudyRoomController {
         return ResponseEntity.ok().body(studyRoomId);
     }
     //방 조회
-    @GetMapping("/{studyRoomId}")
+    @GetMapping("/{studyRoomTitle}")
     @Operation(summary = "스터디룸 조회")
-    public ResponseEntity<StudyRoomInfoResponse> findByRoomId(@PathVariable("studyRoomId") Long studyRoomId) {
-        StudyRoomInfoResponse body = studyRoomService.findByStudyRoomId(studyRoomId);
+    public ResponseEntity<StudyRoomInfoResponse> findByRoomId(@PathVariable("studyRoomTitle") String studyRoomTitle) {
+        StudyRoomInfoResponse body = studyRoomService.findByStudyRoomTitle(studyRoomTitle);
         return ResponseEntity.ok().body(body);
     }
 

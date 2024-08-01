@@ -15,14 +15,14 @@ public class StudyRoomListResponse {
 
     private Long studyRoomId;
 
-    private String studyRoomName;
+    private String studyRoomTitle;
 
     private List<Member> entryList;
 
     private String studyRoomCode;
 
     // 방 공개 여부
-    private boolean isPublic;
+    private int isPublic;
 
     private String studyRoomPw;
 
@@ -42,10 +42,10 @@ public class StudyRoomListResponse {
     public static StudyRoomListResponse from(StudyRoom studyRoom) {
         StudyRoomListResponse studyRoomListResponse = new StudyRoomListResponse();
         studyRoomListResponse.studyRoomId = studyRoom.getStudyRoomId();
-        studyRoomListResponse.studyRoomName = studyRoom.getStudyRoomName();
+        studyRoomListResponse.studyRoomTitle = studyRoom.getStudyRoomTitle();
         studyRoomListResponse.entryList = studyRoom.getEntryList();
         studyRoomListResponse.studyRoomCode = studyRoom.getStudyRoomCode();
-        studyRoomListResponse.isPublic = studyRoom.isPublic();
+        studyRoomListResponse.isPublic = studyRoom.getIsPublic();
         studyRoomListResponse.studyRoomPw = studyRoom.getStudyRoomPw();
         studyRoomListResponse.presentationTime = studyRoom.getPresentationTime();
         studyRoomListResponse.subject = studyRoom.getSubject();
