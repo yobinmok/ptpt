@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { googleSignin, verifyGoogleAccessToken } from '../../apis/auth';
+import { kakaoSignin, verifyKakaoAccessToken } from '../../apis/auth';
 
-const AuthPage = () => {
+const KakaoAuthPage = () => {
   const location = useLocation();
   const [authCode, setAuthCode] = useState(null); // 인가 코드 상태
-  const [token, setToken] = useState(null); // 액세스 토큰 및 ID 토큰 상태
+  const [token, setToken] = useState(null); // 액세스 토큰 상태
   const [tokenVerified, setTokenVerified] = useState(null); // 토큰 검증 상태
 
   useEffect(() => {
@@ -17,28 +17,28 @@ const AuthPage = () => {
       console.log('Authorization code:', code);
       setAuthCode(code); // 인가 코드를 상태에 저장
 
-      // authorization code를 사용하여 백엔드에서 access token과 id token을 요청
-      googleSignin(code)
+      // authorization code를 사용하여 백엔드에서 access token을 요청
+      kakaoSignin(code)
         .then((data) => {
           console.log('Token received:', data);
           setToken(data); // 받은 토큰 데이터를 상태에 저장
 
           // access token을 검증
-          return verifyGoogleAccessToken(data.accessToken);
+          return verifyKakaoAccessToken(data.accessToken);
         })
         .then((verificationResult) => {
           console.log('Token verification result:', verificationResult);
           setTokenVerified(verificationResult.message === 'Valid Token');
         })
         .catch((error) => {
-          console.error('Error during Google sign-in:', error);
+          console.error('Error during Kakao sign-in:', error);
         });
     }
   }, [location]); // location 값이 변경될 때마다 useEffect 훅 실행
 
   return (
     <div>
-      <h1>Google Processing Authentication...</h1>
+      <h1>Kakao Processing Authentication...</h1>
       {authCode && (
         <div>
           <p>Authorization code: {authCode}</p>
@@ -47,7 +47,6 @@ const AuthPage = () => {
       {token && (
         <div>
           <p>Access Token: {token.accessToken}</p>
-          <p>ID Token: {token.id_token}</p>
         </div>
       )}
       {tokenVerified !== null && (
@@ -59,4 +58,4 @@ const AuthPage = () => {
   );
 };
 
-export default AuthPage;
+export default KakaoAuthPage;

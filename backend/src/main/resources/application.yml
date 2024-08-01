@@ -41,9 +41,9 @@ spring:
       uri: mongodb://localhost:27017/pt2_db
 OPENVIDU_SECRET: MY_SECRET
 
-rest-api-key: c78c1a46bb34853b94a1b1d4d9f7d9d2
-redirect-uri: http://localhost:8080/member/signin/kakao
-client-secret:
+rest-api-key: 5ecb22966f2e7ecdd957524875aea32e
+client-secret: qlyCZUYJ7qAG9KlDb1NW0ufJACVqxmXa
 authorize-uri: https://kauth.kakao.com/oauth/authorize
 token-uri: https://kauth.kakao.com/oauth/token
+redirect-uri: http://localhost:5173/auth/kakao
 kakao-api-host: https://kapi.kakao.com
