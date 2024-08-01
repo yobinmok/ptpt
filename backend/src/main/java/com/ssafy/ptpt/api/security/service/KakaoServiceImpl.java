@@ -1,5 +1,6 @@
 package com.ssafy.ptpt.api.security.service;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.ssafy.ptpt.api.transformer.Trans;
 import jakarta.servlet.http.HttpSession;
@@ -62,5 +63,16 @@ public class KakaoServiceImpl implements KakaoService {
         System.out.println("그냥로그아웃");
         String uri = KAKAO_API_HOST + "/v1/user/logout";
         return httpCallService.CallwithToken("POST", uri, httpSession.getAttribute("token").toString());
+    }
+
+    public boolean verifyAccessToken(String accessToken) {
+        String uri = KAKAO_API_HOST + "/v1/user/access_token_info";
+        String response = httpCallService.CallwithToken("GET", uri, accessToken);
+
+        JsonElement element = JsonParser.parseString(response);
+        if (element.getAsJsonObject().get("id") != null) {
+            return true;  // 토큰이 유효함
+        }
+        return false;  // 토큰이 유효하지 않음
     }
 }

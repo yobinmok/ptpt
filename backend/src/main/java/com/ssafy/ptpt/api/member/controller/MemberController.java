@@ -46,11 +46,11 @@ public class MemberController {
     }
 
 
-//    @Operation(summary = "카카오 로그인")
-//    @GetMapping("/login/kakao")
-//    public RedirectView goKakaoOAuth() {
-//        return kakaoService.goKakaoOAuth();
-//    }
+    @Operation(summary = "카카오 로그인")
+    @GetMapping("/login/kakao")
+    public RedirectView goKakaoOAuth() {
+        return kakaoService.goKakaoOAuth();
+    }
 
     @Operation(summary = "카카오 로그인")
     @GetMapping("/signin/kakao")
@@ -74,6 +74,15 @@ public class MemberController {
     @PostMapping("/signout/kakao")
     public String logout() {
         return kakaoService.logout();
+    }
+
+    @Operation(summary = "카카오 액세스 토큰 검증")
+    @PostMapping("/auth/kakao")
+    public ResponseEntity<?> kakaoAuthVerify(@RequestBody AccessTokenRequestBody accessToken) {
+        if (kakaoService.verifyAccessToken(accessToken.getAccessToken())) {
+            return ResponseEntity.ok(BaseResponseBody.of(200, "Valid Token"));
+        }
+        return ResponseEntity.ok(BaseResponseBody.of(401, "Invalid Token"));
     }
 
 
