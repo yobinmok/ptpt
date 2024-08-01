@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,8 +25,8 @@ public class StudyRoom {
 
     private String studyRoomTitle;
 
-    @OneToMany(mappedBy = "studyRoom")
-    private List<Member> entryList;
+    @ElementCollection
+    private List<Integer> entryList = new ArrayList<>();
 
     @OneToMany(mappedBy = "studyRoom")
     private List<Evaluation> Evaluation;

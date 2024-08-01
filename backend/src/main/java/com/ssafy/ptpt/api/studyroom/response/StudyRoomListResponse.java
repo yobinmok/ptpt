@@ -17,7 +17,7 @@ public class StudyRoomListResponse {
 
     private String studyRoomTitle;
 
-    private List<Member> entryList;
+    private List<Integer> entryList;
 
     private String studyRoomCode;
 

@@ -34,18 +34,9 @@ public class Member {
     private Profile profile;
 
     @OneToOne(mappedBy = "member")
-    private Statistic statistic;
-
-    @OneToOne(mappedBy = "member")
     private Role role;
 
     @OneToMany(mappedBy = "member")
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "member")
-    private List<Evaluation> evaluation;
-
-    @ManyToOne
-    @JoinColumn(name = "studyroom_id")
-    private StudyRoom studyRoom;
 }
