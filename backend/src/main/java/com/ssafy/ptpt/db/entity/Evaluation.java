@@ -24,6 +24,10 @@ public class Evaluation {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @ManyToOne
+    @JoinColumn(name = "statistic_id")
+    private Statistic statistic;
+
     private int delivery;
     private int expression;
     private int preparation;
