@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 public interface StatisticRepository extends JpaRepository<Statistic, Long> {
-    @Query("SELECT e FROM Statistic e WHERE e.member.id = :memberId")
+    @Query("SELECT e FROM Statistic e WHERE e.statisticId = :memberId")
     Statistic findByMemberId(@Param("memberId") Long memberId);
 }

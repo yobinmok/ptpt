@@ -17,10 +17,6 @@ public class Statistic {
     @Column(name = "statistic_id")
     private Long statisticId;
 
-    @OneToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
-
     private int totalDelivery;
     private int totalExpression;
     private int totalPreparation;
@@ -28,12 +24,7 @@ public class Statistic {
     private int totalSuitability;
 
     private int evaluateQuantity;
-
-    @OneToMany(mappedBy = "statistic")
-    private List<Evaluation> evaluation;
-
-    public void createStatistic(Member member, int totalDelivery, int totalExpression, int totalPreparation, int totalLogic, int totalSuitability) {
-        this.member = member;
+    public void createStatistic(int totalDelivery, int totalExpression, int totalPreparation, int totalLogic, int totalSuitability) {
         this.totalDelivery = totalDelivery;
         this.totalExpression = totalExpression;
         this.totalPreparation = totalPreparation;

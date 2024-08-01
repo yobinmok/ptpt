@@ -40,36 +40,36 @@ public class EvaluationService {
         Member member = memberRepository.findById(123L)
                 .orElseThrow(() -> new NotFoundException(NotFoundException.MEMBER_NOT_FOUND));
         // 평가를 등록할때 통계 테이블 업데이트 -> 해당 맴버의 데이터가 있는지 조회 먼저
-        Evaluation evaluation = new Evaluation(
-                                                member.getStudyRoom(),
-                                                member,
-                                                evaluationCreateRequest.getDelivery(),
-                                                evaluationCreateRequest.getExpression(),
-                                                evaluationCreateRequest.getPreparation(),
-                                                evaluationCreateRequest.getLogic(),
-                                                evaluationCreateRequest.getSuitability()
-                                                );
+//        Evaluation evaluation = new Evaluation(
+//                                                evaluationCreateRequest.get(),
+//                                                evaluationCreateRequest.getDelivery(),
+//                                                evaluationCreateRequest.getExpression(),
+//                                                evaluationCreateRequest.getPreparation(),
+//                                                evaluationCreateRequest.getLogic(),
+//                                                evaluationCreateRequest.getSuitability()
+//                                                );
 
         Statistic statistic = statisticRepository.findByMemberId(member.getMemberId());
         // 데이터가 없다면 통계 테이블에 값 삽입
-        if (statistic == null) {
-            statistic = new Statistic();
-            statistic.createStatistic(member,
-                    evaluation.getDelivery(),
-                    evaluation.getExpression(),
-                    evaluation.getPreparation(),
-                    evaluation.getLogic()
-                    , evaluation.getSuitability() );
-            // 평가 등록 처리
-            statisticRepository.save(statistic);
-        } else {    // 데이터가 있다면 업데이트 처리
-            // 유저 정보에 매칭되는 통계값을 가져오자
-
-            // 평가 값을 더해서 업데이트를 진행햐지
-            statistic.updateStatistic(evaluation);
-
-        }
-        return evaluation.getEvaluationId();
+//        if (statistic == null) {
+//            statistic = new Statistic();
+//            statistic.createStatistic(
+//                    evaluation.getDelivery(),
+//                    evaluation.getExpression(),
+//                    evaluation.getPreparation(),
+//                    evaluation.getLogic()
+//                    , evaluation.getSuitability() );
+//            // 평가 등록 처리
+//            statisticRepository.save(statistic);
+//        } else {    // 데이터가 있다면 업데이트 처리
+//            // 유저 정보에 매칭되는 통계값을 가져오자
+//
+//            // 평가 값을 더해서 업데이트를 진행햐지
+//            statistic.updateStatistic(evaluation);
+//
+//        }
+//        return evaluation.getEvaluationId();
+        return 1L;
     }
 
     // 평가 조회
@@ -87,7 +87,7 @@ public class EvaluationService {
     public void deleteEvaluation(Member member, Long evaluationId) {
         Evaluation evaluation = evaluationRepository.findById(evaluationId)
                 .orElseThrow(() -> new NotFoundException(NotFoundException.EVALUATION_NOT_FOUND));
-        if (!member.getMemberId().equals(evaluation.getMember().getMemberId())) {
+        if (!member.getMemberId().equals(evaluation.getStudyRoom().getMemberId())) {
             throw new NotMatchException(MEMBER_NOT_MATCH);
         }
         evaluationRepository.deleteById(evaluationId);

@@ -16,7 +16,7 @@ import java.util.List;
 public class StudyRoomInfoResponse {
     private Long studyRoomId;
     private String studyRoomTitle;
-    private List<MemberInfoResponse> memberInfoResponse;
+    private List<Integer> entryList;
     private String studyRoomCode;
     private String studyRoomPw;
     private Long memberId;
@@ -26,7 +26,7 @@ public class StudyRoomInfoResponse {
         StudyRoomInfoResponse studyRoomInfoResponse = new StudyRoomInfoResponse();
         studyRoomInfoResponse.studyRoomId = studyRoom.getStudyRoomId();
         studyRoomInfoResponse.studyRoomTitle = studyRoom.getStudyRoomTitle();
-        studyRoomInfoResponse.memberInfoResponse = Collections.singletonList((MemberInfoResponse) studyRoom.getEntryList());
+        studyRoomInfoResponse.entryList = studyRoom.getEntryList();
         studyRoomInfoResponse.studyRoomCode = studyRoom.getStudyRoomCode();
         studyRoomInfoResponse.studyRoomPw = studyRoom.getStudyRoomPw();
         studyRoomInfoResponse.memberId = studyRoom.getMemberId();

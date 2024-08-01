@@ -27,7 +27,6 @@ public class EvaluationInfoResponse {
         EvaluationInfoResponse evaluationInfoResponse = new EvaluationInfoResponse();
         evaluationInfoResponse.evaluationId = evaluation.getEvaluationId();
         evaluationInfoResponse.studyRoomId = evaluation.getStudyRoom().getStudyRoomId();
-        evaluationInfoResponse.memberId = evaluation.getMember().getMemberId();
         evaluationInfoResponse.delivery = evaluation.getDelivery();
         evaluationInfoResponse.expression = evaluation.getExpression();
         evaluationInfoResponse.preparation = evaluation.getPreparation();

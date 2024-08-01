@@ -6,6 +6,7 @@ import com.ssafy.ptpt.api.evaluation.service.EvaluationService;
 import com.ssafy.ptpt.api.evaluation.service.StatisticService;
 import com.ssafy.ptpt.config.LoginMember;
 import com.ssafy.ptpt.db.entity.Member;
+import com.ssafy.ptpt.db.entity.StudyRoom;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,19 +26,18 @@ public class EvaluationController {
 //    member,
 //@LoginMember Member member,
     // 평가 등록 될때 통계 업데이트
-    @PostMapping()
+    @PostMapping
     @Operation(summary = "평가 등록")
-    public ResponseEntity<?> createEvaluation(@RequestBody @Valid EvaluationCreateRequest evaluationCreateRequest){
+    public ResponseEntity<Long> createEvaluation(@RequestBody @Valid EvaluationCreateRequest evaluationCreateRequest){
         Long evaluationId = evaluationService.createEvaluation(evaluationCreateRequest);
         return ResponseEntity.ok().body(evaluationId);
     }
 
 
-    @GetMapping()
+    @GetMapping
     @Operation(summary = "평가 조회")
-    public ResponseEntity<?> viewEvaluation(@PathVariable("memberId") Long memberId){
-
-        List<EvaluationInfoResponse> evaluationInfoResponse = evaluationService.findEvaluationById(memberId);
+    public ResponseEntity<List<EvaluationInfoResponse>> viewEvaluation(StudyRoom studyRoom){
+        List<EvaluationInfoResponse> evaluationInfoResponse = evaluationService.findEvaluationById(studyRoom.getMemberId());
         return ResponseEntity.ok().body(evaluationInfoResponse);
     }
 
