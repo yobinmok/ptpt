@@ -16,7 +16,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityScan
 public class Statistic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

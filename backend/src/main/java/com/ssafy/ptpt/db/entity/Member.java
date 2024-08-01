@@ -15,10 +15,10 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityScan
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
     private Long memberId;
 
     private String nickname;
@@ -39,7 +39,10 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Comment> comments;
 
+    @OneToMany(mappedBy = "member")
+    private List<Evaluation> evaluation;
+
     @ManyToOne
-    @JoinColumn(name = "entryList")
+    @JoinColumn(name = "studyroom_id")
     private StudyRoom studyRoom;
 }

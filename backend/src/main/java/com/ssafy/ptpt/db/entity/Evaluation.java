@@ -1,31 +1,42 @@
 package com.ssafy.ptpt.db.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityScan
 public class Evaluation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long evaluationId;
 
-    private String presentationName;
+    @ManyToOne
+    @JoinColumn(name = "studyroom_id")
+    private StudyRoom studyRoom;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     private int delivery;
     private int expression;
     private int preparation;
     private int logic;
     private int suitability;
+
+    public Evaluation(StudyRoom studyRoom, Member member, int delivery, int expression, int preparation, int logic, int suitability) {
+        this.studyRoom = studyRoom;
+        this.member = member;
+        this.delivery = delivery;
+        this.expression = expression;
+        this.preparation = preparation;
+        this.logic = logic;
+        this.suitability = suitability;
+    }
 }

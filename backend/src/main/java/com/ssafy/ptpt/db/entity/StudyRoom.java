@@ -15,7 +15,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityScan
 public class StudyRoom {
 
     @Id
@@ -26,6 +25,9 @@ public class StudyRoom {
 
     @OneToMany(mappedBy = "studyRoom")
     private List<Member> entryList;
+
+    @OneToMany(mappedBy = "studyRoom")
+    private List<Evaluation> Evaluation;
 
     private String studyRoomCode;
 

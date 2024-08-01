@@ -59,7 +59,7 @@ public class StudyRoomController {
     //화상방 리스트 전체 조회
     //페이징 처리 전  -----------------------------------------
     @GetMapping
-    public ResponseEntity<List<StudyRoomListResponse>> findBySearchRequest(@LoginMember Member member){
+    public ResponseEntity<List<StudyRoomListResponse>> findBySearchRequest(){
         List<StudyRoomListResponse> body = studyRoomService.findBySearchRequest();
         return ResponseEntity.ok().body(body);
     }
