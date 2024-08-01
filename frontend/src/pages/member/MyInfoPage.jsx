@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
-import MyInfoSidebar from '../components/organisms/MyInfoSidebar';
-import StatisticsPage from '../components/organisms/StatisticsPage';
-import SavedRoomsPage from '../components/organisms/SavedRoomsPage';
-import VoiceModelPage from '../components/organisms/VoiceModelPage';
+import MyInfoSidebar from '../../components/organisms/myInfo/MyInfoSidebar';
+import StatisticsPage from '../../components/organisms/myInfo/StatisticsPage';
+import SavedRoomsPage from '../../components/organisms/myInfo/SavedRoomsPage';
+import VoiceModelPage from '../../components/organisms/myInfo/VoiceModelPage';
 
 const Container = styled.div`
   display: flex;
@@ -16,7 +16,7 @@ const MyInfoContent = styled.div`
   background: #f9f9f9;
 `;
 
-const MyInfo = () => {
+const MyInfoPage = () => {
   return (
     <Container>
       <MyInfoSidebar />
@@ -32,4 +32,4 @@ const MyInfo = () => {
   );
 };
 
-export default MyInfo;
+export default MyInfoPage;

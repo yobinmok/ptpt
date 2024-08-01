@@ -12,6 +12,7 @@ import ToolbarComponent from './toolbar/ToolbarComponent';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';
+import Sidebar from '../../../components/organisms/Sidebar';
 
 const StyledLayoutBounds = styled.div`
   background-color: rgba(0, 0, 0, 0.3);
@@ -19,8 +20,8 @@ const StyledLayoutBounds = styled.div`
   flex-wrap: wrap;
   right: 0;
   height: 100%;
-  min-width: 400px !important;
-  width: 100%;
+  min-width: 100px !important;
+  width: 50%;
   overflow-y: hidden;
   background-size: cover;
   background-repeat: no-repeat;
@@ -167,7 +168,8 @@ class VideoRoomComponent extends Component {
             videoSource: videoDevices[0].deviceId,
             publishAudio: localUser.isAudioActive(),
             publishVideo: localUser.isVideoActive(),
-            resolution: '640x480',
+            // resolution: '640x480',
+            resolution: '320x240',
             frameRate: 30,
             insertMode: 'APPEND',
         });
@@ -527,7 +529,7 @@ class VideoRoomComponent extends Component {
 
         return (
             <div 
-                style={{ height: "100vh", width: "100vw", display: "flex" }}
+                style={{ height: "100vh", width: "0vw", display: "flex" }}
                 className="container" id="container"
             >
                 <ToolbarComponent
@@ -546,7 +548,8 @@ class VideoRoomComponent extends Component {
 
                 <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
 
-                <StyledLayoutBounds id="layout" className="bounds">
+                {/* <StyledLayoutBounds id="layout" className="bounds"> */}
+                <StyledLayoutBounds id="layout">
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         <div className="OT_root OT_publisher custom-class" id="localUser">
                             <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
@@ -569,6 +572,7 @@ class VideoRoomComponent extends Component {
                         </div>
                     )} */}
                 </StyledLayoutBounds>
+                {/* <Sidebar /> */}
             </div>
         );
     }
