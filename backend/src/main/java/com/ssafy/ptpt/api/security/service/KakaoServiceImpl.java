@@ -44,6 +44,14 @@ public class KakaoServiceImpl implements KakaoService {
 
         return new RedirectView(uri);
     }
+    @Override
+    public String getAccessToken(String authorizationCode) {
+        String param = "grant_type=authorization_code&client_id=" + REST_API_KEY +
+                "&redirect_uri=" + REDIRECT_URI +
+                "&client_secret=" + CLIENT_SECRET +
+                "&code=" + authorizationCode;
+        return httpCallService.Call("POST", TOKEN_URI, "", param);
+    }
 
     public RedirectView loginCallback(String code) {
         System.out.println("콜백");
