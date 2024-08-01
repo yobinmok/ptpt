@@ -9,4 +9,5 @@ public interface KakaoService {
     public RedirectView loginCallback(String code);
     public String logout();
     String getProfile();
+    public boolean verifyAccessToken(String accessToken);
 }

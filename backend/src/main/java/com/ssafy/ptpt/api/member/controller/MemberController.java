@@ -76,6 +76,15 @@ public class MemberController {
         return kakaoService.logout();
     }
 
+    @Operation(summary = "카카오 액세스 토큰 검증")
+    @PostMapping("/auth/kakao")
+    public ResponseEntity<?> kakaoAuthVerify(@RequestBody AccessTokenRequestBody accessToken) {
+        if (kakaoService.verifyAccessToken(accessToken.getAccessToken())) {
+            return ResponseEntity.ok(BaseResponseBody.of(200, "Valid Token"));
+        }
+        return ResponseEntity.ok(BaseResponseBody.of(401, "Invalid Token"));
+    }
+
 
     @Operation(
             summary = "구글 액세스 토큰 발급",
