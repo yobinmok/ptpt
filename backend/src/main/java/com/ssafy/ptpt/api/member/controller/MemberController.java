@@ -1,11 +1,13 @@
 package com.ssafy.ptpt.api.member.controller;
 
+import com.google.gson.JsonParser;
 import com.ssafy.ptpt.api.security.model.request.AccessTokenRequestBody;
 import com.ssafy.ptpt.api.security.model.request.AuthorizationCodeRequestBody;
 import com.ssafy.ptpt.api.security.model.response.BaseResponseBody;
 import com.ssafy.ptpt.api.security.model.response.TokenResponseBody;
 import com.ssafy.ptpt.api.security.service.GoogleAuthService;
 import com.ssafy.ptpt.api.security.service.KakaoService;
+import com.ssafy.ptpt.api.transformer.Trans;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -55,32 +57,40 @@ public class MemberController {
     @Operation(summary = "카카오 로그인")
     @PostMapping("/signin/kakao")
     public ResponseEntity<?> kakaoSignIn(@RequestBody AuthorizationCodeRequestBody authorizationCode) {
+//        System.out.println(kakaoService.getProfile());
+        System.out.println("로그인 API");
         String accessToken = kakaoService.getAccessToken(authorizationCode.getAuthorizationCode());
         System.out.println("!!!!!!!!!!!!!!!!!" + accessToken);
-        return ResponseEntity.ok(TokenResponseBody.of(200, "Success", accessToken));
+        String tokenString = Trans.token(accessToken, new JsonParser());
+        String memberId = Trans.id(kakaoService.getProfile(tokenString), new JsonParser());
+        return ResponseEntity.ok(TokenResponseBody.of(200, "Success", tokenString, memberId));
     }
 
-    @Operation(summary = "카카오 권한요청")
-    @GetMapping("/authorize/kakao")
-    public RedirectView goKakaoOAuth(@RequestParam("scope") String scope) {
-        return kakaoService.goKakaoOAuth(scope);
-    }
+//    @Operation(summary = "카카오 권한요청")
+//    @GetMapping("/authorize/kakao")
+//    public RedirectView goKakaoOAuth(@RequestParam("scope") String scope) {
+//        System.out.println("권한요청 API");
+//        return kakaoService.goKakaoOAuth(scope);
+//    }
+//
+//    @Operation(summary = "카카오 프로필")
+//    @GetMapping("/profile/kakao")
+//    public String getProfile() {
+//        System.out.println("프로필 API");
+//        return kakaoService.getProfile();
+//    }
 
-    @Operation(summary = "카카오 프로필")
-    @GetMapping("/profile/kakao")
-    public String getProfile() {
-        return kakaoService.getProfile();
-    }
-
-    @Operation(summary = "카카오 로그아웃")
-    @PostMapping("/signout/kakao")
-    public String logout() {
-        return kakaoService.logout();
-    }
+//    @Operation(summary = "카카오 로그아웃")
+//    @PostMapping("/signout/kakao")
+//    public String logout() {
+//        System.out.println("로그아웃 API");
+//        return kakaoService.logout();
+//    }
 
     @Operation(summary = "카카오 액세스 토큰 검증")
     @PostMapping("/auth/kakao")
     public ResponseEntity<?> kakaoAuthVerify(@RequestBody AccessTokenRequestBody accessToken) {
+        System.out.println("토큰검증 API");
         if (kakaoService.verifyAccessToken(accessToken.getAccessToken())) {
             return ResponseEntity.ok(BaseResponseBody.of(200, "Valid Token"));
         }
@@ -110,8 +120,11 @@ public class MemberController {
         //TODO: 최초 로그인이면 회원가입 진행하기, 데이터베이스랑 연결하기
         System.out.println("TEST!");
 //        String accessToken = googleAuthService.getAccessToken(URLDecoder.decode(authorizationCode.getAuthorizationCode(), StandardCharsets.UTF_8));
-        String accessToken = googleAuthService.getAccessToken(authorizationCode.getAuthorizationCode());
-        return ResponseEntity.ok(TokenResponseBody.of(200, "Success", accessToken));
+        String[] tokens = googleAuthService.getAccessToken(authorizationCode.getAuthorizationCode());
+        String accessToken = tokens[1];
+        String memberId = googleAuthService.getUserResource(tokens[0]).get("id").asText();
+//        System.out.println(googleAuthService.getUserResource(accessToken));
+        return ResponseEntity.ok(TokenResponseBody.of(200, "Success", accessToken, memberId));
     }
 
     @Operation(

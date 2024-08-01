@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 public interface GoogleAuthService {
-    String getAccessToken(String authorizationCode);
+    String[] getAccessToken(String authorizationCode);
     JsonNode getUserResource(String accessToken);
     boolean verifyAccessToken(String accessToken) throws GeneralSecurityException, IOException;
 }

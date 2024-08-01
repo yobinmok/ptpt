@@ -32,19 +32,20 @@ public class KakaoServiceImpl implements KakaoService {
     @Value("${kakao-api-host}")
     private String KAKAO_API_HOST;
 
-    public RedirectView goKakaoOAuth() {
-        System.out.println("그냥로그인");
-        return goKakaoOAuth("");
-    }
+//    public RedirectView goKakaoOAuth() {
+//        System.out.println("그냥로그인");
+//        return goKakaoOAuth("");
+//    }
 
-    public RedirectView goKakaoOAuth(String scope) {
+//    public RedirectView goKakaoOAuth(String scope) {
+//
+//        System.out.println("권한설정");
+//        String uri = AUTHORIZE_URI+"?redirect_uri="+REDIRECT_URI+"&response_type=code&client_id="+REST_API_KEY;
+//        if(!scope.isEmpty()) uri += "&scope="+scope;
+//
+//        return new RedirectView(uri);
+//    }
 
-        System.out.println("권한설정");
-        String uri = AUTHORIZE_URI+"?redirect_uri="+REDIRECT_URI+"&response_type=code&client_id="+REST_API_KEY;
-        if(!scope.isEmpty()) uri += "&scope="+scope;
-
-        return new RedirectView(uri);
-    }
     @Override
     public String getAccessToken(String authorizationCode) {
         String param = "grant_type=authorization_code&client_id=" + REST_API_KEY +
@@ -62,9 +63,9 @@ public class KakaoServiceImpl implements KakaoService {
         return new RedirectView("/index.html");
     }
 
-    public String getProfile() {
+    public String getProfile(String tkn) {
         String uri = KAKAO_API_HOST + "/v2/user/me";
-        return httpCallService.CallwithToken("GET", uri, httpSession.getAttribute("token").toString());
+        return httpCallService.CallwithToken("GET", uri, tkn);
     }
 
     public String logout() {

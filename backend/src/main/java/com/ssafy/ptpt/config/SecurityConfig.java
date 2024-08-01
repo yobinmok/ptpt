@@ -28,6 +28,8 @@ public class SecurityConfig {
     // 모든 인증을 허용한 테스트용 코드 추후 위 주석 해제 예정
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.cors();
         http
                 .csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화
                 .authorizeHttpRequests(auth -> auth
