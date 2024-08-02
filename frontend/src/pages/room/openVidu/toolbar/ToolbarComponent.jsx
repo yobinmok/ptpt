@@ -30,6 +30,7 @@ const ToolbarMenuWrapper = styled.div`
   align-items: center;
   height: 100%;
   width: 80%;
+  gap: 10px;
 `;
 const RoomContentWrapper = styled.div`
   height: 40%;
@@ -160,12 +161,6 @@ export default class ToolbarComponent extends Component {
       <ToolBar>
         <ToolbarMenuWrapper>
           <RoomContentWrapper>
-            <RoomContentButton
-              onClick={this.toggleChat}
-              // position={"relative"}
-            />
-          </RoomContentWrapper>
-          <RoomContentWrapper>
             <RoomContentButton onClick={this.leaveSession}>
               나가
             </RoomContentButton>
@@ -174,11 +169,9 @@ export default class ToolbarComponent extends Component {
             <RoomContentButton onClick={this.micStatusChanged}>
               {/* 온오프에 따른 style */}
               {localUser !== undefined && localUser.isAudioActive() ? (
-                // <FontAwesomeStyled className="fas fa-microphone" />
-                <img src={MicIcon} alt='' />
+                <MicIcon />
               ) : (
-                // <FontAwesomeStyled className="fas fa-microphone-slash" />
-                <img src={MicOffIcon} alt='' />
+                <MicOffIcon />
               )}
               {/* 마이크 */}
             </RoomContentButton>
@@ -187,11 +180,9 @@ export default class ToolbarComponent extends Component {
             <RoomContentButton onClick={this.camStatusChanged}>
               {/* 온오프에 따른 style */}
               {localUser !== undefined && localUser.isVideoActive() ? (
-                // <FontAwesomeStyled className="fas fa-video" />
-                <img src={VideocamIcon} alt='' />
+                <VideocamIcon />
               ) : (
-                // <FontAwesomeStyled className="fas fa-video-slash" />
-                <img src={VideocamOffIcon} alt='' />
+                <VideocamOffIcon />
               )}
               {/* 캠 */}
             </RoomContentButton>
@@ -202,13 +193,11 @@ export default class ToolbarComponent extends Component {
                 onClick={this.stopScreenShare}
                 className='active'
               >
-                {/* <FontAwesomeStyled className="fas fa-desktop active" /> */}
-                <img src={ScreenShareIcon} alt='' />
+                <ScreenShareIcon />
               </RoomContentButton>
             ) : (
               <RoomContentButton onClick={this.screenShare}>
-                {/* <FontAwesomeStyled className="fas fa-desktop" /> */}
-                <img src={StopScreenShareIcon} alt='' />
+                <StopScreenShareIcon />
               </RoomContentButton>
             )}
           </RoomContentWrapper>
