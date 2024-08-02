@@ -3,11 +3,23 @@ import { Box } from '@mui/material';
 import CustomSelect from '../../molecules/CustomSelect';
 import CustomTextarea from '../../molecules/CustomTextarea';
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toggleScriptSelect } from '../../../store/actions/room';
+import { useTempScript } from '../../../store/actions/solo';
 
-const SelectScriptTab = ({ options }) => {
+const SelectScriptTab = () => {
+  const soloPreset = useSelector((state) => state.solo);
+
   const dispatch = useDispatch();
+  const addScript = () => {
+    dispatch(useTempScript(soloPreset.script ?? 0, { title: '', content: '' }));
+    dispatch(toggleScriptSelect(false));
+  };
+
+  const selectScript = (scriptIdx) => {
+    console.log(soloPreset.script[scriptIdx]);
+    dispatch(useTempScript(scriptIdx, soloPreset.script[scriptIdx]));
+  };
   return (
     <Box>
       <Box
@@ -19,8 +31,13 @@ const SelectScriptTab = ({ options }) => {
       >
         <CustomSelect
           label='스크립트 선택'
-          options={options}
-          onChange={() => {}}
+          options={soloPreset.script.map((item, index) => ({
+            value: index,
+            label: item.title,
+          }))}
+          onChange={(scriptIdx) => {
+            selectScript(scriptIdx);
+          }}
         />
         <AddCircleOutlinedIcon
           sx={{
@@ -28,15 +45,12 @@ const SelectScriptTab = ({ options }) => {
             marginLeft: '10px',
             cursor: 'pointer',
           }}
-          onClick={() => {
-            dispatch(toggleScriptSelect());
-          }}
+          onClick={addScript}
         />
       </Box>
 
       <CustomTextarea
         placeholder={'스크립트를 선택해주세요'}
-        content={''}
         editFlag={false}
         sx={{ marginTop: '10px' }} // marginTop 추가
       />

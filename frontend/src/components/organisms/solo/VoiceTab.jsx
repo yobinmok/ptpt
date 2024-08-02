@@ -12,8 +12,7 @@ const VoiceTab = () => {
     { value: 2, label: '내 음성모델' },
   ];
 
-  let stateSoloPreset = useSelector((state) => state.solo);
-  console.log(stateSoloPreset);
+  let soloPreset = useSelector((state) => state.solo);
   let scriptIdx = 0;
   const voiceSetting = {
     model: 0,
@@ -32,7 +31,7 @@ const VoiceTab = () => {
       />
       <CustomSelect
         label='스크립트 선택'
-        options={stateSoloPreset.script.map((item, index) => ({
+        options={soloPreset.script.map((item, index) => ({
           value: index,
           label: item.title,
         }))}

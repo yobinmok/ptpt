@@ -6,8 +6,9 @@ import {
   TOGGLE_SCRIPT_SELECT,
 } from '../types/room';
 
-const toggleScriptSelect = () => ({
+const toggleScriptSelect = (flag) => ({
   type: TOGGLE_SCRIPT_SELECT,
+  flag,
 });
 
 const setRoomSession = (data) => {

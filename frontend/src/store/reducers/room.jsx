@@ -4,6 +4,7 @@ const initialState = {
   isSidebarOpen: false,
   selectedTab: null,
   isSelectScriptTab: true,
+  editFlag: null,
 };
 
 const roomReducer = (state = initialState, action) => {
@@ -37,6 +38,7 @@ const roomReducer = (state = initialState, action) => {
     case 'TOGGLE_SCRIPT_SELECT':
       return {
         ...state,
+        editFlag: action.flag,
         isSelectScriptTab: !state.isSelectScriptTab,
       };
     default:

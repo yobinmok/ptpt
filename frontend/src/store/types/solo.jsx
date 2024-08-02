@@ -6,3 +6,9 @@ export const TOGGLE_RECORDING = 'TOGGLE_RECORDING'; // 화면 녹화 여부
 export const TOGGLE_EXPECTED_QUESTION = 'TOGGLE_EXPECTED_QUESTION'; // 예상 질문 여부
 export const SET_CREATED_TIME = 'SET_CREATED_TIME'; // 생성 시간 업데이트
 export const TOGGLE_COMPLETED = 'TOGGLE_COMPLETED'; // 완료 여부
+
+// 스크립트 작업
+export const USE_TEMP_SCRIPT = 'USE_TEMP_SCRIPT';
+export const UPDATE_SCRIPT = 'UPDATE_SCRIPT';
+export const CREATE_SCRIPT = 'CREATE_SCRIPT';
+export const DELETE_SCRIPT = 'DELETE_SCRIPT';

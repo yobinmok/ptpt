@@ -2,13 +2,32 @@ import React from 'react';
 import CustomTextarea from '../../molecules/CustomTextarea';
 import CustomInput from '../../molecules/CustomInput';
 import { Box, Button } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toggleScriptSelect } from '../../../store/actions/room';
+import {
+  createScript,
+  updateScript,
+  useTempScript,
+} from '../../../store/actions/solo';
 
-const RegisterScriptTab = ({ content, title }) => {
+const RegisterScriptTab = ({}) => {
   const dispatch = useDispatch();
+  const scriptPreset = useSelector((state) => state.solo);
+  const editFlag = useSelector((state) => state.room.editFlag);
   const saveClickListener = () => {
-    // 제목 및 텍스트 저장
+    const { index, script } = scriptPreset.tempScript;
+    if (editFlag) {
+      dispatch(updateScript(index, script));
+    } else {
+      dispatch(createScript(index, script));
+    }
+
+    dispatch(toggleScriptSelect());
+    dispatch(useTempScript(0, { title: '', content: '' }));
+  };
+
+  const cancelClickListener = () => {
+    dispatch(useTempScript(0, { title: '', content: '' }));
     dispatch(toggleScriptSelect());
   };
   return (
@@ -17,27 +36,21 @@ const RegisterScriptTab = ({ content, title }) => {
         <CustomInput />
       </div>
 
-      <CustomTextarea
-        placeholder={'스크립트를 입력해주세요'}
-        content={''}
-        editFlag={true}
-      />
+      <CustomTextarea placeholder={'스크립트를 입력해주세요'} editFlag={true} />
       <Box
         display='flex'
         justifyContent='space-evenly'
         sx={{ paddingTop: '15px' }}
       >
         <Button
-          onClick={saveClickListener()}
+          onClick={saveClickListener}
           variant='contained'
           color='secondary'
         >
           저장
         </Button>
         <Button
-          onClick={() => {
-            dispatch(toggleScriptSelect());
-          }}
+          onClick={cancelClickListener}
           variant='contained'
           color='neutral'
         >

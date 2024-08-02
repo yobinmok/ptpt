@@ -21,8 +21,9 @@ const theme = createTheme({
       contrastText: '#fff',
     },
     neutral: {
-      main: '#EEEEEE', // 새로운 색상 추가
-      contrastText: '#747474', // 새로운 색상 추가
+      // 취소 버튼 색상
+      main: '#9F9693',
+      contrastText: '#fff',
     },
   },
 });
