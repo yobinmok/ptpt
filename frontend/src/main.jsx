@@ -20,17 +20,22 @@ const theme = createTheme({
       main: '#76AE95',
       contrastText: '#fff',
     },
+    neutral: {
+      // 취소 버튼 색상
+      main: '#9F9693',
+      contrastText: '#fff',
+    },
   },
 });
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ThemeProvider>
     </Provider>
   </React.StrictMode>
 );
