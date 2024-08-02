@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Box, easing } from '@mui/material';
 import { useTheme } from '@emotion/react';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearTab } from '../../store/actions/room';
 
 const IconButton = ({
   icon: IconComponent,
@@ -15,9 +17,18 @@ const IconButton = ({
   //   setIsClicked(!isClicked);
   //   handleSidebarToggle();
   // };
+  const dispatch = useDispatch();
+  const isSidebarOpen = useSelector((state) => state.room.isSidebarOpen);
 
   const handleClicked = () => {
+    if (isSidebarOpen) {
+      handleTabClick();
+    }
     handleSidebarToggle();
+  };
+
+  const handleTabClick = () => {
+    dispatch(clearTab());
   };
 
   return (

@@ -1,38 +1,39 @@
 package com.ssafy.ptpt.api.studyroom.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.ElementCollection;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyRoomCreateRequest {
-    // 방 이름
+
     @NotBlank(message = "방제목 필수 입력")
-    private String StudyRoomName;
+    private String studyRoomTitle;
 
-    // 방 공개 여부
-    private boolean isPublic;
+    private int isPublic;
 
-    // 방 비밀번호
-    private String StudyRoomPw;
+    private String studyRoomPw;
 
-    // 발표 시간
     @NotBlank(message = "발표시간 필수 입력")
     private String presentationTime;
 
-    // 주제
     @NotBlank(message = "주제 필수 입력")
     private String subject;
 
-    // 설명
     private String description;
 
-    // 익명여부
-    private boolean anonymity;
+    private int anonymity;
 
-    // 호스트
     private Long memberId;
+
+    @ElementCollection
+    private List<Long> entryList = new ArrayList<>();
 }

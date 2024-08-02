@@ -1,272 +1,201 @@
-import styled from "styled-components"
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { setRoomSession } from "../../store/actions/room";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import styled from 'styled-components';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { setRoomSession } from '../../store/actions/room';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { createStudyRoom } from '../../apis/room';
 
-const ButtonWrapper = styled.div`
-  margin-top: 15px;
-  float: right;
-`;
+import {
+  Box,
+  Button,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+  TextField,
+} from '@mui/material';
 
 const CreateRoomBlock = styled.div`
   height: 510px;
-`;
-
-const InputBlock = styled.div`
-  display: block;
-  margin-top: 5px;
-  margin-bottom: 5px;
-`;
-
-const InputLeftWrap = styled.div`
-  display: inline-block;
-  margin-right: 30px;
-  margin-left: ${(props) => props.marginLeft || "0px"};
-  width: 60px;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: left;
-`;
-
-const InputRightWrap = styled.div`
-  display: inline-block;
-  height: 30px;
-  line-height: 30px;
-  padding: 17px 0;
-`;
-
-const InputForm = styled.input`
-  background-color: ${(props) => props.background};
-  height: 30px;
-  width: ${(props) => props.width};
-  border: 1px solid #919191;
-  border-radius: 5px;
-  padding: 2px 10px;
-
-  outline: none;
-
-  &::placeholder {
-    font-size: 13px;
-    color: #b1b1b1;
-  }
-
-  &:focus {
-    box-shadow: 0px 0px 5px #707070;
-  }
-`;
-
-const SelectBox = styled.select`
-  background-color: white;
-  height: 36px;
-  width: 180px;
-  border: 1px solid #919191;
-  border-radius: 5px;
-  padding: 0 10px;
-  text-align: center;
-  font-size: 15px;
-
-  outline: none;
-
-  &::placeholder {
-    font-size: 13px;
-    color: #b1b1b1;
-  }
-
-  &:focus {
-    box-shadow: 0px 0px 5px #707070;
-  }
-`;
-
-const PeopleLimitWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  padding: 8px;
-`;
-
-const StyledButton = styled.button`
-  adding: 4px;
-  border: none;
-  background-color: transparent;
-  font-size: 16px;
-  color: white;
-  cursor: pointer;
-`;
-
-const StyledAmountWrapper = styled.div`
-  margin: 0 20px;
-  font-size: 20px;
-  font-weight: bold;
-  color: #2b2b2b;
-`;
-
-const AgesWrapper = styled.div`
-  display: inline-block;
-  line-height: 28px;
-  width: 84px;
-  color: black;
-  background-color: #ffffff;
-  border-radius: 4px;
-  border: 2px solid #919191;
-  text-align: center;
-  font-size: 15px;
-
-  & input:checked + span {
-    background-color: #cedaf0;
-  }
-  & span {
-    cursor: pointer;
-    display: block;
-    padding: 2px 16px;
-  }
-
-  &: hover {
-    background-color: #dce5f5;
-  }
-`;
-
-const CheckBoxStyled = styled.input`
-  display: none;
-  cursor: pointer;
 `;
 
 const ProfileWrapper = styled.div`
   margin: 30px 0px;
 `;
 
-const PasswordCheckBox = styled.input`
-  margin-left: 10px;
-`;
+const CreateRoom = ({ onSave, onClose }) => {
+  // user정보 불러와야함
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const minDateTime = new Date();
+  minDateTime.setHours(17);
+  const maxDateTime = new Date();
+  maxDateTime.setHours(20);
 
-const PasswordText = styled.span`
-  margin-left: 5px;
-  font-size: 13px;
-  font-weight: bold;
-  color: #707070;
-`;
+  // 방에 입장하기 위한 세션 정보
+  console.log(
+    'create isside : ' + useSelector((state) => state.room.isSidebarOpen)
+  );
+  const onHandleEnterRoom = (roomId) => {
+    const sessionData = {
+      sessionName: `Session${roomId}`,
+      roomId,
+    };
+    // console.log('create room ' + this.sessionData);
+    dispatch(setRoomSession(sessionData));
+    // navigate('/room/detail');
+    navigate('/multi');
+  };
 
-const CreateRoom = ({ close }) => {
-    // user정보 불러와야함
-    const dispatch =useDispatch();
-    const navigate = useNavigate();
+  // 방 생성 시 설정할 요소들
+  const [roomInfo, setRoomInfo] = useState({
+    roomname: '',
+    roomtopic: '',
+    roomcomment: '',
+    roompw: '',
+    roomopen: 0, // 0: public, 1: private
+    roomtime: '', // 시간으로 변경 필요
+    roomhidden: 0, // 익명 공개 0이면 공개?
+  });
+  const [showPassword, setShowPassword] = useState(false);
 
-    // 방에 입장하기 위한 세션 정보
-    const onHandleEnterRoom = (roomId) => {
-        const sessionData = {
-          sessionName: `Session${roomId}`,
-          roomId,
-        };
-        dispatch(setRoomSession(sessionData));
-        navigate("/room/detail");
-      };
+  const onRoomInfoInput = (e) => {
+    setRoomInfo({ ...roomInfo, [e.target.name]: e.target.value });
+    console.log(roomInfo);
+  };
 
-      // 방 생성 시 설정할 요소들
-      const[roomInfo, setRoomInfo]  = useState({
-        roomname: "",
-        roomtopic: "",
-        roomcomment: "",
-        roompw: "", 
-        roomopen: false,
-        roomtime: "", // 시간으로 변경 필요
-        roomhidden: false, // 익명 공개
-      });
+  const onRoomInfoSubmit = async (e) => {
+    // e.preventDefault();
+    // 방 이름 유효성 검사
+    if (roomInfo.roomname.length === 0) {
+      console.log('방 이름이 없습니다.');
+      alert('방 제목 설정 ');
+      return;
+    }
+    // axios -> 방 생성 api 실행
+    const user = 'hwang';
+    const response = await createStudyRoom(user, roomInfo);
+    onHandleEnterRoom(response); // roomId를 props
+  };
 
-      const onRoomInfoInput = (e) => {
-        setRoomInfo({...roomInfo, [e.target.name]: e.target.value});
-      };
+  const handleSave = () => {
+    // onSave(roomInfo);
+    onClose();
+    onRoomInfoSubmit();
+  };
 
-      const onRoomInfoSubmit = (e) => {
-        e.preventDefault();
-        // 방 이름 유효성 검사
-        if(roomInfo.roomname.length === 0){
-            console.log("방 이름이 없습니다.");
-            alert("방 제목 설정 ");
-        }
-        // axios -> 방 생성 api 실행
-        const roomId = "qwerabcd";
-        onHandleEnterRoom(roomId);
-      };
+  // roomopen을 의존성으로 대입하여, roomopen이 변할 때마다 호출
+  useEffect(() => {
+    if (roomInfo.roomopen === '1') {
+      setShowPassword(true);
+    } else {
+      setShowPassword(false);
+    }
+  }, [roomInfo.roomopen]);
+  return (
+    <>
+      <CreateRoomBlock>
+        <ProfileWrapper>
+          <TextField
+            name='roomname'
+            label='방 이름'
+            fullWidth
+            margin='normal'
+            onChange={onRoomInfoInput}
+            value={roomInfo.roomname}
+          />
+          <TextField
+            name='roomtopic'
+            label='방 주제'
+            fullWidth
+            margin='normal'
+            onChange={onRoomInfoInput}
+            value={roomInfo.roomtopic}
+          />
+          <TextField
+            name='roomcomment'
+            label='방 설명'
+            fullWidth
+            margin='normal'
+            onChange={onRoomInfoInput}
+            value={roomInfo.roomcomment}
+          />
+          <TextField
+            name='roomtime'
+            label='시작 시간'
+            fullWidth
+            type='datetime-local'
+            margin='normal'
+            // inputProps={{ min: `${today}T00:00`, max: `${today}T23:59` }}
+            inputProps={{
+              min: minDateTime.toISOString().slice(0, 16),
+              max: maxDateTime.toISOString().slice(0, 16),
+            }}
+            InputLabelProps={{ shrink: true }}
+            onChange={onRoomInfoInput}
+            value={roomInfo.roomtime}
+          />
 
-      const initState = () => {
-        setRoomInfo({
-        roomname: "",
-        roomtopic: "",
-        roomcomment: "",
-        roompw: "", 
-        roomopen: false,
-        roomtime: "", 
-        roomhidden: false, 
-        });
-      };
-    return (
-        <>
-            <CreateRoomBlock>
-                <ProfileWrapper>
-                    <InputBlock>
-                        <InputLeftWrap>방 이름</InputLeftWrap>
-                        <InputRightWrap>
-                        <InputForm
-                            type="text"
-                            value={roomInfo.roomname}
-                            name="roomname"
-                            placeholder="방 이름을 입력하세요."
-                            onChange={onRoomInfoInput}
-                            required
-                            width="508px"
-                            />
-                        </InputRightWrap>
-                    </InputBlock>
-                    <InputBlock>
-                        <InputLeftWrap>방 주제</InputLeftWrap>
-                        <InputRightWrap>
-                        <InputForm
-                            type="text"
-                            value={roomInfo.roomtopic}
-                            name="roomtopic"
-                            placeholder="방 주제를 입력하세요."
-                            onChange={onRoomInfoInput}
-                            required
-                            width="508px"
-                            />
-                        </InputRightWrap>
-                    </InputBlock>
-                    <InputBlock>
-                        <InputLeftWrap>방 설명</InputLeftWrap>
-                        <InputRightWrap>
-                        <InputForm
-                            type="text"
-                            value={roomInfo.roomcomment}
-                            name="roomcomment"
-                            placeholder="방 설명을 입력하세요."
-                            onChange={onRoomInfoInput}
-                            width="508px"
-                            />
-                        </InputRightWrap>
-                    </InputBlock>
-                    <InputBlock>
-                        <InputLeftWrap>방 비밀번호</InputLeftWrap>
-                        <InputRightWrap>
-                        <InputForm
-                            type="password"
-                            value={roomInfo.roompw}
-                            name="roompw"
-                            placeholder="방 비번을 입력하세요."
-                            onChange={onRoomInfoInput}
-                            width="508px"
-                            />
-                        </InputRightWrap>
-
-                        <ButtonWrapper>
-                            <button onClick={onRoomInfoSubmit}>생성하기</button>
-                        </ButtonWrapper>
-                    </InputBlock>
-                    
-                </ProfileWrapper>
-            </CreateRoomBlock>
-        </>
-    );
+          <FormControl component='fieldset' margin='normal'>
+            <FormLabel component='legend'>방의 공개 여부</FormLabel>
+            <RadioGroup
+              row
+              name='roomopen'
+              value={roomInfo.roomopen}
+              onChange={onRoomInfoInput}
+            >
+              <FormControlLabel value='0' control={<Radio />} label='공개' />
+              <FormControlLabel value='1' control={<Radio />} label='비공개' />
+            </RadioGroup>
+          </FormControl>
+          <br />
+          {showPassword && (
+            <TextField
+              name='roompw'
+              label='비밀번호'
+              // fullWidth
+              margin='normal'
+              onChange={onRoomInfoInput}
+              value={roomInfo.roompw}
+            />
+          )}
+          <br />
+          <FormControl component='fieldset' margin='normal'>
+            <FormLabel component='legend'>평가 익명 여부</FormLabel>
+            <RadioGroup
+              row
+              name='roomhidden'
+              value={String(roomInfo.roomhidden)}
+              onChange={onRoomInfoInput}
+            >
+              <FormControlLabel value='true' control={<Radio />} label='익명' />
+              <FormControlLabel
+                value='false'
+                control={<Radio />}
+                label='공개'
+              />
+            </RadioGroup>
+          </FormControl>
+          <br />
+          <Box mt={2} display='flex' justifyContent='flex-end' gap={1}>
+            <Button
+              variant='contained'
+              color='primary'
+              onClick={handleSave}
+              sx={{ marginRight: '8px' }}
+            >
+              저장
+            </Button>
+            <Button variant='contained' onClick={onClose}>
+              닫기
+            </Button>
+          </Box>
+        </ProfileWrapper>
+      </CreateRoomBlock>
+    </>
+  );
 };
 export default CreateRoom;

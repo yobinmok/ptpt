@@ -47,6 +47,7 @@ const KakaoAuthPage = () => {
       {token && (
         <div>
           <p>Access Token: {token.accessToken}</p>
+          <p>Member Id: {token.memberId}</p>
         </div>
       )}
       {tokenVerified !== null && (
