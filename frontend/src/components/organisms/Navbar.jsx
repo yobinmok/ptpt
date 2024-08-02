@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { login, logout } from '../../store/slices/authSlice';
+import { login, logout } from '../../store/reducers/authReducer';
+
 import {
   StyledNavbar,
   LeftContainer,

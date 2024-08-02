@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'; // useNavigate 추가
 import { useDispatch } from 'react-redux'; // useDispatch 추가
 import { googleSignin, verifyGoogleAccessToken } from '../../apis/auth';
-import { login } from '../../store/slices/authSlice'; // login 액션 추가
+import { login } from '../../store/reducers/authReducer';
 
 const AuthPage = () => {
   const location = useLocation();
-  const navigate = useNavigate(); // navigate 추가
-  const dispatch = useDispatch(); // dispatch 추가
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [authCode, setAuthCode] = useState(null); // 인가 코드 상태
   const [token, setToken] = useState(null); // 액세스 토큰 및 ID 토큰 상태
   const [tokenVerified, setTokenVerified] = useState(null); // 토큰 검증 상태
