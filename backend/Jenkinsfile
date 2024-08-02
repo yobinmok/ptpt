@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+
+    environment {
+        TARGET_BRANCH='develop/be'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    def branch = env.gitlabSourceBranch ?: 'develop/be'
+                    if(branch != env.TARGET_BRANCH) {
+                        error "This build is only for the '${env.TARGET_BRANCH}' branch, but was run on '${branch}'"
+                    }
+
+                    checkout scm
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('backend') {
+                    sh './gradlew clean build'
+                }
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    def image = docker.build("backend:${env.BUILD_ID}", 'backend/.')
+                    image.push()
+                }
+            }
+        }
+        stage('Depoly') {
+            steps {
+                script {
+                    sh 'docker-compose down'
+                    sh 'docker-compose up -d'
+                }
+            }
+        }
+    }
+}
