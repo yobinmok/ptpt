@@ -1,8 +1,7 @@
-package com.ssafy.ptpt.db.repository;
+package com.ssafy.ptpt.db.jpa.repository;
 
-import com.ssafy.ptpt.db.entity.Profile;
+import com.ssafy.ptpt.db.jpa.entity.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
 }

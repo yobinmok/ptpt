@@ -1,13 +1,11 @@
-package com.ssafy.ptpt.db.entity;
+package com.ssafy.ptpt.db.jpa.entity;
 
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomUpdateRequest;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import java.util.ArrayList;
 import java.util.List;

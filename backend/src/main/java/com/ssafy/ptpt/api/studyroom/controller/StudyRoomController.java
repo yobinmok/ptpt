@@ -6,8 +6,6 @@ import com.ssafy.ptpt.api.studyroom.request.StudyRoomUpdateRequest;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomInfoResponse;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomListResponse;
 import com.ssafy.ptpt.api.studyroom.service.StudyRoomService;
-import com.ssafy.ptpt.config.LoginMember;
-import com.ssafy.ptpt.db.entity.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -33,20 +31,33 @@ public class StudyRoomController {
     })
     @PostMapping
     @Operation(summary = "스터디룸 등록")
-    public ResponseEntity<Void> createRoom(@RequestBody @Valid StudyRoomCreateRequest studyRoomCreateRequest) {
+    public ResponseEntity<Long> createRoom(@RequestBody @Valid StudyRoomCreateRequest studyRoomCreateRequest) {
         //Todo : 맴버 값 가져와서 요청에 추가하자
-        studyRoomService.createStudyRoom(studyRoomCreateRequest);
-        return ResponseEntity.ok().build();
+        Long studyRoomId = studyRoomService.createStudyRoom(studyRoomCreateRequest);
+        return ResponseEntity.ok().body(studyRoomId);
     }
-    //방 조회
+
+    //방 검색
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping("/{studyRoomTitle}")
     @Operation(summary = "스터디룸 검색")
-    public ResponseEntity<StudyRoomInfoResponse> findByRoomId(@PathVariable("studyRoomTitle") String studyRoomTitle) {
+    public ResponseEntity<StudyRoomInfoResponse> findByRoomTitle(@PathVariable("studyRoomTitle") String studyRoomTitle) {
         StudyRoomInfoResponse studyRoomInfoResponse = studyRoomService.findByStudyRoomTitle(studyRoomTitle);
+        return ResponseEntity.ok().body(studyRoomInfoResponse);
+    }
+
+    //방 상세조회
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
+    })
+    @GetMapping("/{studyRoomId}")
+    @Operation(summary = "스터디룸 조회")
+    public ResponseEntity<StudyRoomInfoResponse> findByRoomId(@PathVariable("studyRoomId") Long studyRoomId) {
+        StudyRoomInfoResponse studyRoomInfoResponse = studyRoomService.findByStudyRoomId(studyRoomId);
         return ResponseEntity.ok().body(studyRoomInfoResponse);
     }
 

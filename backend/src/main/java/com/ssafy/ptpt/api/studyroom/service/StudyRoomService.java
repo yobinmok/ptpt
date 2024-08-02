@@ -5,10 +5,9 @@ import com.ssafy.ptpt.api.studyroom.request.StudyRoomCreateRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomUpdateRequest;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomInfoResponse;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomListResponse;
-import com.ssafy.ptpt.db.entity.Member;
-import com.ssafy.ptpt.db.entity.StudyRoom;
-import com.ssafy.ptpt.db.repository.MemberRepository;
-import com.ssafy.ptpt.db.repository.StudyRoomRepository;
+import com.ssafy.ptpt.db.jpa.entity.StudyRoom;
+import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
+import com.ssafy.ptpt.db.jpa.repository.StudyRoomRepository;
 import com.ssafy.ptpt.exception.NotFoundException;
 import com.ssafy.ptpt.exception.NotMatchException;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.ssafy.ptpt.exception.NotFoundException.MEMBER_NOT_FOUND;
-import static com.ssafy.ptpt.exception.NotMatchException.MEMBER_NOT_MATCH;
 
 
 @Slf4j
@@ -39,6 +37,14 @@ public class StudyRoomService {
     public StudyRoomInfoResponse findByStudyRoomTitle(String studyRoomTitle) {
         //제목을 통해 정보를 조회해온다
         StudyRoom studyRoom = studyRoomRepository.findByStudyRoomTitle(studyRoomTitle)
+                .orElseThrow(() -> new NotFoundException(NotFoundException.STUDY_ROOM_NOT_FOUND));
+        return StudyRoomInfoResponse.from(studyRoom);
+    }
+
+    //방 상세 조회
+    public StudyRoomInfoResponse findByStudyRoomId(Long studyRoomId) {
+        // 아이디를 통해 정보를 조회해온다
+        StudyRoom studyRoom = studyRoomRepository.findById(studyRoomId)
                 .orElseThrow(() -> new NotFoundException(NotFoundException.STUDY_ROOM_NOT_FOUND));
         return StudyRoomInfoResponse.from(studyRoom);
     }
@@ -63,7 +69,7 @@ public class StudyRoomService {
 
     //방 생성
     @Transactional
-    public void createStudyRoom(StudyRoomCreateRequest studyRoomCreateRequest) {
+    public Long createStudyRoom(StudyRoomCreateRequest studyRoomCreateRequest) {
         memberRepository.findById(studyRoomCreateRequest.getMemberId())
                 .orElseThrow(() -> new NotFoundException(MEMBER_NOT_FOUND));
 
@@ -84,6 +90,7 @@ public class StudyRoomService {
                                     , studyRoomCreateRequest.getMemberId());
 
         studyRoomRepository.save(studyRoom);
+        return studyRoom.getStudyRoomId();
     }
 
     //방 수정

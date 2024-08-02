@@ -1,6 +1,6 @@
 package com.ssafy.ptpt.api.evaluation.service;
 
-import com.ssafy.ptpt.db.repository.StatisticRepository;
+import com.ssafy.ptpt.db.jpa.repository.StatisticRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

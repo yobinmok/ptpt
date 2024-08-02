@@ -1,7 +1,6 @@
 package com.ssafy.ptpt.api.studyroom.response;
 
-import com.ssafy.ptpt.db.entity.Member;
-import com.ssafy.ptpt.db.entity.StudyRoom;
+import com.ssafy.ptpt.db.jpa.entity.StudyRoom;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

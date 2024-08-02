@@ -11,7 +11,7 @@ import com.ssafy.ptpt.api.security.model.response.TokenResponseBody;
 import com.ssafy.ptpt.api.security.service.GoogleAuthService;
 import com.ssafy.ptpt.api.security.service.KakaoService;
 import com.ssafy.ptpt.api.transformer.Trans;
-import com.ssafy.ptpt.db.entity.Member;
+import com.ssafy.ptpt.db.jpa.entity.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -107,7 +107,7 @@ public class MemberController {
         return ResponseEntity.ok(TokenResponseBody.of(200, "Success", tokenString, memberId));
     }
 
-//     @Operation(
+    //     @Operation(
 //             summary = "카카오 액세스 토큰 발급",
 //             description = "카카오 액세스 토큰 발급.",
 //             responses = {

@@ -1,11 +1,10 @@
-package com.ssafy.ptpt.db.entity;
+package com.ssafy.ptpt.db.jpa.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import java.sql.Timestamp;
 import java.util.List;
