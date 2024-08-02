@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MemberProfileResponse {
 
+    private String nickname;
+    private String memberPicture;
     private Long memberId;
     private Long voiceModelId;
     private Long statisticId;
