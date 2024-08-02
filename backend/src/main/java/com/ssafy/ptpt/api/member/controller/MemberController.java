@@ -93,16 +93,15 @@ public class MemberController {
         String accessToken = kakaoService.getAccessToken(authorizationCode.getAuthorizationCode());
         System.out.println("!!!!!!!!!!!!!!!!!" + accessToken);
         String tokenString = Trans.token(accessToken, new JsonParser());
-        String memberId = "K"+Trans.id(kakaoService.getProfile(tokenString), new JsonParser());
+        String oauthId = "K"+Trans.id(kakaoService.getProfile(tokenString), new JsonParser());
 
-        Member member = memberService.findMemberByOauthId(memberId);
-        if (member == null) {
-            member = new Member();
-            member.setOauthId(memberId);
-            memberService.saveMember(member);
+        Member member = memberService.saveMember(oauthId);
+        if(member != null){
+            memberService.saveProfile(member.getMemberId());
+            return ResponseEntity.ok(TokenResponseBody.of(200, "Success", tokenString, oauthId));
+        }else{
+            return ResponseEntity.ok(TokenResponseBody.of(200, "Existing Member", tokenString, oauthId));
         }
-
-        return ResponseEntity.ok(TokenResponseBody.of(200, "Success", tokenString, memberId));
     }
 
     //     @Operation(
@@ -149,24 +148,20 @@ public class MemberController {
             }
     )
     @PostMapping("/signin/google")
-//    @ApiOperation(value = "Google 로그인")
     public ResponseEntity<?> googleSignIn(@RequestBody AuthorizationCodeRequestBody authorizationCode) {
-        //TODO: 최초 로그인이면 회원가입 진행하기, 데이터베이스랑 연결하기
-        System.out.println("TEST!");
-//        String accessToken = googleAuthService.getAccessToken(URLDecoder.decode(authorizationCode.getAuthorizationCode(), StandardCharsets.UTF_8));
         String[] tokens = googleAuthService.getAccessToken(authorizationCode.getAuthorizationCode());
         String accessToken = tokens[1];
         String oauthId = "G"+googleAuthService.getUserResource(tokens[0]).get("id").asText();
 
-        Member member = memberService.findMemberByOauthId(oauthId);
-        if (member == null) {
-            member = new Member();
-            member.setOauthId(oauthId);
-            memberService.saveMember(member);
+        Member member = memberService.saveMember(oauthId);
+        if(member != null){
+            memberService.saveProfile(member.getMemberId());
+            return ResponseEntity.ok(TokenResponseBody.of(200, "Success", accessToken, oauthId));
+        }else{
+            return ResponseEntity.ok(TokenResponseBody.of(200, "Existing Member", accessToken, oauthId));
         }
-
-        return ResponseEntity.ok(TokenResponseBody.of(200, "Success", accessToken, oauthId));
     }
+
 
     @Operation(
             summary = "구글 액세스 토큰 검증",

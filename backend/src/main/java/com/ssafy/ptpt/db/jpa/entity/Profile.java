@@ -15,11 +15,10 @@ import lombok.Setter;
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "profile_id")
     private Long profileId;
 
-    @OneToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+    private Long memberId;
 
     @OneToOne
     @JoinColumn(name = "voicemodel_id")
@@ -30,6 +29,9 @@ public class Profile {
     private Statistic statistic;
 
     private int presentationId;
-    private int evaluationId;
     private int studyRoomId;
+
+    public Profile(Long profileId) {
+        this.profileId = profileId;
+    }
 }

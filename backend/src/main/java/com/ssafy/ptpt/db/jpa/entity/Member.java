@@ -29,8 +29,7 @@ public class Member {
     private boolean isWithdraw;
     private Timestamp withdrawTime;
 
-    @OneToOne(mappedBy = "member")
-    private Profile profile;
+    private Long profileId;
 
     @OneToOne(mappedBy = "member")
     private Role role;
@@ -38,4 +37,7 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Comment> comments;
 
+    public Member(String oauthId) {
+        this.oauthId = oauthId;
+    }
 }
