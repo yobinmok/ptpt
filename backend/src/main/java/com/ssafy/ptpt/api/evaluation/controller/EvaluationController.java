@@ -34,10 +34,10 @@ public class EvaluationController {
     }
 
 
-    @GetMapping("/{memberId}")
+    @GetMapping("/{oauthId}")
     @Operation(summary = "평가 조회")
-    public ResponseEntity<List<EvaluationInfoResponse>> viewEvaluation(@PathVariable("memberId") Long memberId){
-        List<EvaluationInfoResponse> evaluationInfoResponse = evaluationService.findEvaluationById(memberId);
+    public ResponseEntity<List<EvaluationInfoResponse>> viewEvaluation(@PathVariable("oauthId") String oauthId){
+        List<EvaluationInfoResponse> evaluationInfoResponse = evaluationService.findEvaluationById(oauthId);
         return ResponseEntity.ok().body(evaluationInfoResponse);
     }
 

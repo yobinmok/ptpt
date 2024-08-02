@@ -32,8 +32,8 @@ public class StudyRoomCreateRequest {
 
     private int anonymity;
 
-    private Long memberId;
+    private String oauthId;
 
     @ElementCollection
-    private List<Long> entryList = new ArrayList<>();
+    private List<String> entryList = new ArrayList<>();
 }

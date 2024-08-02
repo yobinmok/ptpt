@@ -70,11 +70,10 @@ public class StudyRoomService {
     //방 생성
     @Transactional
     public Long createStudyRoom(StudyRoomCreateRequest studyRoomCreateRequest) {
-        memberRepository.findById(studyRoomCreateRequest.getMemberId())
-                .orElseThrow(() -> new NotFoundException(MEMBER_NOT_FOUND));
+        memberRepository.findByOauthId(studyRoomCreateRequest.getOauthId());
 
-        List<Long> entryList = new ArrayList<>();
-        entryList.add(studyRoomCreateRequest.getMemberId());
+        List<String> entryList = new ArrayList<>();
+        entryList.add(studyRoomCreateRequest.getOauthId());
 
         // 공개 여부에 따른 코드 추가 필요
         StudyRoom studyRoom = new StudyRoom(studyRoomCreateRequest.getStudyRoomTitle()
@@ -84,10 +83,10 @@ public class StudyRoomService {
                                     , studyRoomCreateRequest.getSubject()
                                     , studyRoomCreateRequest.getDescription()
                                     , studyRoomCreateRequest.getAnonymity()
-                                    , studyRoomCreateRequest.getMemberId()
+                                    , studyRoomCreateRequest.getOauthId()
                                     , entryList
                                     , "스터디룸 코드값 추가 예정"
-                                    , studyRoomCreateRequest.getMemberId());
+                                    , studyRoomCreateRequest.getOauthId());
 
         studyRoomRepository.save(studyRoom);
         return studyRoom.getStudyRoomId();

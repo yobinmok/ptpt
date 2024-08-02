@@ -26,11 +26,10 @@ public class Member {
     private String oauthId;
     private String oauthEmail;
     private Timestamp registerTime;
-    private boolean isWithdraw;
+    private int isWithdraw;
     private Timestamp withdrawTime;
 
-    @OneToOne(mappedBy = "member")
-    private Profile profile;
+    private Long profileId;
 
     @OneToOne(mappedBy = "member")
     private Role role;
@@ -38,4 +37,7 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Comment> comments;
 
+    public Member(String oauthId) {
+        this.oauthId = oauthId;
+    }
 }

@@ -11,7 +11,7 @@ public class MemberProfileResponse {
 
     private String nickname;
     private String memberPicture;
-    private Long memberId;
+    private String oauthId;
     private Long voiceModelId;
     private Long statisticId;
     private Long studyRoomId;

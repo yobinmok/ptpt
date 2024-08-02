@@ -69,8 +69,8 @@ public class EvaluationService {
 
     // 평가 조회
     @Transactional
-    public List<EvaluationInfoResponse> findEvaluationById(Long memberId) {
-        List<Evaluation> evaluation = evaluationRepository.findByMemberId(memberId);
+    public List<EvaluationInfoResponse> findEvaluationById(String oauthId) {
+        List<Evaluation> evaluation = evaluationRepository.findByOauthId(oauthId);
 
         return evaluation.stream()
                 .map(EvaluationInfoResponse::from)

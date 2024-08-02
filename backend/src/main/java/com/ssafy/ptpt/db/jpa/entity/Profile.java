@@ -15,11 +15,10 @@ import lombok.Setter;
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "profile_id")
     private Long profileId;
 
-    @OneToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+    private String oauthId;
 
     @OneToOne
     @JoinColumn(name = "voicemodel_id")
@@ -29,7 +28,11 @@ public class Profile {
     @JoinColumn(name = "statisitc_id")
     private Statistic statistic;
 
-    private int presentationId;
-    private int evaluationId;
-    private int studyRoomId;
+    private Long presentationId;
+    private Long studyRoomId;
+
+    public Profile(Long profileId, String oauthId) {
+        this.profileId = profileId;
+        this.oauthId = oauthId;
+    }
 }
