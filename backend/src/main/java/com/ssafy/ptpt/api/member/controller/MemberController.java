@@ -33,9 +33,6 @@ import java.util.Map;
 @RequestMapping("/member")
 public class MemberController {
 
-//    @Autowired
-//    MemberService memberService;
-
     @Autowired
     GoogleAuthService googleAuthService;
 
@@ -44,29 +41,6 @@ public class MemberController {
 
     @Autowired
     private MemberService memberService;
-
-//    @PostMapping("/signup")
-////    @ApiOperation(value = "회원가입")
-//    public ResponseEntity<?> signup(){
-//        return new ResponseEntity<>(HttpStatus.CREATED);
-//    }
-//
-//    @PostMapping("/signin")
-////    @ApiOperation(value = "로그인")
-//    public ResponseEntity<?> signin(){
-//        return new ResponseEntity<>(HttpStatus.ACCEPTED);
-//    }
-
-//    @PostMapping("/signup")
-//    @Operation(summary = "회원가입")
-//    public ResponseEntity<Void> signup(@RequestParam("ACCESS_TOKEN") String ACCESS_TOKEN){
-//        return new ResponseEntity<>(HttpStatus.CREATED);
-//    }
-//    @Operation(summary = "카카오 로그인")
-//    @GetMapping("/login/kakao")
-//    public RedirectView goKakaoOAuth() {
-//        return kakaoService.goKakaoOAuth();
-//    }
 
     @Operation(
             summary = "카카오톡 로그인",
@@ -132,40 +106,6 @@ public class MemberController {
 
         return ResponseEntity.ok(TokenResponseBody.of(200, "Success", tokenString, memberId));
     }
-
-//    @Operation(summary = "카카오 권한요청")
-//    @GetMapping("/authorize/kakao")
-//    public RedirectView goKakaoOAuth(@RequestParam("scope") String scope) {
-//        System.out.println("권한요청 API");
-//        return kakaoService.goKakaoOAuth(scope);
-//    }
-//
-//    @Operation(summary = "카카오 프로필")
-//    @GetMapping("/profile/kakao")
-//    public String getProfile() {
-//        System.out.println("프로필 API");
-//        return kakaoService.getProfile();
-//    }
-
-//    @Operation(summary = "카카오 로그아웃")
-//    @PostMapping("/signout/kakao")
-//    public String logout() {
-//        System.out.println("로그아웃 API");
-//        return kakaoService.logout();
-//    }
-
-
-//
-//    @GetMapping("/signin/kakao")
-//    public RedirectView loginCallback(@RequestParam("authorize") String authorize) {
-//        return kakaoService.loginCallback(authorize);
-//    }
-
-//    @Operation(summary = "카카오 프로필")
-//    @GetMapping("/profile/kakao")
-//    public String getProfile(@RequestBody String accessToken) { //TODO: 버그 발생으로 임의로 추가한 RequestBody입니다. 수정해주세요.
-//        return kakaoService.getProfile(accessToken);
-//    }
 
 //     @Operation(
 //             summary = "카카오 액세스 토큰 발급",
