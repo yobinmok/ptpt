@@ -41,54 +41,24 @@ public class MemberController {
     private MemberService memberService;
 
     @Operation(
-            summary = "카카오톡 로그인",
-            description = "카카오톡 OAuth2.0 인증을 통해 사용자를 로그인합니다.",
+            summary = "카카오 액세스 토큰 발급",
+            description = "카카오 액세스 토큰 발급.",
             responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "로그인 성공",
-                            content = @Content(
-                                    schema = @Schema(
-                                            description = "로그인 성공 응답",
-                                            example = "{ \"message\": \"로그인 성공\"}"
-                                    )
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "잘못된 요청 또는 파라미터 오류",
-                            content = @Content(
-                                    schema = @Schema(
-                                            description = "잘못된 요청 응답",
-                                            example = "{ \"message\": \"잘못된 요청입니다. 요청 파라미터를 확인하세요.\" }"
-                                    )
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "401",
-                            description = "인증 실패 또는 인증 정보 오류",
-                            content = @Content(
-                                    schema = @Schema(
-                                            description = "인증 실패 응답",
-                                            example = "{ \"message\": \"인증에 실패하였습니다. 인증 정보를 확인하세요.\" }"
-                                    )
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "500",
-                            description = "서버 오류",
-                            content = @Content(
-                                    schema = @Schema(
-                                            description = "서버 오류 응답",
-                                            example = "{ \"message\": \"서버에서 오류가 발생했습니다. 나중에 다시 시도해 주세요.\" }"
-                                    )
-                            )
-                    )
+                     @ApiResponse(
+                             responseCode = "200",
+                             description = "액세스 토큰 반환",
+                             content = @Content(
+                                     schemaProperties = {
+                                             @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message")),
+                                             @SchemaProperty(name = "accessToken", schema = @Schema(type = "string", description = "액세스 토큰")),
+                                             @SchemaProperty(name = "oauthId", schema = @Schema(type = "string", description = "oauthId"))
+                                     }
+                             )
+                     )
             }
     )
     @PostMapping("/signin/kakao")
     public ResponseEntity<?> kakaoSignIn(@RequestBody AuthorizationCodeRequestBody authorizationCode) {
-//        System.out.println(kakaoService.getProfile());
         System.out.println("로그인 API");
         String accessToken = kakaoService.getAccessToken(authorizationCode.getAuthorizationCode());
         System.out.println("!!!!!!!!!!!!!!!!!" + accessToken);
@@ -104,23 +74,27 @@ public class MemberController {
         }
     }
 
-    //     @Operation(
-//             summary = "카카오 액세스 토큰 발급",
-//             description = "카카오 액세스 토큰 발급.",
-//             responses = {
-//                     @ApiResponse(
-//                             responseCode = "200",
-//                             description = "액세스 토큰 반환",
-//                             content = @Content(
-//                                     schemaProperties = {
-//                                             @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message")),
-//                                             @SchemaProperty(name = "accessToken", schema = @Schema(type = "string", description = "액세스 토큰"))
-//                                     }
-//                             )
-//                     )
-//             }
-//     )
-    @Operation(summary = "카카오 액세스 토큰 검증")
+
+    @Operation(
+            summary = "카카오 액세스 토큰 검증",
+            description = "카카오 액세스 토큰 검증",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            description = "유효한 토큰",
+                            content = @Content(
+                                    schemaProperties = {
+                                            @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message"))
+                                    }
+                            )),
+                    @ApiResponse(responseCode = "401",
+                            description = "유효하지 않은 토큰",
+                            content = @Content(
+                                    schemaProperties = {
+                                            @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message"))
+                                    }
+                            ))
+            }
+    )
     @PostMapping("/auth/kakao")
     public ResponseEntity<?> kakaoAuthVerify(@RequestBody AccessTokenRequestBody accessToken) {
         System.out.println("토큰검증 API");
@@ -141,7 +115,8 @@ public class MemberController {
                             content = @Content(
                                     schemaProperties = {
                                             @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message")),
-                                            @SchemaProperty(name = "accessToken", schema = @Schema(type = "string", description = "액세스 토큰"))
+                                            @SchemaProperty(name = "accessToken", schema = @Schema(type = "string", description = "액세스 토큰")),
+                                            @SchemaProperty(name = "oauthId", schema = @Schema(type = "string", description = "oauthId"))
                                     }
                             )
                     )
