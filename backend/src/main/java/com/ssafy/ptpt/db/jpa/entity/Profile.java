@@ -18,7 +18,7 @@ public class Profile {
     @Column(name = "profile_id")
     private Long profileId;
 
-    private Long memberId;
+    private String oauthId;
 
     @OneToOne
     @JoinColumn(name = "voicemodel_id")
@@ -28,10 +28,11 @@ public class Profile {
     @JoinColumn(name = "statisitc_id")
     private Statistic statistic;
 
-    private int presentationId;
-    private int studyRoomId;
+    private Long presentationId;
+    private Long studyRoomId;
 
-    public Profile(Long profileId) {
+    public Profile(Long profileId, String oauthId) {
         this.profileId = profileId;
+        this.oauthId = oauthId;
     }
 }

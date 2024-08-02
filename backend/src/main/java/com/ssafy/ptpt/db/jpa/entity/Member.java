@@ -26,7 +26,7 @@ public class Member {
     private String oauthId;
     private String oauthEmail;
     private Timestamp registerTime;
-    private boolean isWithdraw;
+    private int isWithdraw;
     private Timestamp withdrawTime;
 
     private Long profileId;

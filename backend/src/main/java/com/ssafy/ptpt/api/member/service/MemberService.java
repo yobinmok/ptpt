@@ -1,9 +1,9 @@
 package com.ssafy.ptpt.api.member.service;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.ptpt.api.member.response.MemberProfileResponse;
-import com.ssafy.ptpt.db.jpa.entity.Member;
-import com.ssafy.ptpt.db.jpa.entity.Profile;
+import com.ssafy.ptpt.db.jpa.entity.*;
 import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
 import com.ssafy.ptpt.db.jpa.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -37,16 +38,28 @@ public class MemberService {
         return null;
     }
 
-    public void saveProfile(Long memberId){
-        Profile profile = new Profile(memberId);
+    public void saveProfile(Long memberId, String oauthId){
+        Profile profile = new Profile(memberId, oauthId);
         profileRepository.save(profile);
     }
 
-//    public MemberProfileResponse findMemberProfile(String oauthId) {
-//        Member member = memberRepository.findByOauthId(oauthId);
-//        jpaQueryFactory
-//                .select(memberId, )
-//        MemberProfileResponse memberProfileResponse = new MemberProfileResponse();
-//
-//    }
+    public MemberProfileResponse findMemberProfile(String oauthId) {
+        QMember member = QMember.member;
+        QProfile profile = QProfile.profile;
+
+        return jpaQueryFactory.select(
+                        Projections.bean(
+                                MemberProfileResponse.class,
+                                member.nickname,
+                                member.memberPicture,
+                                profile.profileId,
+                                profile.voiceModel,
+                                profile.statistic,
+                                profile.presentationId,
+                                profile.studyRoomId))
+                .from(member)
+                .leftJoin(profile).on(member.profileId.eq(profile.profileId))
+                .where(member.oauthId.eq(oauthId))
+                .fetchOne();
+    }
 }

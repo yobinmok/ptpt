@@ -24,7 +24,7 @@ public class StudyRoom {
     private String studyRoomTitle;
 
     @ElementCollection
-    private List<Long> entryList = new ArrayList<>();
+    private List<String> entryList = new ArrayList<>();
 
     @OneToMany(mappedBy = "studyRoom")
     private List<Evaluation> Evaluation;
@@ -33,10 +33,10 @@ public class StudyRoom {
 
     private String studyRoomPw;
 
-    private Long memberId;
+    private String oauthId;
 
     // 발표자
-    private Long presentationHost;
+    private String presentationHost;
 
     // 방 공개 여부
     private int isPublic;
@@ -64,7 +64,7 @@ public class StudyRoom {
         this.anonymity = studyRoomUpdateRequest.getAnonymity();
     }
 
-    public StudyRoom(String studyRoomTitle, int isPublic, String studyRoomPw, String presentationTime, String subject, String description, int anonymity, Long memberId, List<Long> entryList, String studyRoomCode, Long presentationHost) {
+    public StudyRoom(String studyRoomTitle, int isPublic, String studyRoomPw, String presentationTime, String subject, String description, int anonymity, String oauthId, List<String> entryList, String studyRoomCode, String presentationHost) {
         this.studyRoomTitle = studyRoomTitle;
         this.isPublic = isPublic;
         this.studyRoomPw = studyRoomPw;
@@ -72,7 +72,7 @@ public class StudyRoom {
         this.subject = subject;
         this.description = description;
         this.anonymity = anonymity;
-        this.memberId = memberId;
+        this.oauthId = oauthId;
         this.entryList = entryList;
         this.studyRoomCode = studyRoomCode;
         this.presentationHost = presentationHost;

@@ -16,7 +16,7 @@ public class StudyRoomListResponse {
 
     private String studyRoomTitle;
 
-    private List<Long> entryList;
+    private List<String> entryList;
 
     private String studyRoomCode;
 

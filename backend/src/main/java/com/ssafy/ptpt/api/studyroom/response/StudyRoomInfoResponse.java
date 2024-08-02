@@ -13,11 +13,11 @@ import java.util.List;
 public class StudyRoomInfoResponse {
     private Long studyRoomId;
     private String studyRoomTitle;
-    private List<Long> entryList;
+    private List<String> entryList;
     private String studyRoomCode;
     private String studyRoomPw;
-    private Long memberId;
-    private Long presentationHost;
+    private String oauthId;
+    private String presentationHost;
 
     public static StudyRoomInfoResponse from(StudyRoom studyRoom){
         StudyRoomInfoResponse studyRoomInfoResponse = new StudyRoomInfoResponse();
@@ -26,7 +26,7 @@ public class StudyRoomInfoResponse {
         studyRoomInfoResponse.entryList = studyRoom.getEntryList();
         studyRoomInfoResponse.studyRoomCode = studyRoom.getStudyRoomCode();
         studyRoomInfoResponse.studyRoomPw = studyRoom.getStudyRoomPw();
-        studyRoomInfoResponse.memberId = studyRoom.getMemberId();
+        studyRoomInfoResponse.oauthId = studyRoom.getOauthId();
         studyRoomInfoResponse.presentationHost = studyRoom.getPresentationHost();
 
         return studyRoomInfoResponse;
