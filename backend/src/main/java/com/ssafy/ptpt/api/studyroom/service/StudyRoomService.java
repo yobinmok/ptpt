@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,8 +67,21 @@ public class StudyRoomService {
         memberRepository.findById(studyRoomCreateRequest.getMemberId())
                 .orElseThrow(() -> new NotFoundException(MEMBER_NOT_FOUND));
 
+        List<Long> entryList = new ArrayList<>();
+        entryList.add(studyRoomCreateRequest.getMemberId());
+
         // 공개 여부에 따른 코드 추가 필요
-        StudyRoom studyRoom = new StudyRoom();
+        StudyRoom studyRoom = new StudyRoom(studyRoomCreateRequest.getStudyRoomTitle()
+                                    , studyRoomCreateRequest.getIsPublic()
+                                    , studyRoomCreateRequest.getStudyRoomPw()
+                                    , studyRoomCreateRequest.getPresentationTime()
+                                    , studyRoomCreateRequest.getSubject()
+                                    , studyRoomCreateRequest.getDescription()
+                                    , studyRoomCreateRequest.getAnonymity()
+                                    , studyRoomCreateRequest.getMemberId()
+                                    , entryList
+                                    , "스터디룸 코드값 추가 예정"
+                                    , studyRoomCreateRequest.getMemberId());
 
         studyRoomRepository.save(studyRoom);
     }

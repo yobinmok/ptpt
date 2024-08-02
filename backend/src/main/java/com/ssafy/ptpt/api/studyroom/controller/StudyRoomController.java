@@ -34,6 +34,7 @@ public class StudyRoomController {
     @PostMapping
     @Operation(summary = "스터디룸 등록")
     public ResponseEntity<Void> createRoom(@RequestBody @Valid StudyRoomCreateRequest studyRoomCreateRequest) {
+        //Todo : 맴버 값 가져와서 요청에 추가하자
         studyRoomService.createStudyRoom(studyRoomCreateRequest);
         return ResponseEntity.ok().build();
     }
