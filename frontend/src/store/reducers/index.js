@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
-import user from './user.jsx';
-import room from './room.jsx';
-import solo from './solo.jsx';
+import user from './userReducer.js';
+import room from './roomReducer.js';
+import solo from './soloReducer.js';
 import { persistReducer } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session';
 

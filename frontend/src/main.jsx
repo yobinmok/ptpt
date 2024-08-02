@@ -5,7 +5,7 @@ import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Provider } from 'react-redux';
-import store from './store/store.jsx';
+import store from './store/store.js';
 
 const theme = createTheme({
   typography: {
