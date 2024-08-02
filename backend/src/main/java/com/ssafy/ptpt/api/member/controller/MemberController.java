@@ -42,7 +42,6 @@ public class MemberController {
     @Autowired
     public KakaoService kakaoService;
 
-<<<<<<< backend/src/main/java/com/ssafy/ptpt/api/member/controller/MemberController.java
     @Autowired
     private MemberService memberService;
 
@@ -58,65 +57,17 @@ public class MemberController {
 //        return new ResponseEntity<>(HttpStatus.ACCEPTED);
 //    }
 
-
-=======
-    @PostMapping("/signup")
-    @Operation(summary = "회원가입")
-    public ResponseEntity<Void> signup(@RequestParam("ACCESS_TOKEN") String ACCESS_TOKEN){
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
->>>>>>> backend/src/main/java/com/ssafy/ptpt/api/member/controller/MemberController.java
+//    @PostMapping("/signup")
+//    @Operation(summary = "회원가입")
+//    public ResponseEntity<Void> signup(@RequestParam("ACCESS_TOKEN") String ACCESS_TOKEN){
+//        return new ResponseEntity<>(HttpStatus.CREATED);
+//    }
 //    @Operation(summary = "카카오 로그인")
 //    @GetMapping("/login/kakao")
 //    public RedirectView goKakaoOAuth() {
 //        return kakaoService.goKakaoOAuth();
 //    }
-<<<<<<< backend/src/main/java/com/ssafy/ptpt/api/member/controller/MemberController.java
 
-    @Operation(summary = "카카오 로그인")
-    @PostMapping("/signin/kakao")
-    public ResponseEntity<?> kakaoSignIn(@RequestBody AuthorizationCodeRequestBody authorizationCode) {
-//        System.out.println(kakaoService.getProfile());
-        System.out.println("로그인 API");
-        String accessToken = kakaoService.getAccessToken(authorizationCode.getAuthorizationCode());
-        System.out.println("!!!!!!!!!!!!!!!!!" + accessToken);
-        String tokenString = Trans.token(accessToken, new JsonParser());
-        String memberId = "K"+Trans.id(kakaoService.getProfile(tokenString), new JsonParser());
-
-        Member member = memberService.findMemberByOauthId(memberId);
-        if (member == null) {
-            member = new Member();
-            member.setOauthId(memberId);
-            memberService.saveMember(member);
-        }
-
-        return ResponseEntity.ok(TokenResponseBody.of(200, "Success", tokenString, memberId));
-    }
-
-//    @Operation(summary = "카카오 권한요청")
-//    @GetMapping("/authorize/kakao")
-//    public RedirectView goKakaoOAuth(@RequestParam("scope") String scope) {
-//        System.out.println("권한요청 API");
-//        return kakaoService.goKakaoOAuth(scope);
-//    }
-//
-//    @Operation(summary = "카카오 프로필")
-//    @GetMapping("/profile/kakao")
-//    public String getProfile() {
-//        System.out.println("프로필 API");
-//        return kakaoService.getProfile();
-//    }
-
-//    @Operation(summary = "카카오 로그아웃")
-//    @PostMapping("/signout/kakao")
-//    public String logout() {
-//        System.out.println("로그아웃 API");
-//        return kakaoService.logout();
-//    }
-
-    @Operation(summary = "카카오 액세스 토큰 검증")
-=======
     @Operation(
             summary = "카카오톡 로그인",
             description = "카카오톡 OAuth2.0 인증을 통해 사용자를 로그인합니다.",
@@ -163,34 +114,76 @@ public class MemberController {
                     )
             }
     )
-    @GetMapping("/signin/kakao")
-    public RedirectView loginCallback(@RequestParam("authorize") String authorize) {
-        return kakaoService.loginCallback(authorize);
+    @PostMapping("/signin/kakao")
+    public ResponseEntity<?> kakaoSignIn(@RequestBody AuthorizationCodeRequestBody authorizationCode) {
+//        System.out.println(kakaoService.getProfile());
+        System.out.println("로그인 API");
+        String accessToken = kakaoService.getAccessToken(authorizationCode.getAuthorizationCode());
+        System.out.println("!!!!!!!!!!!!!!!!!" + accessToken);
+        String tokenString = Trans.token(accessToken, new JsonParser());
+        String memberId = "K"+Trans.id(kakaoService.getProfile(tokenString), new JsonParser());
+
+        Member member = memberService.findMemberByOauthId(memberId);
+        if (member == null) {
+            member = new Member();
+            member.setOauthId(memberId);
+            memberService.saveMember(member);
+        }
+
+        return ResponseEntity.ok(TokenResponseBody.of(200, "Success", tokenString, memberId));
     }
 
-    @Operation(summary = "카카오 프로필")
-    @GetMapping("/profile/kakao")
-    public String getProfile() {
-        return kakaoService.getProfile();
-    }
+//    @Operation(summary = "카카오 권한요청")
+//    @GetMapping("/authorize/kakao")
+//    public RedirectView goKakaoOAuth(@RequestParam("scope") String scope) {
+//        System.out.println("권한요청 API");
+//        return kakaoService.goKakaoOAuth(scope);
+//    }
+//
+//    @Operation(summary = "카카오 프로필")
+//    @GetMapping("/profile/kakao")
+//    public String getProfile() {
+//        System.out.println("프로필 API");
+//        return kakaoService.getProfile();
+//    }
 
-    @Operation(
-            summary = "카카오 액세스 토큰 발급",
-            description = "카카오 액세스 토큰 발급.",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "액세스 토큰 반환",
-                            content = @Content(
-                                    schemaProperties = {
-                                            @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message")),
-                                            @SchemaProperty(name = "accessToken", schema = @Schema(type = "string", description = "액세스 토큰"))
-                                    }
-                            )
-                    )
-            }
-    )
->>>>>>> backend/src/main/java/com/ssafy/ptpt/api/member/controller/MemberController.java
+//    @Operation(summary = "카카오 로그아웃")
+//    @PostMapping("/signout/kakao")
+//    public String logout() {
+//        System.out.println("로그아웃 API");
+//        return kakaoService.logout();
+//    }
+
+
+//
+//    @GetMapping("/signin/kakao")
+//    public RedirectView loginCallback(@RequestParam("authorize") String authorize) {
+//        return kakaoService.loginCallback(authorize);
+//    }
+
+//    @Operation(summary = "카카오 프로필")
+//    @GetMapping("/profile/kakao")
+//    public String getProfile(@RequestBody String accessToken) { //TODO: 버그 발생으로 임의로 추가한 RequestBody입니다. 수정해주세요.
+//        return kakaoService.getProfile(accessToken);
+//    }
+
+//     @Operation(
+//             summary = "카카오 액세스 토큰 발급",
+//             description = "카카오 액세스 토큰 발급.",
+//             responses = {
+//                     @ApiResponse(
+//                             responseCode = "200",
+//                             description = "액세스 토큰 반환",
+//                             content = @Content(
+//                                     schemaProperties = {
+//                                             @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message")),
+//                                             @SchemaProperty(name = "accessToken", schema = @Schema(type = "string", description = "액세스 토큰"))
+//                                     }
+//                             )
+//                     )
+//             }
+//     )
+    @Operation(summary = "카카오 액세스 토큰 검증")
     @PostMapping("/auth/kakao")
     public ResponseEntity<?> kakaoAuthVerify(@RequestBody AccessTokenRequestBody accessToken) {
         System.out.println("토큰검증 API");
