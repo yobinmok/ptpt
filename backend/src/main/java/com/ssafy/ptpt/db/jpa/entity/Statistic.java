@@ -1,9 +1,7 @@
-package com.ssafy.ptpt.db.entity;
+package com.ssafy.ptpt.db.jpa.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 
 @Entity

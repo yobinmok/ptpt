@@ -1,4 +1,4 @@
-package com.ssafy.ptpt.db.entity;
+package com.ssafy.ptpt.db.jpa.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,18 +13,15 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment {
+@EntityScan
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long commentId;
+    private Long roleId;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne
-    @JoinColumn(name = "evaluation_id")
-    private Evaluation evaluation;
-
-    private String commentContent;
+    private String roleType;
 }

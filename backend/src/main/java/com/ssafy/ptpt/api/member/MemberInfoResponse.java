@@ -1,7 +1,6 @@
 package com.ssafy.ptpt.api.member;
 
-import com.ssafy.ptpt.db.entity.Member;
-import com.ssafy.ptpt.db.entity.Role;
+import com.ssafy.ptpt.db.jpa.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

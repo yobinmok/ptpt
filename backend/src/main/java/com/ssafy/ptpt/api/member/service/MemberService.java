@@ -1,7 +1,7 @@
 package com.ssafy.ptpt.api.member.service;
 
-import com.ssafy.ptpt.db.entity.Member;
-import com.ssafy.ptpt.db.repository.MemberRepository;
+import com.ssafy.ptpt.db.jpa.entity.Member;
+import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,11 +1,9 @@
-package com.ssafy.ptpt.db.repository;
+package com.ssafy.ptpt.db.jpa.repository;
 
-import com.ssafy.ptpt.db.entity.Evaluation;
+import com.ssafy.ptpt.db.jpa.entity.Evaluation;
 import io.lettuce.core.dynamic.annotation.Param;
-import jakarta.persistence.Entity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

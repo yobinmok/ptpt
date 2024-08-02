@@ -1,10 +1,6 @@
 package com.ssafy.ptpt.api.evaluation.response;
 
-import com.ssafy.ptpt.db.entity.Evaluation;
-import com.ssafy.ptpt.db.entity.Member;
-import com.ssafy.ptpt.db.entity.StudyRoom;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.ssafy.ptpt.db.jpa.entity.Evaluation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

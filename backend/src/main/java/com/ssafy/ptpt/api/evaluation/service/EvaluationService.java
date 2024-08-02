@@ -2,16 +2,13 @@ package com.ssafy.ptpt.api.evaluation.service;
 
 import com.ssafy.ptpt.api.evaluation.request.EvaluationCreateRequest;
 import com.ssafy.ptpt.api.evaluation.response.EvaluationInfoResponse;
-import com.ssafy.ptpt.db.entity.Evaluation;
-import com.ssafy.ptpt.db.entity.Member;
-import com.ssafy.ptpt.db.entity.Statistic;
-import com.ssafy.ptpt.db.entity.StudyRoom;
-import com.ssafy.ptpt.db.repository.EvaluationRepository;
-import com.ssafy.ptpt.db.repository.MemberRepository;
-import com.ssafy.ptpt.db.repository.StatisticRepository;
-import com.ssafy.ptpt.db.repository.StudyRoomRepository;
+import com.ssafy.ptpt.db.jpa.entity.Evaluation;
+import com.ssafy.ptpt.db.jpa.entity.Member;
+import com.ssafy.ptpt.db.jpa.entity.Statistic;
+import com.ssafy.ptpt.db.jpa.repository.EvaluationRepository;
+import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
+import com.ssafy.ptpt.db.jpa.repository.StatisticRepository;
 import com.ssafy.ptpt.exception.NotFoundException;
-import com.ssafy.ptpt.exception.NotMatchException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.ssafy.ptpt.exception.NotMatchException.MEMBER_NOT_MATCH;
 
 @Slf4j
 @Service

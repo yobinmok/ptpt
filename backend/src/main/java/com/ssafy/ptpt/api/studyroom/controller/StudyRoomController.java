@@ -6,8 +6,6 @@ import com.ssafy.ptpt.api.studyroom.request.StudyRoomUpdateRequest;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomInfoResponse;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomListResponse;
 import com.ssafy.ptpt.api.studyroom.service.StudyRoomService;
-import com.ssafy.ptpt.config.LoginMember;
-import com.ssafy.ptpt.db.entity.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -38,15 +36,28 @@ public class StudyRoomController {
         studyRoomService.createStudyRoom(studyRoomCreateRequest);
         return ResponseEntity.ok().build();
     }
-    //방 조회
+
+    //방 검색
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping("/{studyRoomTitle}")
     @Operation(summary = "스터디룸 검색")
-    public ResponseEntity<StudyRoomInfoResponse> findByRoomId(@PathVariable("studyRoomTitle") String studyRoomTitle) {
+    public ResponseEntity<StudyRoomInfoResponse> findByRoomTitle(@PathVariable("studyRoomTitle") String studyRoomTitle) {
         StudyRoomInfoResponse studyRoomInfoResponse = studyRoomService.findByStudyRoomTitle(studyRoomTitle);
+        return ResponseEntity.ok().body(studyRoomInfoResponse);
+    }
+
+    //방 상세조회
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
+    })
+    @GetMapping("/{studyRoomId}")
+    @Operation(summary = "스터디룸 검색")
+    public ResponseEntity<StudyRoomInfoResponse> findByRoomId(@PathVariable("studyRoomId") Long studyRoomId) {
+        StudyRoomInfoResponse studyRoomInfoResponse = studyRoomService.findByStudyRoomId(studyRoomId);
         return ResponseEntity.ok().body(studyRoomInfoResponse);
     }
 
