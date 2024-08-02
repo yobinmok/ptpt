@@ -69,7 +69,7 @@ public class StudyRoomService {
 
     //방 생성
     @Transactional
-    public void createStudyRoom(StudyRoomCreateRequest studyRoomCreateRequest) {
+    public Long createStudyRoom(StudyRoomCreateRequest studyRoomCreateRequest) {
         memberRepository.findById(studyRoomCreateRequest.getMemberId())
                 .orElseThrow(() -> new NotFoundException(MEMBER_NOT_FOUND));
 
@@ -90,6 +90,7 @@ public class StudyRoomService {
                                     , studyRoomCreateRequest.getMemberId());
 
         studyRoomRepository.save(studyRoom);
+        return studyRoom.getStudyRoomId();
     }
 
     //방 수정
