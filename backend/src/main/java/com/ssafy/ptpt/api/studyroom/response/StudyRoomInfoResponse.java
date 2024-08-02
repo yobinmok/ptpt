@@ -16,11 +16,11 @@ import java.util.List;
 public class StudyRoomInfoResponse {
     private Long studyRoomId;
     private String studyRoomTitle;
-    private List<Integer> entryList;
+    private List<Long> entryList;
     private String studyRoomCode;
     private String studyRoomPw;
     private Long memberId;
-    private String presentationHost;
+    private Long presentationHost;
 
     public static StudyRoomInfoResponse from(StudyRoom studyRoom){
         StudyRoomInfoResponse studyRoomInfoResponse = new StudyRoomInfoResponse();
