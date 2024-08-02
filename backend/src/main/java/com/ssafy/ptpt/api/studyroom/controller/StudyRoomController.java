@@ -55,7 +55,7 @@ public class StudyRoomController {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping("/{studyRoomId}")
-    @Operation(summary = "스터디룸 검색")
+    @Operation(summary = "스터디룸 조회")
     public ResponseEntity<StudyRoomInfoResponse> findByRoomId(@PathVariable("studyRoomId") Long studyRoomId) {
         StudyRoomInfoResponse studyRoomInfoResponse = studyRoomService.findByStudyRoomId(studyRoomId);
         return ResponseEntity.ok().body(studyRoomInfoResponse);
