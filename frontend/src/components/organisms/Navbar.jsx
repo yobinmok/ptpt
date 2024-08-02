@@ -1,73 +1,72 @@
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { login, logout } from '../../store/reducers/authReducer';
 
-// 스타일드 컴포넌트로 Navbar 스타일 정의
-const StyledNavbar = styled.div`
-  width: 100%;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: white;
-  box-shadow: none; /* 그림자 효과 제거 */
-  padding: 0 40px; /* 좌우 패딩 */
-  box-sizing: border-box; /* 패딩을 포함한 전체 너비 계산 */
-  position: fixed; /* 상단에 고정 */
-  top: 0; /* 화면 상단에 위치 */
-  left: 0;
-  z-index: 1000; /* 다른 요소들 위에 위치 */
-`;
-
-// 왼쪽 컨테이너 스타일 정의
-const LeftContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-// 오른쪽 컨테이너 스타일 정의
-const RightContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-// 네비게이션 링크 스타일 정의
-const NavLink = styled(Link)`
-  text-decoration: none;
-  color: #000;
-  margin: 0 5px;
-  padding: 8px 12px;
-  font-size: 16px;
-  border-radius: 20px;
-
-  &:hover {
-    background: #f0f0f0;
-  }
-`;
-
-// 프로필 이미지 스타일 정의
-const ProfileImage = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-  margin-left: 10px;
-`;
+import {
+  StyledNavbar,
+  LeftContainer,
+  RightContainer,
+  NavLink,
+  ProfileImage,
+} from '../styles/NavbarStyles';
 
 function Navbar() {
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.auth?.isAuthenticated); // ?. 연산자를 사용하여 null 체크
+  const user = useSelector((state) => state.auth.user);
+
+  console.log('isAuthenticated:', isAuthenticated); // 상태가 변경될 때마다 출력 확인
+  console.log('user:', user); // 상태가 변경될 때마다 출력 확인
+
+  // 로그인 핸들러: 로그인 액션을 디스패치하여 상태를 변경합니다.
+  const handleLogin = () => {
+    console.log('Login button clicked');
+    dispatch(login({ name: 'User', profilePicture: 'default-profile.png' }));
+  };
+
+  // 로그아웃 핸들러: 로그아웃 액션을 디스패치하여 상태를 변경합니다.
+  const handleLogout = () => {
+    console.log('Logout button clicked');
+    dispatch(logout());
+  };
+
   return (
     <StyledNavbar>
       <LeftContainer>
+        {/* 홈 링크 */}
         <Link to='/'>홈</Link>
       </LeftContainer>
       <RightContainer>
-        <NavLink to='/login'>Login</NavLink>
-        <NavLink to='/practice'>Start</NavLink>
-        <NavLink to='/myinfo'>
-          <ProfileImage
-            // src={require('../assets/images/profile.png')}
-            alt='Profile'
-          />
-        </NavLink>
+        {/* 사용자가 인증되었는지 여부에 따라 다른 링크를 표시 */}
+        {isAuthenticated ? (
+          <>
+            {/* 인증된 사용자에게는 내 정보 링크와 프로필 이미지를 표시 */}
+            <NavLink to='/myinfo'>
+              <ProfileImage
+                src={user?.profilePicture || 'default-profile.png'} // 사용자 프로필 사진 또는 기본 이미지
+                alt='Profile'
+              />
+            </NavLink>
+            {/* 로그아웃 버튼 */}
+            <button onClick={handleLogout}>Logout</button>
+          </>
+        ) : (
+          <>
+            {/* 인증되지 않은 사용자에게는 로그인, 시작하기, 내 정보 링크를 표시 */}
+            <NavLink to='/login'>Login</NavLink>
+            <NavLink to='/practice'>Start</NavLink>
+            {/* 로그인 버튼 */}
+            <button onClick={handleLogin}>Login (Demo)</button>
+            {/* <NavLink to='/myinfo'>
+              <ProfileImage
+                // src={require('../assets/images/profile.png')} // 주석 처리된 기본 프로필 이미지 경로
+                alt='Profile'
+              />
+            </NavLink> */}
+          </>
+        )}
       </RightContainer>
     </StyledNavbar>
   );
