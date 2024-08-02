@@ -51,25 +51,40 @@ const NicknameInput = styled.input`
   font-size: 16px;
 `;
 
+// 중복 확인 결과 스타일
+const CheckResult = styled.div`
+  color: ${(props) => (props.isAvailable ? 'green' : 'red')};
+  font-size: 14px;
+  text-align: center;
+`;
+
 // ProfileEditModal 컴포넌트 정의
-// props:
-// nickname: 현재 닉네임
-// onNicknameChange: 닉네임 변경 핸들러
-// onNicknameCheck: 닉네임 중복 확인 핸들러
-// onSave: 닉네임 저장 핸들러
-// onClose: 모달 닫기 핸들러
-const ProfileEditModal = ({
-  nickname,
-  onNicknameChange,
-  onNicknameCheck,
-  onSave,
-  onClose,
-}) => {
+const ProfileEditModal = ({ nickname, onNicknameChange, onSave, onClose }) => {
   const [tempNickname, setTempNickname] = useState(nickname);
+  const [checkResult, setCheckResult] = useState(null); // 중복 확인 결과 상태
+  const [isAvailable, setIsAvailable] = useState(false); // 닉네임 사용 가능 여부
 
   // 저장 버튼 클릭 시 호출되는 핸들러
   const handleSave = () => {
     onSave(tempNickname);
+  };
+
+  // 닉네임 중복 확인 핸들러
+  const handleNicknameCheck = () => {
+    axios
+      .put(`/member/${memberId}`, { nickname: tempNickname }) // PUT 요청으로 변경
+      .then((response) => {
+        const available = response.data.isAvailable;
+        setCheckResult(
+          available ? 'Nickname is available.' : 'Nickname is already taken.'
+        );
+        setIsAvailable(available);
+      })
+      .catch((error) => {
+        console.error('Error checking nickname:', error);
+        setCheckResult('Error checking nickname.');
+        setIsAvailable(false);
+      });
   };
 
   return (
@@ -80,19 +95,28 @@ const ProfileEditModal = ({
         <NicknameSection>
           <NicknameInput
             type='text'
-            value={tempNickname} // 수정된 닉네임 사용
-            onChange={(e) => setTempNickname(e.target.value)} // 임시 닉네임 상태 업데이트
+            value={tempNickname}
+            onChange={(e) => {
+              setTempNickname(e.target.value);
+              setCheckResult(null); // 닉네임이 변경되면 중복 확인 결과를 초기화
+              setIsAvailable(false); // 닉네임이 변경되면 사용 가능 여부를 초기화
+            }}
             placeholder='Enter new nickname'
           />
-          {/* 닉네임 중복 확인 버튼 */}
-          <button onClick={onNicknameCheck}>Check</button>
+          <button onClick={handleNicknameCheck}>Check</button>
         </NicknameSection>
+        {/* 중복 확인 결과 표시 */}
+        {checkResult && (
+          <CheckResult isAvailable={isAvailable}>{checkResult}</CheckResult>
+        )}
         {/* 모달 하단 버튼 섹션 */}
         <div
           style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}
         >
           {/* 닉네임 저장 버튼 */}
-          <ModalButton onClick={handleSave}>Save</ModalButton>
+          <ModalButton onClick={handleSave} disabled={!isAvailable}>
+            Save
+          </ModalButton>
           {/* 모달 닫기 버튼 */}
           <ModalButton onClick={onClose}>Cancel</ModalButton>
         </div>

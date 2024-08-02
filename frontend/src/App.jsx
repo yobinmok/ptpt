@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Provider } from 'react-redux';
 import store from './store/store';
 import MainPage from './pages/MainPage';
 import LoginPage from './pages/member/LoginPage';
@@ -19,24 +18,22 @@ import VideoRoomComponent from './pages/room/openVidu/VideoRoomComponent';
 
 function App() {
   return (
-    <Provider store={store}>
-      <div className='App' style={{ paddingTop: '64px' }}>
-        <Nav />
-        <Routes>
-          <Route exact path='/' element={<MainPage />} />
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/signup' element={<SignupPage />} />
-          <Route path='/auth' element={<AuthPage />} />
-          <Route path='/auth/kakao' element={<KakaoAuthPage />} />
-          <Route path='/practice' element={<PracticePage />} />
-          <Route path='/solo' element={<SoloPage />} />
-          <Route path='/multi' element={<MultiPage />} />
-          <Route path='/myinfo/*' element={<MyInfo />} />
-          <Route path='/createroom' element={<CreateRoom />} />
-          <Route path='/room/detail' element={<VideoRoomComponent />} />
-        </Routes>
-      </div>
-    </Provider>
+    <div className='App' style={{ paddingTop: '64px' }}>
+      <Nav />
+      <Routes>
+        <Route exact path='/' element={<MainPage />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/signup' element={<SignupPage />} />
+        <Route path='/auth' element={<AuthPage />} />
+        <Route path='/auth/kakao' element={<KakaoAuthPage />} />
+        <Route path='/practice' element={<PracticePage />} />
+        <Route path='/solo' element={<SoloPage />} />
+        <Route path='/multi' element={<MultiPage />} />
+        <Route path='/myinfo/*' element={<MyInfo />} />
+        <Route path='/createroom' element={<CreateRoom />} />
+        <Route path='/room/detail' element={<VideoRoomComponent />} />
+      </Routes>
+    </div>
   );
 }
 
