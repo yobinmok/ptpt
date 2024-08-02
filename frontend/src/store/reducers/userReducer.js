@@ -1,5 +1,6 @@
 const initialState = {
   isLogin: false,
+  // accessToken 확인? 저장?
   data: null,
 };
 

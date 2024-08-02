@@ -3,7 +3,6 @@ import {
   Select,
   MenuItem,
   FormControl,
-  InputLabel,
   OutlinedInput,
   styled,
 } from '@mui/material';
@@ -56,7 +55,10 @@ function CustomSelect({ label, options, style, onChange }) {
           if (selected === '') {
             return <span>{label}</span>;
           }
-          return selected;
+          const selectedOption = options.find(
+            (option) => option.value === selected
+          );
+          return selectedOption ? selectedOption.label : label;
         }}
       >
         {value === '' && (

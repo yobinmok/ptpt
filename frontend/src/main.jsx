@@ -5,7 +5,7 @@ import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Provider } from 'react-redux';
-import store from './store/store.jsx';
+import store from './store/store.js';
 
 const theme = createTheme({
   typography: {
@@ -20,17 +20,22 @@ const theme = createTheme({
       main: '#76AE95',
       contrastText: '#fff',
     },
+    neutral: {
+      // 취소 버튼 색상
+      main: '#9F9693',
+      contrastText: '#fff',
+    },
   },
 });
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ThemeProvider>
     </Provider>
   </React.StrictMode>
 );
