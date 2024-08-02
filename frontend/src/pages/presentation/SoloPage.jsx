@@ -1,12 +1,13 @@
 import React from 'react';
 import { Box, Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import SideTab from '../../components/organisms/SideTab';
-import Sidebar from '../../components/organisms/Sidebar';
 import VoiceIcon from '@mui/icons-material/SpatialAudioOffOutlined';
 import ScriptIcon from '@mui/icons-material/DescriptionOutlined';
 import CompareIcon from '@mui/icons-material/MicNone';
 import SettingIcon from '@mui/icons-material/SettingsOutlined';
+
+import SideTab from '../../components/organisms/SideTab';
+import Sidebar from '../../components/organisms/Sidebar';
 import VoiceTab from '../../components/organisms/solo/VoiceTab';
 import ScriptTab from '../../components/organisms/solo/ScrpitTab';
 import CompareTab from '../../components/organisms/solo/CompareTab';
@@ -25,8 +26,6 @@ const SoloPage = () => {
   const dispatch = useDispatch();
   const isSidebarOpen = useSelector((state) => state.room.isSidebarOpen);
   const selectedTab = useSelector((state) => state.room.selectedTab);
-  console.log("isSidebarOpen  " + isSidebarOpen)
-  console.log("selecte tab index  " + selectedTab)
 
   // 탭 클릭 시 호출되는 핸들러
   const handleTabClick = (index) => {
@@ -43,7 +42,6 @@ const SoloPage = () => {
 
   // 탭 별 content 처리
   const getTabContent = (index) => {
-    console.log(index !== null ? tabItem[index] : tabItem[0])
     return index !== null ? tabItem[index] : tabItem[0];
   };
 
