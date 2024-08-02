@@ -4,9 +4,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 public interface KakaoService {
 
-    public RedirectView goKakaoOAuth();
-    public RedirectView goKakaoOAuth(String scope);
-    public RedirectView loginCallback(String code);
-    public String logout();
-    String getProfile();
+    String getAccessToken(String authorizationCode); // 추가된 부분
+    String getProfile(String accessToken);
+    public boolean verifyAccessToken(String accessToken);
 }

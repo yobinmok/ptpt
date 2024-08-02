@@ -41,7 +41,7 @@ public class GoogleAuthServiceImpl implements GoogleAuthService {
     private String REDIRECT_URI;
 
     @Override
-    public String getAccessToken(String authorizationCode) {
+    public String[] getAccessToken(String authorizationCode) {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         System.out.println(authorizationCode);
         params.add("code", authorizationCode);
@@ -57,8 +57,8 @@ public class GoogleAuthServiceImpl implements GoogleAuthService {
         ResponseEntity<JsonNode> responseNode = restTemplate.exchange(TOKEN_URI, HttpMethod.POST, entity, JsonNode.class);
         JsonNode accessTokenNode = responseNode.getBody();
 
-//        return accessTokenNode.get("access_token").asText();
-        return accessTokenNode.get("id_token").asText();    //구글에서 액세스 토큰과 이이디 토큰을 둘다 반환해주는데 구글의 액세스토큰은 jwt가 아니다. 따라서 id토큰을 사용하였다.
+        String[] tokens = {accessTokenNode.get("access_token").asText(), accessTokenNode.get("id_token").asText()};
+        return tokens;    //구글에서 액세스 토큰과 이이디 토큰을 둘다 반환해주는데 구글의 액세스토큰은 jwt가 아니다. 따라서 id토큰을 사용하였다.
 
     }
 

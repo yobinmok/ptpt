@@ -16,9 +16,9 @@ const ButtonContainer = styled.button`
 `;
 
 const Symbol = styled.img`
-  width: ${(props) => props.symbolSize || '24px'};
-  height: ${(props) => props.symbolSize || '24px'};
-  margin-right: ${(props) => props.symbolMargin || '8px'};
+  width: ${(props) => props.$symbolSize || '24px'};
+  height: ${(props) => props.$symbolSize || '24px'};
+  margin-right: ${(props) => props.$symbolMargin || '8px'};
 `;
 
 const Label = styled.span`
@@ -27,10 +27,21 @@ const Label = styled.span`
   font-size: ${(props) => props.fontSize || '16px'};
 `;
 
-const KakaoButton = ({ onClick, children, ...styleProps }) => {
+const KakaoButton = ({
+  onClick,
+  children,
+  symbolSize,
+  symbolMargin,
+  ...styleProps
+}) => {
   return (
     <ButtonContainer onClick={onClick} {...styleProps}>
-      <Symbol src={kakaoSymbolImage} alt='Kakao Symbol' />
+      <Symbol
+        src={kakaoSymbolImage}
+        alt='Kakao Symbol'
+        $symbolSize={symbolSize}
+        $symbolMargin={symbolMargin}
+      />
       <Label>{children}</Label>
     </ButtonContainer>
   );

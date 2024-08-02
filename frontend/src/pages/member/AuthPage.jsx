@@ -38,7 +38,7 @@ const AuthPage = () => {
 
   return (
     <div>
-      <h1>Processing Authentication...</h1>
+      <h1>Google Processing Authentication...</h1>
       {authCode && (
         <div>
           <p>Authorization code: {authCode}</p>
@@ -47,6 +47,7 @@ const AuthPage = () => {
       {token && (
         <div>
           <p>Access Token: {token.accessToken}</p>
+          <p>Member Id: {token.memberId}</p>
           <p>ID Token: {token.id_token}</p>
         </div>
       )}
