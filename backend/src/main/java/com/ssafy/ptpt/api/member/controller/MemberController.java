@@ -2,7 +2,7 @@ package com.ssafy.ptpt.api.member.controller;
 
 import com.google.gson.JsonParser;
 import com.ssafy.ptpt.api.member.service.MemberService;
-import com.ssafy.ptpt.api.member.MemberUpdateRequest;
+import com.ssafy.ptpt.api.member.request.MemberUpdateRequest;
 import com.ssafy.ptpt.api.member.response.MemberProfileResponse;
 import com.ssafy.ptpt.api.security.model.request.AccessTokenRequestBody;
 import com.ssafy.ptpt.api.security.model.request.AuthorizationCodeRequestBody;
@@ -23,11 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/member")
@@ -158,16 +156,16 @@ public class MemberController {
 //        String accessToken = googleAuthService.getAccessToken(URLDecoder.decode(authorizationCode.getAuthorizationCode(), StandardCharsets.UTF_8));
         String[] tokens = googleAuthService.getAccessToken(authorizationCode.getAuthorizationCode());
         String accessToken = tokens[1];
-        String memberId = "G"+googleAuthService.getUserResource(tokens[0]).get("id").asText();
+        String oauthId = "G"+googleAuthService.getUserResource(tokens[0]).get("id").asText();
 
-        Member member = memberService.findMemberByOauthId(memberId);
+        Member member = memberService.findMemberByOauthId(oauthId);
         if (member == null) {
             member = new Member();
-            member.setOauthId(memberId);
+            member.setOauthId(oauthId);
             memberService.saveMember(member);
         }
 
-        return ResponseEntity.ok(TokenResponseBody.of(200, "Success", accessToken, memberId));
+        return ResponseEntity.ok(TokenResponseBody.of(200, "Success", accessToken, oauthId));
     }
 
     @Operation(
@@ -269,8 +267,9 @@ public class MemberController {
     // 프로필 조회
     @GetMapping("/profile/{oauthId}")
     @Operation(summary = "프로필 조회")
-    public ResponseEntity<MemberProfileResponse> findUserProfile(@PathVariable("oauthId") Long oauthId) {
+    public ResponseEntity<MemberProfileResponse> findUserProfile(@PathVariable("oauthId") String oauthId) {
         MemberProfileResponse memberProfileResponse = new MemberProfileResponse();
+//        memberService.findMemberProfile(oauthId);
         return ResponseEntity.ok().body(memberProfileResponse);
     }
 }

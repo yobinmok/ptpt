@@ -1,4 +1,4 @@
-package com.ssafy.ptpt.api.member;
+package com.ssafy.ptpt.api.member.response;
 
 import com.ssafy.ptpt.db.jpa.entity.Role;
 import lombok.AllArgsConstructor;
