@@ -23,6 +23,8 @@ public class Member {
     private String nickname;
     private String memberPicture;
     private String oauthProvider;
+
+    @Column(nullable = false, unique = true)
     private String oauthId;
     private String oauthEmail;
     private Timestamp registerTime;
