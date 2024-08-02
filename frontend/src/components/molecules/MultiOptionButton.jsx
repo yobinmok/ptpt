@@ -43,7 +43,7 @@ const MultiOptionButton = () => {
 
   // 버튼 클릭 시 /multi 페이지로 이동
   const handleClick = () => {
-    navigate('/multi');
+    navigate('/room/list');
   };
 
   return (

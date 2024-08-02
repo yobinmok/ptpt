@@ -15,6 +15,8 @@ import Nav from './components/organisms/Navbar';
 // import VideoRoomComponent from './components/room/openVidu/VideoRoomComponent';
 import CreateRoom from './pages/room/CreateRoom';
 import VideoRoomComponent from './pages/room/openVidu/VideoRoomComponent';
+import RoomListPage from './pages/RoomListPage';
+import RoomDetail from './pages/room/RoomDetail';
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
         <Route path='/myinfo/*' element={<MyInfo />} />
         <Route path='/createroom' element={<CreateRoom />} />
         <Route path='/room/detail' element={<VideoRoomComponent />} />
+        <Route path='room/list' element={<RoomListPage />} />
+        <Route path='/room/:roomId' element={<RoomDetail />} />
       </Routes>
     </div>
   );
