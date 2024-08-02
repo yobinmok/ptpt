@@ -1,10 +1,9 @@
 import { combineReducers } from 'redux';
+import user from './userReducer.js';
+import room from './roomReducer.js';
+import solo from './soloReducer.js';
 import { persistReducer } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session';
-import user from './user.jsx';
-import room from './room.jsx';
-import solo from './solo.jsx';
-import authReducer from './authReducer';
 
 const persistConfig = {
   key: 'uInfo',
@@ -14,7 +13,7 @@ const reducer = combineReducers({
   user,
   room,
   solo,
-  auth: authReducer,
 });
 
+// export default reducer;
 export default persistReducer(persistConfig, reducer);
