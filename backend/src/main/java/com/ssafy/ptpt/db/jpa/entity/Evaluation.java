@@ -19,19 +19,19 @@ public class Evaluation {
     @Column(name = "evaluation_id")
     private Long evaluationId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "studyroom_id")
     private StudyRoom studyRoom;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "statistic_id")
     private Statistic statistic;
 
     @OneToOne(mappedBy = "evaluation")
     private Comment comment;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "member_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "oauth_id")
     private Member member;
 
     private int delivery;
@@ -42,6 +42,18 @@ public class Evaluation {
 
     public Evaluation(StudyRoom studyRoom, int delivery, int expression, int preparation, int logic, int suitability) {
         this.studyRoom = studyRoom;
+        this.delivery = delivery;
+        this.expression = expression;
+        this.preparation = preparation;
+        this.logic = logic;
+        this.suitability = suitability;
+    }
+
+    public Evaluation(StudyRoom studyRoom, Statistic statistic, Comment comment, Member member, int delivery, int expression, int preparation, int logic, int suitability) {
+        this.studyRoom = studyRoom;
+        this.statistic = statistic;
+        this.comment = comment;
+        this.member = member;
         this.delivery = delivery;
         this.expression = expression;
         this.preparation = preparation;

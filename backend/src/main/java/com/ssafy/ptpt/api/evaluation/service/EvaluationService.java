@@ -3,6 +3,7 @@ package com.ssafy.ptpt.api.evaluation.service;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.ptpt.api.evaluation.request.EvaluationCreateRequest;
+import com.ssafy.ptpt.api.evaluation.request.FeedBackSearchRequest;
 import com.ssafy.ptpt.api.evaluation.response.FeedBackInfoResponse;
 import com.ssafy.ptpt.db.jpa.entity.*;
 import com.ssafy.ptpt.db.jpa.repository.EvaluationRepository;
@@ -53,12 +54,7 @@ public class EvaluationService {
         // 데이터가 없다면 통계 테이블에 값 삽입
         if (statistic == null) {
             statistic = new Statistic();
-            statistic.createStatistic(
-                    evaluation.getDelivery(),
-                    evaluation.getExpression(),
-                    evaluation.getPreparation(),
-                    evaluation.getLogic()
-                    , evaluation.getSuitability() );
+            statistic.createStatistic(evaluation);
             // 평가 등록 처리
             statisticRepository.save(statistic);
         } else {    // 데이터가 있다면 업데이트 처리
@@ -81,7 +77,7 @@ public class EvaluationService {
     // 스터디룸 내부 사용자 평가 조회
     // 코멘트도 가져와야 하자너
     @Transactional
-    public List<FeedBackInfoResponse> findFeedBackByStudyRoomIdAndOauthId(Long studyRoomId, String oauthId) {
+    public List<FeedBackInfoResponse> findFeedBackByStudyRoomIdAndOauthId(FeedBackSearchRequest feedBackSearchRequest) {
         QEvaluation evaluation = QEvaluation.evaluation;
         QComment comment = QComment.comment;
 
@@ -102,8 +98,8 @@ public class EvaluationService {
                         )
                 ).from(evaluation)
                 .innerJoin(comment).on(comment.commentId.eq(evaluation.comment.commentId))
-                .where(evaluation.studyRoom.studyRoomId.eq(studyRoomId)
-                        .and(evaluation.member.oauthId.eq(oauthId)))
+                .where(evaluation.studyRoom.studyRoomId.eq(feedBackSearchRequest.getStudyRoomId())
+                        .and(evaluation.member.oauthId.eq(feedBackSearchRequest.getOauthId())))
                 .fetch();
     }
 

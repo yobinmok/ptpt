@@ -53,10 +53,9 @@ public class MemberService {
                                 member.nickname,
                                 member.memberPicture,
                                 profile.profileId,
-                                profile.voiceModel,
-                                profile.statistic,
-                                profile.presentationId,
-                                profile.studyRoomId))
+                                profile.voiceModelId,
+                                profile.statisticId,
+                                profile.presetId))
                 .from(member)
                 .leftJoin(profile).on(member.profileId.eq(profile.profileId))
                 .where(member.oauthId.eq(oauthId))

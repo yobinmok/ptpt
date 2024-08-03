@@ -24,4 +24,9 @@ public class Role {
     private Member member;
 
     private String roleType;
+
+    public Role(Member member, String roleType) {
+        this.member = member;
+        this.roleType = roleType;
+    }
 }

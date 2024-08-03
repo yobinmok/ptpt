@@ -18,11 +18,17 @@ public class Comment {
     @Column(name = "comment_id")
     private Long commentId;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "evaluation_id")
     private Evaluation evaluation;
 
     private String commentContent;
 
     private int isAnonymous;
+
+    public Comment(Evaluation evaluation, String commentContent, int isAnonymous) {
+        this.evaluation = evaluation;
+        this.commentContent = commentContent;
+        this.isAnonymous = isAnonymous;
+    }
 }

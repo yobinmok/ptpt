@@ -33,13 +33,27 @@ public class Member {
 
     private Long profileId;
 
-    @OneToOne(mappedBy = "member")
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private Role role;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Evaluation> evaluation;
 
     public Member(String oauthId) {
         this.oauthId = oauthId;
+    }
+
+    public Member(String nickname, String memberPicture, String oauthProvider, String oauthId, String oauthEmail, Timestamp registerTime, int isWithdraw, Timestamp withdrawTime, Long profileId, Role role, List<Evaluation> evaluation) {
+        this.nickname = nickname;
+        this.memberPicture = memberPicture;
+        this.oauthProvider = oauthProvider;
+        this.oauthId = oauthId;
+        this.oauthEmail = oauthEmail;
+        this.registerTime = registerTime;
+        this.isWithdraw = isWithdraw;
+        this.withdrawTime = withdrawTime;
+        this.profileId = profileId;
+        this.role = role;
+        this.evaluation = evaluation;
     }
 }

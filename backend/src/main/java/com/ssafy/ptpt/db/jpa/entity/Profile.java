@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Entity
 @Getter
@@ -19,20 +21,16 @@ public class Profile {
     private Long profileId;
 
     private String oauthId;
-
-    @OneToOne
-    @JoinColumn(name = "voicemodel_id")
-    private VoiceModel voiceModel;
-
-    @OneToOne
-    @JoinColumn(name = "statisitc_id")
-    private Statistic statistic;
-
-    private Long presentationId;
-    private Long studyRoomId;
+    private Long voiceModelId;
+    private Long statisticId;
+    private Long presetId;
 
     public Profile(Long profileId, String oauthId) {
         this.profileId = profileId;
+        this.oauthId = oauthId;
+    }
+
+    public Profile(String oauthId) {
         this.oauthId = oauthId;
     }
 }
