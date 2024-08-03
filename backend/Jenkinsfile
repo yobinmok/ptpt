@@ -35,7 +35,7 @@ pipeline {
                 script {
                     // def image = docker.build("ptpt-dev-backend:latest", 'backend/.')
                     // image.push()
-                     sh 'docker build -t ptpt-dev-backend:latest .'
+                     sh 'docker build -t ptpt-dev-backend:latest ./backend'
                 }
             }
         }
