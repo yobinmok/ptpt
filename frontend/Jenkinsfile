@@ -21,6 +21,9 @@ pipeline {
         stage('Build') {
             steps {
                 dir('frontend') {
+                    withCredentials([file(credentialsId: 'ENV_FILE', variable: 'env_file')]) {
+                        sh 'cp $env_file ./.env'
+                    }
                     // sh './gradlew clean build'
                 }
             }

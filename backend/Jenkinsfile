@@ -21,6 +21,9 @@ pipeline {
         stage('Build') {
             steps {
                 dir('backend') {
+                    withCredentials([file(credentialsId: 'APPLICATION_YML', variable: 'application_yml')]) {
+                        sh 'cp $application_yml ./src/main/resources/application.yml'
+                    }
                     sh 'chmod +x ./gradlew'
                     sh './gradlew clean build'
                 }
