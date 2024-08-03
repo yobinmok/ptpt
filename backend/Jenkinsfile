@@ -9,10 +9,10 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    def branch = env.gitlabSourceBranch ?: 'develop/be'
-                    if(branch != env.TARGET_BRANCH) {
-                        error "This build is only for the '${env.TARGET_BRANCH}' branch, but was run on '${branch}'"
-                    }
+                    // def branch = env.gitlabSourceBranch ?: 'develop/be'
+                    // if(branch != env.TARGET_BRANCH) {
+                    //     error "This build is only for the '${env.TARGET_BRANCH}' branch, but was run on '${branch}'"
+                    // }
 
                     checkout scm
                 }
@@ -28,7 +28,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def image = docker.build("backend:${env.BUILD_ID}", 'backend/.')
+                    def image = docker.build("ptpt-dev-backend:latest", 'backend/.')
                     image.push()
                 }
             }
@@ -36,8 +36,8 @@ pipeline {
         stage('Depoly') {
             steps {
                 script {
-                    sh 'docker-compose down'
-                    sh 'docker-compose up -d'
+                    // sh 'docker-compose down'
+                    sh 'docker-compose up -d backend'
                 }
             }
         }
