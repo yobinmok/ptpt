@@ -93,11 +93,11 @@ public class EvaluationService {
                                 evaluation.logic,
                                 evaluation.suitability,
                                 comment.commentContent,
-                                comment.evaluation.member.nickname,
+                                comment.nickname,
                                 comment.isAnonymous
                         )
                 ).from(evaluation)
-                .innerJoin(comment).on(comment.commentId.eq(evaluation.comment.commentId))
+                .leftJoin(evaluation.comment, comment)
                 .where(evaluation.studyRoom.studyRoomId.eq(feedBackSearchRequest.getStudyRoomId())
                         .and(evaluation.member.oauthId.eq(feedBackSearchRequest.getOauthId())))
                 .fetch();

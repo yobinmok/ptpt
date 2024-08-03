@@ -22,6 +22,8 @@ public class Comment {
     @JoinColumn(name = "evaluation_id")
     private Evaluation evaluation;
 
+    private String nickname;
+
     private String commentContent;
 
     private int isAnonymous;

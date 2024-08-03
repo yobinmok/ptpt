@@ -74,13 +74,13 @@ public class DataInitializer {
         EntryList entryList = new EntryList(studyRoom, studyRoom.getOauthId());
         entryListRepository.save(entryList);
 
-        Comment comment = new Comment();
-        commentRepository.save(comment);
+        Comment comment1 = new Comment();
+        commentRepository.save(comment1);
 
         Evaluation evaluation1 = new Evaluation(
                 studyRoom,
                 statistic,
-                comment,
+                comment1,
                 member,
                 100,
                 100,
@@ -90,18 +90,22 @@ public class DataInitializer {
         );
         evaluationRepository.save(evaluation1);
 
-        comment.setEvaluation(evaluation1);
-        comment.setCommentContent("testContent");
-        comment.setIsAnonymous(0);
+        comment1.setEvaluation(evaluation1);
+        comment1.setCommentContent("testContent");
+        comment1.setIsAnonymous(0);
+        comment1.setNickname("testNickname");
 
-        commentRepository.save(comment);
+        commentRepository.save(comment1);
 
         statistic.createStatistic(evaluation1);
+
+        Comment comment2 = new Comment();
+        commentRepository.save(comment2);
 
         Evaluation evaluation2 = new Evaluation(
                 studyRoom,
                 statistic,
-                comment,
+                comment2,
                 member,
                 90,
                 90,
@@ -111,11 +115,11 @@ public class DataInitializer {
         );
         evaluationRepository.save(evaluation2);
 
-        comment.setEvaluation(evaluation2);
-        comment.setCommentContent("testContent");
-        comment.setIsAnonymous(0);
-
-        commentRepository.save(comment);
+        comment2.setEvaluation(evaluation2);
+        comment2.setCommentContent("testContent");
+        comment2.setIsAnonymous(0);
+        comment2.setNickname("testNickname2");
+        commentRepository.save(comment2);
 
         statistic.updateStatistic(evaluation2);
         statisticRepository.save(statistic);
