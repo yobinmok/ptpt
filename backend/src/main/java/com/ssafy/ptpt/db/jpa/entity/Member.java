@@ -37,7 +37,7 @@ public class Member {
     private Role role;
 
     @OneToMany(mappedBy = "member")
-    private List<Comment> comments;
+    private List<Evaluation> evaluation;
 
     public Member(String oauthId) {
         this.oauthId = oauthId;
