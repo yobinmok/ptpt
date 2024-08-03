@@ -1,7 +1,7 @@
 package com.ssafy.ptpt.api.evaluation.controller;
 
 import com.ssafy.ptpt.api.evaluation.request.EvaluationCreateRequest;
-import com.ssafy.ptpt.api.evaluation.response.EvaluationInfoResponse;
+import com.ssafy.ptpt.api.evaluation.response.FeedBackInfoResponse;
 import com.ssafy.ptpt.api.evaluation.service.EvaluationService;
 import com.ssafy.ptpt.api.evaluation.service.StatisticService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,22 +33,22 @@ public class EvaluationController {
         return ResponseEntity.ok().body(evaluationId);
     }
 
-
     // 프로필 화면에서 조회한 사용자의 스터디룸을 클릭했을때 평가를 조회
-    @GetMapping("/{studyRoomId}")
-    @Operation(summary = "사용자 별 스터디룸 조회")
-    public ResponseEntity<List<EvaluationInfoResponse>> findByEvaluation(@PathVariable("studyRoomId") Long studyRoomId){
-        List<EvaluationInfoResponse> evaluationInfoResponse = evaluationService.findByStudyRoomId(studyRoomId);
-        return ResponseEntity.ok().body(evaluationInfoResponse);
+    /**
+     * 프로필 화면에서의 평가를 클릭했을때
+     * 평가 내용과 코멘트를 조회
+     * 하나의 사용자에게 다른 참가자들이 등록한 n개의 평가와 코멘트가 있는데
+     * 스터디룸 방의 정보와 사용자의 식별값을 통해 평가전체와 코멘트를 가져옵니다.
+     */
+    @PostMapping("/feedBack")
+    @Operation(summary = "스터디 룸 내부 사용자 평가 조회")
+    public ResponseEntity<List<FeedBackInfoResponse>> findStudyRoomMemberEvaluationByOauthId(@RequestParam("studyRoomId") Long studyRoomId,
+                                                                                             @RequestParam("oauthId") String oauthId){
+        List<FeedBackInfoResponse> feedBackInfoResponses = evaluationService.findFeedBackByStudyRoomIdAndOauthId(studyRoomId, oauthId);
+        return ResponseEntity.ok().body(feedBackInfoResponses);
     }
 
-    @PostMapping("/studyRoom")
-    @Operation(summary = "스터디 룸 내부 사용자 평가 조회")
-    public ResponseEntity<List<EvaluationInfoResponse>> findByStudyRoomMemberEvaluation(@RequestParam("studyRoomId") Long studyRoomId,
-                                                                                        @RequestParam("oauthId") String oauthId){
-        List<EvaluationInfoResponse> evaluationInfoResponse = evaluationService.findByStudyRoomIdAndOauthId(studyRoomId, oauthId);
-        return ResponseEntity.ok().body(evaluationInfoResponse);
-    }
+
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),

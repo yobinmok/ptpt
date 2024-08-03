@@ -27,8 +27,12 @@ public class Evaluation {
     @JoinColumn(name = "statistic_id")
     private Statistic statistic;
 
-    @OneToMany(mappedBy = "evaluation")
-    private List<Comment> comment;
+    @OneToOne(mappedBy = "evaluation")
+    private Comment comment;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     private int delivery;
     private int expression;
