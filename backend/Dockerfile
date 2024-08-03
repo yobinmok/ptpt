@@ -15,6 +15,6 @@ WORKDIR /app
 
 COPY --from=build /app/build/libs/ptpt-0.0.1-SNAPSHOT.jar /app/ptpt-0.0.1-SNAPSHOT.jar
 
-EXPOSE 8080
+EXPOSE 8081
 
 CMD ["java", "-jar", "/app/ptpt-0.0.1-SNAPSHOT.jar"]
