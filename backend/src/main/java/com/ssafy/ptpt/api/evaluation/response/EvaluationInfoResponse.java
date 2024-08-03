@@ -1,9 +1,12 @@
 package com.ssafy.ptpt.api.evaluation.response;
 
+import com.ssafy.ptpt.db.jpa.entity.Comment;
 import com.ssafy.ptpt.db.jpa.entity.Evaluation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,7 +21,7 @@ public class EvaluationInfoResponse {
     private int preparation;
     private int logic;
     private int suitability;
-    private Long commentId;
+    private List<Comment> comment;
 
     public static EvaluationInfoResponse from(Evaluation evaluation) {
         EvaluationInfoResponse evaluationInfoResponse = new EvaluationInfoResponse();
@@ -29,7 +32,7 @@ public class EvaluationInfoResponse {
         evaluationInfoResponse.preparation = evaluation.getPreparation();
         evaluationInfoResponse.logic = evaluation.getLogic();
         evaluationInfoResponse.suitability = evaluation.getSuitability();
-        evaluationInfoResponse.commentId = evaluation.getComment().getCommentId();
+        evaluationInfoResponse.comment = evaluation.getComment();
 
         return evaluationInfoResponse;
     }
