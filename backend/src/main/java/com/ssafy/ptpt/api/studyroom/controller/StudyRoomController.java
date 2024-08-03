@@ -1,5 +1,6 @@
 package com.ssafy.ptpt.api.studyroom.controller;
 
+import com.ssafy.ptpt.api.studyroom.request.StudyRoomAssignationRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomConnectRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomCreateRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomUpdateRequest;
@@ -109,32 +110,40 @@ public class StudyRoomController {
         return ResponseEntity.ok().build();
     }
 
-    // 스터디룸 발표자 지정
-    // 호스트가 권한을 줌
+    /**
+     스터디룸 발표자 지정
+     호스트가 권한을 줌
 
-    // 동작
-    // 호스트의 식별값(oauthId)과 참가중인 사용자의 식별값을 입력받아서
-    // 호스트의 스터디룸 목록 중 종료 여부를 확인하여 진행종인 스터디 룸 중에서 (라이브는 1개니까)
-    // 검색된 스터디룸의 발표자를 참가중인 사용자의 식별값으로 변경
-    // 변경 뒤 발표자의 id 값을 반환해서 프론트에 넘겨주자
+     동작
+     스터디 룸 Id 값을 얻어온 뒤,
+     선택된 참가자의 식별값(oauthId)을 통해
+     검색된 스터디룸의 발표자를 사용자의 식별값으로 변경
+     변경 뒤 발표자의 id 값을 반환해서 프론트에 넘겨주자
+     **/
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @PostMapping("/assignation")
     @Operation(summary = "발표자 지정", description = "호스트가 참가한 사용자에 대해 발표권한을 부여합니다.")
-    public ResponseEntity<Long> presentatorAssignation(@RequestBody @Valid StudyRoomConnectRequest studyRoomConnectRequest) {
-        return ResponseEntity.ok().body(1L);
+    public ResponseEntity<Long> presentatorAssignation(@RequestBody @Valid StudyRoomAssignationRequest studyRoomAssignationRequest) {
+        int complete = studyRoomService.presentatorAssignation(studyRoomAssignationRequest);
+        return complete == 1 ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
 
 
-    // 스터디 룸 입장 관리
-    // 발표 시작 전 참가자의 현황을 관리하지 않고, 시작이 된다면 entryList 테이블에 스터디룸 번호와 함께 참가자 목록 저장
-    // 현재 스터디 룸에 들어와 있는 사용자의 session 값을 얻어와서 사용자 식별 후 참가자 테이블에 업데이트
-    // 난이도 높겠는데
+    /**      스터디 룸 입장 관리
+     *      발표 시작 전 참가자의 현황을 관리하지 않고, 시작이 된다면 entryList 테이블에 스터디룸 번호와 함께 참가자 목록 저장
+     *      현재 스터디 룸에 들어와 있는 사용자의 session 값을 얻어와서 사용자 식별 후 참가자 테이블에 업데이트
+     *      난이도 높겠는데
+     */
 
-    // 스터디 룸 퇴장 관리
-    // 나가기 버튼을 누른 사용자에 대해 참가자 테이블 업데이트
+
+    /**
+     *      스터디 룸 퇴장 관리jx
+     *      나가기 버튼을 누른 사용자에 대해 참가자 테이블 업데이트
+     */
+
 
 }

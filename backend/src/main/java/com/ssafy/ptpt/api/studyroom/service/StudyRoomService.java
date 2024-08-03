@@ -1,5 +1,6 @@
 package com.ssafy.ptpt.api.studyroom.service;
 
+import com.ssafy.ptpt.api.studyroom.request.StudyRoomAssignationRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomConnectRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomCreateRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomUpdateRequest;
@@ -128,10 +129,10 @@ public class StudyRoomService {
         }
     }
 
-    // 스터디룸 호스트가 발표자 지정
-//    @Transactional
-//    public void presentatorAssignation(Long studyRoomId) {
-//        StudyRoom findStudyRoom = studyRoomRepository.???(studyRoomId);
-//
-//    }
+    //스터디룸 호스트가 발표자 지정
+    @Transactional
+    public int presentatorAssignation(StudyRoomAssignationRequest studyRoomAssignationRequest) {
+        return studyRoomRepository.updatePresentatorAssignation(studyRoomAssignationRequest.getStudyRoomId()
+        ,studyRoomAssignationRequest.getOauthId());
+    }
 }

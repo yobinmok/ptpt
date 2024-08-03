@@ -54,6 +54,9 @@ public class StudyRoom {
     // 익명여부
     private int anonymity;
 
+    // 스터디룸 종료 여부
+    private int isCompleted;
+
     // 방 수정하기 - jpa 변경감지를 통해 entity 값 update
     public void updateStudyRoom(StudyRoomUpdateRequest studyRoomUpdateRequest){
         this.studyRoomTitle = studyRoomUpdateRequest.getStudyRoomTitle();
