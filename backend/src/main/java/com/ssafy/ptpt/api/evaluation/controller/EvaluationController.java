@@ -29,8 +29,8 @@ public class EvaluationController {
     @PostMapping
     @Operation(summary = "평가 등록")
     public ResponseEntity<Long> createEvaluation(@RequestParam("studyRoomId") Long studyRoomId,@RequestBody @Valid EvaluationCreateRequest evaluationCreateRequest){
-        Long evaluation = evaluationService.createEvaluation(studyRoomId, evaluationCreateRequest);
-        return ResponseEntity.ok().body(evaluation);
+        Long evaluationId = evaluationService.createEvaluation(studyRoomId, evaluationCreateRequest);
+        return ResponseEntity.ok().body(evaluationId);
     }
 
 
@@ -42,10 +42,10 @@ public class EvaluationController {
         return ResponseEntity.ok().body(evaluationInfoResponse);
     }
 
-    @GetMapping("/{studyRoomId}/{oauthId}")
+    @PostMapping("/studyRoom")
     @Operation(summary = "스터디 룸 내부 사용자 평가 조회")
-    public ResponseEntity<List<EvaluationInfoResponse>> findByStudyRoomMemberEvaluation(@PathVariable("studyRoomId") Long studyRoomId,
-                                                                                @PathVariable("oauthId") String oauthId){
+    public ResponseEntity<List<EvaluationInfoResponse>> findByStudyRoomMemberEvaluation(@RequestParam("studyRoomId") Long studyRoomId,
+                                                                                        @RequestParam("oauthId") String oauthId){
         List<EvaluationInfoResponse> evaluationInfoResponse = evaluationService.findByStudyRoomIdAndOauthId(studyRoomId, oauthId);
         return ResponseEntity.ok().body(evaluationInfoResponse);
     }
