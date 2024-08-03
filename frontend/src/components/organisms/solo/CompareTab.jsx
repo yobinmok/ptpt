@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { Button, Box, Divider } from '@mui/material';
 import CustomSelect from '../../molecules/CustomSelect';
-import CustomSlider from '../../molecules/CustomSlider';
-import { useSelector, useDispatch } from 'react-redux';
-import { registerGuideline } from '../../../store/actions/solo';
+import { useSelector } from 'react-redux';
+import AudioWaveform from '../../molecules/AudioWaveform';
+
 const CompareTab = () => {
-  const dispatch = useDispatch();
   let soloPreset = useSelector((state) => state.solo);
-  let scriptIdx = 0;
+  const [guideIdx, setGuideIdx] = useState();
+  const [voiceRecordIdx, setVoiceRecord] = useState();
 
   return (
     <>
@@ -17,7 +16,9 @@ const CompareTab = () => {
           value: index,
           label: item,
         }))}
-        onChange={(value) => {}}
+        onChange={(value) => {
+          console.log(value);
+        }}
       />
       <CustomSelect
         label='녹음본 선택'
@@ -26,18 +27,10 @@ const CompareTab = () => {
           label: item,
         }))}
         onChange={(value) => {}}
-        style={{ marginTop: '10px' }}
+        style={{ margin: '10px 0px' }}
       />
-
-      <Button
-        onClick={() => {
-          dispatch(registerGuideline(scriptIdx, voiceSetting));
-        }}
-        variant='contained'
-        color='secondary'
-      >
-        등록
-      </Button>
+      <AudioWaveform title={'가이드라인'} audioUrl='' />
+      <AudioWaveform title={'내 녹음본'} audioUrl='' />
     </>
   );
 };
