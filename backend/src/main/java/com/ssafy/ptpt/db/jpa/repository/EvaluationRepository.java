@@ -8,7 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
-    @Query("SELECT e FROM Evaluation e WHERE e.studyRoom.oauthId = :oauthId")
-    List<Evaluation> findByOauthId(@Param("oauthId") String oauthId);
+    @Query("SELECT e FROM Evaluation e WHERE e.studyRoom.studyRoomId = :studyRoomId")
+    List<Evaluation> findByStudyRoomId(@Param("studyRoomId") Long studyRoomId);
+
+    @Query("SELECT e FROM Evaluation e WHERE e.studyRoom.studyRoomId = :studyRoomId AND e.studyRoom.oauthId = :oauthId")
+    List<Evaluation> findByStudyRoomIdAndOauthId(@Param("studyRoomId") Long studyRoomId, @Param("oauthId") String oauthId);
+
+
 
 }

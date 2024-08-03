@@ -33,7 +33,7 @@ public class StudyRoomService {
 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    //방 상세 조회
+    //방 조회
     public StudyRoomInfoResponse findByStudyRoomTitle(String studyRoomTitle) {
         //제목을 통해 정보를 조회해온다
         StudyRoom studyRoom = studyRoomRepository.findByStudyRoomTitle(studyRoomTitle)
@@ -41,12 +41,13 @@ public class StudyRoomService {
         return StudyRoomInfoResponse.from(studyRoom);
     }
 
-    //방 상세 조회
-    public StudyRoomInfoResponse findByStudyRoomId(Long studyRoomId) {
+    // 사용자 방 조회
+    public List<StudyRoomInfoResponse> findByOauthId(String oauthId) {
         // 아이디를 통해 정보를 조회해온다
-        StudyRoom studyRoom = studyRoomRepository.findById(studyRoomId)
-                .orElseThrow(() -> new NotFoundException(NotFoundException.STUDY_ROOM_NOT_FOUND));
-        return StudyRoomInfoResponse.from(studyRoom);
+        List<StudyRoom> studyRoom = studyRoomRepository.findByOauthId(oauthId);
+        return studyRoom.stream()
+                .map(StudyRoomInfoResponse::from)
+                .collect(Collectors.toList());
     }
 
     //방 리스트 전체 조회 - 페이징 추가 해야함

@@ -37,31 +37,31 @@ public class StudyRoomController {
         return ResponseEntity.ok().body(studyRoomId);
     }
 
-    //방 검색
+    //스터디룸 검색
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping("/{studyRoomTitle}")
-    @Operation(summary = "스터디룸 검색")
+    @Operation(summary = "스터디룸 검색", description = "대기실 화면에서 스터디룸을 검색 할수 있습니다.")
     public ResponseEntity<StudyRoomInfoResponse> findByRoomTitle(@PathVariable("studyRoomTitle") String studyRoomTitle) {
         StudyRoomInfoResponse studyRoomInfoResponse = studyRoomService.findByStudyRoomTitle(studyRoomTitle);
         return ResponseEntity.ok().body(studyRoomInfoResponse);
     }
 
-    //방 상세조회
+    //스터디룸 조회
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
     })
-    @GetMapping("/{studyRoomId}")
-    @Operation(summary = "스터디룸 조회")
-    public ResponseEntity<StudyRoomInfoResponse> findByRoomId(@PathVariable("studyRoomId") Long studyRoomId) {
-        StudyRoomInfoResponse studyRoomInfoResponse = studyRoomService.findByStudyRoomId(studyRoomId);
+    @GetMapping("/{oauthId}")
+    @Operation(summary = "스터디룸 조회", description = "프로필에서 사용자의 스터디룸을 확인할수 있습니다.")
+    public ResponseEntity<List<StudyRoomInfoResponse>> findByOauthId(@PathVariable("oauthId") String oauthId) {
+        List<StudyRoomInfoResponse> studyRoomInfoResponse = studyRoomService.findByOauthId(oauthId);
         return ResponseEntity.ok().body(studyRoomInfoResponse);
     }
 
-    //방 삭제
+    //스터디룸 삭제
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
@@ -73,13 +73,13 @@ public class StudyRoomController {
         return ResponseEntity.ok().build();
     }
 
-    //방 수정
+    //스터디룸 수정
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @PutMapping("/{studyRoomId}")
-    @Operation(summary = "스터디룸 수정")
+    @Operation(summary = "스터디룸 수정", description = "방 내부에서 스터리룸 관련 설정을 수정할수 있습니다.")
     public ResponseEntity<Void> updateRoom(
                                            @PathVariable("studyRoomId") Long studyRoomId,
                                            @RequestBody @Valid StudyRoomUpdateRequest studyRoomUpdateRequest) {
@@ -88,18 +88,18 @@ public class StudyRoomController {
     }
 
 
-    //화상방 리스트 전체 조회
+    //스터디룸 리스트 전체 조회
     //페이징 처리 전  -----------------------------------------
     @GetMapping
-    @Operation(summary = "스터디룸 전체 조회")
+    @Operation(summary = "스터디룸 전체 조회", description = "대기실 화면에 있는 스터디룸의 리스트를 확인할수 있습니다.")
     public ResponseEntity<List<StudyRoomListResponse>> findBySearchRequest(){
         List<StudyRoomListResponse> body = studyRoomService.findBySearchRequest();
         return ResponseEntity.ok().body(body);
     }
 
-    // 방 비밀번호 확인
+    // 스터디룸 비밀번호 확인
     @PostMapping("/pwCheck")
-    @Operation(summary = "스터디방 비밀번호 체크")
+    @Operation(summary = "스터디룸 비밀번호 체크", description = "스터디룸의 비밀번호 체크")
     public ResponseEntity<Void> findById(@RequestBody @Valid StudyRoomConnectRequest studyRoomConnectRequest) {
         studyRoomService.findById(studyRoomConnectRequest);
         return ResponseEntity.ok().build();

@@ -18,6 +18,7 @@ public class EvaluationInfoResponse {
     private int preparation;
     private int logic;
     private int suitability;
+    private Long commentId;
 
     public static EvaluationInfoResponse from(Evaluation evaluation) {
         EvaluationInfoResponse evaluationInfoResponse = new EvaluationInfoResponse();
@@ -28,6 +29,7 @@ public class EvaluationInfoResponse {
         evaluationInfoResponse.preparation = evaluation.getPreparation();
         evaluationInfoResponse.logic = evaluation.getLogic();
         evaluationInfoResponse.suitability = evaluation.getSuitability();
+        evaluationInfoResponse.commentId = evaluation.getComment().getCommentId();
 
         return evaluationInfoResponse;
     }
