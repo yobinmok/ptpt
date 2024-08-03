@@ -21,7 +21,7 @@ public class Comment {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "evaluation_id")
     private Evaluation evaluation;
 

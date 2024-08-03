@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -25,8 +27,8 @@ public class Evaluation {
     @JoinColumn(name = "statistic_id")
     private Statistic statistic;
 
-    @OneToOne(mappedBy = "evaluation")
-    private Comment comment;
+    @OneToMany(mappedBy = "evaluation")
+    private List<Comment> comment;
 
     private int delivery;
     private int expression;
