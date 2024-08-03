@@ -1,11 +1,14 @@
 package com.ssafy.ptpt.api.studyroom.service;
 
+import com.ssafy.ptpt.api.studyroom.request.StudyRoomAssignationRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomConnectRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomCreateRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomUpdateRequest;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomInfoResponse;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomListResponse;
+import com.ssafy.ptpt.db.jpa.entity.EntryList;
 import com.ssafy.ptpt.db.jpa.entity.StudyRoom;
+import com.ssafy.ptpt.db.jpa.repository.EntryListRepository;
 import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
 import com.ssafy.ptpt.db.jpa.repository.StudyRoomRepository;
 import com.ssafy.ptpt.exception.NotFoundException;
@@ -30,10 +33,11 @@ import static com.ssafy.ptpt.exception.NotFoundException.MEMBER_NOT_FOUND;
 public class StudyRoomService {
     private final StudyRoomRepository studyRoomRepository;
     private final MemberRepository memberRepository;
+    private final EntryListRepository entryListRepository;
 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    //방 상세 조회
+    //방 조회
     public StudyRoomInfoResponse findByStudyRoomTitle(String studyRoomTitle) {
         //제목을 통해 정보를 조회해온다
         StudyRoom studyRoom = studyRoomRepository.findByStudyRoomTitle(studyRoomTitle)
@@ -41,12 +45,13 @@ public class StudyRoomService {
         return StudyRoomInfoResponse.from(studyRoom);
     }
 
-    //방 상세 조회
-    public StudyRoomInfoResponse findByStudyRoomId(Long studyRoomId) {
+    // 사용자 방 조회
+    public List<StudyRoomInfoResponse> findByOauthId(String oauthId) {
         // 아이디를 통해 정보를 조회해온다
-        StudyRoom studyRoom = studyRoomRepository.findById(studyRoomId)
-                .orElseThrow(() -> new NotFoundException(NotFoundException.STUDY_ROOM_NOT_FOUND));
-        return StudyRoomInfoResponse.from(studyRoom);
+        List<StudyRoom> studyRoom = studyRoomRepository.findByOauthId(oauthId);
+        return studyRoom.stream()
+                .map(StudyRoomInfoResponse::from)
+                .collect(Collectors.toList());
     }
 
     //방 리스트 전체 조회 - 페이징 추가 해야함
@@ -72,8 +77,7 @@ public class StudyRoomService {
     public Long createStudyRoom(StudyRoomCreateRequest studyRoomCreateRequest) {
         memberRepository.findByOauthId(studyRoomCreateRequest.getOauthId());
 
-        List<String> entryList = new ArrayList<>();
-        entryList.add(studyRoomCreateRequest.getOauthId());
+
 
         // 공개 여부에 따른 코드 추가 필요
         StudyRoom studyRoom = new StudyRoom(studyRoomCreateRequest.getStudyRoomTitle()
@@ -84,11 +88,14 @@ public class StudyRoomService {
                                     , studyRoomCreateRequest.getDescription()
                                     , studyRoomCreateRequest.getAnonymity()
                                     , studyRoomCreateRequest.getOauthId()
-                                    , entryList
                                     , "스터디룸 코드값 추가 예정"
                                     , studyRoomCreateRequest.getOauthId());
 
         studyRoomRepository.save(studyRoom);
+
+        // 방 생성될때는 호스트만 참가자
+        EntryList entryList = new EntryList(studyRoom ,studyRoom.getOauthId());
+        entryListRepository.save(entryList);
         return studyRoom.getStudyRoomId();
     }
 
@@ -113,12 +120,19 @@ public class StudyRoomService {
 
     // 방 비밀번호 일치여부 확인
     @Transactional
-    public void findById(StudyRoomConnectRequest studyRoomConnectRequest) {
+    public void studyRoomPwCheck(StudyRoomConnectRequest studyRoomConnectRequest) {
         StudyRoom findStudyRoom = studyRoomRepository.findById(studyRoomConnectRequest.getStudyRoomId())
                 .orElseThrow(() -> new NotFoundException(NotFoundException.STUDY_ROOM_NOT_FOUND));
 
         if (!passwordEncoder.matches(studyRoomConnectRequest.getStudyRoomPw(), findStudyRoom.getStudyRoomPw())) {
             throw new NotMatchException(NotMatchException.PW_NOT_MATCH);
         }
+    }
+
+    //스터디룸 호스트가 발표자 지정
+    @Transactional
+    public int presentatorAssignation(StudyRoomAssignationRequest studyRoomAssignationRequest) {
+        return studyRoomRepository.updatePresentatorAssignation(studyRoomAssignationRequest.getStudyRoomId()
+        ,studyRoomAssignationRequest.getOauthId());
     }
 }

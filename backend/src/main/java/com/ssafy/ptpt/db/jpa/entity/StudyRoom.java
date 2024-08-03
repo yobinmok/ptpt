@@ -19,12 +19,13 @@ public class StudyRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "study_room_id")
     private Long studyRoomId;
 
     private String studyRoomTitle;
 
-    @ElementCollection
-    private List<String> entryList = new ArrayList<>();
+    @OneToMany(mappedBy = "studyRoom")
+    private List<EntryList> entryList;
 
     @OneToMany(mappedBy = "studyRoom")
     private List<Evaluation> Evaluation;
@@ -53,6 +54,9 @@ public class StudyRoom {
     // 익명여부
     private int anonymity;
 
+    // 스터디룸 종료 여부
+    private int isCompleted;
+
     // 방 수정하기 - jpa 변경감지를 통해 entity 값 update
     public void updateStudyRoom(StudyRoomUpdateRequest studyRoomUpdateRequest){
         this.studyRoomTitle = studyRoomUpdateRequest.getStudyRoomTitle();
@@ -64,7 +68,7 @@ public class StudyRoom {
         this.anonymity = studyRoomUpdateRequest.getAnonymity();
     }
 
-    public StudyRoom(String studyRoomTitle, int isPublic, String studyRoomPw, String presentationTime, String subject, String description, int anonymity, String oauthId, List<String> entryList, String studyRoomCode, String presentationHost) {
+    public StudyRoom(String studyRoomTitle, int isPublic, String studyRoomPw, String presentationTime, String subject, String description, int anonymity, String oauthId, String studyRoomCode, String presentationHost) {
         this.studyRoomTitle = studyRoomTitle;
         this.isPublic = isPublic;
         this.studyRoomPw = studyRoomPw;
@@ -73,7 +77,6 @@ public class StudyRoom {
         this.description = description;
         this.anonymity = anonymity;
         this.oauthId = oauthId;
-        this.entryList = entryList;
         this.studyRoomCode = studyRoomCode;
         this.presentationHost = presentationHost;
     }
