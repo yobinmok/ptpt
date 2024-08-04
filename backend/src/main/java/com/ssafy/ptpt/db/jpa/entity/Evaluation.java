@@ -27,7 +27,7 @@ public class Evaluation {
     @JoinColumn(name = "statistic_id")
     private Statistic statistic;
 
-    @OneToOne(mappedBy = "evaluation")
+    @OneToOne(mappedBy = "evaluation", fetch = FetchType.LAZY)
     private Comment comment;
 
     @ManyToOne(fetch = FetchType.LAZY)

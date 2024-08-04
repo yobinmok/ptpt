@@ -3,6 +3,8 @@ package com.ssafy.ptpt.db.jpa.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 
 @Entity
 @Getter
@@ -14,6 +16,12 @@ public class Statistic {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "statistic_id")
     private Long statisticId;
+
+    @OneToMany(mappedBy = "statistic")
+    private List<Evaluation> evaluation;
+
+    @OneToOne(mappedBy = "statistic", fetch = FetchType.LAZY)
+    private Profile profile;
 
     private int totalDelivery;
     private int totalExpression;

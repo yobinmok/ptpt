@@ -21,8 +21,18 @@ public class Profile {
     private Long profileId;
 
     private String oauthId;
-    private Long voiceModelId;
-    private Long statisticId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "voice_model_id")
+    private VoiceModel voiceModel;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "statistic_id")
+    private Statistic statistic;
+
+    @OneToOne(mappedBy = "profile")
+    private Member member;
+
     private Long presetId;
 
     public Profile(Long profileId, String oauthId) {

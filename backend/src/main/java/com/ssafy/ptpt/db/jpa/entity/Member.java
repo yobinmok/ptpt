@@ -31,11 +31,13 @@ public class Member {
     private int isWithdraw;
     private Timestamp withdrawTime;
 
-    private Long profileId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
 
     private int memberReportCount;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Role role;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
@@ -45,7 +47,7 @@ public class Member {
         this.oauthId = oauthId;
     }
 
-    public Member(String nickname, String memberPicture, String oauthProvider, String oauthId, String oauthEmail, Timestamp registerTime, int isWithdraw, Timestamp withdrawTime, Long profileId, Role role, List<Evaluation> evaluation) {
+    public Member(String nickname, String memberPicture, String oauthProvider, String oauthId, String oauthEmail, Timestamp registerTime, int isWithdraw, Timestamp withdrawTime, Profile profile, Role role, List<Evaluation> evaluation) {
         this.nickname = nickname;
         this.memberPicture = memberPicture;
         this.oauthProvider = oauthProvider;
@@ -54,7 +56,7 @@ public class Member {
         this.registerTime = registerTime;
         this.isWithdraw = isWithdraw;
         this.withdrawTime = withdrawTime;
-        this.profileId = profileId;
+        this.profile = profile;
         this.role = role;
         this.evaluation = evaluation;
     }

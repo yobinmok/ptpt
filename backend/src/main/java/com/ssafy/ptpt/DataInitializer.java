@@ -36,7 +36,7 @@ public class DataInitializer {
                 time,
                 0,
                 time,
-                1L,
+                null,
                 null,
                 null
         );
@@ -124,7 +124,7 @@ public class DataInitializer {
         statistic.updateStatistic(evaluation2);
         statisticRepository.save(statistic);
 
-        profile.setStatisticId(statistic.getStatisticId());
+        profile.setStatistic(statistic);
         profileRepository.save(profile);
     }
 }

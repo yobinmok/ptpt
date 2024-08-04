@@ -51,11 +51,11 @@ public class MemberService {
                                 member.nickname,
                                 member.memberPicture,
                                 profile.profileId,
-                                profile.voiceModelId,
-                                profile.statisticId,
+                                profile.voiceModel,
+                                profile.statistic,
                                 profile.presetId))
                 .from(member)
-                .leftJoin(profile).on(member.profileId.eq(profile.profileId))
+                .leftJoin(profile).on(member.profile.profileId.eq(profile.profileId))
                 .where(member.oauthId.eq(oauthId))
                 .fetchOne();
     }

@@ -28,19 +28,16 @@ public class EvaluationService {
     private final StatisticRepository statisticRepository;
     private final StudyRoomRepository studyRoomRepository;
     private final JPAQueryFactory jpaQueryFactory;
-
     //test
     private final MemberRepository memberRepository;
 
     // 평가 등록
     @Transactional
-    public Long createEvaluation(Long studyRoomId, EvaluationCreateRequest evaluationCreateRequest) {
-        // 임의 멤버 데이터
-        Member member = memberRepository.findById(123L)
-                .orElseThrow(() -> new NotFoundException(NotFoundException.MEMBER_NOT_FOUND));
+    public Long createEvaluation(EvaluationCreateRequest evaluationCreateRequest) {
         // 평가를 등록할때 통계 테이블 업데이트 -> 해당 맴버의 데이터가 있는지 조회 먼저
+        Member member = memberRepository.findByOauthId(evaluationCreateRequest.getOauthId());
 
-        StudyRoom studyRoom = studyRoomRepository.findByStudyRoomId(studyRoomId);
+        StudyRoom studyRoom = studyRoomRepository.findByStudyRoomId(evaluationCreateRequest.getStudyRoomId());
         Evaluation evaluation = new Evaluation(
                                                 studyRoom,
                                                 evaluationCreateRequest.getDelivery(),
@@ -50,14 +47,15 @@ public class EvaluationService {
                                                 evaluationCreateRequest.getSuitability()
                                                 );
 
-        Statistic statistic = statisticRepository.findByMemberId(member.getMemberId());
+        Statistic statistic = statisticRepository.findByOauthId(member.getMemberId());
         // 데이터가 없다면 통계 테이블에 값 삽입
         if (statistic == null) {
             statistic = new Statistic();
             statistic.createStatistic(evaluation);
             // 평가 등록 처리
             statisticRepository.save(statistic);
-        } else {    // 데이터가 있다면 업데이트 처리
+        } else {
+            // 데이터가 있다면 업데이트 처리
             // 유저 정보에 매칭되는 통계값을 가져오자
 
             // 평가 값을 더해서 업데이트를 진행햐지
@@ -86,7 +84,7 @@ public class EvaluationService {
                                 FeedBackInfoResponse.class,
                                 evaluation.evaluationId,
                                 evaluation.studyRoom.studyRoomId,
-                                evaluation.member.oauthId,
+                                evaluation.member.nickname,
                                 evaluation.delivery,
                                 evaluation.expression,
                                 evaluation.preparation,
