@@ -1,6 +1,5 @@
 package com.ssafy.ptpt.db.jpa.repository;
 
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomAssignationRequest;
 import com.ssafy.ptpt.db.jpa.entity.StudyRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -19,5 +18,9 @@ public interface StudyRoomRepository extends JpaRepository<StudyRoom, Long> {
     @Modifying
     @Query("UPDATE StudyRoom s SET s.oauthId = :oauthId WHERE s.studyRoomId = :studyRoomId AND s.isCompleted = 1")
     int updatePresentatorAssignation(@Param("studyRoomId") Long studyRoomId, @Param("oauthId") String oauthId);
+
+    @Modifying
+    @Query("DELETE FROM EntryList el WHERE el.studyRoom.studyRoomId = :studyRoomId AND el.oauthId = :oauthId")
+    int deleteByStudyRoomIdAndOauthId(@Param("studyRoomId") Long studyRoomId, @Param("oauthId") String oauthId);
 
 }

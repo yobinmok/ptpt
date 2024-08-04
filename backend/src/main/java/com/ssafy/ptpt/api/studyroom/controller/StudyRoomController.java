@@ -1,6 +1,6 @@
 package com.ssafy.ptpt.api.studyroom.controller;
 
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomAssignationRequest;
+import com.ssafy.ptpt.api.studyroom.request.StudyRoomStatusRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomConnectRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomCreateRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomUpdateRequest;
@@ -80,7 +80,7 @@ public class StudyRoomController {
             @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @PutMapping("/{studyRoomId}")
-    @Operation(summary = "스터디룸 수정", description = "방 내부에서 스터리룸 관련 설정을 수정할수 있습니다.")
+    @Operation(summary = "스터디룸 수정", description = "방 내부에서 스터디룸 관련 설정을 수정할수 있습니다.")
     public ResponseEntity<Void> updateRoom(
                                            @PathVariable("studyRoomId") Long studyRoomId,
                                            @RequestBody @Valid StudyRoomUpdateRequest studyRoomUpdateRequest) {
@@ -127,8 +127,8 @@ public class StudyRoomController {
     })
     @PostMapping("/assignation")
     @Operation(summary = "발표자 지정", description = "호스트가 참가한 사용자에 대해 발표권한을 부여합니다.")
-    public ResponseEntity<Long> presentatorAssignation(@RequestBody @Valid StudyRoomAssignationRequest studyRoomAssignationRequest) {
-        int complete = studyRoomService.presentatorAssignation(studyRoomAssignationRequest);
+    public ResponseEntity<Long> presentatorAssignation(@RequestBody @Valid StudyRoomStatusRequest studyRoomStatusRequest) {
+        int complete = studyRoomService.presentatorAssignation(studyRoomStatusRequest);
         return complete == 1 ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
@@ -145,6 +145,17 @@ public class StudyRoomController {
      *      스터디 룸 퇴장 관리jx
      *      나가기 버튼을 누른 사용자에 대해 참가자 테이블 업데이트
      */
+    // TODO : 스터디룸 테이블에서 발표자인 사용자가 나갈 경우에 대한 처리에 대해 생각 후 반영 필요
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+    })
+    @DeleteMapping("/exit")
+    @Operation(summary = "스터디룸 퇴장", description = "사용자가 스터디룸에서 퇴장합니다.")
+    public ResponseEntity<Void> studyRoomExit(@RequestBody @Valid StudyRoomStatusRequest studyRoomStatusRequest) {
+        int complete = studyRoomService.studyRoomExit(studyRoomStatusRequest);
+        return complete == 1 ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+    }
 
 
 }
