@@ -33,8 +33,8 @@ services:
     container_name: mongo
     restart: unless-stopped
     environment:
-      - MONGO_INITDB_ROOT_USERNAME: root
-      - MONGO_INITDB_ROOT_PASSWORD: 1234
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=1234
     volumes:
       - /shared/data/mongo:/data/db
     expose:
