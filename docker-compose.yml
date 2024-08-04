@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  backend:
+    image: ptpt-dev-backend:latest
+    restart: unless-stopped
+    ports:
+    # 임시로 8081할당
+      - 8081:8080
+  
+  frontend:
+    image: ptpt-dev-frontend:latest
+    restart: unless-stopped
+    prots:
+      - 5173:5173
+
+  mysql:
+    image: mysql:8.0.37
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD: 1234
+      - mYSQL_DATABASE: pt2_db
+
+    volumes:
+    # 컨테이너가 삭제되어도 데이터 유지하도록 마운트      
+      - /shared/data/mysql:/var/lib/mysql
+    expose:
+      - "3306"
+
+  mongo:
+    image: mongo:7.0.12
+    container_name: mongo
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME: root
+      - MONGO_INITDB_ROOT_PASSWORD: 1234
+    volumes:
+      - /shared/data/mongo:/data/db
+    expose:
+      - "27017"
