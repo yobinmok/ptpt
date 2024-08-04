@@ -1,6 +1,7 @@
 package com.ssafy.ptpt.api.member.controller;
 
 import com.google.gson.JsonParser;
+import com.ssafy.ptpt.api.member.request.MemberIdRequest;
 import com.ssafy.ptpt.api.member.service.MemberService;
 import com.ssafy.ptpt.api.member.request.MemberUpdateRequest;
 import com.ssafy.ptpt.api.member.response.MemberProfileResponse;
@@ -19,6 +20,8 @@ import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,16 +32,12 @@ import java.security.GeneralSecurityException;
 
 @RestController
 @RequestMapping("/member")
+@RequiredArgsConstructor
 public class MemberController {
 
-    @Autowired
-    GoogleAuthService googleAuthService;
-
-    @Autowired
-    public KakaoService kakaoService;
-
-    @Autowired
-    private MemberService memberService;
+    private final GoogleAuthService googleAuthService;
+    private final KakaoService kakaoService;
+    private final MemberService memberService;
 
     @Operation(
             summary = "카카오 액세스 토큰 발급",
@@ -214,13 +213,14 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
     })
-    @DeleteMapping("/{oauthId}")
+    @DeleteMapping("/withdraw")
     @Operation(summary = "회원 탈퇴")
-    public ResponseEntity<Void> deleteMember(@PathVariable String oauthId){
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> withdrawMember(@RequestBody @Valid MemberIdRequest memberIdRequest){
+        int complete = memberService.withdrawMember(memberIdRequest);
+        return complete == 1 ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
-    @PutMapping("/{oauthId}")
+    @PutMapping("/modify")
     @Operation(
             summary = "회원 정보 수정",
             description = "회원 정보 수정",
@@ -230,16 +230,18 @@ public class MemberController {
                     @ApiResponse(responseCode = "401",
                             description = "수정 실패")
             })
-    public ResponseEntity<Void> modifyMemberInfo(@PathVariable String oauthId, @RequestBody MemberUpdateRequest memberUpdateRequest){
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> modifyMemberInfo(@RequestBody MemberUpdateRequest memberUpdateRequest){
+        int complete = memberService.modifyMemberInfo(memberUpdateRequest);
+        return complete == 1 ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
     // 프로필 조회
     @GetMapping("/profile/{oauthId}")
     @Operation(summary = "프로필 조회")
     public ResponseEntity<MemberProfileResponse> findUserProfile(@PathVariable("oauthId") String oauthId) {
-        System.out.println("???");
         MemberProfileResponse memberProfile = memberService.findMemberProfile(oauthId);
         return ResponseEntity.ok().body(memberProfile);
     }
+
+
 }

@@ -16,7 +16,7 @@ public interface StudyRoomRepository extends JpaRepository<StudyRoom, Long> {
     List<StudyRoom> findByOauthId(String oauthId);
 
     @Modifying
-    @Query("UPDATE StudyRoom s SET s.oauthId = :oauthId WHERE s.studyRoomId = :studyRoomId AND s.isCompleted = 1")
+    @Query("UPDATE StudyRoom s SET s.presentationHost = :oauthId WHERE s.studyRoomId = :studyRoomId AND s.isCompleted = 1")
     int updatePresentatorAssignation(@Param("studyRoomId") Long studyRoomId, @Param("oauthId") String oauthId);
 
     @Modifying

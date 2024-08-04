@@ -2,6 +2,8 @@ package com.ssafy.ptpt.api.member.service;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.ptpt.api.member.request.MemberIdRequest;
+import com.ssafy.ptpt.api.member.request.MemberUpdateRequest;
 import com.ssafy.ptpt.api.member.response.MemberProfileResponse;
 import com.ssafy.ptpt.db.jpa.entity.*;
 import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
@@ -60,5 +62,17 @@ public class MemberService {
                 .leftJoin(profile).on(member.profileId.eq(profile.profileId))
                 .where(member.oauthId.eq(oauthId))
                 .fetchOne();
+    }
+
+    // 사용자 탈퇴 기능
+    public int withdrawMember(MemberIdRequest memberIdRequest) {
+        return memberRepository.deleteMemberByOauthId(memberIdRequest.getOauthId());
+    }
+
+    // 사용자 정보 수정 기능
+    public int modifyMemberInfo(MemberUpdateRequest memberUpdateRequest) {
+        return memberRepository.modifyMemberInfo(memberUpdateRequest.getOauthId(),
+                                                    memberUpdateRequest.getNickName(),
+                                                    memberUpdateRequest.getMemberPicture());
     }
 }
