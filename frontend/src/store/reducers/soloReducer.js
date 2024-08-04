@@ -4,12 +4,12 @@ const initialState = {
   studyRoomTitle: null,
   script: [],
   // {title: "", content: "", voiceSetting: {model: 0, tone: 3, speakingRate: 2}} 리스트 형식 -> 불러올 때는 인덱스 사용
-  voiceRecord: null, // 내 녹음본
+  voiceRecord: [], // 내 녹음본
+  guideline: [], // 가이드라인 [오디오 태그의 src값 저장..?ㅠ]
   isRecording: false,
   expectedQuestion: false,
   createdTime: null,
   isCompleted: false,
-  guideline: null,
   tempScript: null, // {index, script}, script: {title: , content: } 형식
 };
 

@@ -1,11 +1,14 @@
 import { Button } from '@mui/material';
 import { textToSpeeachApi } from '../apis/voice';
+import AudioWaveform from '../components/molecules/AudioWaveform';
+import { useState } from 'react';
 
 const VoiceTestPage = () => {
   // params로 받아야하는 값
   // voice -> name
   // input -> text
   // audioConfig -> pitch, speakingRate
+  const [url, setUrl] = useState();
   const param = {
     voice: {
       languageCode: 'ko-KR',
@@ -31,6 +34,8 @@ const VoiceTestPage = () => {
         var audioFile = new Audio();
         let audioBlob = base64ToBlob(data.audioContent, 'wav');
         audioFile.src = window.URL.createObjectURL(audioBlob);
+        console.log(audioFile.src);
+        setUrl(audioFile.src);
         audioFile.playbackRate = 1; //재생속도
         audioFile.play();
         downloadURI(audioFile.src, 'audio.wav');
@@ -83,6 +88,8 @@ const VoiceTestPage = () => {
       >
         실행
       </Button>
+
+      <AudioWaveform audioUrl={url} />
     </>
   );
 };
