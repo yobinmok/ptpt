@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { textToSpeeachApi } from '../apis/voice';
+import { textToSpeechApi } from '../apis/voice';
 import AudioWaveform from '../components/molecules/AudioWaveform';
 import { useState } from 'react';
 
@@ -24,7 +24,7 @@ const VoiceTestPage = () => {
     },
   };
   const textToSpeeach = () => {
-    textToSpeeachApi(
+    textToSpeechApi(
       param,
       ({ data }) => {
         // audioContet는 base64로 인코딩된 문자열을 반환함

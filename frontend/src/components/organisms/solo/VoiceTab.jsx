@@ -1,27 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Box, Divider } from '@mui/material';
 import CustomSelect from '../../molecules/CustomSelect';
 import CustomSlider from '../../molecules/CustomSlider';
 import { useSelector, useDispatch } from 'react-redux';
-import { registerGuideline } from '../../../store/actions/solo';
-import { textToSpeeachApi } from '../../../apis/voice';
+import {
+  registerGuideline,
+  updateVoiceSetting,
+} from '../../../store/actions/solo';
+import { base64ToBlob } from '../../../hooks/voice';
+import { textToSpeechApi } from '../../../apis/voice';
 
 const VoiceTab = () => {
   const dispatch = useDispatch();
-  const options = [
-    { value: 0, label: 'ko-KR-Standard-A' },
-    { value: 1, label: 'ko-KR-Standard-B' },
-    { value: 2, label: 'ko-KR-Standard-C' },
-    { value: 3, label: 'ko-KR-Standard-D' },
-  ];
-
+  let soloPreset = useSelector((state) => state.solo);
+  let scriptIdx = 0;
   const param = {
     voice: {
       languageCode: 'ko-KR',
-      name: 'ko-KR-Wavenet-A',
+      name: '',
     },
     input: {
-      text: '네 안녕하세요 발표 시작하도록 하겠습니다',
+      text: '',
     },
     audioConfig: {
       audioEncoding: 'linear16',
@@ -29,55 +28,60 @@ const VoiceTab = () => {
       speakingRate: 1,
     },
   };
+  const voiceSetting = useRef({
+    model: 0,
+    speed: 1,
+    tone: 0,
+  });
 
-  const textToSpeeach = () => {
+  const textToSpeech = (registerFlag) => {
+    const text = soloPreset.script[scriptIdx].content;
+    param.voice.name = soloPreset.voiceModel[voiceSetting.current.model];
+    param.audioConfig.pitch = voiceSetting.current.tone;
+    param.audioConfig.speakingRate = voiceSetting.current.speed;
+
+    param.input.text = registerFlag
+      ? text
+      : text.length <= 100
+        ? text
+        : text.substring(0, 100);
+
+    if (voiceSetting.current.model === 4) {
+      // 내 음성모델을 고른 경우
+      // 하단에서 tts 음성파일(.wav) 생성 -> infer 후 output 생성
+      // 후 그 파일 play......?..........(10초 이상 걸릴 듯)
+    }
+
     textToSpeechApi(
       param,
       ({ data }) => {
-        var audioFile = new Audio();
         let audioBlob = base64ToBlob(data.audioContent, 'wav');
-        audioFile.src = window.URL.createObjectURL(audioBlob);
-        audioFile.playbackRate = 1; //재생속도
-        audioFile.play();
+        // data.audioContent 값을 가이드라인에 저장하고 재생할 때는 아래처럼 url로 변환하기
+        if (registerFlag) {
+          dispatch(registerGuideline(scriptIdx, data.audioContent));
+          dispatch(updateVoiceSetting(scriptIdx, voiceSetting.current));
+        } else {
+          var audioFile = new Audio();
+          audioFile.src = window.URL.createObjectURL(audioBlob);
+          audioFile.play();
+        }
       },
       (res) => {
-        console.log(res);
+        console.log(res.response.data.error);
       }
     );
-  };
-
-  const base64ToBlob = (base64, fileType) => {
-    let typeHeader = 'data:application/' + fileType + ';base64,'; // base64 헤더 파일 유형 정의
-    let audioSrc = typeHeader + base64;
-    let arr = audioSrc.split(',');
-    let array = arr[0].match(/:(.*?);/);
-    let mime = (array && array.length > 1 ? array[1] : type) || type;
-    let bytes = window.atob(arr[1]);
-    let ab = new ArrayBuffer(bytes.length);
-    let ia = new Uint8Array(ab);
-    for (let i = 0; i < bytes.length; i++) {
-      ia[i] = bytes.charCodeAt(i);
-    }
-    return new Blob([ab], {
-      type: mime,
-    });
-  };
-
-  let soloPreset = useSelector((state) => state.solo);
-  let scriptIdx = 0;
-  const voiceSetting = {
-    model: 0,
-    speed: 0,
-    tone: 0,
   };
 
   return (
     <>
       <CustomSelect
         label='음성모델 선택'
-        options={options}
+        options={soloPreset.voiceModel.map((item, index) => ({
+          value: index,
+          label: item,
+        }))}
         onChange={(value) => {
-          voiceSetting.model = value;
+          voiceSetting.current.model = value;
         }}
       />
       <CustomSelect
@@ -95,11 +99,10 @@ const VoiceTab = () => {
       <div style={{ fontSize: '17px', marginBottom: '10px' }}>톤 조정</div>
       <CustomSlider
         defaultValue={0}
-        // step={10}
         min={-20}
         max={20}
         handleChange={(event, newValue) => {
-          voiceSetting.tone = newValue;
+          voiceSetting.current.tone = newValue;
         }}
         labels={['낮음', '보통', '높음']}
       ></CustomSlider>
@@ -120,7 +123,7 @@ const VoiceTab = () => {
         min={0.25}
         max={2}
         handleChange={(event, newValue) => {
-          voiceSetting.speed = newValue;
+          voiceSetting.current.speed = newValue;
         }}
         labels={['느림', '', '빠름']}
       ></CustomSlider>
@@ -131,12 +134,16 @@ const VoiceTab = () => {
         justifyContent='space-evenly'
         sx={{ paddingTop: '15px' }}
       >
-        <Button variant='contained' color='secondary' onClick={textToSpeeach}>
+        <Button
+          variant='contained'
+          color='secondary'
+          onClick={() => textToSpeech(false)}
+        >
           ▶ &nbsp;재생
         </Button>
         <Button
           onClick={() => {
-            dispatch(registerGuideline(scriptIdx, voiceSetting));
+            textToSpeech(true);
           }}
           variant='contained'
           color='secondary'
