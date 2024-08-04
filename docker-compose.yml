@@ -19,8 +19,8 @@ services:
     container_name: mysql
     restart: unless-stopped
     environment:
-      - MYSQL_ROOT_PASSWORD: 1234
-      - MYSQL_DATABASE: pt2_db
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: pt2_db
     volumes:
     # 컨테이너가 삭제되어도 데이터 유지하도록 마운트      
       - /shared/data/mysql:/var/lib/mysql
