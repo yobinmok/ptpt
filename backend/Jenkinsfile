@@ -43,7 +43,10 @@ pipeline {
             steps {
                 script {
                     // sh 'docker-compose down'
-                    sh 'docker-compose up -d backend'
+                    //오늘은 여기까지 컴포즈를 못찾는다니까 젠킨스로 컴포즈 파일을 가지고오면 될까?
+                    //다른방법도 찾아보기
+                    sh 'cd /shared'
+                    sh 'docker-compose up -d'
                 }
             }
         }
