@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudyRoomAssignationRequest {
+public class StudyRoomStatusRequest {
     private Long studyRoomId;
     private String oauthId;
 }

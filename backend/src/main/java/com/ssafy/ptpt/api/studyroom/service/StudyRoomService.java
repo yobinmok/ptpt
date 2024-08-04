@@ -1,6 +1,6 @@
 package com.ssafy.ptpt.api.studyroom.service;
 
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomAssignationRequest;
+import com.ssafy.ptpt.api.studyroom.request.StudyRoomStatusRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomConnectRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomCreateRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomUpdateRequest;
@@ -19,11 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.ssafy.ptpt.exception.NotFoundException.MEMBER_NOT_FOUND;
 
 
 @Slf4j
@@ -131,8 +128,15 @@ public class StudyRoomService {
 
     //스터디룸 호스트가 발표자 지정
     @Transactional
-    public int presentatorAssignation(StudyRoomAssignationRequest studyRoomAssignationRequest) {
-        return studyRoomRepository.updatePresentatorAssignation(studyRoomAssignationRequest.getStudyRoomId()
-        ,studyRoomAssignationRequest.getOauthId());
+    public int presentatorAssignation(StudyRoomStatusRequest studyRoomStatusRequest) {
+        return studyRoomRepository.updatePresentatorAssignation(studyRoomStatusRequest.getStudyRoomId()
+        , studyRoomStatusRequest.getOauthId());
+    }
+
+    // 스터디룸 퇴장
+    @Transactional
+    public int studyRoomExit(StudyRoomStatusRequest studyRoomStatusRequest) {
+        return studyRoomRepository.deleteByStudyRoomIdAndOauthId(studyRoomStatusRequest.getStudyRoomId()
+                , studyRoomStatusRequest.getOauthId());
     }
 }
