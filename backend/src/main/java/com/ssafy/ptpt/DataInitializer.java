@@ -34,7 +34,7 @@ public class DataInitializer {
                 "G123",
                 "test@gmail.com",
                 time,
-                1,
+                0,
                 time,
                 1L,
                 null,

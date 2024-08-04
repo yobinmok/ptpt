@@ -243,5 +243,24 @@ public class MemberController {
         return ResponseEntity.ok().body(memberProfile);
     }
 
+    // 프로필 조회
+
+    /**
+     * 사용자 신고기능
+     * 사용작의 정보를 조회하여
+     * 신고횟수 확인 후
+     * 3회 일시 정지
+     * else 신고횟수 누적++
+     *
+     */
+    @PostMapping("/report")
+    @Operation(summary = "유저 신고")
+    public ResponseEntity<Void> memberReport(@RequestBody @Valid MemberIdRequest memberIdRequest) {
+//        return ResponseEntity.ok().body();
+        memberService.memberReport(memberIdRequest);
+        return null;
+    }
+
+
 
 }

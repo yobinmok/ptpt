@@ -10,12 +10,8 @@ import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
 import com.ssafy.ptpt.db.jpa.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -74,5 +70,17 @@ public class MemberService {
         return memberRepository.modifyMemberInfo(memberUpdateRequest.getOauthId(),
                                                     memberUpdateRequest.getNickName(),
                                                     memberUpdateRequest.getMemberPicture());
+    }
+
+    // 사용자 신고횟수 조회 로직 추가
+    public void memberReport(MemberIdRequest memberIdRequest) {
+        Member member = memberRepository.findByOauthId(memberIdRequest.getOauthId());
+        int memberReportCount = member.getMemberReportCount();
+        if (memberReportCount == 2) {
+            // 사용자 정지기능 추가
+            member.memberReport();
+        }else{
+            member.memberReportCount(memberReportCount);
+        }
     }
 }

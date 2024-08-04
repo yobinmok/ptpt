@@ -15,4 +15,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Modifying
     @Query("UPDATE Member m SET m.nickname = :nickname, m.memberPicture = :memberPicture  WHERE m.oauthId = :oauthId")
     int modifyMemberInfo(@Param("oauthId") String oauthId, @Param("nickname") String nickname, @Param("memberPicture") String memberPicture);
+
+    @Modifying
+    @Query("UPDATE Member m SET m.nickname = :nickname, m.memberPicture = :memberPicture  WHERE m.oauthId = :oauthId")
+    int modifyMemberReport(@Param("oauthId") String oauthId);
 }

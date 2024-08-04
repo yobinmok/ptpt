@@ -33,6 +33,8 @@ public class Member {
 
     private Long profileId;
 
+    private int memberReportCount;
+
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private Role role;
 
@@ -55,5 +57,17 @@ public class Member {
         this.profileId = profileId;
         this.role = role;
         this.evaluation = evaluation;
+    }
+
+    // 탈퇴여부가 1이면 정지회원
+    // 0이면 일반 회원
+    // 사용자 탈퇴여부 변경 로직
+    public void memberReport() {
+        this.isWithdraw = (this.isWithdraw + 1)%2;
+        this.memberReportCount = 0;
+    }
+
+    public void memberReportCount(int memberReportCount) {
+        this.memberReportCount = ++memberReportCount;
     }
 }
