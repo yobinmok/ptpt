@@ -1,6 +1,7 @@
 package com.ssafy.ptpt.api.evaluation.controller;
 
 import com.ssafy.ptpt.api.evaluation.request.EvaluationCreateRequest;
+import com.ssafy.ptpt.api.evaluation.request.FeedBackSearchRequest;
 import com.ssafy.ptpt.api.evaluation.response.FeedBackInfoResponse;
 import com.ssafy.ptpt.api.evaluation.service.EvaluationService;
 import com.ssafy.ptpt.api.evaluation.service.StatisticService;
@@ -41,10 +42,9 @@ public class EvaluationController {
      * 스터디룸 방의 정보와 사용자의 식별값을 통해 평가전체와 코멘트를 가져옵니다.
      */
     @PostMapping("/feedBack")
-    @Operation(summary = "스터디 룸 내부 사용자 평가 조회")
-    public ResponseEntity<List<FeedBackInfoResponse>> findStudyRoomMemberEvaluationByOauthId(@RequestParam("studyRoomId") Long studyRoomId,
-                                                                                             @RequestParam("oauthId") String oauthId){
-        List<FeedBackInfoResponse> feedBackInfoResponses = evaluationService.findFeedBackByStudyRoomIdAndOauthId(studyRoomId, oauthId);
+    @Operation(summary = "사용자 평가 조회")
+    public ResponseEntity<List<FeedBackInfoResponse>> findStudyRoomMemberEvaluationByOauthId(@RequestBody @Valid FeedBackSearchRequest feedBackSearchRequest){
+        List<FeedBackInfoResponse> feedBackInfoResponses = evaluationService.findFeedBackByStudyRoomIdAndOauthId(feedBackSearchRequest);
         return ResponseEntity.ok().body(feedBackInfoResponses);
     }
 
