@@ -1,6 +1,6 @@
 package com.ssafy.ptpt.config.auth.dto;
 
-import com.ssafy.ptpt.db.entity.Member;
+import com.ssafy.ptpt.db.jpa.entity.Member;
 import lombok.Getter;
 
 import java.io.Serializable;

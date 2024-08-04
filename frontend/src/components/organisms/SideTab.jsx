@@ -1,4 +1,3 @@
-// src/components/organisms/SideTab.jsx
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Divider, Box } from '@mui/material';
@@ -19,15 +18,14 @@ const SideTab = ({ item }) => {
         borderLeft: '1px solid #ddd', // 왼쪽 테두리
       }}
     >
-      <Box display='flex' flexDirection='column'>
+      <Box display='flex' flexDirection='column' height='100%'>
         <div
           style={{ padding: '25px 15px', fontSize: '20px', fontWeight: 'bold' }}
         >
           {item.text}
         </div>
         <Divider />
-        <div style={{ padding: '15px' }}>
-          {/* 탭 별 content는 하단에 위치 */}
+        <div style={{ padding: '15px', overflowY: 'auto', flex: 1 }}>
           {item.content}
         </div>
       </Box>

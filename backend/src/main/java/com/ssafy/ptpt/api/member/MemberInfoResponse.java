@@ -1,7 +1,6 @@
 package com.ssafy.ptpt.api.member;
 
-import com.ssafy.ptpt.db.entity.Member;
-import com.ssafy.ptpt.db.entity.Role;
+import com.ssafy.ptpt.db.jpa.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,7 @@ public class MemberInfoResponse {
     private String nickName;
     private String memberPicture;
     private String oauthProvider;
-    private Integer oauthId;
+    private String oauthId;
     private LocalDateTime registerTime;
     private String isWithDraw;
     private String withDrawTime;

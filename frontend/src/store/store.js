@@ -1,11 +1,8 @@
 import { createStore, applyMiddleware } from 'redux';
-// import { composeWithDevTools } from "redux-devtools-extension";
-// import thunk from "redux-thunk";
-import reducer from './reducers';
+// import thunk from 'redux-thunk';
+import rootReducer from './reducers'; // rootReducer 사용
 import { persistStore } from 'redux-persist';
 
-// const enhancer = composeWithDevTools(applyMiddleware(thunk));
-// const store = createStore(reducer, enhancer);
-const store = createStore(reducer);
+const store = createStore(rootReducer);
 export const persistor = persistStore(store);
 export default store;

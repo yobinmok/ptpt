@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import store from './store/store';
 import MainPage from './pages/MainPage';
 import LoginPage from './pages/member/LoginPage';
 import AuthPage from './pages/member/AuthPage';
@@ -14,6 +15,8 @@ import Nav from './components/organisms/Navbar';
 // import VideoRoomComponent from './components/room/openVidu/VideoRoomComponent';
 import CreateRoom from './pages/room/CreateRoom';
 import VideoRoomComponent from './pages/room/openVidu/VideoRoomComponent';
+import RoomListPage from './pages/RoomListPage';
+import RoomDetail from './pages/room/RoomDetail';
 
 function App() {
   return (
@@ -31,6 +34,9 @@ function App() {
         <Route path='/myinfo/*' element={<MyInfo />} />
         <Route path='/createroom' element={<CreateRoom />} />
         <Route path='/room/detail' element={<VideoRoomComponent />} />
+        <Route path='room/list' element={<RoomListPage />} />
+        <Route path='/room/:roomId' element={<RoomDetail />} />
+        <Route path='/test' element={<VoiceTestPage />} />
       </Routes>
     </div>
   );
