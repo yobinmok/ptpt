@@ -3,6 +3,7 @@ version: '3.8'
 services:
   backend:
     image: ptpt-dev-backend:latest
+    container_name: ptpt-dev-backend
     # restart: unless-stopped
     ports:
     # 임시로 8081할당
@@ -10,6 +11,8 @@ services:
   
   frontend:
     image: ptpt-dev-frontend:latest
+    container_name: ptpt-dev-frontend
+
     # restart: unless-stopped
     ports:
       - 5173:5173
