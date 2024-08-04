@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class MemberUpdateRequest {
 
+    private String oauthId;
     private String nickName;
     private String memberPicture;
 }

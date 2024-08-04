@@ -14,6 +14,5 @@ public class MemberProfileResponse {
     private String oauthId;
     private Long voiceModelId;
     private Long statisticId;
-    private Long studyRoomId;
     private Long presetId;
 }

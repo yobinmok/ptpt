@@ -27,10 +27,4 @@ public class Comment {
     private String commentContent;
 
     private int isAnonymous;
-
-    public Comment(Evaluation evaluation, String commentContent, int isAnonymous) {
-        this.evaluation = evaluation;
-        this.commentContent = commentContent;
-        this.isAnonymous = isAnonymous;
-    }
 }

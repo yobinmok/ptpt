@@ -24,13 +24,14 @@ public class EvaluationController {
     private final StatisticService statisticService;
 
     // 평가 등록 될때 통계 업데이트
+    //평가가 등록될때 코멘트도 값이 등록이 되어야 한다
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found"),})
     @PostMapping
     @Operation(summary = "평가 등록")
-    public ResponseEntity<Long> createEvaluation(@RequestParam("studyRoomId") Long studyRoomId,@RequestBody @Valid EvaluationCreateRequest evaluationCreateRequest){
-        Long evaluationId = evaluationService.createEvaluation(studyRoomId, evaluationCreateRequest);
+    public ResponseEntity<Long> createEvaluation(@RequestBody @Valid EvaluationCreateRequest evaluationCreateRequest){
+        Long evaluationId = evaluationService.createEvaluation(evaluationCreateRequest);
         return ResponseEntity.ok().body(evaluationId);
     }
 
