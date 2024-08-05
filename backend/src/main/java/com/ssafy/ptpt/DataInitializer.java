@@ -42,6 +42,21 @@ public class DataInitializer {
         );
         memberRepository.save(member);
 
+        Member member2 = new Member(
+                "testMember2",
+                "test2",
+                "Google2",
+                "G1234",
+                "test2@gmail.com",
+                time,
+                0,
+                time,
+                null,
+                null,
+                null
+        );
+        memberRepository.save(member2);
+
         // Role 저장
         Role role = new Role(member, "admin");
         roleRepository.save(role);

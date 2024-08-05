@@ -18,13 +18,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 @Slf4j
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class StudyRoomService {
     private final StudyRoomRepository studyRoomRepository;
@@ -142,6 +143,7 @@ public class StudyRoomService {
     // 스터디룸 입장 참가자 저장
     public void studyRoomEntryRegister(StudyRoomCreateEntryRequest studyRoomCreateEntryRequest) {
         List<String> nicknameList = studyRoomCreateEntryRequest.getNicknameList();
+        System.out.println(nicknameList.toString());
         List<EntryList> entryList = new ArrayList<>();
         for (String nickname : nicknameList) {
             Member member = memberRepository.findByNickname(nickname);
