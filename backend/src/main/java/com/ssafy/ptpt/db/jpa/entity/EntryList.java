@@ -20,10 +20,10 @@ public class EntryList {
 
     private Long studyRoomId;
 
-    private String oauthId;
+    private Long memberId;
 
-    public EntryList(Long studyRoomId, String oauthId) {
+    public EntryList(Long studyRoomId, Long memberId) {
         this.studyRoomId = studyRoomId;
-        this.oauthId = oauthId;
+        this.memberId = memberId;
     }
 }

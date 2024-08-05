@@ -4,6 +4,8 @@ import com.ssafy.ptpt.api.studyroom.request.*;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomInfoResponse;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomListResponse;
 import com.ssafy.ptpt.api.studyroom.service.StudyRoomService;
+import com.ssafy.ptpt.db.jpa.entity.Member;
+import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,6 +23,7 @@ import java.util.List;
 public class StudyRoomController {
 
     private final StudyRoomService studyRoomService;
+    private final MemberRepository memberRepository;
 
     //방 생성
     @ApiResponses(value = {
@@ -55,7 +58,8 @@ public class StudyRoomController {
     @GetMapping("/{oauthId}")
     @Operation(summary = "스터디룸 조회", description = "프로필에서 사용자의 스터디룸을 확인할수 있습니다.")
     public ResponseEntity<List<StudyRoomInfoResponse>> findByOauthId(@PathVariable("oauthId") String oauthId) {
-        List<StudyRoomInfoResponse> studyRoomInfoResponse = studyRoomService.findByOauthId(oauthId);
+        Member member = memberRepository.findByOauthId(oauthId);
+        List<StudyRoomInfoResponse> studyRoomInfoResponse = studyRoomService.findByMemberId(member.getMemberId());
         return ResponseEntity.ok().body(studyRoomInfoResponse);
     }
 
