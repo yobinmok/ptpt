@@ -12,6 +12,7 @@ COPY package.json .
 # # RUN source ~/.bashrc
 # ENV NVM_DIR /root/.nvm
 
+RUN source ~/.bashrc
 RUN nvm intall 16.16.0
 RUN nvm use 16.16.0
 RUN npm install
