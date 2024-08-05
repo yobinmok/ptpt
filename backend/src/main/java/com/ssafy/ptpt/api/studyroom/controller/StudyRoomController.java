@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -170,5 +171,23 @@ public class StudyRoomController {
         return complete == 1 ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
+    //    clearEntryList
+
+    /**
+     * 스터디룸 발표가 종료되었을때 (사용자가 전부 나갔을때)
+     * 스터디룸의 status 를 변경해주며 (1일때 종료된 스터디룸)
+     * 해당 스터디룸의 참가한 사용자들의 목록을 clear 합니다
+     *
+     */
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+    })
+    @PostMapping("/clear")
+    @Operation(summary = "스터디룸 종료처리", description = "스터디룸의 종료 처리와 참가자 리스트의 삭제를 진행합니다")
+    public ResponseEntity<Void> clearEntryList(@RequestBody @Valid StudyRoomClearRequest studyRoomClearRequest) {
+        studyRoomService.clearEntryList(studyRoomClearRequest);
+        return ResponseEntity.ok().build();
+    }
 
 }

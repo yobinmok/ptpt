@@ -1,8 +1,12 @@
 package com.ssafy.ptpt.api.member.request;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MemberUpdateRequest {
 
     private String oauthId;

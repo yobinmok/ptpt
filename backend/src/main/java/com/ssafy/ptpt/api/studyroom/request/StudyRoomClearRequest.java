@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudyRoomConnectRequest {
+public class StudyRoomClearRequest {
     private Long studyRoomId;
-    private String studyRoomPw;
 }

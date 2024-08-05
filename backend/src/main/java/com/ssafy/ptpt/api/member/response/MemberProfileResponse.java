@@ -1,14 +1,12 @@
 package com.ssafy.ptpt.api.member.response;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class MemberProfileResponse {
 
     private String nickname;
