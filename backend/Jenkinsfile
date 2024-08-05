@@ -42,8 +42,10 @@ pipeline {
         stage('Depoly') {
             steps {
                 script { 
-                    sh 'ls'
-                    sh 'docker-compose up -d'
+                    sh 'docker-compose stop backend || true'
+                    sh 'docker-compose rm -f backend || true'
+                    sh 'docker-compose up backend -d'
+                    // sh 'docker-compose up -d'
                     
                 }
             }
