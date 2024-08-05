@@ -1,10 +1,10 @@
 package com.ssafy.ptpt.api.voicemodel.controller;
 
 //import io.swagger.annotations.ApiOperation;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.swagger.v3.oas.annotations.Operation;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -60,7 +60,6 @@ public class VoiceModelController {
 
 //    @Value("${planThumbFile.preTrain}")
     private String PRETRAIN_UPLOAD_PATH = "C:/Users/SSAFY/Desktop/src/preTrain";
-    private String POSTTRAIN_UPLOAD_PATH = "C:/Users/SSAFY/Desktop/src/postTrain";
     //    MultipartFile: multipart/form-data 파일을 처리할 수 있도록 설계된 클래스
     @PostMapping("/preTrainAudio")
     public ResponseEntity<?> getPreTrainVoice(@RequestPart(name="audio") MultipartFile audio) throws IOException {
@@ -88,7 +87,7 @@ public class VoiceModelController {
         String filePath = originalFile.getAbsolutePath();
         try {
             for (int i = 0; i < 4; i++) {
-                String jsonPayload = createJsonPayload(filePath);
+                String jsonPayload = createJsonPayload(folderPath);
                 ResponseEntity<String> response = callExternalApi(jsonPayload);
 
                 // 응답을 받지 못한 경우
@@ -103,46 +102,38 @@ public class VoiceModelController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception occurred: " + e.getMessage());
         }
 
-
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    public String createJsonPayload(String folderPath) {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode rootNode = mapper.createObjectNode();
+
+        ArrayNode dataNode = mapper.createArrayNode();
+        dataNode.add("memberVoiceModel");
+        dataNode.add("40k");
+        dataNode.add("true");
+        dataNode.add(folderPath);
+        dataNode.add(0);
+        dataNode.add(14);
+        dataNode.add("rmvpe_gpu");
+        dataNode.add(20);
+        dataNode.add(20);
+        dataNode.add(3);
+        dataNode.add("Yes");
+        dataNode.add("assets/pretrained_v2/f0G40k.pth");
+        dataNode.add("assets/pretrained_v2/f0D40k.pth");
+        dataNode.add("0");
+        dataNode.add("Yes");
+        dataNode.add("Yes");
+        dataNode.add("v2");
+        dataNode.add("0-0");
 
 
-    private String createJsonPayload(String folderPath) throws ParseException {
-        // JSON 으로 파싱할 문자열
-        String str = "{\"name\" : \"apple\", \"id\" : 1, \"price\" : 1000}";
+        rootNode.set("data", dataNode);
+        System.out.println(rootNode.toString());
 
-        // JSONParser로 JSONObject로 변환
-        JSONObject jsonObject = (JSONObject) new JSONParser().parse(str);
-
-        // 추가
-        jsonObject.put("count", 5);
-
-        // JSON 데이터 생성 예제
-        return "{"
-                + "\"data\":["
-                + "\"memberVoiceModel\","
-                + "\"40k\","
-                + "\"true\","
-                + "\"" + folderPath + "\","
-                + "0,"
-                + "14,"
-                + "\"rmvpe_gpu\","
-                + "20,"
-                + "20,"
-                + "3,"
-                + "\"Yes\","
-                + "\"assets/pretrained_v2/f0G40k.pth\","
-                + "\"assets/pretrained_v2/f0D40k.pth\","
-                + "\"0\","
-                + "\"Yes\","
-                + "\"Yes\","
-                + "\"v2\","
-                + "\"0-0\""
-                + "]"
-                + "}";
+        return rootNode.toString();
     }
 
     @Value("${external.api.url}")
