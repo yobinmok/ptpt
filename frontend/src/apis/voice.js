@@ -3,8 +3,8 @@ import { Google } from '../util/http-commons';
 
 const google = Google();
 
-function textToSpeeachApi(param, success, fail) {
+function textToSpeechApi(param, success, fail) {
   google.post('', param).then(success).catch(fail);
 }
 
-export { textToSpeeachApi };
+export { textToSpeechApi };

@@ -8,20 +8,33 @@ import './VideoRoomComponent.css';
 import OpenViduLayout from './layout/openvidu-layout';
 import UserModel from './models/user-model';
 import ToolbarComponent from './toolbar/ToolbarComponent';
-// import ToolbarComponent
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';
-import Sidebar from '../../../components/organisms/Sidebar';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { setParticipants } from '../../../store/actions/participant';
+
+// const StyledLayoutBounds = styled.div`
+//   background-color: rgba(0, 0, 0, 0.3);
+//   display: flex;
+//   flex-wrap: wrap;
+//   right: 0;
+//   height: 100%;
+//   min-width: 100px !important;
+//   width: 80%;
+//   overflow-y: hidden;
+//   background-size: cover;
+//   background-repeat: no-repeat;
+// `;
 
 const StyledLayoutBounds = styled.div`
-  background-color: rgba(0, 0, 0, 0.3);
-  display: flex;
-  flex-wrap: wrap;
-  right: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 10px;
   height: 100%;
-  min-width: 100px !important;
-  width: 80%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
   overflow-y: hidden;
   background-size: cover;
   background-repeat: no-repeat;
@@ -33,6 +46,9 @@ const APPLICATION_SERVER_URL =
 function withNavigation(Component) {
   return (props) => <Component navigate={useNavigate()} {...props} />;
 }
+// 참가자 목록 관리를 위한 redux
+// const dispatch = useDispatch();
+// const participants = useSelector((state) => state.participant.participants);
 
 class VideoRoomComponent extends Component {
   constructor(props) {
@@ -77,6 +93,7 @@ class VideoRoomComponent extends Component {
     this.toggleChat = this.toggleChat.bind(this);
     this.checkNotification = this.checkNotification.bind(this);
     this.checkSize = this.checkSize.bind(this);
+    // this.navigateHome = this.navigateHome.bind(this);
   }
 
   componentDidMount() {
@@ -208,6 +225,7 @@ class VideoRoomComponent extends Component {
       publisher.on('accessAllowed', () => {
         this.state.session.publish(publisher).then(() => {
           this.updateSubscribers();
+          console.log('211 : ' + this.state.subscribers);
           this.localUserAccessAllowed = true;
           if (this.props.joinSession) {
             this.props.joinSession();
@@ -256,7 +274,13 @@ class VideoRoomComponent extends Component {
         this.updateLayout();
       }
     );
+    console.log('260 : ' + this.state.subscribers);
   }
+
+  // navigateHome() {
+  //   const navigate = useNavigate();
+  //   navigate('/');
+  // }
 
   leaveSession() {
     const mySession = this.state.session;
@@ -280,7 +304,7 @@ class VideoRoomComponent extends Component {
       console.log('get out');
     }
     console.log('default leave');
-    // this.props.navigate("/", {replace: true});
+    // this.props.navigate('/', { replace: true });
     // 방을 떠나고, 필요한 정보가 있다면 props넘기기
   }
   camStatusChanged() {
@@ -324,6 +348,7 @@ class VideoRoomComponent extends Component {
     this.state.session.on('streamCreated', (event) => {
       const subscriber = this.state.session.subscribe(event.stream, undefined);
       // var subscribers = this.state.subscribers;
+      console.log('347 : ' + subscriber);
       subscriber.on('streamPlaying', (e) => {
         this.checkSomeoneShareScreen();
         subscriber.videos[0].video.parentElement.classList.remove(
@@ -337,9 +362,11 @@ class VideoRoomComponent extends Component {
       const nickname = event.stream.connection.data.split('%')[0];
       newUser.setNickname(JSON.parse(nickname).clientData);
       this.remotes.push(newUser);
+      console.log('361 : ' + newUser);
       if (this.localUserAccessAllowed) {
         this.updateSubscribers();
       }
+      console.log('345 : ' + this.state.subscribers);
     });
   }
 
@@ -383,6 +410,11 @@ class VideoRoomComponent extends Component {
         },
         () => this.checkSomeoneShareScreen()
       );
+      // 여기서 api 호출해서 db에 저장하기
+      console.log('11111111111111111');
+      console.log(this.state.subscribers);
+
+      // dispatch(setParticipants())
     });
   }
 
@@ -587,7 +619,7 @@ class VideoRoomComponent extends Component {
 
     return (
       <div
-        style={{ height: '100vh', width: '80vw', display: 'flex' }}
+        style={{ height: '100vh', width: '100%', display: 'flex' }}
         className='container'
         id='container'
       >

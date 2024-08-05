@@ -1,15 +1,22 @@
 // 리듀서: store에 들어갈 state와 state를 바꿀 함수 정의
 // state와 state를 바꿀 함수를 정의하는 곳
 const initialState = {
+  voiceModel: [
+    'ko-KR-Standard-A',
+    'ko-KR-Standard-B',
+    'ko-KR-Standard-C',
+    'ko-KR-Standard-D',
+  ],
   studyRoomTitle: null,
   script: [],
   // {title: "", content: "", voiceSetting: {model: 0, tone: 3, speakingRate: 2}} 리스트 형식 -> 불러올 때는 인덱스 사용
-  voiceRecord: null, // 내 녹음본
+  voiceRecord: [], // 내 녹음본
+  guideline: [], // 가이드라인 [오디오 태그의 src값 저장..?ㅠ]
   isRecording: false,
   expectedQuestion: false,
   createdTime: null,
   isCompleted: false,
-  guideline: null,
+  presentationSheet: null,
   tempScript: null, // {index, script}, script: {title: , content: } 형식
 };
 
@@ -18,6 +25,23 @@ const soloReducer = (state = initialState, action) => {
   // STATE를 수정하는 방식을 다 정해둠 -> type : type에 따른 처리
   switch (action.type) {
     case 'REGISTER_GUIDELINE':
+      const { index, guideline } = action.payload;
+      const guidelineExists = state.guideline.some((g) => g.index === index);
+
+      if (guidelineExists) {
+        return {
+          ...state,
+          guideline: state.guideline.map((g) =>
+            g.index === index ? { ...g, guideline } : g
+          ),
+        };
+      } else {
+        return {
+          ...state,
+          guideline: [...state.guideline, { index, guideline }],
+        };
+      }
+    case 'UPDATE_VOICESETTING':
       return {
         ...state,
         script: state.script.map((item, index) =>

@@ -28,6 +28,7 @@ const ProfileWrapper = styled.div`
 
 const CreateRoom = ({ onSave, onClose }) => {
   // user정보 불러와야함
+  // const user = useSelector((state) => state.user.data.oauth_id);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const minDateTime = new Date();
@@ -76,7 +77,8 @@ const CreateRoom = ({ onSave, onClose }) => {
       return;
     }
     // axios -> 방 생성 api 실행
-    const user = 'hwang';
+    // const user = 'hwang';
+    const user = 789;
     const response = await createStudyRoom(user, roomInfo);
     onHandleEnterRoom(response); // roomId를 props
   };
@@ -171,12 +173,8 @@ const CreateRoom = ({ onSave, onClose }) => {
               value={String(roomInfo.roomhidden)}
               onChange={onRoomInfoInput}
             >
-              <FormControlLabel value='true' control={<Radio />} label='익명' />
-              <FormControlLabel
-                value='false'
-                control={<Radio />}
-                label='공개'
-              />
+              <FormControlLabel value='0' control={<Radio />} label='익명' />
+              <FormControlLabel value='1' control={<Radio />} label='공개' />
             </RadioGroup>
           </FormControl>
           <br />

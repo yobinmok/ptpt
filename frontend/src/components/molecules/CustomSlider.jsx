@@ -15,7 +15,7 @@ const CustomSlider = ({
         valueLabelDisplay='auto'
         step={step}
         onChange={handleChange}
-        marks
+        // marks
         min={min}
         max={max}
       />
