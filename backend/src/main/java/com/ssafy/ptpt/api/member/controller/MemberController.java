@@ -236,7 +236,7 @@ public class MemberController {
     }
 
     // 프로필 조회
-    @GetMapping("/profile")
+    @PostMapping("/profile")
     @Operation(summary = "프로필 조회")
     public ResponseEntity<MemberProfileResponse> findUserProfile(@RequestBody @Valid MemberIdRequest memberIdRequest) {
         MemberProfileResponse memberProfile = memberService.findMemberProfile(memberIdRequest.getOauthId());

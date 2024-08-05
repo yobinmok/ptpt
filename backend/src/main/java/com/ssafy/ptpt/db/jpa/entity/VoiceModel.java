@@ -21,6 +21,6 @@ public class VoiceModel {
 
     private String voiceModelPath;
 
-    @OneToOne(mappedBy = "voiceModel")
+    @OneToOne(mappedBy = "voiceModel",cascade = CascadeType.ALL)
     private Profile profile;
 }

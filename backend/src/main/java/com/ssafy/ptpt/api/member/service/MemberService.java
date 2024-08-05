@@ -41,22 +41,24 @@ public class MemberService {
         profileRepository.save(profile);
     }
 
+    // 보이스 모델 ID를 추가해야 하는 로직
     public MemberProfileResponse findMemberProfile(String oauthId) {
-        QMember member = QMember.member;
+        QMember qmember = QMember.member;
         QProfile profile = QProfile.profile;
-
+        Member member = memberRepository.findByOauthId(oauthId);
         return jpaQueryFactory.select(
                         Projections.bean(
                                 MemberProfileResponse.class,
-                                member.nickname,
-                                member.memberPicture,
-                                profile.profileId,
-                                profile.voiceModel,
-                                profile.statistic,
+                                qmember.nickname,
+                                qmember.memberPicture,
+                                qmember.profile.profileId,
+                                profile.member.memberId,
+                                profile.voiceModel.voiceModelId,
+                                profile.statistic.statisticId,
                                 profile.presetId))
-                .from(member)
-                .leftJoin(profile).on(member.profile.profileId.eq(profile.profileId))
-                .where(member.oauthId.eq(oauthId))
+                .from(qmember)
+                .leftJoin(qmember.profile, profile)
+                .where(qmember.memberId.eq(member.getMemberId()))
                 .fetchOne();
     }
 

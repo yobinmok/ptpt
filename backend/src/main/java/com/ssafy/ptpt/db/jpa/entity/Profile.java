@@ -21,7 +21,7 @@ public class Profile {
     private Long profileId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "voice_model_id")
+    @JoinColumn(name = "voicemodel_id")
     private VoiceModel voiceModel;
 
     @OneToOne(fetch = FetchType.LAZY)

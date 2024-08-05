@@ -1,10 +1,7 @@
 package com.ssafy.ptpt.db.jpa.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -14,6 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +37,7 @@ public class Member {
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Role role;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member")
     private List<Evaluation> evaluation;
 
     public Member(String oauthId) {
