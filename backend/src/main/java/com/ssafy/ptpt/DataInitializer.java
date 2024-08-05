@@ -71,7 +71,7 @@ public class DataInitializer {
         studyRoom = studyRoomRepository.save(studyRoom);
 
         // entryList 저장
-        EntryList entryList = new EntryList(studyRoom, studyRoom.getOauthId());
+        EntryList entryList = new EntryList(studyRoom.getStudyRoomId(), studyRoom.getOauthId());
         entryListRepository.save(entryList);
 
         Comment comment1 = new Comment();

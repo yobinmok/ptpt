@@ -14,7 +14,6 @@ import java.util.List;
 public class StudyRoomInfoResponse {
     private Long studyRoomId;
     private String studyRoomTitle;
-    private List<EntryList> entryList;
     private String studyRoomCode;
     private String studyRoomPw;
     private String oauthId;
@@ -24,7 +23,6 @@ public class StudyRoomInfoResponse {
         StudyRoomInfoResponse studyRoomInfoResponse = new StudyRoomInfoResponse();
         studyRoomInfoResponse.studyRoomId = studyRoom.getStudyRoomId();
         studyRoomInfoResponse.studyRoomTitle = studyRoom.getStudyRoomTitle();
-        studyRoomInfoResponse.entryList = studyRoom.getEntryList();
         studyRoomInfoResponse.studyRoomCode = studyRoom.getStudyRoomCode();
         studyRoomInfoResponse.studyRoomPw = studyRoom.getStudyRoomPw();
         studyRoomInfoResponse.oauthId = studyRoom.getOauthId();

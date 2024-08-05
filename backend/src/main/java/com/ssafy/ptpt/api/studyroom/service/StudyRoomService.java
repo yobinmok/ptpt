@@ -91,7 +91,7 @@ public class StudyRoomService {
         studyRoomRepository.save(studyRoom);
 
         // 방 생성될때는 호스트만 참가자
-        EntryList entryList = new EntryList(studyRoom ,studyRoom.getOauthId());
+        EntryList entryList = new EntryList(studyRoom.getStudyRoomId() ,studyRoom.getOauthId());
         entryListRepository.save(entryList);
         return studyRoom.getStudyRoomId();
     }
