@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+
+    environment {
+        TARGET_BRANCH='develop/fe'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    // def branch = env.gitlabSourceBranch ?: 'develop/fe'
+                    // if(branch != env.TARGET_BRANCH) {
+                    //     error "This build is only for the '${env.TARGET_BRANCH}' branch, but was run on '${branch}'"
+                    // }
+
+                    checkout scm
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('frontend') {
+                    withCredentials([file(credentialsId: 'ENV_FILE', variable: 'env_file')]) {
+                        sh 'cp $env_file ./.env'
+                    }
+                    // sh './gradlew clean build'
+                }
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    def image = docker.build("ptpt-dev-frontend:latest", 'frontend/.')
+                    image.push()
+                }
+            }
+        }
+        stage('Depoly') {
+            steps {
+                script {
+                    // sh 'docker-compose down'
+                    sh 'docker-compose up -d frontend'
+                }
+            }
+        }
+    }
+}
