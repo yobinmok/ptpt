@@ -4,6 +4,7 @@ import {
   SELECT_TAB,
   CLEAR_TAB,
   TOGGLE_SCRIPT_SELECT,
+  EVALUATE_ANONYMOUS,
 } from '../types/room';
 
 const toggleScriptSelect = (flag) => ({
@@ -43,6 +44,13 @@ const clearTab = () => {
   };
 };
 
+const setAnonymous = (isAnonymous) => {
+  return {
+    type: EVALUATE_ANONYMOUS,
+    payload: isAnonymous,
+  };
+};
+
 export {
   setRoomSession,
   clearRoomSession,
@@ -50,4 +58,5 @@ export {
   selectTab,
   clearTab,
   toggleScriptSelect,
+  setAnonymous,
 };

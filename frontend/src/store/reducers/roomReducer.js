@@ -5,6 +5,7 @@ const initialState = {
   selectedTab: null,
   isSelectScriptTab: true,
   editFlag: null,
+  isAnonymous: 0,
 };
 
 const roomReducer = (state = initialState, action) => {
@@ -40,6 +41,11 @@ const roomReducer = (state = initialState, action) => {
         ...state,
         editFlag: action.flag,
         isSelectScriptTab: !state.isSelectScriptTab,
+      };
+    case 'EVALUATE_ANONYMOUS':
+      return {
+        ...state,
+        isAnonymous: action.payload,
       };
     default:
       return {

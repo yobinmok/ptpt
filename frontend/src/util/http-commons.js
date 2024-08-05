@@ -1,18 +1,19 @@
 import axios from 'axios';
 
-const { VITE_GOOGLE_API_KEY, VITE_GOOGLE_TTS_API_URL } = import.meta.env;
+const { VITE_API_URL, VITE_GOOGLE_API_KEY, VITE_GOOGLE_TTS_API_URL } =
+  import.meta.env;
 
-const Axios = axios.create();
-// function Axios() {
-//   const instance = axios.create({
-//     baseURL: VITE_API_URL,
-//     headers: {
-//       'Content-Type': 'application/json;charset=utf-8',
-//     },
-//   });
+// const Axios = axios.create();
+function Axios() {
+  const instance = axios.create({
+    baseURL: VITE_API_URL,
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+  });
 
-//   return instance;
-// }
+  return instance;
+}
 
 function Google() {
   const instance = axios.create({

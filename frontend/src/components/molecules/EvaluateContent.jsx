@@ -3,10 +3,14 @@ import { useState } from 'react';
 import CustomSlider from './CustomSlider';
 import { TextField, Box, Divider, Button } from '@mui/material';
 import { submitEvaluate } from '../../apis/room';
+import { useSelector } from 'react-redux';
+import CustomSelect from './CustomSelect';
 
-const EvaluateContent = () => {
+const EvaluateContent = ({}) => {
   //   const [evaluateInfo, setEvaluateInfo] = useState([]);
-
+  const studyRoomId = useSelector((state) => state.room.roomId);
+  const isAnonymous = useSelector((state) => state.room.isAnonymous);
+  const participants = useSelector((state) => state.participant.participants);
   // 평가 당하는 사람의 유저 아이디를 가져와야함
   // api를 사용해서 가져오기??
   const evaluateInfo = {
@@ -16,21 +20,31 @@ const EvaluateContent = () => {
     logic: 0,
     suitability: 0,
     commentContent: '',
+    isAnonymous: isAnonymous,
   };
 
   const onRoomInfoInput = (e) => {
     // setRoomInfo({ ...roomInfo, [e.target.name]: e.target.value });
-    // console.log(roomInfo);
     evaluateInfo.commentContent = e.target.value;
   };
 
   // 점수와 코멘트 제출
   const onHandleSubmit = async () => {
-    const response = await submitEvaluate(evaluateInfo);
+    const response = await submitEvaluate(evaluateInfo, studyRoomId);
+    // 평가는 제출하면 끝이므로 추가적인 로직 필요 없음
   };
 
   return (
     <div>
+      {/* 평가 항목과 평가 여부 */}
+      <CustomSelect
+        label='발표자 선택'
+        options={participants.map((item, index) => ({
+          value: index,
+          label: item,
+        }))}
+        onChange={(value) => {}}
+      />
       {/*      
        memberId: 1234,
       commentContent: '',
@@ -95,7 +109,7 @@ const EvaluateContent = () => {
 
       <TextField
         //   id='outlined-multiline-static'
-        label='Multiline'
+        label='Comment'
         multiline
         fullWidth
         rows={4}

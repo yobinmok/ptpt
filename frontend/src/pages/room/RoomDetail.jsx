@@ -15,10 +15,10 @@ const RoomDetail = () => {
 
   const onRoomDetail = async () => {
     // console.log('match : ' + match.params.roomId);
-    const response = await detailStudyRoom(match.params.roomId);
-    console.log('room detail');
-    console.log(response);
-    setRoomInfo(response);
+    // const response = await detailStudyRoom(match.params.roomId);
+    // console.log('room detail');
+    // console.log(response);
+    setRoomInfo(match.params.roomId);
   };
 
   // 방에 입장하기 위한 세션 정보
@@ -38,7 +38,7 @@ const RoomDetail = () => {
       };
       console.log('roominfo : ', roomInfo);
       dispatch(setRoomSession(sessionData));
-      navigate('/room/detail');
+      navigate(`/multi/${roomInfo.studyRoomId}`);
     }
   }, [roomInfo, dispatch, navigate]); // roomInfo가 업데이트될 때만 실행
 

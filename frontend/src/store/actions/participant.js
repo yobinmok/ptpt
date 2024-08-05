@@ -7,7 +7,7 @@ import {
 const setParticipants = (data) => {
   return {
     type: SET_PARTICIPANTS,
-    data,
+    payload: data,
   };
 };
 

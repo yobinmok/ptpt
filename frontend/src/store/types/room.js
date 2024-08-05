@@ -9,3 +9,6 @@ export const CLEAR_TAB = 'CLEAR_TAB';
 
 // 사이드 탭
 export const TOGGLE_SCRIPT_SELECT = 'TOGGLE_SCRIPT_SELECT';
+
+// 발표 익명 여부
+export const EVALUATE_ANONYMOUS = 'EVALUATE_ANONYMOUS';

@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import user from './userReducer.js';
 import room from './roomReducer.js';
 import solo from './soloReducer.js';
+import participantReducer from './participantReducer.js';
 import authReducer from './authReducer';
 import { persistReducer } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session';
@@ -10,7 +11,7 @@ import storageSession from 'redux-persist/lib/storage/session';
 const persistConfig = {
   key: 'root',
   storage: storageSession,
-  whitelist: ['auth', 'user', 'room'], // 저장할 상태만 선택
+  whitelist: ['auth', 'user', 'room', 'participant'], // 저장할 상태만 선택
 };
 
 // persistReducer를 적용한 리듀서
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   user,
   room,
   solo, // solo는 persistReducer로 감싸지 않음
+  participant: participantReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
