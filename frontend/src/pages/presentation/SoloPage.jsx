@@ -14,6 +14,7 @@ import CompareTab from '../../components/organisms/solo/CompareTab';
 import SettingTab from '../../components/organisms/solo/SettingTab';
 import PresentationMain from '../../components/organisms/solo/PresentationMain';
 import { toggleSidebar, selectTab, clearTab } from '../../store/actions/room';
+import BottomBar from '../../components/molecules/BottomBar';
 
 const SoloPage = () => {
   const tabItem = [
@@ -63,10 +64,7 @@ const SoloPage = () => {
             <PresentationMain />
           </Box>
 
-          <Box height={60} sx={{ margin: '10px', backgroundColor: '#d9d9d9' }}>
-            {' '}
-            하단바
-          </Box>
+          <BottomBar src='' />
         </Box>
         {/* 여닫히는 커스텀 사이드바 */}
         <SideTab
