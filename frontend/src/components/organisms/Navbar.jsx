@@ -1,8 +1,14 @@
-import React, { useEffect } from 'react';
+import { React, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import { login, logout } from '../../store/reducers/authReducer';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import {
+  login,
+  logout,
+  setAuth,
+  demoLogin,
+  demoLogout,
+} from '../../store/actions/authActions';
 
 import {
   StyledNavbar,
@@ -14,8 +20,9 @@ import {
 
 function Navbar() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth?.isAuthenticated); // ?. 연산자를 사용하여 null 체크
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state) => state.auth?.user);
 
   console.log('isAuthenticated:', isAuthenticated); // 상태가 변경될 때마다 출력 확인
   console.log('user:', user); // 상태가 변경될 때마다 출력 확인
@@ -23,13 +30,30 @@ function Navbar() {
   // 로그인 핸들러: 로그인 액션을 디스패치하여 상태를 변경합니다.
   const handleLogin = () => {
     console.log('Login button clicked');
-    dispatch(login({ name: 'User', profilePicture: 'default-profile.png' }));
+    dispatch(login({ username: 'testuser', password: 'password' })); // 로그인 예시 데이터
   };
 
   // 로그아웃 핸들러: 로그아웃 액션을 디스패치하여 상태를 변경합니다.
-  const handleLogout = () => {
-    console.log('Logout button clicked');
-    dispatch(logout());
+  const handleLogout = async () => {
+    try {
+      await axios.put('/member/signout'); // 서버에 로그아웃 요청
+      dispatch(logout());
+      navigate('/'); // 메인 페이지로 리디렉션
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
+
+  // Demo 로그인 핸들러: 상태를 로그인 상태로 변경합니다.
+  const handleDemoLogin = () => {
+    console.log('Demo login button clicked');
+    dispatch(demoLogin()); // Demo 로그인 액션 생성자 호출
+  };
+
+  // Demo 로그아웃 핸들러: 상태를 로그아웃 상태로 변경합니다.
+  const handleDemoLogout = () => {
+    console.log('Demo logout button clicked');
+    dispatch(demoLogout()); // Demo 로그아웃 액션 생성자 호출
   };
 
   return (
@@ -38,6 +62,11 @@ function Navbar() {
         {/* 홈 링크 */}
         <Link to='/'>홈</Link>
       </LeftContainer>
+      <div>
+        {isAuthenticated
+          ? '현재 로그인 상태입니다.'
+          : '현재 로그아웃 상태입니다.'}
+      </div>
       <RightContainer>
         {/* 사용자가 인증되었는지 여부에 따라 다른 링크를 표시 */}
         {isAuthenticated ? (
@@ -50,23 +79,22 @@ function Navbar() {
               />
             </NavLink>
             {/* 로그아웃 버튼 */}
+            <NavLink to='/practice'>Start</NavLink>
             <button onClick={handleLogout}>Logout</button>
+            {/* Demo 로그아웃 버튼 */}
+            <button onClick={handleDemoLogout}>Demo Logout</button>
           </>
         ) : (
           <>
-            {/* 인증되지 않은 사용자에게는 로그인, 시작하기, 내 정보 링크를 표시 */}
+            {/* 인증되지 않은 사용자에게는 로그인 링크를 표시 */}
             <NavLink to='/login'>Login</NavLink>
-            <NavLink to='/practice'>Start</NavLink>
             {/* 로그인 버튼 */}
-            <button onClick={handleLogin}>Login (Demo)</button>
-            {/* <NavLink to='/myinfo'>
-              <ProfileImage
-                // src={require('../assets/images/profile.png')} // 주석 처리된 기본 프로필 이미지 경로
-                alt='Profile'
-              />
-            </NavLink> */}
+            <button onClick={handleLogin}>Login</button>
+            {/* Demo 로그인 버튼 */}
+            <button onClick={handleDemoLogin}>Demo Login</button>
           </>
         )}
+        {/* 로그인 상태 안내문 */}
       </RightContainer>
     </StyledNavbar>
   );

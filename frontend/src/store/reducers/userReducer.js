@@ -1,25 +1,46 @@
+/**
+ * 사용자 리듀서
+ * 초기 상태를 정의하고, 액션 타입에 따라 상태를 업데이트합니다.
+ * SET_USER_PROFILE, LOG_OUT, UPDATE_NICKNAME 액션을 처리합니다.
+ */
+
+import { SET_USER_PROFILE, LOG_OUT, UPDATE_NICKNAME } from '../types/userTypes';
+
+// 초기 상태 정의
 const initialState = {
-  isLogin: false,
-  // accessToken 확인? 저장?
-  data: null,
+  isLogin: false, // 사용자의 로그인 상태를 나타냅니다.
+  data: null, // 사용자 정보를 저장합니다.
 };
 
-const userReducer = (prevState = initialState, action) => {
+// 사용자 리듀서 정의
+const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SET_USER_PROFILE":
+    // 사용자 프로필 설정 액션 처리
+    case SET_USER_PROFILE:
       return {
-        ...prevState,
-        isLogin: true,
-        data: { ...action.data },
+        ...state, // 기존 상태를 복사
+        isLogin: true, // 로그인 상태를 true로 변경
+        data: { ...action.data }, // 새로운 사용자 정보로 업데이트
       };
-    case "LOG_OUT":
+    // 로그아웃 액션 처리
+    case LOG_OUT:
       return {
-        ...prevState,
-        isLogin: false,
-        data: null,
+        ...state, // 기존 상태를 복사
+        isLogin: false, // 로그인 상태를 false로 변경
+        data: null, // 사용자 정보를 초기화
       };
+    // 닉네임 업데이트 액션 처리
+    case UPDATE_NICKNAME:
+      return {
+        ...state, // 기존 상태를 복사
+        data: {
+          ...state.data, // 기존 사용자 정보를 복사
+          nickname: action.payload, // 닉네임만 업데이트
+        },
+      };
+    // 기본적으로 기존 상태를 반환
     default:
-      return prevState;
+      return state;
   }
 };
 
