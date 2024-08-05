@@ -20,7 +20,7 @@ public interface StudyRoomRepository extends JpaRepository<StudyRoom, Long> {
     int updatePresentatorAssignation(@Param("studyRoomId") Long studyRoomId, @Param("oauthId") String oauthId);
 
     @Modifying
-    @Query("DELETE FROM EntryList el WHERE el.studyRoom.studyRoomId = :studyRoomId AND el.oauthId = :oauthId")
+    @Query("DELETE FROM EntryList el WHERE el.studyRoomId = :studyRoomId AND el.oauthId = :oauthId")
     int deleteByStudyRoomIdAndOauthId(@Param("studyRoomId") Long studyRoomId, @Param("oauthId") String oauthId);
 
 }

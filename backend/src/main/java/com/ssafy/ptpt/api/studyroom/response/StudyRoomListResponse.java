@@ -17,8 +17,6 @@ public class StudyRoomListResponse {
 
     private String studyRoomTitle;
 
-    private List<EntryList> entryList;
-
     private String studyRoomCode;
 
     // 방 공개 여부
@@ -43,7 +41,6 @@ public class StudyRoomListResponse {
         StudyRoomListResponse studyRoomListResponse = new StudyRoomListResponse();
         studyRoomListResponse.studyRoomId = studyRoom.getStudyRoomId();
         studyRoomListResponse.studyRoomTitle = studyRoom.getStudyRoomTitle();
-        studyRoomListResponse.entryList = studyRoom.getEntryList();
         studyRoomListResponse.studyRoomCode = studyRoom.getStudyRoomCode();
         studyRoomListResponse.isPublic = studyRoom.getIsPublic();
         studyRoomListResponse.studyRoomPw = studyRoom.getStudyRoomPw();

@@ -18,14 +18,12 @@ public class EntryList {
     @Column(name = "entry_list_id")
     private Long entryListId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_room_id")
-    private StudyRoom studyRoom;
+    private Long studyRoomId;
 
     private String oauthId;
 
-    public EntryList(StudyRoom studyRoom, String oauthId) {
-        this.studyRoom = studyRoom;
+    public EntryList(Long studyRoomId, String oauthId) {
+        this.studyRoomId = studyRoomId;
         this.oauthId = oauthId;
     }
 }

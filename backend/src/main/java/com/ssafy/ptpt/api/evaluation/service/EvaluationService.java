@@ -6,10 +6,7 @@ import com.ssafy.ptpt.api.evaluation.request.EvaluationCreateRequest;
 import com.ssafy.ptpt.api.evaluation.request.FeedBackSearchRequest;
 import com.ssafy.ptpt.api.evaluation.response.FeedBackInfoResponse;
 import com.ssafy.ptpt.db.jpa.entity.*;
-import com.ssafy.ptpt.db.jpa.repository.EvaluationRepository;
-import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
-import com.ssafy.ptpt.db.jpa.repository.StatisticRepository;
-import com.ssafy.ptpt.db.jpa.repository.StudyRoomRepository;
+import com.ssafy.ptpt.db.jpa.repository.*;
 import com.ssafy.ptpt.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,22 +27,42 @@ public class EvaluationService {
     private final JPAQueryFactory jpaQueryFactory;
     //test
     private final MemberRepository memberRepository;
+    private final CommentRepository commentRepository;
 
     // 평가 등록
     @Transactional
     public Long createEvaluation(EvaluationCreateRequest evaluationCreateRequest) {
         // 평가를 등록할때 통계 테이블 업데이트 -> 해당 맴버의 데이터가 있는지 조회 먼저
+        // 평가한 사람이 있는 member임
         Member member = memberRepository.findByOauthId(evaluationCreateRequest.getOauthId());
 
         StudyRoom studyRoom = studyRoomRepository.findByStudyRoomId(evaluationCreateRequest.getStudyRoomId());
+
+        // 발표한사람의 oauthId
+        String presentationHost = studyRoom.getPresentationHost();
+        
+        // 발표한 사람의 닉네임을 얻어오자
+        Member presentationHostMember = memberRepository.findByOauthId(presentationHost);
+
         Evaluation evaluation = new Evaluation(
                                                 studyRoom,
                                                 evaluationCreateRequest.getDelivery(),
                                                 evaluationCreateRequest.getExpression(),
                                                 evaluationCreateRequest.getPreparation(),
                                                 evaluationCreateRequest.getLogic(),
-                                                evaluationCreateRequest.getSuitability()
+                                                evaluationCreateRequest.getSuitability(),
+                                                presentationHostMember.getNickname(),
+                                                member
                                                 );
+        evaluationRepository.save(evaluation);
+        
+        // 코멘트 등록 로직
+        Comment comment = new Comment(evaluation,
+                                    member.getNickname(),
+                                    evaluationCreateRequest.getCommentContent(),
+                                    evaluationCreateRequest.getAnonymity());
+
+        commentRepository.save(comment);
 
         Statistic statistic = statisticRepository.findByOauthId(member.getMemberId());
         // 데이터가 없다면 통계 테이블에 값 삽입
@@ -92,7 +109,7 @@ public class EvaluationService {
                                 evaluation.suitability,
                                 comment.commentContent,
                                 comment.nickname,
-                                comment.isAnonymous
+                                comment.anonymity
                         )
                 ).from(evaluation)
                 .leftJoin(evaluation.comment, comment)

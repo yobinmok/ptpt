@@ -23,7 +23,7 @@ public class FeedBackInfoResponse {
     private int suitability;
     private String commentContent;
     private String nickname;
-    private int isAnonymous;
+    private int anonymity;
 
     public static FeedBackInfoResponse from(Evaluation evaluation, Comment comment) {
         FeedBackInfoResponse feedBackInfoResponse = new FeedBackInfoResponse();
@@ -37,7 +37,7 @@ public class FeedBackInfoResponse {
         feedBackInfoResponse.suitability = evaluation.getSuitability();
         feedBackInfoResponse.commentContent = comment.getCommentContent();
         feedBackInfoResponse.nickname = comment.getEvaluation().getMember().getNickname();
-        feedBackInfoResponse.isAnonymous = comment.getIsAnonymous();
+        feedBackInfoResponse.anonymity = comment.getAnonymity();
 
         return feedBackInfoResponse;
     }

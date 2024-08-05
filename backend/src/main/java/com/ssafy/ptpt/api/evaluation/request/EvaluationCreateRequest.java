@@ -17,5 +17,5 @@ public class EvaluationCreateRequest {
     private int suitability;
     private String oauthId;
     private String commentContent;
-    private int isAnonymous;
+    private int anonymity;
 }

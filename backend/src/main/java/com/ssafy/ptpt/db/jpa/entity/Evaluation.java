@@ -31,7 +31,7 @@ public class Evaluation {
     private Comment comment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "oauth_id")
+    @JoinColumn(name = "oauth_id", referencedColumnName = "oauthId")
     private Member member;
 
     private int delivery;
@@ -40,13 +40,18 @@ public class Evaluation {
     private int logic;
     private int suitability;
 
-    public Evaluation(StudyRoom studyRoom, int delivery, int expression, int preparation, int logic, int suitability) {
+    // 평가를 받은사람
+    private String nickname;
+
+    public Evaluation(StudyRoom studyRoom, int delivery, int expression, int preparation, int logic, int suitability, String nickname, Member member) {
         this.studyRoom = studyRoom;
         this.delivery = delivery;
         this.expression = expression;
         this.preparation = preparation;
         this.logic = logic;
         this.suitability = suitability;
+        this.nickname = nickname;
+        this.member = member;
     }
 
     public Evaluation(StudyRoom studyRoom, Statistic statistic, Comment comment, Member member, int delivery, int expression, int preparation, int logic, int suitability) {

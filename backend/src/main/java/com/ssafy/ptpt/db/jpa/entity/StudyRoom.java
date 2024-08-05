@@ -25,9 +25,6 @@ public class StudyRoom {
     private String studyRoomTitle;
 
     @OneToMany(mappedBy = "studyRoom")
-    private List<EntryList> entryList;
-
-    @OneToMany(mappedBy = "studyRoom")
     private List<Evaluation> Evaluation;
 
     private String studyRoomCode;
