@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -14,15 +16,23 @@ import lombok.Setter;
 public class Evaluation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "evaluation_id")
     private Long evaluationId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "studyroom_id")
     private StudyRoom studyRoom;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "statistic_id")
     private Statistic statistic;
+
+    @OneToOne(mappedBy = "evaluation", fetch = FetchType.LAZY)
+    private Comment comment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", referencedColumnName = "member_id")
+    private Member member;
 
     private int delivery;
     private int expression;
@@ -30,12 +40,30 @@ public class Evaluation {
     private int logic;
     private int suitability;
 
-    public Evaluation(StudyRoom studyRoom, int delivery, int expression, int preparation, int logic, int suitability) {
+    // 평가를 받은사람
+    private String nickname;
+
+    public Evaluation(StudyRoom studyRoom, int delivery, int expression, int preparation, int logic, int suitability, String nickname, Member member) {
         this.studyRoom = studyRoom;
         this.delivery = delivery;
         this.expression = expression;
         this.preparation = preparation;
         this.logic = logic;
         this.suitability = suitability;
+        this.nickname = nickname;
+        this.member = member;
+    }
+
+    public Evaluation(StudyRoom studyRoom, Statistic statistic, Comment comment, Member member, int delivery, int expression, int preparation, int logic, int suitability, String nickname) {
+        this.studyRoom = studyRoom;
+        this.statistic = statistic;
+        this.comment = comment;
+        this.member = member;
+        this.delivery = delivery;
+        this.expression = expression;
+        this.preparation = preparation;
+        this.logic = logic;
+        this.suitability = suitability;
+        this.nickname = nickname;
     }
 }

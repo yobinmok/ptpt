@@ -1,11 +1,11 @@
 package com.ssafy.ptpt.api.studyroom.controller;
 
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomConnectRequest;
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomCreateRequest;
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomUpdateRequest;
+import com.ssafy.ptpt.api.studyroom.request.*;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomInfoResponse;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomListResponse;
 import com.ssafy.ptpt.api.studyroom.service.StudyRoomService;
+import com.ssafy.ptpt.db.jpa.entity.Member;
+import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -23,6 +24,7 @@ import java.util.List;
 public class StudyRoomController {
 
     private final StudyRoomService studyRoomService;
+    private final MemberRepository memberRepository;
 
     //방 생성
     @ApiResponses(value = {
@@ -32,36 +34,37 @@ public class StudyRoomController {
     @PostMapping
     @Operation(summary = "스터디룸 등록")
     public ResponseEntity<Long> createRoom(@RequestBody @Valid StudyRoomCreateRequest studyRoomCreateRequest) {
-        //Todo : 맴버 값 가져와서 요청에 추가하자
         Long studyRoomId = studyRoomService.createStudyRoom(studyRoomCreateRequest);
         return ResponseEntity.ok().body(studyRoomId);
     }
 
-    //방 검색
+    //스터디룸 검색
+    //TODO : 사용자가 선택한 항목의 키워드를 입력받아 검색할수 있도록 수정예정
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping("/{studyRoomTitle}")
-    @Operation(summary = "스터디룸 검색")
+    @Operation(summary = "스터디룸 검색", description = "대기실 화면에서 스터디룸을 검색 할수 있습니다.")
     public ResponseEntity<StudyRoomInfoResponse> findByRoomTitle(@PathVariable("studyRoomTitle") String studyRoomTitle) {
         StudyRoomInfoResponse studyRoomInfoResponse = studyRoomService.findByStudyRoomTitle(studyRoomTitle);
         return ResponseEntity.ok().body(studyRoomInfoResponse);
     }
 
-    //방 상세조회
+    //스터디룸 조회
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
     })
-    @GetMapping("/{studyRoomId}")
-    @Operation(summary = "스터디룸 조회")
-    public ResponseEntity<StudyRoomInfoResponse> findByRoomId(@PathVariable("studyRoomId") Long studyRoomId) {
-        StudyRoomInfoResponse studyRoomInfoResponse = studyRoomService.findByStudyRoomId(studyRoomId);
+    @GetMapping("/{oauthId}")
+    @Operation(summary = "스터디룸 조회", description = "프로필에서 사용자의 스터디룸을 확인할수 있습니다.")
+    public ResponseEntity<List<StudyRoomInfoResponse>> findByOauthId(@PathVariable("oauthId") String oauthId) {
+        Member member = memberRepository.findByOauthId(oauthId);
+        List<StudyRoomInfoResponse> studyRoomInfoResponse = studyRoomService.findByMemberId(member.getMemberId());
         return ResponseEntity.ok().body(studyRoomInfoResponse);
     }
 
-    //방 삭제
+    //스터디룸 삭제
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
@@ -73,13 +76,13 @@ public class StudyRoomController {
         return ResponseEntity.ok().build();
     }
 
-    //방 수정
+    //스터디룸 수정
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @PutMapping("/{studyRoomId}")
-    @Operation(summary = "스터디룸 수정")
+    @Operation(summary = "스터디룸 수정", description = "방 내부에서 스터디룸 관련 설정을 수정할수 있습니다.")
     public ResponseEntity<Void> updateRoom(
                                            @PathVariable("studyRoomId") Long studyRoomId,
                                            @RequestBody @Valid StudyRoomUpdateRequest studyRoomUpdateRequest) {
@@ -88,20 +91,103 @@ public class StudyRoomController {
     }
 
 
-    //화상방 리스트 전체 조회
+    //스터디룸 리스트 전체 조회
     //페이징 처리 전  -----------------------------------------
     @GetMapping
-    @Operation(summary = "스터디룸 전체 조회")
+    @Operation(summary = "스터디룸 전체 조회", description = "대기실 화면에 있는 스터디룸의 리스트를 확인할수 있습니다.")
     public ResponseEntity<List<StudyRoomListResponse>> findBySearchRequest(){
         List<StudyRoomListResponse> body = studyRoomService.findBySearchRequest();
         return ResponseEntity.ok().body(body);
     }
 
-    // 방 비밀번호 확인
+    // 스터디룸 비밀번호 확인
+    // TODO : 성공시 200 실패시 ?? 반환할수 있도록 수정예정
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+    })
     @PostMapping("/pwCheck")
-    @Operation(summary = "스터디방 비밀번호 체크")
+    @Operation(summary = "스터디룸 비밀번호 체크", description = "스터디룸의 비밀번호 체크")
     public ResponseEntity<Void> findById(@RequestBody @Valid StudyRoomConnectRequest studyRoomConnectRequest) {
-        studyRoomService.findById(studyRoomConnectRequest);
+        studyRoomService.studyRoomPwCheck(studyRoomConnectRequest);
         return ResponseEntity.ok().build();
     }
+
+    /**
+     스터디룸 발표자 지정
+     호스트가 권한을 줌
+
+     동작
+     스터디 룸 Id 값을 얻어온 뒤,
+     선택된 참가자의 식별값(oauthId)을 통해
+     검색된 스터디룸의 발표자를 사용자의 식별값으로 변경
+     변경 뒤 발표자의 id 값을 반환해서 프론트에 넘겨주자
+     **/
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+    })
+    @PostMapping("/assignation")
+    @Operation(summary = "발표자 지정", description = "호스트가 참가한 사용자에 대해 발표권한을 부여합니다.")
+    public ResponseEntity<Long> presentatorAssignation(@RequestBody @Valid StudyRoomStatusRequest studyRoomStatusRequest) {
+        int complete = studyRoomService.presentatorAssignation(studyRoomStatusRequest);
+        return complete == 1 ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+    }
+
+
+
+    /**      스터디 룸 입장 관리
+     *      발표 시작 전 참가자의 현황을 관리하지 않고, 시작이 된다면 entryList 테이블에 스터디룸 번호와 함께 참가자 목록 저장
+     *      현재 스터디 룸에 들어와 있는 사용자의 session 값을 얻어와서 사용자 식별 후 참가자 테이블에 업데이트
+     *      -> 발표가 시작하기 전까지는 스터디룸에 여러 사용자가 입 퇴장 할 수 있다.
+     *      오픈비두 에서 접속한 사용자에 대한 세션값을 리스트로 관리해줌 ex) sessionId, nickname 이 있는데 설정가능
+     *      리스트<닉네임>을 얻어와서 닉네임을 통한 유저의 oauthId를 조회 후 이 값들을 entryList 에 일괄 저장
+     */
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+    })
+    @PostMapping("/entry")
+    @Operation(summary = "입장 인원 등록", description = "스터디룸에 입장한 사용자들의 리스트를 참가자 데이터베이스에 저장해줍니다.")
+    public ResponseEntity<Void> studyRoomEntry(@RequestBody @Valid StudyRoomCreateEntryRequest studyRoomCreateEntryRequest) {
+        studyRoomService.studyRoomEntryRegister(studyRoomCreateEntryRequest);
+        return ResponseEntity.ok().build();
+    }
+
+
+    /**
+     *      스터디 룸 퇴장 관리
+     *      나가기 버튼을 누른 사용자에 대해 참가자 테이블 업데이트
+     */
+    // TODO : 스터디룸 테이블에서 발표자인 사용자가 나갈 경우에 대한 처리에 대해 생각 후 반영 필요
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+    })
+    @DeleteMapping("/exit")
+    @Operation(summary = "스터디룸 퇴장", description = "사용자가 스터디룸에서 퇴장합니다.")
+    public ResponseEntity<Void> studyRoomExit(@RequestBody @Valid StudyRoomStatusRequest studyRoomStatusRequest) {
+        int complete = studyRoomService.studyRoomExit(studyRoomStatusRequest);
+        return complete == 1 ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+    }
+
+    //    clearEntryList
+
+    /**
+     * 스터디룸 발표가 종료되었을때 (사용자가 전부 나갔을때)
+     * 스터디룸의 status 를 변경해주며 (1일때 종료된 스터디룸)
+     * 해당 스터디룸의 참가한 사용자들의 목록을 clear 합니다
+     *
+     */
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+    })
+    @PostMapping("/clear")
+    @Operation(summary = "스터디룸 종료처리", description = "스터디룸의 종료 처리와 참가자 리스트의 삭제를 진행합니다")
+    public ResponseEntity<Void> clearEntryList(@RequestBody @Valid StudyRoomClearRequest studyRoomClearRequest) {
+        studyRoomService.clearEntryList(studyRoomClearRequest);
+        return ResponseEntity.ok().build();
+    }
+
 }

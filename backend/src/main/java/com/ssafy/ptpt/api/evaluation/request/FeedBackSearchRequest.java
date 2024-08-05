@@ -7,15 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EvaluationCreateRequest {
-
+public class FeedBackSearchRequest {
     private Long studyRoomId;
-    private int delivery;
-    private int expression;
-    private int preparation;
-    private int logic;
-    private int suitability;
     private String oauthId;
-    private String commentContent;
-    private int anonymity;
 }

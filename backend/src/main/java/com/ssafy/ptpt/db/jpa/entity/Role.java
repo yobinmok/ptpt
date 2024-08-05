@@ -19,9 +19,14 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roleId;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     private String roleType;
+
+    public Role(Member member, String roleType) {
+        this.member = member;
+        this.roleType = roleType;
+    }
 }

@@ -2,18 +2,15 @@ package com.ssafy.ptpt.api.studyroom.response;
 
 import com.ssafy.ptpt.db.jpa.entity.StudyRoom;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyRoomInfoResponse {
     private Long studyRoomId;
     private String studyRoomTitle;
-    private List<Long> entryList;
     private String studyRoomCode;
     private String studyRoomPw;
     private Long memberId;
@@ -23,7 +20,6 @@ public class StudyRoomInfoResponse {
         StudyRoomInfoResponse studyRoomInfoResponse = new StudyRoomInfoResponse();
         studyRoomInfoResponse.studyRoomId = studyRoom.getStudyRoomId();
         studyRoomInfoResponse.studyRoomTitle = studyRoom.getStudyRoomTitle();
-        studyRoomInfoResponse.entryList = studyRoom.getEntryList();
         studyRoomInfoResponse.studyRoomCode = studyRoom.getStudyRoomCode();
         studyRoomInfoResponse.studyRoomPw = studyRoom.getStudyRoomPw();
         studyRoomInfoResponse.memberId = studyRoom.getMemberId();

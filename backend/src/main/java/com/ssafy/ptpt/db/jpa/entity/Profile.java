@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Entity
 @Getter
@@ -15,21 +17,24 @@ import lombok.Setter;
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "profile_id")
     private Long profileId;
 
-    @OneToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
-
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "voicemodel_id")
     private VoiceModel voiceModel;
 
-    @OneToOne
-    @JoinColumn(name = "statisitc_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "statistic_id")
     private Statistic statistic;
 
-    private int presentationId;
-    private int evaluationId;
-    private int studyRoomId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    private Long presetId;
+
+    public Profile(Member member) {
+        this.member = member;
+    }
 }

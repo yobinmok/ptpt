@@ -5,22 +5,25 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class VoiceModel {
+public class EntryList {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "voice_model_id")
-    private Long voiceModelId;
+    @Column(name = "entry_list_id")
+    private Long entryListId;
 
-    private String voiceModelPath;
+    private Long studyRoomId;
 
-    @OneToOne(mappedBy = "voiceModel",cascade = CascadeType.ALL)
-    private Profile profile;
+    private Long memberId;
+
+    public EntryList(Long studyRoomId, Long memberId) {
+        this.studyRoomId = studyRoomId;
+        this.memberId = memberId;
+    }
 }

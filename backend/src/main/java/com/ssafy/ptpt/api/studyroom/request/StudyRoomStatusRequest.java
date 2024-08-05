@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudyRoomConnectRequest {
+public class StudyRoomStatusRequest {
     private Long studyRoomId;
-    private String studyRoomPw;
+    private String oauthId;
 }

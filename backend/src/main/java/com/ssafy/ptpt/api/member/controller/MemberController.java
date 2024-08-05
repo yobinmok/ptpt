@@ -1,9 +1,10 @@
 package com.ssafy.ptpt.api.member.controller;
 
 import com.google.gson.JsonParser;
-import com.ssafy.ptpt.api.member.service.MemberService;
-import com.ssafy.ptpt.api.member.MemberUpdateRequest;
+import com.ssafy.ptpt.api.member.request.MemberIdRequest;
+import com.ssafy.ptpt.api.member.request.MemberUpdateRequest;
 import com.ssafy.ptpt.api.member.response.MemberProfileResponse;
+import com.ssafy.ptpt.api.member.service.MemberService;
 import com.ssafy.ptpt.api.security.model.request.AccessTokenRequestBody;
 import com.ssafy.ptpt.api.security.model.request.AuthorizationCodeRequestBody;
 import com.ssafy.ptpt.api.security.model.response.BaseResponseBody;
@@ -19,111 +20,79 @@ import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/member")
+@RequiredArgsConstructor
 public class MemberController {
 
-    @Autowired
-    GoogleAuthService googleAuthService;
-
-    @Autowired
-    public KakaoService kakaoService;
-
-    @Autowired
-    private MemberService memberService;
+    private final GoogleAuthService googleAuthService;
+    private final KakaoService kakaoService;
+    private final MemberService memberService;
 
     @Operation(
-            summary = "카카오톡 로그인",
-            description = "카카오톡 OAuth2.0 인증을 통해 사용자를 로그인합니다.",
+            summary = "카카오 액세스 토큰 발급",
+            description = "카카오 액세스 토큰 발급.",
             responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "로그인 성공",
-                            content = @Content(
-                                    schema = @Schema(
-                                            description = "로그인 성공 응답",
-                                            example = "{ \"message\": \"로그인 성공\"}"
-                                    )
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "잘못된 요청 또는 파라미터 오류",
-                            content = @Content(
-                                    schema = @Schema(
-                                            description = "잘못된 요청 응답",
-                                            example = "{ \"message\": \"잘못된 요청입니다. 요청 파라미터를 확인하세요.\" }"
-                                    )
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "401",
-                            description = "인증 실패 또는 인증 정보 오류",
-                            content = @Content(
-                                    schema = @Schema(
-                                            description = "인증 실패 응답",
-                                            example = "{ \"message\": \"인증에 실패하였습니다. 인증 정보를 확인하세요.\" }"
-                                    )
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "500",
-                            description = "서버 오류",
-                            content = @Content(
-                                    schema = @Schema(
-                                            description = "서버 오류 응답",
-                                            example = "{ \"message\": \"서버에서 오류가 발생했습니다. 나중에 다시 시도해 주세요.\" }"
-                                    )
-                            )
-                    )
+                     @ApiResponse(
+                             responseCode = "200",
+                             description = "액세스 토큰 반환",
+                             content = @Content(
+                                     schemaProperties = {
+                                             @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message")),
+                                             @SchemaProperty(name = "accessToken", schema = @Schema(type = "string", description = "액세스 토큰")),
+                                             @SchemaProperty(name = "oauthId", schema = @Schema(type = "string", description = "oauthId"))
+                                     }
+                             )
+                     )
             }
     )
     @PostMapping("/signin/kakao")
     public ResponseEntity<?> kakaoSignIn(@RequestBody AuthorizationCodeRequestBody authorizationCode) {
-//        System.out.println(kakaoService.getProfile());
         System.out.println("로그인 API");
         String accessToken = kakaoService.getAccessToken(authorizationCode.getAuthorizationCode());
         System.out.println("!!!!!!!!!!!!!!!!!" + accessToken);
         String tokenString = Trans.token(accessToken, new JsonParser());
-        String memberId = "K"+Trans.id(kakaoService.getProfile(tokenString), new JsonParser());
+        String oauthId = "K"+Trans.id(kakaoService.getProfile(tokenString), new JsonParser());
 
-        Member member = memberService.findMemberByOauthId(memberId);
-        if (member == null) {
-            member = new Member();
-            member.setOauthId(memberId);
-            memberService.saveMember(member);
+        Member member = memberService.saveMember(oauthId);
+        if(member != null){
+            memberService.saveProfile(member);
+            return ResponseEntity.ok(TokenResponseBody.of(200, "Success", tokenString, oauthId));
+        }else{
+            return ResponseEntity.ok(TokenResponseBody.of(200, "Existing Member", tokenString, oauthId));
         }
-
-        return ResponseEntity.ok(TokenResponseBody.of(200, "Success", tokenString, memberId));
     }
 
-    //     @Operation(
-//             summary = "카카오 액세스 토큰 발급",
-//             description = "카카오 액세스 토큰 발급.",
-//             responses = {
-//                     @ApiResponse(
-//                             responseCode = "200",
-//                             description = "액세스 토큰 반환",
-//                             content = @Content(
-//                                     schemaProperties = {
-//                                             @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message")),
-//                                             @SchemaProperty(name = "accessToken", schema = @Schema(type = "string", description = "액세스 토큰"))
-//                                     }
-//                             )
-//                     )
-//             }
-//     )
-    @Operation(summary = "카카오 액세스 토큰 검증")
+
+    @Operation(
+            summary = "카카오 액세스 토큰 검증",
+            description = "카카오 액세스 토큰 검증",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            description = "유효한 토큰",
+                            content = @Content(
+                                    schemaProperties = {
+                                            @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message"))
+                                    }
+                            )),
+                    @ApiResponse(responseCode = "401",
+                            description = "유효하지 않은 토큰",
+                            content = @Content(
+                                    schemaProperties = {
+                                            @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message"))
+                                    }
+                            ))
+            }
+    )
     @PostMapping("/auth/kakao")
     public ResponseEntity<?> kakaoAuthVerify(@RequestBody AccessTokenRequestBody accessToken) {
         System.out.println("토큰검증 API");
@@ -144,31 +113,28 @@ public class MemberController {
                             content = @Content(
                                     schemaProperties = {
                                             @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message")),
-                                            @SchemaProperty(name = "accessToken", schema = @Schema(type = "string", description = "액세스 토큰"))
+                                            @SchemaProperty(name = "accessToken", schema = @Schema(type = "string", description = "액세스 토큰")),
+                                            @SchemaProperty(name = "oauthId", schema = @Schema(type = "string", description = "oauthId"))
                                     }
                             )
                     )
             }
     )
     @PostMapping("/signin/google")
-//    @ApiOperation(value = "Google 로그인")
     public ResponseEntity<?> googleSignIn(@RequestBody AuthorizationCodeRequestBody authorizationCode) {
-        //TODO: 최초 로그인이면 회원가입 진행하기, 데이터베이스랑 연결하기
-        System.out.println("TEST!");
-//        String accessToken = googleAuthService.getAccessToken(URLDecoder.decode(authorizationCode.getAuthorizationCode(), StandardCharsets.UTF_8));
         String[] tokens = googleAuthService.getAccessToken(authorizationCode.getAuthorizationCode());
         String accessToken = tokens[1];
-        String memberId = "G"+googleAuthService.getUserResource(tokens[0]).get("id").asText();
+        String oauthId = "G"+googleAuthService.getUserResource(tokens[0]).get("id").asText();
 
-        Member member = memberService.findMemberByOauthId(memberId);
-        if (member == null) {
-            member = new Member();
-            member.setOauthId(memberId);
-            memberService.saveMember(member);
+        Member member = memberService.saveMember(oauthId);
+        if(member != null){
+            memberService.saveProfile(member);
+            return ResponseEntity.ok(TokenResponseBody.of(200, "Success", accessToken, oauthId));
+        }else{
+            return ResponseEntity.ok(TokenResponseBody.of(200, "Existing Member", accessToken, oauthId));
         }
-
-        return ResponseEntity.ok(TokenResponseBody.of(200, "Success", accessToken, memberId));
     }
+
 
     @Operation(
             summary = "구글 액세스 토큰 검증",
@@ -246,13 +212,14 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
     })
-    @DeleteMapping("/{oauthId}")
+    @DeleteMapping("/withdraw")
     @Operation(summary = "회원 탈퇴")
-    public ResponseEntity<Void> deleteMember(@PathVariable String oauthId){
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> withdrawMember(@RequestBody @Valid MemberIdRequest memberIdRequest){
+        int complete = memberService.withdrawMember(memberIdRequest);
+        return complete == 1 ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
-    @PutMapping("/{oauthId}")
+    @PutMapping("/modify")
     @Operation(
             summary = "회원 정보 수정",
             description = "회원 정보 수정",
@@ -262,15 +229,56 @@ public class MemberController {
                     @ApiResponse(responseCode = "401",
                             description = "수정 실패")
             })
-    public ResponseEntity<Void> modifyMemberInfo(@PathVariable String oauthId, @RequestBody MemberUpdateRequest memberUpdateRequest){
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> modifyMemberInfo(@RequestBody MemberUpdateRequest memberUpdateRequest){
+        int complete = memberService.modifyMemberInfo(memberUpdateRequest);
+        return complete == 1 ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+    }
+
+
+    // 프로필 조회
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+    })
+    @PostMapping("/profile")
+    @Operation(summary = "프로필 조회")
+    public ResponseEntity<MemberProfileResponse> findUserProfile(@RequestBody @Valid MemberIdRequest memberIdRequest) {
+        MemberProfileResponse memberProfile = memberService.findMemberProfile(memberIdRequest.getOauthId());
+        return ResponseEntity.ok().body(memberProfile);
     }
 
     // 프로필 조회
-    @GetMapping("/profile/{oauthId}")
-    @Operation(summary = "프로필 조회")
-    public ResponseEntity<MemberProfileResponse> findUserProfile(@PathVariable("oauthId") Long oauthId) {
-        MemberProfileResponse memberProfileResponse = new MemberProfileResponse();
-        return ResponseEntity.ok().body(memberProfileResponse);
+
+    /**
+     * 사용자 신고기능
+     * 사용작의 정보를 조회하여
+     * 신고횟수 확인 후
+     * 3회 일시 정지
+     * else 신고횟수 누적++
+     *
+     */
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+    })
+    @PostMapping("/report")
+    @Operation(summary = "유저 신고")
+    public ResponseEntity<Void> memberReport(@RequestBody @Valid MemberIdRequest memberIdRequest) {
+        memberService.memberReport(memberIdRequest);
+        return ResponseEntity.ok().build();
     }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+    })
+    @GetMapping("/{nickname}")
+    @Operation(summary = "닉네임 중복 체크")
+    public ResponseEntity<String> nicknameDuplicateCheck(@PathVariable("nickname") String nickname) {
+        return (memberService.nicknameDuplicateCheck(nickname) == null)
+                ? ResponseEntity.ok().body("입력한 닉네임 사용 가능.")
+                : ResponseEntity.badRequest().body("입력한 닉네임이 이미 사용 중입니다.");
+    }
+
+
 }
