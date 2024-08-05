@@ -11,8 +11,7 @@ COPY package.json .
 # RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 # # RUN source ~/.bashrc
 # ENV NVM_DIR /root/.nvm
-RUN apt-get update
-RUN apt-get install nvm
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 RUN source ~/.bashrc
 
 RUN nvm intall 16.16.0
