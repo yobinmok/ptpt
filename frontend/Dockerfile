@@ -13,7 +13,7 @@ COPY package.json .
 # ENV NVM_DIR /root/.nvm
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 # RUN source ~/.bashrc
-RUN source ~/.nvm/nvm.s
+RUN . ~/.nvm/nvm.s
 RUN nvm intall 16.16.0
 RUN nvm use 16.16.0
 RUN npm install
