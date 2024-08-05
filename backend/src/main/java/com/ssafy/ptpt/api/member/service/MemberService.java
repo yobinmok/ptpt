@@ -85,4 +85,8 @@ public class MemberService {
             member.memberReportCount(memberReportCount);
         }
     }
+
+    public Member nicknameDuplicateCheck(String nickname) {
+        return memberRepository.findByNickname(nickname);
+    }
 }

@@ -1,11 +1,8 @@
 package com.ssafy.ptpt.api.studyroom.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyRoomCreateResponse {

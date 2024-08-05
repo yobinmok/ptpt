@@ -120,7 +120,7 @@ public class StudyRoomService {
         StudyRoom findStudyRoom = studyRoomRepository.findById(studyRoomConnectRequest.getStudyRoomId())
                 .orElseThrow(() -> new NotFoundException(NotFoundException.STUDY_ROOM_NOT_FOUND));
 
-        if (!passwordEncoder.matches(studyRoomConnectRequest.getStudyRoomPw(), findStudyRoom.getStudyRoomPw())) {
+        if (!studyRoomConnectRequest.getStudyRoomPw().equals(findStudyRoom.getStudyRoomPw())) {
             throw new NotMatchException(NotMatchException.PW_NOT_MATCH);
         }
     }
@@ -156,5 +156,13 @@ public class StudyRoomService {
         }
 
         entryListRepository.saveAll(entryList);
+    }
+
+    public void clearEntryList(StudyRoomClearRequest studyRoomClearRequest) {
+        // 상태 변경 로직
+        studyRoomRepository.studyRoomStatusChange(studyRoomClearRequest.getStudyRoomId());
+
+        // 삭제 로직
+        entryListRepository.deleteByStudyRoomId(studyRoomClearRequest.getStudyRoomId());
     }
 }
