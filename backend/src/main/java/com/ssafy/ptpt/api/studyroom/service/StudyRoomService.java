@@ -1,12 +1,10 @@
 package com.ssafy.ptpt.api.studyroom.service;
 
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomStatusRequest;
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomConnectRequest;
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomCreateRequest;
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomUpdateRequest;
+import com.ssafy.ptpt.api.studyroom.request.*;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomInfoResponse;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomListResponse;
 import com.ssafy.ptpt.db.jpa.entity.EntryList;
+import com.ssafy.ptpt.db.jpa.entity.Member;
 import com.ssafy.ptpt.db.jpa.entity.StudyRoom;
 import com.ssafy.ptpt.db.jpa.repository.EntryListRepository;
 import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
@@ -19,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -138,5 +137,19 @@ public class StudyRoomService {
     public int studyRoomExit(StudyRoomStatusRequest studyRoomStatusRequest) {
         return studyRoomRepository.deleteByStudyRoomIdAndOauthId(studyRoomStatusRequest.getStudyRoomId()
                 , studyRoomStatusRequest.getOauthId());
+    }
+
+    // 스터디룸 입장 참가자 저장
+    public void studyRoomEntryRegister(StudyRoomCreateEntryRequest studyRoomCreateEntryRequest) {
+        List<String> nicknameList = studyRoomCreateEntryRequest.getNicknameList();
+        List<EntryList> entryList = new ArrayList<>();
+        for (String nickname : nicknameList) {
+            Member member = memberRepository.findByNickname(nickname);
+            EntryList entry = new EntryList(studyRoomCreateEntryRequest.getStudyRoomId(),
+                                                member.getOauthId());
+            entryList.add(entry);
+        }
+
+        entryListRepository.saveAll(entryList);
     }
 }

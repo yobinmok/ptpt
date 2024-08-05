@@ -1,9 +1,6 @@
 package com.ssafy.ptpt.api.studyroom.controller;
 
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomStatusRequest;
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomConnectRequest;
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomCreateRequest;
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomUpdateRequest;
+import com.ssafy.ptpt.api.studyroom.request.*;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomInfoResponse;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomListResponse;
 import com.ssafy.ptpt.api.studyroom.service.StudyRoomService;
@@ -137,12 +134,24 @@ public class StudyRoomController {
     /**      스터디 룸 입장 관리
      *      발표 시작 전 참가자의 현황을 관리하지 않고, 시작이 된다면 entryList 테이블에 스터디룸 번호와 함께 참가자 목록 저장
      *      현재 스터디 룸에 들어와 있는 사용자의 session 값을 얻어와서 사용자 식별 후 참가자 테이블에 업데이트
-     *      난이도 높겠는데
+     *      -> 발표가 시작하기 전까지는 스터디룸에 여러 사용자가 입 퇴장 할 수 있다.
+     *      오픈비두 에서 접속한 사용자에 대한 세션값을 리스트로 관리해줌 ex) sessionId, nickname 이 있는데 설정가능
+     *      리스트<닉네임>을 얻어와서 닉네임을 통한 유저의 oauthId를 조회 후 이 값들을 entryList 에 일괄 저장
      */
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+    })
+    @PostMapping("/entry")
+    @Operation(summary = "입장 인원 등록", description = "스터디룸에 입장한 사용자들의 리스트를 참가자 데이터베이스에 저장해줍니다.")
+    public ResponseEntity<Void> studyRoomEntry(@RequestBody @Valid StudyRoomCreateEntryRequest studyRoomCreateEntryRequest) {
+        studyRoomService.studyRoomEntryRegister(studyRoomCreateEntryRequest);
+        return ResponseEntity.ok().build();
+    }
 
 
     /**
-     *      스터디 룸 퇴장 관리jx
+     *      스터디 룸 퇴장 관리
      *      나가기 버튼을 누른 사용자에 대해 참가자 테이블 업데이트
      */
     // TODO : 스터디룸 테이블에서 발표자인 사용자가 나갈 경우에 대한 처리에 대해 생각 후 반영 필요

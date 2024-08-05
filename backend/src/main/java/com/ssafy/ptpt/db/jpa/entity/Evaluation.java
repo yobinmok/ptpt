@@ -31,7 +31,7 @@ public class Evaluation {
     private Comment comment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "oauth_id")
+    @JoinColumn(name = "oauth_id", referencedColumnName = "oauthId")
     private Member member;
 
     private int delivery;
