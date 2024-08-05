@@ -107,7 +107,7 @@ public class DataInitializer {
 
         comment1.setEvaluation(evaluation1);
         comment1.setCommentContent("testContent");
-        comment1.setIsAnonymous(0);
+        comment1.setAnonymity(0);
         comment1.setNickname("testNickname");
 
         commentRepository.save(comment1);
@@ -132,7 +132,7 @@ public class DataInitializer {
 
         comment2.setEvaluation(evaluation2);
         comment2.setCommentContent("testContent");
-        comment2.setIsAnonymous(0);
+        comment2.setAnonymity(0);
         comment2.setNickname("testNickname2");
         commentRepository.save(comment2);
 

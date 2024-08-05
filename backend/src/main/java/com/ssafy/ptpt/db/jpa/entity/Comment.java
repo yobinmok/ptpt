@@ -22,9 +22,17 @@ public class Comment {
     @JoinColumn(name = "evaluation_id")
     private Evaluation evaluation;
 
+    // 평가를 당한사람
     private String nickname;
 
     private String commentContent;
 
-    private int isAnonymous;
+    private int anonymity;
+
+    public Comment(Evaluation evaluation, String nickname, String commentContent, int anonymity) {
+        this.evaluation = evaluation;
+        this.nickname = nickname;
+        this.commentContent = commentContent;
+        this.anonymity = anonymity;
+    }
 }
