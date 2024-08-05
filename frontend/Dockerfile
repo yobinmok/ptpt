@@ -4,7 +4,7 @@ WORKDIR /src
 
 COPY package.json .
 
-RUN npm update
+RUN npm install -g npm@10.8.2
 RUN npm install
 
 COPY . .
