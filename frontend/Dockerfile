@@ -4,7 +4,7 @@ WORKDIR /src
 
 COPY package.json .
 
-RUN npm info react-wavesurfer
+RUN npm update
 RUN npm install
 
 COPY . .
