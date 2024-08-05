@@ -81,7 +81,15 @@ const RoomListPage = () => {
 
   const onLoadRoomList = async () => {
     const response = await loadRoomList();
+    console.log('on load list : ' + response);
     setCurrentList([...response.data]);
+    // 시간 순으로 정렬
+    // console.log(currentList);
+    // const sortedRooms = currentList.sort(
+    //   (a, b) => new Date(a.presentationTime) - new Date(b.presentationTime)
+    // );
+    // setCurrentList(sortedRooms);
+    // console.log([...currentList]);
   };
 
   const handleModalOpen = () => {
@@ -188,9 +196,9 @@ const RoomListPage = () => {
             {currentList.length === 0 ? (
               <RecommendLetter color={'#EAF1FF'}>
                 최근에 만들어진 방이 없어요.
-                <LiButton onClick={() => navigate('/createroom')}>
+                {/* <LiButton onClick={() => navigate('/createroom')}>
                   방을 만들어볼까요?
-                </LiButton>
+                </LiButton> */}
               </RecommendLetter>
             ) : (
               <>

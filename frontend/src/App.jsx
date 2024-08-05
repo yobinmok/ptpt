@@ -36,6 +36,7 @@ function App() {
         <Route path='/room/detail' element={<VideoRoomComponent />} />
         <Route path='room/list' element={<RoomListPage />} />
         <Route path='/room/:roomId' element={<RoomDetail />} />
+        <Route path='/test' element={<VoiceTestPage />} />
       </Routes>
     </div>
   );
