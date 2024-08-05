@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'; // useNavigate 추가
 import { useDispatch } from 'react-redux'; // useDispatch 추가
 import { googleSignin, verifyGoogleAccessToken } from '../../apis/auth';
-import { login } from '../../store/reducers/authReducer';
+import { setAuth } from '../../store/actions/authActions';
 
 const AuthPage = () => {
   const location = useLocation();
@@ -34,7 +34,7 @@ const AuthPage = () => {
               setTokenVerified(verificationResult.message === 'Valid Token');
 
               // 로그인 성공 시 oauth_id와 사용자 정보를 Redux에 저장
-              dispatch(login({ oauth_id: data.oauth_id, user: data.user }));
+              dispatch(setAuth({ oauth_id: data.oauth_id, user: data.user }));
               navigate('/'); // 로그인 후 메인 페이지로 이동
             }
           );

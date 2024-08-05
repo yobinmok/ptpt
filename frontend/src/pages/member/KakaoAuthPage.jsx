@@ -1,40 +1,54 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { kakaoSignin, verifyKakaoAccessToken } from '../../apis/auth';
+import { setAuth } from '../../store/actions/authActions';
+// import UserInfoModal from '../../components/organisms/UserInfoModal';
 
 const KakaoAuthPage = () => {
   const location = useLocation();
-  const [authCode, setAuthCode] = useState(null); // 인가 코드 상태
-  const [token, setToken] = useState(null); // 액세스 토큰 상태
-  const [tokenVerified, setTokenVerified] = useState(null); // 토큰 검증 상태
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [authCode, setAuthCode] = useState(null);
+  const [token, setToken] = useState(null);
+  const [tokenVerified, setTokenVerified] = useState(null);
+  // const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    // URL에서 authorization code를 추출
     const query = new URLSearchParams(location.search);
     const code = query.get('code');
 
     if (code) {
       console.log('Authorization code:', code);
-      setAuthCode(code); // 인가 코드를 상태에 저장
+      setAuthCode(code);
 
-      // authorization code를 사용하여 백엔드에서 access token을 요청
       kakaoSignin(code)
         .then((data) => {
           console.log('Token received:', data);
-          setToken(data); // 받은 토큰 데이터를 상태에 저장
+          setToken(data);
 
           // access token을 검증
-          return verifyKakaoAccessToken(data.accessToken);
-        })
-        .then((verificationResult) => {
-          console.log('Token verification result:', verificationResult);
-          setTokenVerified(verificationResult.message === 'Valid Token');
+          return verifyKakaoAccessToken(data.accessToken).then(
+            (verificationResult) => {
+              console.log('Token verification result:', verificationResult);
+              setTokenVerified(verificationResult.message === 'Valid Token');
+
+              if (verificationResult.message === 'Valid Token') {
+                console.log('Dispatching setAuth with:', {
+                  oauth_id: data.oauth_id,
+                  user: data.user,
+                });
+                dispatch(setAuth({ oauth_id: data.oauth_id, user: data.user }));
+                navigate('/'); // 로그인 후 메인 페이지로 이동
+              }
+            }
+          );
         })
         .catch((error) => {
           console.error('Error during Kakao sign-in:', error);
         });
     }
-  }, [location]); // location 값이 변경될 때마다 useEffect 훅 실행
+  }, [location, dispatch, navigate]);
 
   return (
     <div>
