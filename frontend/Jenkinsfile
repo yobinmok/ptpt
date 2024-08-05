@@ -39,7 +39,7 @@ pipeline {
         stage('Depoly') {
             steps {
                 script {
-                    // sh 'docker-compose down'
+                    sh 'docker-compose down frontend'
                     sh 'docker-compose up frontend -d'
                 }
             }
