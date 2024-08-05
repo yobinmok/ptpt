@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,53 +34,57 @@ public class EvaluationService {
     @Transactional
     public Long createEvaluation(EvaluationCreateRequest evaluationCreateRequest) {
         // 평가를 등록할때 통계 테이블 업데이트 -> 해당 맴버의 데이터가 있는지 조회 먼저
-        // 평가한 사람이 있는 member임
+        // 평가한 사람이 있는 member 임
         Member member = memberRepository.findByOauthId(evaluationCreateRequest.getOauthId());
 
         StudyRoom studyRoom = studyRoomRepository.findByStudyRoomId(evaluationCreateRequest.getStudyRoomId());
 
-        // 발표한사람의 oauthId
-        String presentationHost = studyRoom.getPresentationHost();
+        // 발표한사람의 memberId
+        Long presentationHost = studyRoom.getPresentationHost();
         
         // 발표한 사람의 닉네임을 얻어오자
-        Member presentationHostMember = memberRepository.findByOauthId(presentationHost);
+        Optional<Member> presentationHostMember = memberRepository.findById(presentationHost);
 
-        Evaluation evaluation = new Evaluation(
-                                                studyRoom,
-                                                evaluationCreateRequest.getDelivery(),
-                                                evaluationCreateRequest.getExpression(),
-                                                evaluationCreateRequest.getPreparation(),
-                                                evaluationCreateRequest.getLogic(),
-                                                evaluationCreateRequest.getSuitability(),
-                                                presentationHostMember.getNickname(),
-                                                member
-                                                );
-        evaluationRepository.save(evaluation);
-        
-        // 코멘트 등록 로직
-        Comment comment = new Comment(evaluation,
-                                    member.getNickname(),
-                                    evaluationCreateRequest.getCommentContent(),
-                                    evaluationCreateRequest.getAnonymity());
+        if (presentationHostMember.isPresent()) {
+            Evaluation evaluation = new Evaluation(
+                    studyRoom,
+                    evaluationCreateRequest.getDelivery(),
+                    evaluationCreateRequest.getExpression(),
+                    evaluationCreateRequest.getPreparation(),
+                    evaluationCreateRequest.getLogic(),
+                    evaluationCreateRequest.getSuitability(),
+                    presentationHostMember.get().getNickname(),
+                    member
+            );
 
-        commentRepository.save(comment);
+            evaluationRepository.save(evaluation);
+            // 코멘트 등록 로직
+            Comment comment = new Comment(evaluation,
+                    member.getNickname(),
+                    evaluationCreateRequest.getCommentContent(),
+                    evaluationCreateRequest.getAnonymity());
 
-        Statistic statistic = statisticRepository.findByOauthId(member.getMemberId());
-        // 데이터가 없다면 통계 테이블에 값 삽입
-        if (statistic == null) {
-            statistic = new Statistic();
-            statistic.createStatistic(evaluation);
-            // 평가 등록 처리
-            statisticRepository.save(statistic);
-        } else {
-            // 데이터가 있다면 업데이트 처리
-            // 유저 정보에 매칭되는 통계값을 가져오자
+            commentRepository.save(comment);
 
-            // 평가 값을 더해서 업데이트를 진행햐지
-            statistic.updateStatistic(evaluation);
+            Statistic statistic = statisticRepository.findByOauthId(member.getMemberId());
+            // 데이터가 없다면 통계 테이블에 값 삽입
+            if (statistic == null) {
+                statistic = new Statistic();
+                statistic.createStatistic(evaluation);
+                // 평가 등록 처리
+                statisticRepository.save(statistic);
+            } else {
+                // 데이터가 있다면 업데이트 처리
+                // 유저 정보에 매칭되는 통계값을 가져오자
 
+                // 평가 값을 더해서 업데이트를 진행햐지
+                statistic.updateStatistic(evaluation);
+
+            }
+            return evaluation.getEvaluationId();
+        }else{
+            throw new NotFoundException(NotFoundException.MEMBER_NOT_FOUND);
         }
-        return evaluation.getEvaluationId();
     }
 
     // 평가 전체 조회

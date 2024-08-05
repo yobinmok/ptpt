@@ -37,7 +37,6 @@ public class DataInitializer {
                 0,
                 time,
                 null,
-                null,
                 null
         );
         memberRepository.save(member);
@@ -52,7 +51,6 @@ public class DataInitializer {
                 0,
                 time,
                 null,
-                null,
                 null
         );
         memberRepository.save(member2);
@@ -62,7 +60,7 @@ public class DataInitializer {
         roleRepository.save(role);
 
         // Profile 저장
-        Profile profile = new Profile(member.getOauthId());
+        Profile profile = new Profile(member);
         profileRepository.save(profile);
 
         // statistic 저장
@@ -78,15 +76,15 @@ public class DataInitializer {
                 "테스트",
                 "test",
                 1,
-                member.getOauthId(),
+                member.getMemberId(),
                 "studyRoomCode",
-                member.getOauthId()
+                member.getMemberId()
         );
 
         studyRoom = studyRoomRepository.save(studyRoom);
 
         // entryList 저장
-        EntryList entryList = new EntryList(studyRoom.getStudyRoomId(), studyRoom.getOauthId());
+        EntryList entryList = new EntryList(studyRoom.getStudyRoomId(), studyRoom.getMemberId());
         entryListRepository.save(entryList);
 
         Comment comment1 = new Comment();
@@ -101,7 +99,8 @@ public class DataInitializer {
                 100,
                 100,
                 100,
-                100
+                100,
+                member.getNickname()
         );
         evaluationRepository.save(evaluation1);
 
@@ -121,12 +120,13 @@ public class DataInitializer {
                 studyRoom,
                 statistic,
                 comment2,
-                member,
+                member2,
                 90,
                 90,
                 90,
                 90,
-                90
+                90,
+                member2.getNickname()
         );
         evaluationRepository.save(evaluation2);
 

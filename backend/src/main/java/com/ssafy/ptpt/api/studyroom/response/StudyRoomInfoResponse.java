@@ -16,8 +16,8 @@ public class StudyRoomInfoResponse {
     private String studyRoomTitle;
     private String studyRoomCode;
     private String studyRoomPw;
-    private String oauthId;
-    private String presentationHost;
+    private Long memberId;
+    private Long presentationHost;
 
     public static StudyRoomInfoResponse from(StudyRoom studyRoom){
         StudyRoomInfoResponse studyRoomInfoResponse = new StudyRoomInfoResponse();
@@ -25,7 +25,7 @@ public class StudyRoomInfoResponse {
         studyRoomInfoResponse.studyRoomTitle = studyRoom.getStudyRoomTitle();
         studyRoomInfoResponse.studyRoomCode = studyRoom.getStudyRoomCode();
         studyRoomInfoResponse.studyRoomPw = studyRoom.getStudyRoomPw();
-        studyRoomInfoResponse.oauthId = studyRoom.getOauthId();
+        studyRoomInfoResponse.memberId = studyRoom.getMemberId();
         studyRoomInfoResponse.presentationHost = studyRoom.getPresentationHost();
 
         return studyRoomInfoResponse;

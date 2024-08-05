@@ -36,8 +36,8 @@ public class MemberService {
         return null;
     }
 
-    public void saveProfile(Long memberId, String oauthId){
-        Profile profile = new Profile(memberId, oauthId);
+    public void saveProfile(Member member){
+        Profile profile = new Profile(member);
         profileRepository.save(profile);
     }
 

@@ -13,14 +13,16 @@ public interface StudyRoomRepository extends JpaRepository<StudyRoom, Long> {
 
     Optional<StudyRoom> findByStudyRoomTitle(String studyRoomTitle);
     StudyRoom findByStudyRoomId(Long studyRoomId);
-    List<StudyRoom> findByOauthId(String oauthId);
+    List<StudyRoom> findByMemberId(Long memberId);
+    StudyRoom findByStudyRoomIdAndMemberId(Long studyRoomId, Long memberId);
+
 
     @Modifying
-    @Query("UPDATE StudyRoom s SET s.presentationHost = :oauthId WHERE s.studyRoomId = :studyRoomId AND s.isCompleted = 1")
-    int updatePresentatorAssignation(@Param("studyRoomId") Long studyRoomId, @Param("oauthId") String oauthId);
+    @Query("UPDATE StudyRoom s SET s.presentationHost = :memberId WHERE s.studyRoomId = :studyRoomId AND s.isCompleted = 1")
+    int updatePresentatorAssignation(@Param("memberId") Long memberId, @Param("studyRoomId") Long studyRoomId);
 
     @Modifying
-    @Query("DELETE FROM EntryList el WHERE el.studyRoomId = :studyRoomId AND el.oauthId = :oauthId")
-    int deleteByStudyRoomIdAndOauthId(@Param("studyRoomId") Long studyRoomId, @Param("oauthId") String oauthId);
+    @Query("DELETE FROM EntryList el WHERE el.studyRoomId = :studyRoomId AND el.memberId = :memberId")
+    int deleteByStudyRoomIdAndOauthId(@Param("studyRoomId") Long studyRoomId, @Param("memberId") Long memberId);
 
 }

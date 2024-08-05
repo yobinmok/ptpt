@@ -14,5 +14,5 @@ public class StudyRoomCreateResponse {
     private Long StudyRoomId;
 
     // 참가자
-    private String memberId;
+    private Long memberId;
 }
