@@ -1,6 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  updateNickname,
+  fetchUserProfile,
+} from '../../store/actions/userActions';
 
 // 모달의 배경을 어둡게 만드는 오버레이 스타일
 const ModalOverlay = styled.div`
@@ -53,38 +58,57 @@ const NicknameInput = styled.input`
 
 // 중복 확인 결과 스타일
 const CheckResult = styled.div`
-  color: ${(props) => (props.isAvailable ? 'green' : 'red')};
+  color: ${(props) => (props.$isAvailable ? 'green' : 'red')};
   font-size: 14px;
   text-align: center;
 `;
 
 // ProfileEditModal 컴포넌트 정의
-const ProfileEditModal = ({ nickname, onNicknameChange, onSave, onClose }) => {
-  const [tempNickname, setTempNickname] = useState(nickname);
-  const [checkResult, setCheckResult] = useState(null); // 중복 확인 결과 상태
-  const [isAvailable, setIsAvailable] = useState(false); // 닉네임 사용 가능 여부
+const ProfileEditModal = ({ onClose, oauthId }) => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.data) || {};
+  const { nickname = '' } = user;
 
-  // 저장 버튼 클릭 시 호출되는 핸들러
-  const handleSave = () => {
-    onSave(tempNickname);
-  };
+  useEffect(() => {
+    if (oauthId) {
+      dispatch(fetchUserProfile(oauthId));
+    }
+  }, [dispatch, oauthId]);
+
+  const [tempNickname, setTempNickname] = useState(nickname);
+  const [checkResult, setCheckResult] = useState(null);
+  const [isAvailable, setIsAvailable] = useState(false);
 
   // 닉네임 중복 확인 핸들러
-  const handleNicknameCheck = () => {
-    axios
-      .put(`/member/${memberId}`, { nickname: tempNickname }) // PUT 요청으로 변경
-      .then((response) => {
-        const available = response.data.isAvailable;
-        setCheckResult(
-          available ? 'Nickname is available.' : 'Nickname is already taken.'
-        );
-        setIsAvailable(available);
-      })
-      .catch((error) => {
-        console.error('Error checking nickname:', error);
-        setCheckResult('Error checking nickname.');
-        setIsAvailable(false);
+  const handleNicknameCheck = async () => {
+    try {
+      const response = await axios.put(`/member/${oauthId}`, {
+        nickname: tempNickname,
+        checkOnly: true,
       });
+      const available = response.data.isAvailable;
+      setCheckResult(
+        available ? 'Nickname is available.' : 'Nickname is already taken.'
+      );
+      setIsAvailable(available);
+    } catch (error) {
+      console.error('Error checking nickname:', error);
+      setCheckResult('Error checking nickname.');
+      setIsAvailable(false);
+    }
+  };
+
+  // 저장 버튼 클릭 시 호출되는 핸들러
+  const handleSave = async () => {
+    if (isAvailable) {
+      try {
+        await axios.put(`/member/${oauthId}`, { nickname: tempNickname });
+        dispatch(updateNickname(tempNickname));
+        onClose();
+      } catch (error) {
+        setCheckResult('Error saving nickname.');
+      }
+    }
   };
 
   return (
@@ -98,8 +122,8 @@ const ProfileEditModal = ({ nickname, onNicknameChange, onSave, onClose }) => {
             value={tempNickname}
             onChange={(e) => {
               setTempNickname(e.target.value);
-              setCheckResult(null); // 닉네임이 변경되면 중복 확인 결과를 초기화
-              setIsAvailable(false); // 닉네임이 변경되면 사용 가능 여부를 초기화
+              setCheckResult(null);
+              setIsAvailable(false);
             }}
             placeholder='Enter new nickname'
           />
@@ -107,7 +131,7 @@ const ProfileEditModal = ({ nickname, onNicknameChange, onSave, onClose }) => {
         </NicknameSection>
         {/* 중복 확인 결과 표시 */}
         {checkResult && (
-          <CheckResult isAvailable={isAvailable}>{checkResult}</CheckResult>
+          <CheckResult $isAvailable={isAvailable}>{checkResult}</CheckResult>
         )}
         {/* 모달 하단 버튼 섹션 */}
         <div
