@@ -6,6 +6,7 @@ COPY package.json .
 
 
 RUN apk update
+RUN apk add bash
 RUN apk add curl
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 RUN source ~/.bashrc
