@@ -4,7 +4,9 @@ WORKDIR /src
 
 COPY package.json .
 
-RUN node --version
+RUN node -v
+RUN nvm intall 16.16.0
+RUN nvm use 16.16.0
 RUN npm install
 
 COPY . .
