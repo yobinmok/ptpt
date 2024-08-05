@@ -1,8 +1,10 @@
 import axios from 'axios';
+import { Axios } from '../util/http-commons';
+const { VITE_API_URL } = import.meta.env;
 
 // Axios 인스턴스를 생성하여 기본 설정 지정
 const instance = axios.create({
-  baseURL: 'http://localhost:8080', // 백엔드 서버 주소
+  baseURL: VITE_API_URL, // 백엔드 서버 주소
   headers: {
     'Content-Type': 'application/json',
   },
@@ -57,6 +59,22 @@ export const verifyKakaoAccessToken = async (accessToken) => {
     return response.data;
   } catch (error) {
     console.error('Error during Kakao access token verification:', error);
+    throw error;
+  }
+};
+
+// 프로필 조회 함수
+export const getProfile = async (oauthId) => {
+  try {
+    const response = await instance.get('/member/profile', {
+      params: {
+        oauthId,
+      },
+    });
+    console.log('Profile response:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching profile:', error);
     throw error;
   }
 };

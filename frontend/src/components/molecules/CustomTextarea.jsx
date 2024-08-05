@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, styled, Box } from '@mui/material';
+import { TextField, styled, Box, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,21 +9,30 @@ import { DeleteDialog } from './DeleteDialog';
 
 function CustomTextarea({ placeholder, editFlag }) {
   const [open, setOpen] = useState(false);
+  const [charCount, setCharCount] = useState(0);
+  const MAX_CHAR_COUNT = 2000; // 원하는 최대 글자 수로 설정
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const dispatch = useDispatch();
   const tempScript = useSelector((state) => state.solo.tempScript);
 
+  useEffect(() => {
+    setCharCount(tempScript?.script?.content?.length || 0);
+  }, [tempScript]);
+
   const handleChange = (event) => {
     const { index, script } = tempScript;
 
-    const updatedScript = {
-      ...script,
-      content: event.target.value,
-    };
+    if (event.target.value.length <= MAX_CHAR_COUNT) {
+      const updatedScript = {
+        ...script,
+        content: event.target.value,
+      };
 
-    dispatch(useTempScript(index, updatedScript));
+      dispatch(useTempScript(index, updatedScript));
+      setCharCount(event.target.value.length);
+    }
   };
 
   return (
@@ -32,21 +41,21 @@ function CustomTextarea({ placeholder, editFlag }) {
         placeholder={placeholder}
         multiline
         rows={13}
-        value={tempScript?.script.content}
-        onChange={handleChange} // onChange 핸들러 추가
+        value={tempScript?.script.content || ''}
+        onChange={handleChange}
         variant='outlined'
         fullWidth
         InputProps={{
           readOnly: !editFlag, // editFlag가 false일 때만 readOnly
-          style: { color: 'inherit' }, // 텍스트 색상 변경 방지
+          style: { color: 'inherit' },
         }}
       />
-      {!editFlag && (
+      {!editFlag ? (
         <Box
           sx={{
             display: 'flex',
             justifyContent: 'flex-end',
-            padding: '8px 0', // 위아래 패딩 추가
+            padding: '8px 0',
           }}
         >
           <DeleteIcon
@@ -68,7 +77,21 @@ function CustomTextarea({ placeholder, editFlag }) {
             }}
           />
         </Box>
+      ) : (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            paddingTop: '8px',
+            paddingRight: '3px',
+          }}
+        >
+          <Typography variant='caption' color='textSecondary'>
+            {charCount}/{MAX_CHAR_COUNT}
+          </Typography>
+        </Box>
       )}
+
       <DeleteDialog
         open={open}
         deleteAction={deleteScript}
@@ -81,22 +104,21 @@ function CustomTextarea({ placeholder, editFlag }) {
 export const CustomTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
-      border: 'none', // 경계선 제거
+      border: 'none',
     },
     '&:hover fieldset': {
-      border: 'none', // 호버 시 경계선 제거
+      border: 'none',
     },
     '&.Mui-focused fieldset': {
-      border: 'none', // 포커스 시 경계선 제거
+      border: 'none',
     },
   },
 }));
 
-// 스크립트 컨테이너를 위한 스타일
 const ScriptContainer = styled(Box)(({ theme }) => ({
-  border: '1px solid #E1E3E1', // 경계선 색상 설정
-  borderRadius: '4px', // 경계선 둥글기
-  padding: '2px', // 패딩
+  border: '1px solid #E1E3E1',
+  borderRadius: '4px',
+  padding: '2px',
 }));
 
 export default CustomTextarea;

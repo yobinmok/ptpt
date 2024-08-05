@@ -8,12 +8,12 @@ import ChecklistIcon from '@mui/icons-material/Checklist';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleSidebar, selectTab, clearTab } from '../../store/actions/room';
-import { Subscriber } from 'openvidu-browser';
+import EvaluteTab from '../../components/organisms/multi/EvaluateTab';
 
 const MultiPage = () => {
   const tabItem = [
     { icon: PersonIcon, text: '참가자', content: '수정' },
-    { icon: ChecklistIcon, text: '평가', content: '수정' },
+    { icon: ChecklistIcon, text: '평가', content: <EvaluteTab /> },
     { icon: SettingsIcon, text: '설정', content: '수정' },
   ];
   const dispatch = useDispatch();
@@ -36,12 +36,7 @@ const MultiPage = () => {
 
   // 탭 별 content 처리
   const getTabContent = (index) => {
-    console.log(index);
-    console.log(tabItem);
-    console.log(selectedTab + ' ' + isSidebarOpen);
     console.log(index !== null ? tabItem[index] : tabItem[0]);
-    // console.log(Subscriber);
-    // console.log(Subscriber.name);
     return index !== null ? tabItem[index] : tabItem[0];
   };
 

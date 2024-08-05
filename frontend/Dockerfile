@@ -19,13 +19,14 @@ COPY package.json .
 # RUN npm install
 
 # Install nvm, node, and npm
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash && \
-    export NVM_DIR="$HOME/.nvm" && \
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && \
-    nvm install 16.16.0 && \
-    nvm use 16.16.0 && \
-    npm install
+# RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash && \
+#     export NVM_DIR="$HOME/.nvm" && \
+#     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && \
+#     nvm install 16.16.0 && \
+#     nvm use 16.16.0 && \
+#     npm install
 
+RUN npm install --legacy-peer-deps
 
 COPY . .
 
