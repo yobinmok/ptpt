@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import userReducer from './userReducer';
+import user from './userReducer';
 import authReducer from './authReducer';
 // import roomReducer from './roomReducer';
 // import soloReducer from './soloReducer';
