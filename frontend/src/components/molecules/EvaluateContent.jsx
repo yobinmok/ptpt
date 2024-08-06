@@ -21,7 +21,12 @@ const EvaluateContent = ({}) => {
   const studyRoomId = useSelector((state) => state.room.roomId);
   const isAnonymous = useSelector((state) => state.room.isAnonymous);
   const participants = useSelector((state) => state.participant.participants);
-  const userId = useSelector((state) => state.user.data);
+  // const userId = useSelector((state) => state.user.data);
+  // 자기 자신을 제외한 참가자 목록을 평가지에 올림
+  const userId = 'OpenVidu_User54';
+  const participantsWithoutMe = participants.filter(
+    (participant) => participant !== userId
+  );
 
   // 익명 평가이면, master 공백으로 넘김
   useEffect(() => {
@@ -70,7 +75,7 @@ const EvaluateContent = ({}) => {
   const handleSelectChange = (value) => {
     setEvaluateInfo((prevInfo) => ({
       ...prevInfo,
-      slave: value,
+      slave: participantsWithoutMe[value],
     }));
   };
 
@@ -79,7 +84,7 @@ const EvaluateContent = ({}) => {
       {/* 평가 항목과 평가 여부 */}
       <CustomSelect
         label='발표자 선택'
-        options={participants.map((item, index) => ({
+        options={participantsWithoutMe.map((item, index) => ({
           value: index,
           label: item,
         }))}
@@ -156,14 +161,6 @@ const EvaluateContent = ({}) => {
         onChange={onEvaluateInfoInput}
         value={evaluateInfo.commentContent}
       />
-      {/* <TextField
-            name='roomcomment'
-            label='방 설명'
-            fullWidth
-            margin='normal'
-            onChange={onRoomInfoInput}
-            value={roomInfo.roomcomment}
-          /> */}
       <Button
         variant='contained'
         color='primary'

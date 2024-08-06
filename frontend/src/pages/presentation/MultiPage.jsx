@@ -9,10 +9,11 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleSidebar, selectTab, clearTab } from '../../store/actions/room';
 import EvaluteTab from '../../components/organisms/multi/EvaluateTab';
+import ParticipantsTab from '../../components/organisms/multi/ParticipantsTab';
 
 const MultiPage = () => {
   const tabItem = [
-    { icon: PersonIcon, text: '참가자', content: '수정' },
+    { icon: PersonIcon, text: '참가자', content: <ParticipantsTab /> },
     { icon: ChecklistIcon, text: '평가', content: <EvaluteTab /> },
     { icon: SettingsIcon, text: '설정', content: '수정' },
   ];

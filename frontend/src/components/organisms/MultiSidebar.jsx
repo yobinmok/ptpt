@@ -23,7 +23,7 @@ const MultiSidebar = ({ tabItem }) => {
   const participants = useSelector((state) => state.participant.participants);
   const hasExecuteRef = useRef(false);
 
-  // dispatch(setPresentationTime('2024-08-06T15:49'));
+  // dispatch(setPresentationTime('2024-08-07T01:13'));
   // hasExecuteRef.current = false;
 
   // 시간 호출
@@ -32,10 +32,10 @@ const MultiSidebar = ({ tabItem }) => {
   }, []);
   useInterval(() => {
     setRealTime(moment());
-    console.log('moment : ' + moment(realTime).toString());
-    console.log(presentationTime);
-    console.log(moment(presentationTime).toString());
-    console.log('hasExecuteRef : ' + hasExecuteRef.current);
+    // console.log('moment : ' + moment(realTime).toString());
+    // console.log(presentationTime);
+    // console.log(moment(presentationTime).toString());
+    // console.log('hasExecuteRef : ' + hasExecuteRef.current);
     if (
       !hasExecuteRef.current &&
       moment(realTime).isAfter(presentationTime) &&
