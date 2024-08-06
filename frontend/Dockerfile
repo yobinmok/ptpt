@@ -4,6 +4,9 @@ WORKDIR /react
 
 RUN rm -rf /react/*
 
+RUN echo "removed"
+RUN ls
+
 COPY package.json .
 
 
