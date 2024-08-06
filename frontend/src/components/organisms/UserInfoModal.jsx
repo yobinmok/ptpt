@@ -55,6 +55,10 @@ const Button = styled.button`
   &:hover {
     background-color: #0056b3;
   }
+  &:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
 `;
 
 const FileInput = styled.input`
@@ -90,6 +94,7 @@ const Label = styled.label`
 
 const UserInfoModal = ({ showModal, setShowModal, handleSubmit }) => {
   const [nickname, setNickname] = useState('');
+  const [profilePicture, setProfilePicture] = useState(null);
   const [voiceModel, setVoiceModel] = useState(null);
   const [nicknameMessage, setNicknameMessage] = useState('');
   const [isNicknameValid, setIsNicknameValid] = useState(false);
@@ -104,32 +109,34 @@ const UserInfoModal = ({ showModal, setShowModal, handleSubmit }) => {
     setVoiceModel(e.target.files[0]);
   };
 
+  const handleProfilePictureChange = (e) => {
+    setProfilePicture(e.target.value);
+  };
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    handleSubmit(nickname, voiceModel);
+    handleSubmit(nickname, profilePicture || 'default-profile.png');
     setShowModal(false);
   };
 
   const checkNicknameDuplicate = async () => {
     try {
-      console.log(`Checking nickname: ${nickname}`); // 요청 전 닉네임 확인
-      const response = await axios.get('/member/profile', {
-        params: {
-          oauthId: nickname,
-        },
-      });
-      console.log('Response:', response.data); // 응답 데이터 확인
-      if (response.data.nickname === nickname) {
-        setNicknameMessage('이미 존재하는 닉네임입니다.');
-        setIsNicknameValid(false);
-      } else {
+      console.log(`Checking nickname: ${nickname}`);
+      const response = await axios.get(`/member/${nickname}`);
+      console.log('Nickname check response:', response.data);
+      if (response.status === 200) {
         setNicknameMessage('사용 가능한 닉네임입니다.');
         setIsNicknameValid(true);
       }
     } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setNicknameMessage('이미 존재하는 닉네임입니다.');
+        setIsNicknameValid(false);
+      } else {
+        setNicknameMessage('닉네임 중복 확인 중 오류가 발생했습니다.');
+        setIsNicknameValid(false);
+      }
       console.error('Error checking nickname:', error);
-      setNicknameMessage('닉네임 중복 확인 중 오류가 발생했습니다.');
-      setIsNicknameValid(false);
     }
   };
 
@@ -146,6 +153,7 @@ const UserInfoModal = ({ showModal, setShowModal, handleSubmit }) => {
                 placeholder='Nickname'
                 value={nickname}
                 onChange={handleNicknameChange}
+                required
               />
               <Button type='button' onClick={checkNicknameDuplicate}>
                 Check
@@ -154,11 +162,13 @@ const UserInfoModal = ({ showModal, setShowModal, handleSubmit }) => {
             {nicknameMessage && (
               <Message $isError={!isNicknameValid}>{nicknameMessage}</Message>
             )}
+            <Label>Profile Picture</Label>
+            <FileInput type='file' onChange={handleProfilePictureChange} />
             <Label>Voice Model</Label>
             <FileInput type='file' onChange={handleVoiceModelChange} />
             <ButtonContainer>
               <Button type='submit' disabled={!isNicknameValid}>
-                Submit
+                회원가입
               </Button>
             </ButtonContainer>
           </form>
