@@ -72,7 +72,6 @@ public class MemberController {
         }
     }
 
-
     @Operation(
             summary = "카카오 액세스 토큰 검증",
             description = "카카오 액세스 토큰 검증",
