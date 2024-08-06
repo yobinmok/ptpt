@@ -103,6 +103,27 @@ public class MemberController {
     }
 
 
+    @PostMapping("/signout/kakao")
+    @Operation(
+            summary = "카카오 로그아웃",
+            description = "카카오 사용자의 세션을 종료하거나 액세스 토큰을 무효화합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "로그아웃 성공"),
+                    @ApiResponse(responseCode = "401", description = "로그아웃 실패")
+            })
+    public ResponseEntity<?> kakaoLogout(@RequestBody AccessTokenRequestBody accessTokenRequestBody) {
+        try {
+            boolean result = kakaoService.logout(accessTokenRequestBody.getAccessToken());
+            if (result) {
+                return ResponseEntity.ok(BaseResponseBody.of(200, "로그아웃 성공"));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseResponseBody.of(401, "로그아웃 실패"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(BaseResponseBody.of(500, "서버 오류"));
+        }
+    }
+
     @Operation(
             summary = "구글 액세스 토큰 발급",
             description = "구글 액세스 토큰 발급 (구글에서는 ID_Token이라 명명.",
