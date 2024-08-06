@@ -38,6 +38,8 @@ COPY . .
 # CMD [ "npm", "start" ]
 CMD [ "npm", "run", "build" ]
 
+RUN ls
+
 FROM node:18-alpine
 
 WORKDIR /react_build
@@ -46,3 +48,5 @@ WORKDIR /react_build
 RUN rm -rf /react_build/*
 
 COPY --from=build /react/dist ./
+
+RUN ls
