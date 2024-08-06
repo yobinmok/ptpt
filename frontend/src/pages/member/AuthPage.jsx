@@ -42,13 +42,13 @@ const AuthPage = () => {
 
           if (data.message === 'Existing Member') {
             try {
-              const profile = await getProfile(data.memberId); // data.oauthId -> data.memberId 로 변경
+              const profile = await getProfile(data.memberId);
               console.log('Profile data:', profile);
 
               if (profile) {
                 // 기존 회원인 경우
                 console.log('기존회원입니다. 메인페이지로 이동');
-                dispatch(setAuth({ oauth_id: data.memberId, user: profile })); // data.oauthId -> data.memberId 로 변경
+                dispatch(setAuth({ oauth_id: data.memberId, user: profile }));
                 navigate('/');
               }
             } catch (error) {
@@ -70,7 +70,7 @@ const AuthPage = () => {
   const handleSubmit = async (nickname, profilePicture) => {
     try {
       const profileData = {
-        oauthId: token.memberId, // token.oauthId -> token.memberId 로 변경
+        oauthId: token.memberId,
         nickName: nickname,
         memberPicture: profilePicture || 'default-profile.png',
       };
@@ -78,7 +78,7 @@ const AuthPage = () => {
       console.log('Sending profile data:', profileData); // 데이터 확인
 
       await updateProfile(profileData);
-      dispatch(setAuth({ oauth_id: token.memberId, user: profileData })); // token.oauthId -> token.memberId 로 변경
+      dispatch(setAuth({ oauth_id: token.memberId, user: profileData }));
       console.log('회원가입 성공');
       navigate('/');
     } catch (error) {
