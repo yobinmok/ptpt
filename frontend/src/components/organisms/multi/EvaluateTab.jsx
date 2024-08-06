@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import EvaluateContent from '../../molecules/EvaluateContent';
 import { Box, Container } from '@mui/material';
+import MyEvaluateContent from '../../molecules/MyEvaluateContent';
 // import MyEvaluateContent from '../../molecules/MyEvaluateContent';
 
 const EvaluteTab = () => {
@@ -40,9 +41,10 @@ const EvaluteTab = () => {
       {/* 평가항목은 따로 컴포넌트 화 */}
       <Container sx={{ height: '500px', flex: 2, overflowX: 'auto' }}>
         {isMyEvaluate ? (
-          <Button variant='contained' color='primary'>
-            내평가
-          </Button>
+          // <Button variant='contained' color='primary'>
+          //   내평가
+          // </Button>
+          <MyEvaluateContent />
         ) : (
           <EvaluateContent />
         )}

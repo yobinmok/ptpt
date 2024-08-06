@@ -1,25 +1,26 @@
-import axios from 'axios';
+import { Axios } from '../util/http-commons';
 const { VITE_API_URL } = import.meta.env;
+const axios = Axios();
 
 // 엑세스 토큰 요청 함수
-export const fetchAccessToken = async (authorizationCode, provider) => {
-  try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_BACKEND_URL}/oauth/${provider}`,
-      {
-        code: authorizationCode,
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching access token:', error);
-    throw error;
-  }
-};
+// export const fetchAccessToken = async (authorizationCode, provider) => {
+//   try {
+//     const response = await axios.post(
+//       `${import.meta.env.VITE_BACKEND_URL}/oauth/${provider}`,
+//       {
+//         code: authorizationCode,
+//       }
+//     );
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error fetching access token:', error);
+//     throw error;
+//   }
+// };
 
 export const createStudyRoom = async (user, roomInfo) => {
   try {
-    const response = await axios.post(`${VITE_API_URL}/studyRoom`, {
+    const response = await axios.post(`/studyRoom`, {
       studyRoomTitle: roomInfo.roomname,
       studyRoomPw: roomInfo.roompw,
       memberId: user, // 방장 아이디(host)
@@ -39,7 +40,7 @@ export const createStudyRoom = async (user, roomInfo) => {
 
 export const detailStudyRoom = async (path) => {
   try {
-    const response = await axios.get(`${VITE_API_URL}/studyRoom/${path}`);
+    const response = await axios.get(`/studyRoom/${path}`);
     return response.data;
   } catch (error) {
     console.log('room detail get error : ' + error);
@@ -48,7 +49,8 @@ export const detailStudyRoom = async (path) => {
 
 export const loadRoomList = async () => {
   try {
-    const response = await axios.get(`${VITE_API_URL}/studyRoom`);
+    await Axios.post;
+    const response = await axios.get(`/studyRoom`);
     return response;
   } catch (error) {
     console.log('list error : ', error);
@@ -57,7 +59,7 @@ export const loadRoomList = async () => {
 
 export const searchByStudyRoomName = async (studyRoomTitle) => {
   try {
-    const response = axios.get(`${VITE_API_URL}/studyRoom/${studyRoomTitle}`);
+    const response = axios.get(`/studyRoom/${studyRoomTitle}`);
     return response;
   } catch (error) {
     console.log('searchByStudyRoomTitle error : ' + error);
@@ -67,7 +69,7 @@ export const searchByStudyRoomName = async (studyRoomTitle) => {
 // 비밀번호가 틀렸을 때의 response를 RoomListItem으로 어떻게 가져오지?
 export const checkStudyRoomPW = async (studyRoomId, studyRoomPw) => {
   try {
-    const response = await axios.post(`${VITE_API_URL}/studyRoom/pwCheck`, {
+    const response = await axios.post(`/studyRoom/pwCheck`, {
       studyRoomId: studyRoomId,
       studyRoomPw: studyRoomPw,
     });
@@ -80,28 +82,47 @@ export const checkStudyRoomPW = async (studyRoomId, studyRoomPw) => {
 };
 
 // 평가 관련 함수
-export const submitEvaluate = async (evaluateInfo) => {
+// user oauth id도 입력값으로 받아오기
+export const submitEvaluate = async (evaluateInfo, studyRoomId) => {
   try {
-    const response = await axios.post(`${VITE_API_URL}/evaluation `, {
+    const response = await axios.post(`/evaluation `, {
       delivery: evaluateInfo.delivery,
       expression: evaluateInfo.expression,
       preparation: evaluateInfo.preparation,
       logic: evaluateInfo.logic,
       suitability: evaluateInfo.suitability,
-      memberId: 1234,
+      master: evaluateInfo.master, // 평가 주는 사람 : null 가능
+      // slave: evaluateInfo.slave, // 평가 당하는 사람
+      slave: 'testMember',
       commentContent: '',
-      isAnonymous: 0,
+      isAnonymous: evaluateInfo.isAnonymous,
+      studyRoomId: studyRoomId,
     });
   } catch (error) {
     console.log(error);
   }
 };
 
-export const takeMyEvaluate = async (userId) => {
+export const takeMyEvaluate = async (studyRoomId, userId) => {
   try {
-    const response = await axios.get(`${VITE_API_URL}/evaluation/${userId}`);
+    const response = await axios.post(`/evaluation/feedBack`, {
+      studyRoomId: studyRoomId,
+      oauthId: 'G123',
+    });
     return response;
   } catch (error) {
     console.log('take my evaluate info error : ' + error);
+  }
+};
+
+// 참가자 등록 api
+export const adminParticipants = async (studyRoomId, participants) => {
+  try {
+    const response = await axios.post(`/studyRoom/entry`, {
+      studyRoomId: studyRoomId,
+      nicknameList: participants,
+    });
+  } catch (error) {
+    console.log('admin participants error : ' + error);
   }
 };

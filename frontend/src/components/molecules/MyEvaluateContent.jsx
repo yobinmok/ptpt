@@ -2,54 +2,87 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { takeMyEvaluate } from '../../apis/room';
-// import { Radar } from 'react-chartjs-2';
-// import { Chart } from 'chart.js/auto';
-// import {
-//   Chart as ChartJS,
-//   RadialLinearScale,
-//   PointElement,
-//   LineElement,
-//   Filler,
-//   Tooltip,
-//   Legend,
-// } from 'chart.js';
-
-// ChartJS.register(Legend);
 
 const MyEvaluateContent = () => {
-  const [myEvaluate, setMyEvaluate] = useState();
-  const userId = useSelector((state) => state.user.data.oauth_id);
+  const [myEvaluate, setMyEvaluate] = useState({
+    delivery: 0,
+    expression: 0,
+    preparation: 0,
+    logic: 0,
+    suitability: 0,
+  });
+  const [myComment, setMyComment] = useState({
+    nickname: '',
+    commentContent: '',
+  });
+  // const userId = useSelector((state) => state.user.data.oauth_id);
+  const studyRoomId = useSelector((state) => state.room.roomId);
 
   // back-end response
   /*
   {
-    "evaluationId": 0,
-    "studyRoomId": 0,
-    "memberId": 0,
-    "delivery": 0,
-    "expression": 0,
-    "preparation": 0,
-    "logic": 0,
-    "suitability": 0
+    "evaluationId": 1,
+    "studyRoomId": 37,
+    "oauthId": null,
+    "delivery": 100,
+    "expression": 100,
+    "preparation": 100,
+    "logic": 100,
+    "suitability": 100,
+    "commentContent": "testContent",
+    "nickname": "testNickname",
+    "isAnonymous": 0
   }
   */
+  const getMyEval = async () => {
+    try {
+      const userId = 'G123';
+      const response = await takeMyEvaluate(studyRoomId, userId);
+      if (response && response.data) {
+        const {
+          delivery,
+          expression,
+          preparation,
+          logic,
+          suitability,
+          nickname,
+          commentContent,
+          anonymity, // 필요한가?
+        } = response.data;
+        setMyEvaluate({
+          delivery,
+          expression,
+          preparation,
+          logic,
+          suitability,
+        });
+        setMyComment({ nickname, commentContent });
+      }
+    } catch (error) {
+      console.log('get my evaluate error : ' + error);
+    }
+  };
 
-  useEffect(async () => {
-    // 해당 페이지가 렌더링되면, api를 통해 내 정보 바로 불러오기
-    // const response = await takeMyEvaluate(userId);
-    // console.log(myEvaluate);
-    // setMyEvaluate([...response]);
+  useEffect(() => {
+    getMyEval();
   }, []);
 
   return (
     <div>
       <p>내 평가</p>
-      {/* 평가 항목을 그래프로 보여주기
-        코멘트 모아서 보여주기
-        - 익명이면, 그냥 보여주고
-        - 공개면, 이름과 함께 보여주기 -> 현재 반환되는 값이 id인데, 이름과 보여주려면 api 호출이 또 필요
-            - 따라서 반환을 id가 아닌 이름이나 별명?
-     */}
+      <div>
+        <h3>평가 점수</h3>
+        <p>Delivery: {myEvaluate.delivery}</p>
+        <p>Expression: {myEvaluate.expression}</p>
+        <p>Preparation: {myEvaluate.preparation}</p>
+        <p>Logic: {myEvaluate.logic}</p>
+        <p>Suitability: {myEvaluate.suitability}</p>
+      </div>
+      <div>
+        <h3>코멘트</h3>
+        <p>Nickname: {myComment.nickname}</p>
+        <p>Comment: {myComment.commentContent}</p>
+      </div>
     </div>
   );
 };

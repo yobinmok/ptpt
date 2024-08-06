@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import Sidebar from '../../components/organisms/Sidebar';
+import MultiSidebar from '../../components/organisms/MultiSidebar';
 import SideTab from '../../components/organisms/SideTab';
 import VideoRoomComponent from '../room/openVidu/VideoRoomComponent';
 import PersonIcon from '@mui/icons-material/Person';
@@ -98,7 +98,7 @@ const MultiPage = () => {
           // isSidebarOpen={isSidebarOpen}
         />
         {/* 우측 고정된 세로탭 */}
-        <Sidebar
+        <MultiSidebar
           tabItem={tabItem}
           handleTabClick={handleTabClick}
           // selectedTab={selectedTab}
