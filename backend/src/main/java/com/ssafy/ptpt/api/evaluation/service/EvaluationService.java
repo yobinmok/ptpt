@@ -25,6 +25,7 @@ public class EvaluationService {
     private final EvaluationRepository evaluationRepository;
     private final StatisticRepository statisticRepository;
     private final StudyRoomRepository studyRoomRepository;
+    private final EntryListRepository entryListRepository;
     private final JPAQueryFactory jpaQueryFactory;
     //test
     private final MemberRepository memberRepository;
@@ -33,58 +34,54 @@ public class EvaluationService {
     // 평가 등록
     @Transactional
     public Long createEvaluation(EvaluationCreateRequest evaluationCreateRequest) {
-        // 평가를 등록할때 통계 테이블 업데이트 -> 해당 맴버의 데이터가 있는지 조회 먼저
-        // 평가한 사람이 있는 member 임
-        Member member = memberRepository.findByOauthId(evaluationCreateRequest.getOauthId());
+        // 발표한 사람의 정보를 알아야함
+        Member slave = memberRepository.findByNickname(evaluationCreateRequest.getSlave());
 
-        StudyRoom studyRoom = studyRoomRepository.findByStudyRoomId(evaluationCreateRequest.getStudyRoomId());
+        // 현재 사용자가 참가중인 스터디 방을 알아야지 어떻게? 참가자 리스트를 확인해서
+        // 스터디 룸이 종료가 된다면 참가자 리스트를 관리하기 때문에 참여한 멤버는 1명만 조회될 예정
+        Long studyRoomId = entryListRepository.findStudyRoomIdByMemberId(slave.getMemberId());
+        StudyRoom studyRoom = studyRoomRepository.findByStudyRoomId(studyRoomId);
 
-        // 발표한사람의 memberId
-        Long presentationHost = studyRoom.getPresentationHost();
-        
-        // 발표한 사람의 닉네임을 얻어오자
-        Optional<Member> presentationHostMember = memberRepository.findById(presentationHost);
 
-        if (presentationHostMember.isPresent()) {
-            Evaluation evaluation = new Evaluation(
-                    studyRoom,
-                    evaluationCreateRequest.getDelivery(),
-                    evaluationCreateRequest.getExpression(),
-                    evaluationCreateRequest.getPreparation(),
-                    evaluationCreateRequest.getLogic(),
-                    evaluationCreateRequest.getSuitability(),
-                    presentationHostMember.get().getNickname(),
-                    member
-            );
+        // 발표한 사람의 평가를 입력하는 로직
+        Evaluation evaluation = new Evaluation(
+                studyRoom,
+                evaluationCreateRequest.getDelivery(),
+                evaluationCreateRequest.getExpression(),
+                evaluationCreateRequest.getPreparation(),
+                evaluationCreateRequest.getLogic(),
+                evaluationCreateRequest.getSuitability(),
+                slave.getNickname(),
+                slave);
 
             evaluationRepository.save(evaluation);
+
             // 코멘트 등록 로직
-            Comment comment = new Comment(evaluation,
-                    member.getNickname(),
+            // 평가하는 사람의 값이 필요함
+        Member master = memberRepository.findByNickname(evaluationCreateRequest.getSlave());
+        Comment comment = new Comment(evaluation,
+                master.getNickname(),
                     evaluationCreateRequest.getCommentContent(),
                     evaluationCreateRequest.getAnonymity());
 
-            commentRepository.save(comment);
+        commentRepository.save(comment);
 
-            Statistic statistic = statisticRepository.findByOauthId(member.getMemberId());
-            // 데이터가 없다면 통계 테이블에 값 삽입
-            if (statistic == null) {
-                statistic = new Statistic();
-                statistic.createStatistic(evaluation);
-                // 평가 등록 처리
-                statisticRepository.save(statistic);
-            } else {
-                // 데이터가 있다면 업데이트 처리
-                // 유저 정보에 매칭되는 통계값을 가져오자
+        Statistic statistic = statisticRepository.findByOauthId(master.getMemberId());
+        // 데이터가 없다면 통계 테이블에 값 삽입
+        if (statistic == null) {
+            statistic = new Statistic();
+            statistic.createStatistic(evaluation);
+            // 평가 등록 처리
+            statisticRepository.save(statistic);
+        } else {
+            // 데이터가 있다면 업데이트 처리
+            // 유저 정보에 매칭되는 통계값을 가져오자
 
-                // 평가 값을 더해서 업데이트를 진행햐지
-                statistic.updateStatistic(evaluation);
+            // 평가 값을 더해서 업데이트를 진행햐지
+            statistic.updateStatistic(evaluation);
 
-            }
-            return evaluation.getEvaluationId();
-        }else{
-            throw new NotFoundException(NotFoundException.MEMBER_NOT_FOUND);
         }
+        return evaluation.getEvaluationId();
     }
 
     // 평가 전체 조회
