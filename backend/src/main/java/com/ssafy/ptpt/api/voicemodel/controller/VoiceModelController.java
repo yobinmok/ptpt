@@ -32,12 +32,6 @@ public class VoiceModelController {
     @Value("${external.api.train}")
     private String externalApiTrain;
 
-    @Value("${external.api.select}")
-    private String externalApiSelect;
-
-    @Value("${external.api.train}")
-    private String externalApiConvert;
-
     // 추후 설정파일로 이동 및 경로 변경 필!
     @Value("${audioFile.path}")
     private String UPLOAD_PATH;
