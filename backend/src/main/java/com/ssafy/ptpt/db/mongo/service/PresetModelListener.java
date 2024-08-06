@@ -1,4 +1,4 @@
-package com.ssafy.ptpt.db.mongo;
+package com.ssafy.ptpt.db.mongo.service;
 
 import com.ssafy.ptpt.db.mongo.entity.Preset;
 import lombok.RequiredArgsConstructor;

@@ -19,9 +19,8 @@ public class PresetController {
     @Operation(summary = "프리셋 등록")
     public ResponseEntity<?> createPreset(){
         System.out.println("몽고디비 테스트 전");
-        presetService.saveUser();
+//        presetService.savePreset();
 
-        presetService.getUser();
         System.out.println("몽고디비 테스트 완");
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
