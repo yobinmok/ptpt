@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Button, Box, Divider } from '@mui/material';
 import CustomSelect from '../../molecules/CustomSelect';
 import CustomSlider from '../../molecules/CustomSlider';
 import { useSelector, useDispatch } from 'react-redux';
+import { base64ToBlob } from '../../../hooks/voice';
+import { textToSpeechApi, uploadAudioApi } from '../../../apis/voice';
 import {
   registerGuideline,
   updateVoiceSetting,
 } from '../../../store/actions/solo';
-import { base64ToBlob } from '../../../hooks/voice';
-import { textToSpeechApi } from '../../../apis/voice';
 
 const VoiceTab = () => {
   const dispatch = useDispatch();
@@ -34,6 +34,34 @@ const VoiceTab = () => {
     tone: 0,
   });
 
+  const uploadAudio = (audioContent) => {
+    return new Promise((resolve, reject) => {
+      const now = new Date();
+      const timestamp = now
+        .toISOString()
+        .replace(/[^0-9]/g, '')
+        .slice(0, 14);
+
+      const audioBlob = base64ToBlob(audioContent, 'wav');
+      const formData = new FormData();
+      formData.append('audio', audioBlob, `audio_${timestamp}.wav`);
+      formData.append('fileName', soloPreset.voiceModel[4]);
+
+      uploadAudioApi(
+        formData,
+        ({ data }) => {
+          console.log('성공');
+          console.log(data);
+          resolve(data); // Promise를 성공으로 마치고 resultAudioBlob을 반환
+        },
+        () => {
+          console.log('실패');
+          reject('업로드 실패'); // Promise를 실패로 마침
+        }
+      );
+    });
+  };
+
   const textToSpeech = (registerFlag) => {
     const text = soloPreset.script[scriptIdx].content;
     param.voice.name = soloPreset.voiceModel[voiceSetting.current.model];
@@ -50,6 +78,9 @@ const VoiceTab = () => {
       // 내 음성모델을 고른 경우
       // 하단에서 tts 음성파일(.wav) 생성 -> infer 후 output 생성
       // 후 그 파일 play......?..........(10초 이상 걸릴 듯)
+
+      // 성별, 높낮이에 따라 음성 선택해야 함.
+      param.voice.name = soloPreset.voiceModel[1];
     }
 
     textToSpeechApi(
@@ -58,12 +89,35 @@ const VoiceTab = () => {
         let audioBlob = base64ToBlob(data.audioContent, 'wav');
         // data.audioContent 값을 가이드라인에 저장하고 재생할 때는 아래처럼 url로 변환하기
         if (registerFlag) {
-          dispatch(registerGuideline(scriptIdx, data.audioContent));
+          // 가이드라인 등록
+          if (voiceSetting.current.model === 4) {
+            uploadAudio(data.audioContent)
+              .then((base64) => {
+                dispatch(registerGuideline(scriptIdx, base64));
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
           dispatch(updateVoiceSetting(scriptIdx, voiceSetting.current));
         } else {
-          var audioFile = new Audio();
-          audioFile.src = window.URL.createObjectURL(audioBlob);
-          audioFile.play();
+          // 가이드라인 재생
+          if (voiceSetting.current.model === 4) {
+            uploadAudio(data.audioContent)
+              .then((base64) => {
+                audioBlob = base64ToBlob(base64, 'wav');
+                var audioFile = new Audio();
+                audioFile.src = window.URL.createObjectURL(audioBlob);
+                audioFile.play();
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          } else {
+            var audioFile = new Audio();
+            audioFile.src = window.URL.createObjectURL(audioBlob);
+            audioFile.play();
+          }
         }
       },
       (res) => {
