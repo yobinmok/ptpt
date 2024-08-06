@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberIdRequest {
+public class MemberOauthIdRequest {
 
     @NotNull
     private String oauthId;

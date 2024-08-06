@@ -21,10 +21,6 @@ public class Profile {
     private Long profileId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "voicemodel_id")
-    private VoiceModel voiceModel;
-
-    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "statistic_id")
     private Statistic statistic;
 
