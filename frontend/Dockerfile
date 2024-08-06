@@ -2,6 +2,8 @@ FROM node:16 AS build
 
 WORKDIR /src
 
+RUN rm -rf /src/*
+
 COPY package.json .
 
 
@@ -36,7 +38,11 @@ COPY . .
 # CMD [ "npm", "start" ]
 CMD [ "npm", "run", "build" ]
 
+FROM node:18-alpine
+
+WORKDIR /react_build
+
 # 내부의 모든내용 삭제
 RUN rm -rf /react_build/*
 
-COPY --from=build dist /react_build
+COPY --from=build /src/dist ./
