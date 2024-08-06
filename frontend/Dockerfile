@@ -39,7 +39,8 @@ COPY . .
 
 # CMD [ "npm" , "run", "dev" ]
 # CMD [ "npm", "start" ]
-CMD [ "npm", "run", "build" ]
+# CMD [ "npm", "run", "build" ]
+RUN npm run build
 
 RUN ls
 
