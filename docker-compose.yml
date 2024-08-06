@@ -5,6 +5,8 @@ services:
     image: ptpt-dev-backend:latest
     container_name: ptpt-dev-backend
     # restart: unless-stopped
+    # environment:
+    #   JENKINS_OPTS: --prefix=/jenkins
     ports:
     # 임시로 8081할당
       - 8081:8080
