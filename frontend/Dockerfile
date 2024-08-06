@@ -29,7 +29,7 @@ WORKDIR /react_build
 # 내부의 모든내용 삭제
 RUN rm -rf /react_build/*
 
-COPY --from=build /react/dist /react_build
+COPY --from=build /react_build /react/dist
 
 RUN ls
 RUN pwd
