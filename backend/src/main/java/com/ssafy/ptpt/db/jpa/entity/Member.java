@@ -1,10 +1,7 @@
 package com.ssafy.ptpt.db.jpa.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -14,6 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,30 +22,29 @@ public class Member {
     private String memberPicture;
     private String oauthProvider;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "oauth_id", nullable = false, unique = true)
     private String oauthId;
     private String oauthEmail;
     private Timestamp registerTime;
     private int isWithdraw;
     private Timestamp withdrawTime;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id")
-    private Profile profile;
-
     private int memberReportCount;
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Profile profile;
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Role role;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member")
     private List<Evaluation> evaluation;
 
     public Member(String oauthId) {
         this.oauthId = oauthId;
     }
 
-    public Member(String nickname, String memberPicture, String oauthProvider, String oauthId, String oauthEmail, Timestamp registerTime, int isWithdraw, Timestamp withdrawTime, Profile profile, Role role, List<Evaluation> evaluation) {
+    public Member(String nickname, String memberPicture, String oauthProvider, String oauthId, String oauthEmail, Timestamp registerTime, int isWithdraw, Timestamp withdrawTime, Role role, List<Evaluation> evaluation) {
         this.nickname = nickname;
         this.memberPicture = memberPicture;
         this.oauthProvider = oauthProvider;
@@ -56,7 +53,6 @@ public class Member {
         this.registerTime = registerTime;
         this.isWithdraw = isWithdraw;
         this.withdrawTime = withdrawTime;
-        this.profile = profile;
         this.role = role;
         this.evaluation = evaluation;
     }

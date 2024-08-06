@@ -23,8 +23,10 @@ export const DeleteDialog = ({ open, handleClose, deleteAction }) => {
             paddingTop: '40px',
           }}
         >
-          <div>정말로 이 데이터를 삭제하시겠습니까? </div>
-          <div>이 작업은 되돌릴 수 없습니다.</div>
+          <div>스크립트를 삭제하면 해당 스크립트에 </div>
+          <div>등록되어 있는 가이드라인도 모두 삭제됩니다.</div>
+          <br></br>
+          <div>계속 진행하시겠습니까?</div>
         </DialogContent>
         <DialogActions
           sx={{

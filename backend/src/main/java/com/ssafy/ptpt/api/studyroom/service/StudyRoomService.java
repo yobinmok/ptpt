@@ -1,12 +1,10 @@
 package com.ssafy.ptpt.api.studyroom.service;
 
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomStatusRequest;
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomConnectRequest;
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomCreateRequest;
-import com.ssafy.ptpt.api.studyroom.request.StudyRoomUpdateRequest;
+import com.ssafy.ptpt.api.studyroom.request.*;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomInfoResponse;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomListResponse;
 import com.ssafy.ptpt.db.jpa.entity.EntryList;
+import com.ssafy.ptpt.db.jpa.entity.Member;
 import com.ssafy.ptpt.db.jpa.entity.StudyRoom;
 import com.ssafy.ptpt.db.jpa.repository.EntryListRepository;
 import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
@@ -19,13 +17,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 @Slf4j
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class StudyRoomService {
     private final StudyRoomRepository studyRoomRepository;
@@ -43,9 +42,9 @@ public class StudyRoomService {
     }
 
     // 사용자 방 조회
-    public List<StudyRoomInfoResponse> findByOauthId(String oauthId) {
+    public List<StudyRoomInfoResponse> findByMemberId(Long memberId) {
         // 아이디를 통해 정보를 조회해온다
-        List<StudyRoom> studyRoom = studyRoomRepository.findByOauthId(oauthId);
+        List<StudyRoom> studyRoom = studyRoomRepository.findByMemberId(memberId);
         return studyRoom.stream()
                 .map(StudyRoomInfoResponse::from)
                 .collect(Collectors.toList());
@@ -72,7 +71,7 @@ public class StudyRoomService {
     //방 생성
     @Transactional
     public Long createStudyRoom(StudyRoomCreateRequest studyRoomCreateRequest) {
-        memberRepository.findByOauthId(studyRoomCreateRequest.getOauthId());
+        memberRepository.findById(studyRoomCreateRequest.getMemberId());
 
 
 
@@ -84,14 +83,14 @@ public class StudyRoomService {
                                     , studyRoomCreateRequest.getSubject()
                                     , studyRoomCreateRequest.getDescription()
                                     , studyRoomCreateRequest.getAnonymity()
-                                    , studyRoomCreateRequest.getOauthId()
+                                    , studyRoomCreateRequest.getMemberId()
                                     , "스터디룸 코드값 추가 예정"
-                                    , studyRoomCreateRequest.getOauthId());
+                                    , studyRoomCreateRequest.getMemberId());
 
         studyRoomRepository.save(studyRoom);
 
         // 방 생성될때는 호스트만 참가자
-        EntryList entryList = new EntryList(studyRoom ,studyRoom.getOauthId());
+        EntryList entryList = new EntryList(studyRoom.getStudyRoomId() ,studyRoom.getMemberId());
         entryListRepository.save(entryList);
         return studyRoom.getStudyRoomId();
     }
@@ -121,7 +120,7 @@ public class StudyRoomService {
         StudyRoom findStudyRoom = studyRoomRepository.findById(studyRoomConnectRequest.getStudyRoomId())
                 .orElseThrow(() -> new NotFoundException(NotFoundException.STUDY_ROOM_NOT_FOUND));
 
-        if (!passwordEncoder.matches(studyRoomConnectRequest.getStudyRoomPw(), findStudyRoom.getStudyRoomPw())) {
+        if (!studyRoomConnectRequest.getStudyRoomPw().equals(findStudyRoom.getStudyRoomPw())) {
             throw new NotMatchException(NotMatchException.PW_NOT_MATCH);
         }
     }
@@ -129,14 +128,41 @@ public class StudyRoomService {
     //스터디룸 호스트가 발표자 지정
     @Transactional
     public int presentatorAssignation(StudyRoomStatusRequest studyRoomStatusRequest) {
+        Member member = memberRepository.findByOauthId(studyRoomStatusRequest.getOauthId());
         return studyRoomRepository.updatePresentatorAssignation(studyRoomStatusRequest.getStudyRoomId()
-        , studyRoomStatusRequest.getOauthId());
+        , member.getMemberId());
     }
 
     // 스터디룸 퇴장
     @Transactional
     public int studyRoomExit(StudyRoomStatusRequest studyRoomStatusRequest) {
+        Member member = memberRepository.findByOauthId(studyRoomStatusRequest.getOauthId());
+        StudyRoom studyRoom = studyRoomRepository.findByStudyRoomIdAndMemberId(studyRoomStatusRequest.getStudyRoomId(),
+                member.getMemberId());
         return studyRoomRepository.deleteByStudyRoomIdAndOauthId(studyRoomStatusRequest.getStudyRoomId()
-                , studyRoomStatusRequest.getOauthId());
+                , studyRoom.getMemberId());
+    }
+
+    // 스터디룸 입장 참가자 저장
+    public void studyRoomEntryRegister(StudyRoomCreateEntryRequest studyRoomCreateEntryRequest) {
+        List<String> nicknameList = studyRoomCreateEntryRequest.getNicknameList();
+        System.out.println(nicknameList.toString());
+        List<EntryList> entryList = new ArrayList<>();
+        for (String nickname : nicknameList) {
+            Member member = memberRepository.findByNickname(nickname);
+            EntryList entry = new EntryList(studyRoomCreateEntryRequest.getStudyRoomId(),
+                                                member.getMemberId());
+            entryList.add(entry);
+        }
+
+        entryListRepository.saveAll(entryList);
+    }
+
+    public void clearEntryList(StudyRoomClearRequest studyRoomClearRequest) {
+        // 상태 변경 로직
+        studyRoomRepository.studyRoomStatusChange(studyRoomClearRequest.getStudyRoomId());
+
+        // 삭제 로직
+        entryListRepository.deleteByStudyRoomId(studyRoomClearRequest.getStudyRoomId());
     }
 }

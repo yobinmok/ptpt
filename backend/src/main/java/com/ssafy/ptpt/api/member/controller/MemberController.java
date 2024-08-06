@@ -2,9 +2,9 @@ package com.ssafy.ptpt.api.member.controller;
 
 import com.google.gson.JsonParser;
 import com.ssafy.ptpt.api.member.request.MemberIdRequest;
-import com.ssafy.ptpt.api.member.service.MemberService;
 import com.ssafy.ptpt.api.member.request.MemberUpdateRequest;
 import com.ssafy.ptpt.api.member.response.MemberProfileResponse;
+import com.ssafy.ptpt.api.member.service.MemberService;
 import com.ssafy.ptpt.api.security.model.request.AccessTokenRequestBody;
 import com.ssafy.ptpt.api.security.model.request.AuthorizationCodeRequestBody;
 import com.ssafy.ptpt.api.security.model.response.BaseResponseBody;
@@ -22,7 +22,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -66,7 +65,7 @@ public class MemberController {
 
         Member member = memberService.saveMember(oauthId);
         if(member != null){
-            memberService.saveProfile(member.getMemberId(), member.getOauthId());
+            memberService.saveProfile(member);
             return ResponseEntity.ok(TokenResponseBody.of(200, "Success", tokenString, oauthId));
         }else{
             return ResponseEntity.ok(TokenResponseBody.of(200, "Existing Member", tokenString, oauthId));
@@ -129,7 +128,7 @@ public class MemberController {
 
         Member member = memberService.saveMember(oauthId);
         if(member != null){
-            memberService.saveProfile(member.getMemberId(), member.getOauthId());
+            memberService.saveProfile(member);
             return ResponseEntity.ok(TokenResponseBody.of(200, "Success", accessToken, oauthId));
         }else{
             return ResponseEntity.ok(TokenResponseBody.of(200, "Existing Member", accessToken, oauthId));
@@ -235,8 +234,13 @@ public class MemberController {
         return complete == 1 ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
+
     // 프로필 조회
-    @GetMapping("/profile")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+    })
+    @PostMapping("/profile")
     @Operation(summary = "프로필 조회")
     public ResponseEntity<MemberProfileResponse> findUserProfile(@RequestBody @Valid MemberIdRequest memberIdRequest) {
         MemberProfileResponse memberProfile = memberService.findMemberProfile(memberIdRequest.getOauthId());
@@ -253,14 +257,28 @@ public class MemberController {
      * else 신고횟수 누적++
      *
      */
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+    })
     @PostMapping("/report")
     @Operation(summary = "유저 신고")
     public ResponseEntity<Void> memberReport(@RequestBody @Valid MemberIdRequest memberIdRequest) {
-//        return ResponseEntity.ok().body();
         memberService.memberReport(memberIdRequest);
-        return null;
+        return ResponseEntity.ok().build();
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+    })
+    @GetMapping("/{nickname}")
+    @Operation(summary = "닉네임 중복 체크")
+    public ResponseEntity<String> nicknameDuplicateCheck(@PathVariable("nickname") String nickname) {
+        return (memberService.nicknameDuplicateCheck(nickname) == null)
+                ? ResponseEntity.ok().body("입력한 닉네임 사용 가능.")
+                : ResponseEntity.badRequest().body("입력한 닉네임이 이미 사용 중입니다.");
+    }
 
 
 }

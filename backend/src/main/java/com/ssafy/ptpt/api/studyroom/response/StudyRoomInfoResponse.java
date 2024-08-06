@@ -1,33 +1,28 @@
 package com.ssafy.ptpt.api.studyroom.response;
 
-import com.ssafy.ptpt.db.jpa.entity.EntryList;
 import com.ssafy.ptpt.db.jpa.entity.StudyRoom;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyRoomInfoResponse {
     private Long studyRoomId;
     private String studyRoomTitle;
-    private List<EntryList> entryList;
     private String studyRoomCode;
     private String studyRoomPw;
-    private String oauthId;
-    private String presentationHost;
+    private Long memberId;
+    private Long presentationHost;
 
     public static StudyRoomInfoResponse from(StudyRoom studyRoom){
         StudyRoomInfoResponse studyRoomInfoResponse = new StudyRoomInfoResponse();
         studyRoomInfoResponse.studyRoomId = studyRoom.getStudyRoomId();
         studyRoomInfoResponse.studyRoomTitle = studyRoom.getStudyRoomTitle();
-        studyRoomInfoResponse.entryList = studyRoom.getEntryList();
         studyRoomInfoResponse.studyRoomCode = studyRoom.getStudyRoomCode();
         studyRoomInfoResponse.studyRoomPw = studyRoom.getStudyRoomPw();
-        studyRoomInfoResponse.oauthId = studyRoom.getOauthId();
+        studyRoomInfoResponse.memberId = studyRoom.getMemberId();
         studyRoomInfoResponse.presentationHost = studyRoom.getPresentationHost();
 
         return studyRoomInfoResponse;

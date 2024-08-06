@@ -37,17 +37,30 @@ public class DataInitializer {
                 0,
                 time,
                 null,
-                null,
                 null
         );
         memberRepository.save(member);
+
+        Member member2 = new Member(
+                "testMember2",
+                "test2",
+                "Google2",
+                "G1234",
+                "test2@gmail.com",
+                time,
+                0,
+                time,
+                null,
+                null
+        );
+        memberRepository.save(member2);
 
         // Role 저장
         Role role = new Role(member, "admin");
         roleRepository.save(role);
 
         // Profile 저장
-        Profile profile = new Profile(member.getOauthId());
+        Profile profile = new Profile(member);
         profileRepository.save(profile);
 
         // statistic 저장
@@ -63,15 +76,15 @@ public class DataInitializer {
                 "테스트",
                 "test",
                 1,
-                member.getOauthId(),
+                member.getMemberId(),
                 "studyRoomCode",
-                member.getOauthId()
+                member.getMemberId()
         );
 
         studyRoom = studyRoomRepository.save(studyRoom);
 
         // entryList 저장
-        EntryList entryList = new EntryList(studyRoom, studyRoom.getOauthId());
+        EntryList entryList = new EntryList(studyRoom.getStudyRoomId(), studyRoom.getMemberId());
         entryListRepository.save(entryList);
 
         Comment comment1 = new Comment();
@@ -86,13 +99,14 @@ public class DataInitializer {
                 100,
                 100,
                 100,
-                100
+                100,
+                member.getNickname()
         );
         evaluationRepository.save(evaluation1);
 
         comment1.setEvaluation(evaluation1);
         comment1.setCommentContent("testContent");
-        comment1.setIsAnonymous(0);
+        comment1.setAnonymity(0);
         comment1.setNickname("testNickname");
 
         commentRepository.save(comment1);
@@ -106,18 +120,19 @@ public class DataInitializer {
                 studyRoom,
                 statistic,
                 comment2,
-                member,
+                member2,
                 90,
                 90,
                 90,
                 90,
-                90
+                90,
+                member2.getNickname()
         );
         evaluationRepository.save(evaluation2);
 
         comment2.setEvaluation(evaluation2);
         comment2.setCommentContent("testContent");
-        comment2.setIsAnonymous(0);
+        comment2.setAnonymity(0);
         comment2.setNickname("testNickname2");
         commentRepository.save(comment2);
 

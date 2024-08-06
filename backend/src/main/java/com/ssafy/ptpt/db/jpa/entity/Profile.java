@@ -20,27 +20,21 @@ public class Profile {
     @Column(name = "profile_id")
     private Long profileId;
 
-    private String oauthId;
-
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "voice_model_id")
+    @JoinColumn(name = "voicemodel_id")
     private VoiceModel voiceModel;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "statistic_id")
     private Statistic statistic;
 
-    @OneToOne(mappedBy = "profile")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private Member member;
 
     private Long presetId;
 
-    public Profile(Long profileId, String oauthId) {
-        this.profileId = profileId;
-        this.oauthId = oauthId;
-    }
-
-    public Profile(String oauthId) {
-        this.oauthId = oauthId;
+    public Profile(Member member) {
+        this.member = member;
     }
 }

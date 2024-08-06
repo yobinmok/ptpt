@@ -1,11 +1,16 @@
-// src/components/organisms/RoomListItem.jsx
-import { useState } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 import { Modal, Box, Button } from '@mui/material';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import LockIcon from '@mui/icons-material/Lock';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
+import { detailStudyRoom } from '../../apis/room';
+import { setRoomSession } from '../../store/actions/room';
+import { checkStudyRoomPW } from '../../apis/room';
+import axios from 'axios';
+const { VITE_API_URL } = import.meta.env;
 
-// src/components/organisms/RoomListItem.jsx
 const Card = styled.div`
   position: relative;
   width: calc(
@@ -44,33 +49,85 @@ const RoomSubject = styled.p`
 `;
 
 const RoomListItem = ({
-  roomName,
+  studyRoomTitle,
   subject,
   studyRoomId,
   isPublic,
   description,
-  startTime,
+  presentationTime,
+  anonymity,
+  studyRoomPw,
 }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [showModal, setShowModal] = useState(false);
   const [password, setPassword] = useState('');
+  const [roomInfo, setRoomInfo] = useState(null);
+  const [isJoinDisabled, setIsJoinDisabled] = useState(false);
 
   const handleOpen = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
-  console.log(roomName);
+
+  const handleJoin = async () => {
+    if (studyRoomPw === '') {
+      console.log('roomId');
+      console.log(studyRoomId);
+      const response = await detailStudyRoom(studyRoomId);
+      console.log('list item detail res : ' + response);
+      setRoomInfo(response);
+      navigate('/multi');
+      return;
+    } else {
+      console.log('id : ' + studyRoomId + ' pw : ' + password);
+      const response = await checkStudyRoomPW(studyRoomId, password);
+      console.log(response);
+      if (response.status == '200') {
+        const response = await detailStudyRoom(studyRoomId);
+        console.log('list item detail res : ' + response); // undefined
+        setRoomInfo(response);
+      } else {
+        alert('비밀번호 오류');
+        return;
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (roomInfo) {
+      const sessionData = {
+        sessionName: `Session${roomInfo.studyRoomId}`,
+        roomId: roomInfo.studyRoomId,
+      };
+      console.log('roominfo : ', roomInfo);
+      dispatch(setRoomSession(sessionData));
+      navigate('/room/detail');
+    }
+  }, [roomInfo]);
+
+  // 현재 시간이 생성 시간을 초과하면 참가 버튼 비활성화
+  useEffect(() => {
+    const currentTime = new Date();
+    const presentationDateTime = new Date(presentationTime);
+    if (currentTime > presentationDateTime) {
+      setIsJoinDisabled(true);
+    }
+  }, [presentationTime]);
+
   return (
     <>
       <Card onClick={handleOpen}>
         <CardImage>
-          {false ? (
+          {!isPublic ? (
             <LockOpenIcon style={{ position: 'absolute', top: 8, right: 8 }} />
           ) : (
             <LockIcon style={{ position: 'absolute', top: 8, right: 8 }} />
           )}
         </CardImage>
         <CardContent>
-          <RoomTitle>{roomName}</RoomTitle>
+          <RoomTitle>{studyRoomTitle}</RoomTitle>
           <RoomSubject>{subject}</RoomSubject>
-          <RoomSubject>{startTime}</RoomSubject>
+          <RoomSubject>{presentationTime}</RoomSubject>
         </CardContent>
       </Card>
       <Modal open={showModal} onClose={handleClose}>
@@ -87,11 +144,11 @@ const RoomListItem = ({
             p: 4,
           }}
         >
-          <h2>{roomName}</h2>
+          <h2>{studyRoomTitle}</h2>
           <p>{description}</p>
           <p>{subject}</p>
-          <p>{startTime}</p>
-          {!isPublic && (
+          <p>{presentationTime}</p>
+          {isPublic && (
             <div>
               <input
                 type='password'
@@ -101,6 +158,13 @@ const RoomListItem = ({
               />
             </div>
           )}
+          <Button
+            variant='contained'
+            onClick={handleJoin}
+            disabled={isJoinDisabled}
+          >
+            참가
+          </Button>
           <Button variant='contained' onClick={handleClose}>
             닫기
           </Button>

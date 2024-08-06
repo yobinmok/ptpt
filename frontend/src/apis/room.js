@@ -22,7 +22,7 @@ export const createStudyRoom = async (user, roomInfo) => {
     const response = await axios.post(`${VITE_API_URL}/studyRoom`, {
       studyRoomTitle: roomInfo.roomname,
       studyRoomPw: roomInfo.roompw,
-      memberId: 1234567, // 방장 아이디(host)
+      memberId: user, // 방장 아이디(host)
       isPublic: roomInfo.roomopen,
       presentationTime: roomInfo.roomtime,
       subject: roomInfo.roomtopic,
@@ -57,9 +57,51 @@ export const loadRoomList = async () => {
 
 export const searchByStudyRoomName = async (studyRoomTitle) => {
   try {
-    axios.get(`${VITE_API_URL}/studyRoom/${studyRoomTitle}`);
+    const response = axios.get(`${VITE_API_URL}/studyRoom/${studyRoomTitle}`);
     return response;
   } catch (error) {
     console.log('searchByStudyRoomTitle error : ' + error);
+  }
+};
+
+// 비밀번호가 틀렸을 때의 response를 RoomListItem으로 어떻게 가져오지?
+export const checkStudyRoomPW = async (studyRoomId, studyRoomPw) => {
+  try {
+    const response = await axios.post(`${VITE_API_URL}/studyRoom/pwCheck`, {
+      studyRoomId: studyRoomId,
+      studyRoomPw: studyRoomPw,
+    });
+    // console.log(response);
+    return response;
+  } catch (error) {
+    console.log('checkPW error : ' + error);
+    return error;
+  }
+};
+
+// 평가 관련 함수
+export const submitEvaluate = async (evaluateInfo) => {
+  try {
+    const response = await axios.post(`${VITE_API_URL}/evaluation `, {
+      delivery: evaluateInfo.delivery,
+      expression: evaluateInfo.expression,
+      preparation: evaluateInfo.preparation,
+      logic: evaluateInfo.logic,
+      suitability: evaluateInfo.suitability,
+      memberId: 1234,
+      commentContent: '',
+      isAnonymous: 0,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const takeMyEvaluate = async (userId) => {
+  try {
+    const response = await axios.get(`${VITE_API_URL}/evaluation/${userId}`);
+    return response;
+  } catch (error) {
+    console.log('take my evaluate info error : ' + error);
   }
 };

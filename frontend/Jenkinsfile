@@ -18,29 +18,30 @@ pipeline {
                 }
             }
         }
-        stage('Build') {
+        stage('Set .ENV File') {
             steps {
                 dir('frontend') {
                     withCredentials([file(credentialsId: 'ENV_FILE', variable: 'env_file')]) {
                         sh 'cp $env_file ./.env'
                     }
-                    // sh './gradlew clean build'
                 }
             }
         }
         stage('Build Docker Image') {
             steps {
                 script {
-                    def image = docker.build("ptpt-dev-frontend:latest", 'frontend/.')
-                    image.push()
+                    // def image = docker.build("ptpt-dev-frontend:latest", 'frontend/.')
+                    // image.push()
+                    sh 'docker build -t ptpt-dev-frontend:latest ./frontend'
                 }
             }
         }
         stage('Depoly') {
             steps {
                 script {
-                    // sh 'docker-compose down'
-                    sh 'docker-compose up -d frontend'
+                    sh 'docker-compose stop frontend || true'
+                    sh 'docker-compose rm -f frontend || true'
+                    sh 'docker-compose up frontend -d'
                 }
             }
         }
