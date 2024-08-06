@@ -24,6 +24,15 @@ import java.util.UUID;
 @RequestMapping("/voiceModel")
 public class VoiceModelController {
 
+    @Value("${external.api.train}")
+    private String externalApiTrain;
+
+    @Value("${external.api.select}")
+    private String externalApiSelect;
+
+    @Value("${external.api.train}")
+    private String externalApiConvert;
+
     @PostMapping()
     @Operation(summary = "음성모델 등록")
     public ResponseEntity<?> createVoiceModel(){
@@ -36,31 +45,9 @@ public class VoiceModelController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @Value("${planThumbFile.path}")
-    private String UPLOAD_PATH = "C:/Users/SSAFY/Desktop/src/ttsUpload";
-    //    MultipartFile: multipart/form-data 파일을 처리할 수 있도록 설계된 클래스
-    @PostMapping("/audio")
-    public ResponseEntity<?> getTtsVoice(@RequestPart(name="audio") MultipartFile audio) throws IOException {
-        if (audio.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File is empty");
-        }
-        String today = new SimpleDateFormat("yyMMdd").format(new Date());
-        String saveFolder = UPLOAD_PATH + File.separator + today;
-        File folder = new File(saveFolder);
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-        String originalFileName = audio.getOriginalFilename();
-        String saveFileName = UUID.randomUUID() + originalFileName.substring(originalFileName.lastIndexOf('.'));
-        audio.transferTo(new File(folder, saveFileName));
-        System.out.println(saveFolder);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
-
-//    @Value("${planThumbFile.preTrain}")
-    private String PRETRAIN_UPLOAD_PATH = "C:/Users/SSAFY/Desktop/src/preTrain";
-    //    MultipartFile: multipart/form-data 파일을 처리할 수 있도록 설계된 클래스
+    @Value("${audioFile.preTrain}")
+    private String PRETRAIN_UPLOAD_PATH;
     @PostMapping("/train")
     @Operation(summary = "음성모델 생성")
     public ResponseEntity<?> voiceModelTrain(@RequestPart(name="audio") MultipartFile audio) throws IOException {
@@ -89,14 +76,12 @@ public class VoiceModelController {
         try {
             for (int i = 0; i < 4; i++) {
                 String jsonPayload = createJsonPayload(folderPath);
-                ResponseEntity<String> response = callExternalApi(jsonPayload);
+                ResponseEntity<String> response = callExternalApi(jsonPayload, externalApiTrain);
 
-                // 응답을 받지 못한 경우
                 if (response == null || response.getStatusCode() != HttpStatus.OK) {
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process the request at step " + (i + 1));
                 }
 
-                // API 호출 응답에 따라 다음 호출 준비 (필요시 대기)
                 System.out.println("API call " + (i + 1) + " completed successfully.");
             }
         } catch (Exception e) {
@@ -119,7 +104,7 @@ public class VoiceModelController {
         dataNode.add(14);
         dataNode.add("rmvpe_gpu");
         dataNode.add(20);
-        dataNode.add(20);
+        dataNode.add(30);
         dataNode.add(3);
         dataNode.add("Yes");
         dataNode.add("assets/pretrained_v2/f0G40k.pth");
@@ -137,10 +122,9 @@ public class VoiceModelController {
         return rootNode.toString();
     }
 
-    @Value("${external.api.url}")
-    private String externalApiUrl;
 
-    private ResponseEntity<String> callExternalApi(String jsonPayload) {
+
+    private ResponseEntity<String> callExternalApi(String jsonPayload, String api) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -149,9 +133,8 @@ public class VoiceModelController {
         HttpEntity<String> requestEntity = new HttpEntity<>(jsonPayload, headers);
 
         try {
-            return restTemplate.exchange(externalApiUrl, HttpMethod.POST, requestEntity, String.class);
+            return restTemplate.exchange(api, HttpMethod.POST, requestEntity, String.class);
         } catch (Exception e) {
-            // 예외 처리
             e.printStackTrace();
             return null;
         }
