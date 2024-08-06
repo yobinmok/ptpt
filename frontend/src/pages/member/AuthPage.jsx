@@ -91,7 +91,7 @@ const AuthPage = () => {
         <UserInfoModal
           showModal={showModal}
           setShowModal={setShowModal}
-          handleSubmit={handleSubmit}
+          // handleSubmit={handleSubmit}
         />
       )}
     </div>

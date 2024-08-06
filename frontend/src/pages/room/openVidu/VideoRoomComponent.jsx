@@ -43,6 +43,7 @@ const StyledLayoutBounds = styled.div`
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080/';
+// process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080/';
 function withNavigation(Component) {
   return (props) => <Component navigate={useNavigate()} {...props} />;
 }
@@ -410,11 +411,11 @@ class VideoRoomComponent extends Component {
         },
         () => this.checkSomeoneShareScreen()
       );
-      // 여기서 api 호출해서 db에 저장하기
-      console.log('11111111111111111');
-      console.log(this.state.subscribers);
-
-      // dispatch(setParticipants())
+      // redux - participants에 사용자들 저장하기
+      // 사용자들이 들어올 때마다 저장됨
+      const nicknames = this.state.subscribers.map((user) => user.nickname);
+      nicknames.push(this.state.myUserName);
+      this.props.setParticipants(nicknames);
     });
   }
 
@@ -729,6 +730,20 @@ class VideoRoomComponent extends Component {
 const mapStateToProps = (state) => ({
   user: state.user.data,
   sessionInfo: state.room,
+  participants: state.participants,
 });
+
+// const mapDispatchToProps = (dispatch) => ({
+// setParticipants: (participants) => dispatch(setParticipants(participants)),
+// });
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setParticipants: (participants) => dispatch(setParticipants(participants)),
+  };
+};
+
 // export default VideoRoomComponent;
-export default connect(mapStateToProps)(withNavigation(VideoRoomComponent));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withNavigation(VideoRoomComponent));

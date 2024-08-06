@@ -30,7 +30,7 @@ function App() {
         <Route path='/auth/kakao' element={<KakaoAuthPage />} />
         <Route path='/practice' element={<PracticePage />} />
         <Route path='/solo' element={<SoloPage />} />
-        <Route path='/multi' element={<MultiPage />} />
+        <Route path='/multi/:roomId' element={<MultiPage />} />
         <Route path='/myinfo/*' element={<MyInfo />} />
         <Route path='/createroom' element={<CreateRoom />} />
         <Route path='/room/detail' element={<VideoRoomComponent />} />
