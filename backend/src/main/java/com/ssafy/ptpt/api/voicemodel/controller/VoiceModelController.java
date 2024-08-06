@@ -1,6 +1,10 @@
 package com.ssafy.ptpt.api.voicemodel.controller;
 
-//import io.swagger.annotations.ApiOperation;
+import com.ssafy.ptpt.api.voicemodel.service.VoiceModelService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.swagger.v3.oas.annotations.Operation;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,19 +13,20 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Mono;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.UUID;
+import org.springframework.web.client.RestTemplate;
+import java.util.Collections;
 
 @RestController
 @RequestMapping("/voiceModel")
+@RequiredArgsConstructor
 public class VoiceModelController {
 
     @Value("${external.api.train}")
@@ -38,11 +43,45 @@ public class VoiceModelController {
     public ResponseEntity<?> createVoiceModel(){
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+    // 추후 설정파일로 이동 및 경로 변경 필!
+    @Value("${audioFile.path}")
+    private String UPLOAD_PATH;
+    private final VoiceModelService voiceModelService;
 
-    @GetMapping("/{voiceModelId}")
-    @Operation(summary = "음성모델 조회")
-    public ResponseEntity<?> viewVoiceModel(@PathVariable String voiceModelId){
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PostMapping("/audio")
+    public Mono<ResponseEntity<String>> getTtsVoice(
+            @RequestPart(name = "audio") MultipartFile audio,
+            @RequestPart(name = "fileName") String fileName
+    )throws IOException {
+        if (audio.isEmpty()) {
+            return Mono.just(ResponseEntity.badRequest().body("파일이 비어있습니다."));
+        }
+
+        // 업로드 폴더 설정
+        String today = new SimpleDateFormat("yyMMdd").format(new Date());
+        String saveFolder = UPLOAD_PATH + File.separator + today;
+        File folder = new File(saveFolder);
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+
+        // 파일 저장
+        String originalFileName = audio.getOriginalFilename();
+        String saveFileName = UUID.randomUUID() + originalFileName.substring(originalFileName.lastIndexOf('.'));
+        String ttsPath = saveFolder + File.separator + saveFileName;
+        audio.transferTo(new File(folder, saveFileName));
+
+        // 비동기 처리 및 체이닝된 메서드 호출
+        System.out.println(ttsPath);
+        return voiceModelService.processVoiceConversion(fileName, ttsPath)
+                .map(response -> {
+                    System.out.println("base64 응답 성공!");
+                    return ResponseEntity.ok(response); // response가 일케 옴
+                })
+                .onErrorResume(error -> {
+                    System.err.println("오류: " + error.getMessage());
+                    return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("오류가 발생했습니다."));
+                });
     }
 
 

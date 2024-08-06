@@ -20,6 +20,10 @@ const theme = createTheme({
       main: '#76AE95',
       contrastText: '#fff',
     },
+    error: {
+      main: '#B32222',
+      contrastText: '#fff',
+    },
     neutral: {
       // 취소 버튼 색상
       main: '#9F9693',

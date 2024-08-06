@@ -6,6 +6,7 @@ const initialState = {
     'ko-KR-Standard-B',
     'ko-KR-Standard-C',
     'ko-KR-Standard-D',
+    'test1.pth', // 내 음성모델 불러오기
   ],
   studyRoomTitle: null,
   script: [],
