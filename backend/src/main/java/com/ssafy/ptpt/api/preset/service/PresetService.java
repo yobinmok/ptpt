@@ -23,7 +23,7 @@ public class PresetService {
 
     //  mongoDB 연결 테스트
     public void savePreset(Preset preset) {
-        Map<String, String> test = new HashMap<>();
+        Map<String, Object> test = new HashMap<>();
         test.put("이름", "홍길동");
         test.put("나이", "30");
         test.put("이메일", "hong@example.com");
@@ -31,7 +31,7 @@ public class PresetService {
 
 //        Preset preset = new Preset();
         preset.setPresetId(sequenceGeneratorService.generateSequence(Preset.SEQUENCE_NAME));
-        preset.setPresetName("java-w3schools@example.com");
+        preset.setPresetType("solo");
         preset.setJsonData(test);
         presetRepository.insert(preset);
 

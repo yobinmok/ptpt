@@ -1,6 +1,7 @@
 package com.ssafy.ptpt.api.preset.controller;
 
 //import io.swagger.annotations.ApiOperation;
+import com.ssafy.ptpt.api.preset.request.PresetCreateRequest;
 import com.ssafy.ptpt.api.preset.service.PresetService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class PresetController {
 
     @PostMapping()
     @Operation(summary = "프리셋 등록")
-    public ResponseEntity<?> createPreset(){
+    public ResponseEntity<?> createPreset(@RequestBody PresetCreateRequest presetCreateRequest){
         System.out.println("몽고디비 테스트 전");
 //        presetService.savePreset();
 
