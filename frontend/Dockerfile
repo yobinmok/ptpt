@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:16 AS build
 
 WORKDIR /src
 
@@ -30,7 +30,13 @@ RUN npm install --legacy-peer-deps
 
 COPY . .
 
-EXPOSE 5173
+# EXPOSE 5173
 
-CMD [ "npm" , "run", "dev" ]
+# CMD [ "npm" , "run", "dev" ]
 # CMD [ "npm", "start" ]
+CMD [ "npm", "run", "build" ]
+
+# 내부의 모든내용 삭제
+RUN rm -rf /react_build/*
+
+COPY --from=build dist /react_build

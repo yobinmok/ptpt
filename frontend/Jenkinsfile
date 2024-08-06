@@ -18,6 +18,15 @@ pipeline {
                 }
             }
         }
+
+        // stage('Install NPM') {
+        //     steps {
+        //         script {
+        //             sh 'apt-get install npm -y'
+        //         }
+        //     }
+        // }
+
         stage('Set .ENV File') {
             steps {
                 dir('frontend') {
@@ -30,8 +39,6 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // def image = docker.build("ptpt-dev-frontend:latest", 'frontend/.')
-                    // image.push()
                     sh 'docker build -t ptpt-dev-frontend:latest ./frontend'
                 }
             }
