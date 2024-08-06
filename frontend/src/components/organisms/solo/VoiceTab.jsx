@@ -74,11 +74,8 @@ const VoiceTab = () => {
         ? text
         : text.substring(0, 100);
 
+    // 내 음성모델을 고른 경우
     if (voiceSetting.current.model === 4) {
-      // 내 음성모델을 고른 경우
-      // 하단에서 tts 음성파일(.wav) 생성 -> infer 후 output 생성
-      // 후 그 파일 play......?..........(10초 이상 걸릴 듯)
-
       // 성별, 높낮이에 따라 음성 선택해야 함.
       param.voice.name = soloPreset.voiceModel[1];
     }
@@ -86,8 +83,6 @@ const VoiceTab = () => {
     textToSpeechApi(
       param,
       ({ data }) => {
-        let audioBlob = base64ToBlob(data.audioContent, 'wav');
-        // data.audioContent 값을 가이드라인에 저장하고 재생할 때는 아래처럼 url로 변환하기
         if (registerFlag) {
           // 가이드라인 등록
           if (voiceSetting.current.model === 4) {
@@ -105,7 +100,7 @@ const VoiceTab = () => {
           if (voiceSetting.current.model === 4) {
             uploadAudio(data.audioContent)
               .then((base64) => {
-                audioBlob = base64ToBlob(base64, 'wav');
+                let audioBlob = base64ToBlob(base64, 'wav');
                 var audioFile = new Audio();
                 audioFile.src = window.URL.createObjectURL(audioBlob);
                 audioFile.play();
@@ -114,6 +109,7 @@ const VoiceTab = () => {
                 console.log(error);
               });
           } else {
+            let audioBlob = base64ToBlob(data.audioContent, 'wav');
             var audioFile = new Audio();
             audioFile.src = window.URL.createObjectURL(audioBlob);
             audioFile.play();
