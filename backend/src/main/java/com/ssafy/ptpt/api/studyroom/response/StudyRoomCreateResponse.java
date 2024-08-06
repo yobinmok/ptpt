@@ -3,6 +3,7 @@ package com.ssafy.ptpt.api.studyroom.response;
 import lombok.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyRoomCreateResponse {
