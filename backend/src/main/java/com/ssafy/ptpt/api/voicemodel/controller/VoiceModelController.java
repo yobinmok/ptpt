@@ -61,8 +61,9 @@ public class VoiceModelController {
 //    @Value("${planThumbFile.preTrain}")
     private String PRETRAIN_UPLOAD_PATH = "C:/Users/SSAFY/Desktop/src/preTrain";
     //    MultipartFile: multipart/form-data 파일을 처리할 수 있도록 설계된 클래스
-    @PostMapping("/preTrainAudio")
-    public ResponseEntity<?> getPreTrainVoice(@RequestPart(name="audio") MultipartFile audio) throws IOException {
+    @PostMapping("/train")
+    @Operation(summary = "음성모델 생성")
+    public ResponseEntity<?> voiceModelTrain(@RequestPart(name="audio") MultipartFile audio) throws IOException {
         if (audio.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File is empty");
         }
