@@ -38,11 +38,6 @@ public class VoiceModelController {
     @Value("${external.api.train}")
     private String externalApiConvert;
 
-    @PostMapping()
-    @Operation(summary = "음성모델 등록")
-    public ResponseEntity<?> createVoiceModel(){
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
     // 추후 설정파일로 이동 및 경로 변경 필!
     @Value("${audioFile.path}")
     private String UPLOAD_PATH;
@@ -96,13 +91,13 @@ public class VoiceModelController {
 
         // 1. 원본 파일 (PRETRAIN DATA) 저장
         String today = new SimpleDateFormat("yyMMdd").format(new Date());
-        String saveFolder = PRETRAIN_UPLOAD_PATH + File.separator + today;
+        String saveFolder = PRETRAIN_UPLOAD_PATH;
         File folder = new File(saveFolder);
         if (!folder.exists()) {
             folder.mkdirs();
         }
         String originalFileName = audio.getOriginalFilename();
-        String saveFileName = UUID.randomUUID() + originalFileName.substring(originalFileName.lastIndexOf('.'));
+        String saveFileName = "preTrainAudio.mp3";
         File originalFile = new File(folder, saveFileName);
         audio.transferTo(originalFile);
         System.out.println(saveFolder);
@@ -135,15 +130,15 @@ public class VoiceModelController {
         ObjectNode rootNode = mapper.createObjectNode();
 
         ArrayNode dataNode = mapper.createArrayNode();
-        dataNode.add("memberVoiceModel");
+        dataNode.add("memberVoiceModel5");
         dataNode.add("40k");
         dataNode.add("true");
         dataNode.add(folderPath);
         dataNode.add(0);
         dataNode.add(14);
         dataNode.add("rmvpe_gpu");
-        dataNode.add(20);
-        dataNode.add(30);
+        dataNode.add(30); //이 값 만큼의 epoch마다 저장됨 (학습 횟수보다 큰 값으로 설정).
+        dataNode.add(3); //학습 횟수
         dataNode.add(3);
         dataNode.add("Yes");
         dataNode.add("assets/pretrained_v2/f0G40k.pth");
