@@ -1,9 +1,6 @@
 package com.ssafy.ptpt.db.jpa.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +16,11 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 public class VoiceModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "voice_model_id")
     private Long voiceModelId;
 
     private String voiceModelPath;
+
+    @OneToOne(mappedBy = "voiceModel",cascade = CascadeType.ALL)
+    private Profile profile;
 }

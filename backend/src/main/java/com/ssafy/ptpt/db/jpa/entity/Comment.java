@@ -15,15 +15,24 @@ import lombok.Setter;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id")
     private Long commentId;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
-
-    @ManyToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "evaluation_id")
     private Evaluation evaluation;
 
+    // 평가를 당한사람
+    private String nickname;
+
     private String commentContent;
+
+    private int anonymity;
+
+    public Comment(Evaluation evaluation, String nickname, String commentContent, int anonymity) {
+        this.evaluation = evaluation;
+        this.nickname = nickname;
+        this.commentContent = commentContent;
+        this.anonymity = anonymity;
+    }
 }

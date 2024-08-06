@@ -8,12 +8,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EvaluationCreateRequest {
+
+    private Long studyRoomId;
     private int delivery;
     private int expression;
     private int preparation;
     private int logic;
     private int suitability;
-    private Long memberId;
+    private String oauthId;
     private String commentContent;
-    private int isAnonymous;
+    private int anonymity;
 }

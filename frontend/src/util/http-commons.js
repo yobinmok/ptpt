@@ -24,6 +24,8 @@ function AxiosMulti() {
 
   return instance;
 }
+  return instance;
+}
 
 function Google() {
   const instance = axios.create({

@@ -8,7 +8,4 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
-    @Query("SELECT e FROM Evaluation e WHERE e.studyRoom.memberId = :memberId")
-    List<Evaluation> findByMemberId(@Param("memberId") Long memberId);
-
 }

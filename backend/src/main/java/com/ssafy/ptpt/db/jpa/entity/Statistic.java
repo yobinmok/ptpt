@@ -3,6 +3,8 @@ package com.ssafy.ptpt.db.jpa.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 
 @Entity
 @Getter
@@ -15,6 +17,12 @@ public class Statistic {
     @Column(name = "statistic_id")
     private Long statisticId;
 
+    @OneToMany(mappedBy = "statistic")
+    private List<Evaluation> evaluation;
+
+    @OneToOne(mappedBy = "statistic", fetch = FetchType.LAZY)
+    private Profile profile;
+
     private int totalDelivery;
     private int totalExpression;
     private int totalPreparation;
@@ -22,12 +30,12 @@ public class Statistic {
     private int totalSuitability;
 
     private int evaluateQuantity;
-    public void createStatistic(int totalDelivery, int totalExpression, int totalPreparation, int totalLogic, int totalSuitability) {
-        this.totalDelivery = totalDelivery;
-        this.totalExpression = totalExpression;
-        this.totalPreparation = totalPreparation;
-        this.totalLogic = totalLogic;
-        this.totalSuitability = totalSuitability;
+    public void createStatistic(Evaluation evaluation) {
+        this.totalDelivery = evaluation.getDelivery();
+        this.totalExpression = evaluation.getExpression();
+        this.totalPreparation = evaluation.getPreparation();
+        this.totalLogic = evaluation.getLogic();
+        this.totalSuitability = evaluation.getSuitability();
         this.evaluateQuantity++;
     }
 

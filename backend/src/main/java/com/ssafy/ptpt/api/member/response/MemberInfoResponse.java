@@ -1,13 +1,13 @@
-package com.ssafy.ptpt.api.member;
+package com.ssafy.ptpt.api.member.response;
 
 import com.ssafy.ptpt.db.jpa.entity.Role;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberInfoResponse {
