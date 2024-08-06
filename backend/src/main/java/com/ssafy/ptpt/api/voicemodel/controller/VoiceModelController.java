@@ -130,7 +130,7 @@ public class VoiceModelController {
         ObjectNode rootNode = mapper.createObjectNode();
 
         ArrayNode dataNode = mapper.createArrayNode();
-        dataNode.add("memberVoiceModel5");
+        dataNode.add("memberVoiceModel");
         dataNode.add("40k");
         dataNode.add("true");
         dataNode.add(folderPath);
