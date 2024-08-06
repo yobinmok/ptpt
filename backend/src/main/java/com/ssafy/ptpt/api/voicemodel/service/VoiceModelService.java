@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -22,7 +23,10 @@ public class VoiceModelService {
 
     private final WebClient webClient;
     private final ObjectMapper objectMapper;
-    private final String BASE_URL = "http://localhost:7897"; // 추후 application.yml 파일에 추가 예정
+    @Value("${external.api.convert}")
+    private String CONVERT; // 추후 application.yml 파일에 추가 예정
+    @Value("${external.api.select}")
+    private String SELECT;
 
     @Autowired
     public VoiceModelService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper) {
@@ -50,10 +54,8 @@ public class VoiceModelService {
         jsonArray.add(0.33);
         jsonObject.set("data", jsonArray);
 
-        String url = BASE_URL + "/run/infer_convert";
-
         return webClient.post()
-                .uri(url)
+                .uri(CONVERT)
                 .bodyValue(jsonObject)
                 .retrieve()
                 .bodyToMono(String.class);
@@ -70,10 +72,8 @@ public class VoiceModelService {
         jsonArray.add(0.33);
         jsonObject.set("data", jsonArray);
 
-        String url = BASE_URL + "/run/infer_change_voice";
-
         return webClient.post()
-                .uri(url)
+                .uri(SELECT)
                 .bodyValue(jsonObject)
                 .retrieve()
                 .bodyToMono(String.class);

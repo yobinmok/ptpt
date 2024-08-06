@@ -2,6 +2,7 @@ package com.ssafy.ptpt.api.voicemodel.controller;
 
 import com.ssafy.ptpt.api.voicemodel.service.VoiceModelService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class VoiceModelController {
 
-// 추후 설정파일로 이동 및 경로 변경 필!
-    private final String UPLOAD_PATH = "C:/Users/SSAFY/Desktop/src/ttsUpload";
+    // 추후 설정파일로 이동 및 경로 변경 필!
+    @Value("${audioFile.path}")
+    private String UPLOAD_PATH;
     private final VoiceModelService voiceModelService;
 
     @PostMapping("/audio")
