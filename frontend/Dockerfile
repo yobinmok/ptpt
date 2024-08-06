@@ -1,8 +1,8 @@
 FROM node:16 AS build
 
-WORKDIR /src
+WORKDIR /react
 
-RUN rm -rf /src/*
+RUN rm -rf /react/*
 
 COPY package.json .
 
@@ -45,4 +45,4 @@ WORKDIR /react_build
 # 내부의 모든내용 삭제
 RUN rm -rf /react_build/*
 
-COPY --from=build /src/dist ./
+COPY --from=build /react/dist ./
