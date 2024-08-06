@@ -84,14 +84,14 @@ public class VoiceModelController {
     private String PRETRAIN_UPLOAD_PATH;
     @PostMapping("/train")
     @Operation(summary = "음성모델 생성")
-    public ResponseEntity<?> voiceModelTrain(@RequestPart(name="audio") MultipartFile audio) throws IOException {
+    public ResponseEntity<?> voiceModelTrain(@RequestPart(name="audio") MultipartFile audio, @RequestPart(name="oauthId") String oauthId) throws IOException {
         if (audio.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File is empty");
         }
 
         // 1. 원본 파일 (PRETRAIN DATA) 저장
         String today = new SimpleDateFormat("yyMMdd").format(new Date());
-        String saveFolder = PRETRAIN_UPLOAD_PATH;
+        String saveFolder = PRETRAIN_UPLOAD_PATH + File.separator + oauthId;
         File folder = new File(saveFolder);
         if (!folder.exists()) {
             folder.mkdirs();
@@ -109,7 +109,7 @@ public class VoiceModelController {
         String filePath = originalFile.getAbsolutePath();
         try {
             for (int i = 0; i < 4; i++) {
-                String jsonPayload = createJsonPayload(folderPath);
+                String jsonPayload = createJsonPayload(folderPath, oauthId);
                 ResponseEntity<String> response = callExternalApi(jsonPayload, externalApiTrain);
 
                 if (response == null || response.getStatusCode() != HttpStatus.OK) {
@@ -125,12 +125,12 @@ public class VoiceModelController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public String createJsonPayload(String folderPath) {
+    public String createJsonPayload(String folderPath, String oauthId) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode rootNode = mapper.createObjectNode();
 
         ArrayNode dataNode = mapper.createArrayNode();
-        dataNode.add("memberVoiceModel");
+        dataNode.add("vm"+oauthId); //저장할 VoiceModel 이름
         dataNode.add("40k");
         dataNode.add("true");
         dataNode.add(folderPath);
@@ -138,7 +138,7 @@ public class VoiceModelController {
         dataNode.add(14);
         dataNode.add("rmvpe_gpu");
         dataNode.add(30); //이 값 만큼의 epoch마다 저장됨 (학습 횟수보다 큰 값으로 설정).
-        dataNode.add(3); //학습 횟수
+        dataNode.add(20); //학습 횟수
         dataNode.add(3);
         dataNode.add("Yes");
         dataNode.add("assets/pretrained_v2/f0G40k.pth");
