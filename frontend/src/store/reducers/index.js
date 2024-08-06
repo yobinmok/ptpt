@@ -41,6 +41,7 @@ const rootReducer = combineReducers({
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
+// combinedReducer는 persistReducer를 적용한 리듀서를 반환하도록 수정
 export default function combinedReducer(state, action) {
   // soloReducer는 persistReducer를 적용하지 않으므로
   // state와 action을 combinedReducer로 전달합니다.

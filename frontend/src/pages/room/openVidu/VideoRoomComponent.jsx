@@ -42,8 +42,7 @@ const StyledLayoutBounds = styled.div`
 
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080/';
-// process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080/';
+  process.env.NODE_ENV === 'production' ? '' : `${ import.meta.env.VITE_API_URL }`;
 function withNavigation(Component) {
   return (props) => <Component navigate={useNavigate()} {...props} />;
 }
