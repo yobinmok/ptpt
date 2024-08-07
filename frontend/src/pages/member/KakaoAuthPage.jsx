@@ -5,6 +5,7 @@ import {
   kakaoSignin,
   verifyKakaoAccessToken,
   getProfile,
+  updateProfile,
 } from '../../apis/auth';
 import { setAuth } from '../../store/actions/authActions';
 import UserInfoModal from '../../components/organisms/UserInfoModal';
@@ -27,34 +28,36 @@ const KakaoAuthPage = () => {
       setAuthCode(code);
 
       kakaoSignin(code)
-        .then((data) => {
+        .then(async (data) => {
           console.log('Token received:', data);
           setToken(data);
 
-          // access token을 검증
-          return verifyKakaoAccessToken(data.accessToken).then(
-            (verificationResult) => {
-              console.log('Token verification result:', verificationResult);
-              setTokenVerified(verificationResult.message === 'Valid Token');
-
-              if (verificationResult.message === 'Valid Token') {
-                dispatch(setAuth({ oauth_id: data.oauth_id, user: data.user }));
-                // 프로필 조회를 통해 기존 회원 여부 확인
-                getProfile(data.oauth_id)
-                  .then((profile) => {
-                    if (profile) {
-                      navigate('/'); // 기존 회원은 메인 페이지로 리디렉트
-                    } else {
-                      setShowModal(true); // 신규 회원은 모달창 띄우기
-                    }
-                  })
-                  .catch((error) => {
-                    console.error('Error fetching profile:', error);
-                    setShowModal(true); // 오류가 발생해도 모달창 띄우기
-                  });
-              }
-            }
+          const verificationResult = await verifyKakaoAccessToken(
+            data.accessToken
           );
+          console.log('Token verification result:', verificationResult);
+          setTokenVerified(verificationResult.message === 'Valid Token');
+
+          if (data.message === 'Existing Member') {
+            try {
+              const profile = await getProfile(data.memberId);
+              console.log('Profile data:', profile);
+
+              if (profile) {
+                // 기존 회원인 경우
+                console.log('기존회원입니다. 메인페이지로 이동');
+                dispatch(setAuth(data.accessToken, profile));
+                navigate('/');
+              }
+            } catch (error) {
+              console.error('Error fetching profile:', error);
+              console.log('신규 회원입니다. 정보 입력 모달');
+              setShowModal(true); // 프로필 조회 실패 시에도 모달을 띄움
+            }
+          } else {
+            console.log('신규 회원입니다. 정보 입력 모달');
+            setShowModal(true); // 신규 회원인 경우
+          }
         })
         .catch((error) => {
           console.error('Error during Kakao sign-in:', error);
@@ -62,17 +65,23 @@ const KakaoAuthPage = () => {
     }
   }, [location, dispatch, navigate]);
 
-  const handleModalSubmit = (nickname, voiceModel) => {
-    // 여기에 추가 정보를 서버로 전송하는 로직을 추가합니다.
-    // axios.post('/api/userinfo', { nickname, voiceModel })
-    //   .then(response => {
-    //     navigate('/'); // 정보 입력 후 메인 페이지로 리디렉트
-    //   })
-    //   .catch(error => {
-    //     console.error('Error submitting user info:', error);
-    //   });
+  const handleSubmit = async (nickname, profilePicture) => {
+    try {
+      const profileData = {
+        oauthId: token.memberId,
+        nickName: nickname,
+        memberPicture: profilePicture || 'default-profile.png',
+      };
 
-    navigate('/'); // 임시로 메인 페이지로 이동하도록 설정
+      console.log('Sending profile data:', profileData); // 데이터 확인
+
+      await updateProfile(profileData);
+      dispatch(setAuth(token.accessToken, profileData));
+      console.log('회원가입 성공');
+      navigate('/');
+    } catch (error) {
+      console.error('회원가입 에러', error);
+    }
   };
 
   return (
@@ -94,11 +103,13 @@ const KakaoAuthPage = () => {
           <p>Token Verified: {tokenVerified ? 'Yes' : 'No'}</p>
         </div>
       )}
-      <UserInfoModal
-        showModal={showModal}
-        setShowModal={setShowModal}
-        handleSubmit={handleModalSubmit}
-      />
+      {showModal && (
+        <UserInfoModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          handleSubmit={handleSubmit}
+        />
+      )}
     </div>
   );
 };

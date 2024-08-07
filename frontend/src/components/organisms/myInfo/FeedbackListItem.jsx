@@ -42,7 +42,7 @@ const FeedbackListItem = ({ roomName, date, subject, roomId }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/room/${roomId}`);
+    navigate(`/myinfo/statistics/evaluation/feedBack/${roomId}`);
   };
 
   return (

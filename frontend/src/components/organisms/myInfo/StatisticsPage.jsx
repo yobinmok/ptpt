@@ -25,6 +25,26 @@ const FeedbackHeader = styled.div`
   font-weight: bold;
 `;
 
+const ChartContainer = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+`;
+
+const ExplanationContainer = styled.div`
+  max-width: 600px;
+  padding: 0 20px;
+  margin-left: 100px;
+`;
+
+const ExplanationTitle = styled.h3`
+  margin-bottom: 10px;
+`;
+
+const ExplanationText = styled.p`
+  margin-bottom: 10px;
+`;
+
 const StatisticsPage = () => {
   const dispatch = useDispatch();
   const { loading, statistics, error } = useSelector(
@@ -32,7 +52,7 @@ const StatisticsPage = () => {
   );
 
   useEffect(() => {
-    const oauthId = 'your_oauth_id_here'; // 실제 oauthId를 설정합니다.
+    const oauthId = 'your_oauth_id_here';
     dispatch(fetchStatistics(oauthId));
   }, [dispatch]);
 
@@ -58,6 +78,20 @@ const StatisticsPage = () => {
     },
   ];
 
+  // 설명 데이터
+  const explanations = {
+    delivery:
+      '발표력이 낮으면 발표력이 낮아지고, 신뢰성이 떨어질 수 있어요. 이로 인해 청중을 설득하기 어려워집니다.',
+    expression:
+      '표현력이 낮으면 청중의 이해도가 낮아지고, 발표의 신뢰성이 떨어질 수 있어요. 이로 인해 청중을 설득하기 어려워집니다.',
+    logic:
+      '논리성이 낮으면 발표의 이해도가 낮아지고, 발표의 신뢰성이 떨어질 수 있어요. 이로 인해 청중을 설득하기 어려워집니다.',
+    preparation:
+      '준비성이 낮으면 발표의 신뢰성이 떨어질 수 있어요. 이로 인해 청중을 설득하기 어려워집니다.',
+    suitability:
+      '적합성이 낮으면 발표의 신뢰성이 떨어질 수 있어요. 이로 인해 청중을 설득하기 어려워집니다.',
+  };
+
   return (
     <div>
       <h1>통계 페이지</h1>
@@ -69,11 +103,21 @@ const StatisticsPage = () => {
         {/* 평가 점수 섹션 */}
         <div>
           <h2>평가 점수</h2>
-          {statistics && (
-            <div style={{ width: '400px', height: '400px' }}>
-              <RadarChart data={statistics} />
-            </div>
-          )}
+          <ChartContainer>
+            {statistics && (
+              <div style={{ width: '400px', height: '400px' }}>
+                <RadarChart data={statistics} />
+              </div>
+            )}
+            <ExplanationContainer>
+              <ExplanationTitle>평가 점수 설명</ExplanationTitle>
+              <ExplanationText>{explanations.delivery}</ExplanationText>
+              <ExplanationText>{explanations.expression}</ExplanationText>
+              <ExplanationText>{explanations.logic}</ExplanationText>
+              <ExplanationText>{explanations.preparation}</ExplanationText>
+              <ExplanationText>{explanations.suitability}</ExplanationText>
+            </ExplanationContainer>
+          </ChartContainer>
         </div>
 
         {/* 피드백 모아보기 섹션 */}
