@@ -129,8 +129,8 @@ public class StudyRoomService {
     @Transactional
     public int presentatorAssignation(StudyRoomStatusRequest studyRoomStatusRequest) {
         Member member = memberRepository.findByNickname(studyRoomStatusRequest.getNickname());
-        return studyRoomRepository.updatePresentatorAssignation(studyRoomStatusRequest.getStudyRoomId()
-        , member.getMemberId());
+        return studyRoomRepository.updatePresentatorAssignation(member.getMemberId(),
+                studyRoomStatusRequest.getStudyRoomId());
     }
 
     // 스터디룸 퇴장

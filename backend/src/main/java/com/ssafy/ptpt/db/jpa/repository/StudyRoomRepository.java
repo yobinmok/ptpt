@@ -19,7 +19,7 @@ public interface StudyRoomRepository extends JpaRepository<StudyRoom, Long> {
 
 
     @Modifying
-    @Query("UPDATE StudyRoom s SET s.presentationHost = :memberId WHERE s.studyRoomId = :studyRoomId AND s.isCompleted = 1")
+    @Query("UPDATE StudyRoom s SET s.presentationHost = :memberId WHERE s.studyRoomId = :studyRoomId AND s.isCompleted = 0")
     int updatePresentatorAssignation(@Param("memberId") Long memberId, @Param("studyRoomId") Long studyRoomId);
 
     @Modifying

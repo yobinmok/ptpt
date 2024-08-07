@@ -35,6 +35,18 @@ public class EvaluationController {
         return ResponseEntity.ok().body(evaluationId);
     }
 
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+    })
+    @DeleteMapping("/{evaluationId}")
+    @Operation(summary = "평가 삭제")
+    public ResponseEntity<Void> deleteEvaluation(@PathVariable("evaluationId") Long evaluationId){
+        evaluationService.deleteEvaluation(evaluationId);
+        return ResponseEntity.ok().build();
+    }
+
     // 프로필 화면에서 조회한 사용자의 스터디룸을 클릭했을때 평가를 조회
     /**
      * 프로필 화면에서의 평가를 클릭했을때
@@ -48,16 +60,4 @@ public class EvaluationController {
         List<FeedBackInfoResponse> feedBackInfoResponses = evaluationService.findFeedBackByStudyRoomIdAndOauthId(feedBackSearchRequest);
         return ResponseEntity.ok().body(feedBackInfoResponses);
     }
-
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Success"),
-            @ApiResponse(responseCode = "404", description = "Not Found"),
-    })
-    @DeleteMapping("/{evaluationId}")
-    @Operation(summary = "평가 삭제")
-    public ResponseEntity<Void> deleteEvaluation(@PathVariable("evaluationId") Long evaluationId){
-        evaluationService.deleteEvaluation(evaluationId);
-        return ResponseEntity.ok().build();
-    }
-
 }
