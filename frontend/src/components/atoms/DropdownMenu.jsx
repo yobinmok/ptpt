@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 import ListIcon from '@mui/icons-material/List';
-const DropdownMenu = ({ list }) => {
+const DropdownMenu = ({ options, onSelect }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -13,6 +13,10 @@ const DropdownMenu = ({ list }) => {
     setAnchorEl(null);
   };
 
+  const handleMenuItemClick = (value) => {
+    onSelect(value); // 부모 컴포넌트로 선택된 값 전달
+    handleClose(); // 메뉴 닫기
+  };
   return (
     <div>
       <Tooltip title='가이드라인 선택'>
@@ -44,9 +48,15 @@ const DropdownMenu = ({ list }) => {
           horizontal: 'center',
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        {options.map((option, index) => (
+          <MenuItem
+            key={index}
+            value={option.value}
+            onClick={() => handleMenuItemClick(option.value)}
+          >
+            {option.label}
+          </MenuItem>
+        ))}
       </Menu>
     </div>
   );

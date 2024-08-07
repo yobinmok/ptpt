@@ -6,38 +6,39 @@ import { base64ToBlob } from '../../../hooks/voice';
 
 const CompareTab = () => {
   let soloPreset = useSelector((state) => state.solo);
+  const guideline = soloPreset.script.filter(
+    (item) => item.guideline && item.title
+  );
+  console.log(guideline);
   console.log(soloPreset);
   const [guide, setGuide] = useState();
-  const [voiceRecordIdx, setVoiceRecord] = useState();
-
+  const [voiceRecord, setVoiceRecord] = useState();
   return (
     <>
       <CustomSelect
         label='가이드라인 선택'
-        options={soloPreset.script.map((item, index) => ({
-          value: index,
+        options={guideline.map((item) => ({
+          value: item.guideline,
           label: item.title,
         }))}
-        onChange={(index) => {
-          console.log(index);
-          const guideline = soloPreset.guideline.find(
-            (g) => g.index === index
-          ).guideline;
-          let audioBlob = base64ToBlob(guideline, 'wav');
+        onChange={(base64) => {
+          let audioBlob = base64ToBlob(base64, 'wav');
           setGuide(window.URL.createObjectURL(audioBlob));
         }}
       />
       <CustomSelect
         label='녹음본 선택'
-        options={soloPreset.voiceRecord.map((item, index) => ({
-          value: index,
-          label: item,
+        options={soloPreset.voiceRecord.map((item) => ({
+          value: item.data,
+          label: item.title,
         }))}
-        onChange={(value) => {}}
+        onChange={(value) => {
+          setVoiceRecord(value);
+        }}
         style={{ margin: '10px 0px' }}
       />
       <AudioWaveform title={'가이드라인'} audioUrl={guide} />
-      <AudioWaveform title={'내 녹음본'} audioUrl='' />
+      <AudioWaveform title={'내 녹음본'} audioUrl={voiceRecord} />
     </>
   );
 };
