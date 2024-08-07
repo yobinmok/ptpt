@@ -1,18 +1,15 @@
 package com.ssafy.ptpt.db.mongo.entity;
 
-import com.mongodb.client.model.CollationStrength;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.annotation.Collation;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Map;
-import java.util.Objects;
 
 @Getter
 @Setter

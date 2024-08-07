@@ -15,7 +15,6 @@ import com.ssafy.ptpt.api.security.service.GoogleAuthService;
 import com.ssafy.ptpt.api.security.service.KakaoService;
 import com.ssafy.ptpt.api.transformer.Trans;
 import com.ssafy.ptpt.db.jpa.entity.Member;
-import com.ssafy.ptpt.db.jpa.entity.Statistic;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -71,7 +70,7 @@ public class MemberController {
             memberService.saveProfile(member);
             return ResponseEntity.ok(TokenResponseBody.of(200, "Success", tokenString, oauthId));
         }else{
-            return ResponseEntity.ok(TokenResponseBody.of(200, "Existing Member", tokenString, oauthId));
+            return ResponseEntity.ok(TokenResponseBody.of(201, "Existing Member", tokenString, oauthId));
         }
     }
 
@@ -153,9 +152,9 @@ public class MemberController {
         Member member = memberService.saveMember(oauthId);
         if(member != null){
             memberService.saveProfile(member);
-            return ResponseEntity.ok(TokenResponseBody.of(200, "Success", accessToken, oauthId));
-        }else{
             return ResponseEntity.ok(TokenResponseBody.of(200, "Existing Member", accessToken, oauthId));
+        }else{
+            return ResponseEntity.ok(TokenResponseBody.of(200, "Success", accessToken, oauthId));
         }
     }
 

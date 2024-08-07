@@ -18,12 +18,16 @@ public class EntryList {
     @Column(name = "entry_list_id")
     private Long entryListId;
 
-    private Long studyRoomId;
+//    private Long studyRoomId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_room_id", referencedColumnName = "study_room_id")
+    private StudyRoom studyRoom;
 
     private Long memberId;
 
-    public EntryList(Long studyRoomId, Long memberId) {
-        this.studyRoomId = studyRoomId;
+    public EntryList(StudyRoom studyRoom, Long memberId) {
+        this.studyRoom = studyRoom;
         this.memberId = memberId;
     }
 }

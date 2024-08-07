@@ -2,13 +2,11 @@ package com.ssafy.ptpt.api.security.service;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.ssafy.ptpt.api.transformer.Trans;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.view.RedirectView;
 
 @RequiredArgsConstructor
 @Service

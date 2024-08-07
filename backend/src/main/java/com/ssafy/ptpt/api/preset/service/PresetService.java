@@ -1,6 +1,5 @@
 package com.ssafy.ptpt.api.preset.service;
 
-import com.mongodb.client.result.UpdateResult;
 import com.ssafy.ptpt.api.preset.request.PresetCreateRequest;
 import com.ssafy.ptpt.api.preset.request.PresetSearchRequest;
 import com.ssafy.ptpt.api.preset.response.PresetInfoResponse;
