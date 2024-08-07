@@ -14,6 +14,17 @@ function Axios() {
   return instance;
 }
 
+function AxiosMulti() {
+  const instance = axios.create({
+    baseURL: VITE_API_URL,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  return instance;
+}
+
 function Google() {
   const instance = axios.create({
     baseURL:
@@ -37,4 +48,4 @@ function Google_STT() {
   return instance;
 }
 
-export { Axios, Google, Google_STT };
+export { Axios, AxiosMulti, Google, Google_STT };

@@ -4,6 +4,9 @@ import {
   SELECT_TAB,
   CLEAR_TAB,
   TOGGLE_SCRIPT_SELECT,
+  EVALUATE_ANONYMOUS,
+  IS_START_PRESANTATION,
+  PRESENTATION_TIME,
 } from '../types/room';
 
 const toggleScriptSelect = (flag) => ({
@@ -43,6 +46,27 @@ const clearTab = () => {
   };
 };
 
+const setAnonymous = (isAnonymous) => {
+  return {
+    type: EVALUATE_ANONYMOUS,
+    payload: isAnonymous,
+  };
+};
+
+const isStartPresantation = (flag) => {
+  return {
+    type: IS_START_PRESANTATION,
+    flag,
+  };
+};
+
+const setPresentationTime = (time) => {
+  return {
+    type: PRESENTATION_TIME,
+    payload: time,
+  };
+};
+
 export {
   setRoomSession,
   clearRoomSession,
@@ -50,4 +74,7 @@ export {
   selectTab,
   clearTab,
   toggleScriptSelect,
+  setAnonymous,
+  isStartPresantation,
+  setPresentationTime,
 };

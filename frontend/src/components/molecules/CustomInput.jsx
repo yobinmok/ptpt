@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { CustomTextField } from './CustomTextarea';
 import { useSelector, useDispatch } from 'react-redux';
-import { useTempScript } from '../../store/actions/solo';
+import { useTempScript } from '../../store/actions/soloActions';
 
 // 커스텀 스타일 적용
-
 function CustomInput() {
   const dispatch = useDispatch();
   const tempScript = useSelector((state) => state.solo.tempScript);

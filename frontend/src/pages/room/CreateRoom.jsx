@@ -48,7 +48,8 @@ const CreateRoom = ({ onSave, onClose }) => {
     // console.log('create room ' + this.sessionData);
     dispatch(setRoomSession(sessionData));
     // navigate('/room/detail');
-    navigate('/multi');
+    // navigate('/multi');
+    navigate(`/multi/${roomId}`);
   };
 
   // 방 생성 시 설정할 요소들

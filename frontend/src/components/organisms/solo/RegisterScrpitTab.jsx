@@ -8,7 +8,7 @@ import {
   createScript,
   updateScript,
   useTempScript,
-} from '../../../store/actions/solo';
+} from '../../../store/actions/soloActions';
 
 const RegisterScriptTab = ({}) => {
   const dispatch = useDispatch();
