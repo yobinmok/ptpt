@@ -5,7 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleScriptSelect } from '../../store/actions/room';
 import { useTempScript, deleteScript } from '../../store/actions/soloActions';
-import { DeleteDialog } from './DeleteDialog';
+import { DeleteModal } from './DeleteModal';
 
 function CustomTextarea({ placeholder, editFlag }) {
   const [open, setOpen] = useState(false);
@@ -92,7 +92,7 @@ function CustomTextarea({ placeholder, editFlag }) {
         </Box>
       )}
 
-      <DeleteDialog
+      <DeleteModal
         open={open}
         deleteAction={deleteScript}
         handleClose={handleClose}

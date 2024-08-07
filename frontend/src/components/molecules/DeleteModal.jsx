@@ -2,7 +2,7 @@ import { Dialog, DialogActions, DialogContent, Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTempScript } from '../../store/actions/soloActions';
 
-export const DeleteDialog = ({ open, handleClose, deleteAction }) => {
+export const DeleteModal = ({ open, handleClose, deleteAction }) => {
   const curIndex = useSelector((state) => state.solo.tempScript);
 
   const dispatch = useDispatch();
