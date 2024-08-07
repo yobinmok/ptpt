@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.io.File;
@@ -36,6 +37,26 @@ public class VoiceModelController {
     @Value("${audioFile.path}")
     private String UPLOAD_PATH;
     private final VoiceModelService voiceModelService;
+
+    @PostMapping("/refresh")
+    public void inferRefresh()throws IOException {
+        System.out.println("??????????????????????/");
+        WebClient webClient = WebClient.create("http://localhost:7897");
+        ObjectMapper mapper = new ObjectMapper();
+
+        ObjectNode rootNode = mapper.createObjectNode();
+
+        ArrayNode dataNode = mapper.createArrayNode();
+
+        rootNode.set("data", dataNode);
+        Mono<String> response = webClient.post()
+                .uri("/run/infer_refresh")
+                .bodyValue(rootNode)
+                .retrieve()
+                .bodyToMono(String.class);
+
+        response.subscribe(System.out::println);
+    }
 
     @PostMapping("/audio")
     @Operation(summary = "음성 변환")

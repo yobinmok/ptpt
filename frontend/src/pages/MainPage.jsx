@@ -7,6 +7,7 @@ import {
   Overlay,
   Content,
 } from '../components/styles/MainPageStyles';
+import { testRVC } from '../apis/voice';
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -37,6 +38,20 @@ const MainPage = () => {
     };
   }, [isAuthenticated]);
 
+  const rvctest = () => {
+    testRVC(
+      {
+        data: [],
+      },
+      (res) => {
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  };
+
   return (
     <Container isAuthenticated={isAuthenticated}>
       <Overlay />
@@ -51,6 +66,7 @@ const MainPage = () => {
           <Content isVisible={true}>
             <h1>Main Page</h1>
             <h2>Welcome to Our Site</h2>
+            <Button onClick={rvctest}>test</Button>
             <p>Please log in to access more features.</p>
           </Content>
           <Content isVisible={isSection2Visible}>
