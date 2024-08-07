@@ -39,8 +39,8 @@ const MyEvaluateContent = () => {
   // oauth_id로 내 평가 호출해오기
   const getMyEval = async () => {
     try {
-      const userId = 'G123';
-      // const userId = useSelector((state) => state.user.userId);
+      // const userId = 'G123';
+      const userId = useSelector((state) => state.user.userId);
       const response = await takeMyEvaluate(studyRoomId, userId);
       if (response && response.data) {
         const {
