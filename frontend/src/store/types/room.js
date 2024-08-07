@@ -16,3 +16,6 @@ export const EVALUATE_ANONYMOUS = 'EVALUATE_ANONYMOUS';
 // 발표 시작 여부
 export const IS_START_PRESANTATION = 'IS_START_PRESANTATION';
 export const PRESENTATION_TIME = 'PRESENTATION_TIME';
+
+// host 관리
+export const SET_HOST_NAME = 'SET_HOST_NAME';
