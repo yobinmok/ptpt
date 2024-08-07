@@ -48,7 +48,7 @@ const AuthPage = () => {
               if (profile) {
                 // 기존 회원인 경우
                 console.log('기존회원입니다. 메인페이지로 이동');
-                dispatch(setAuth({ oauth_id: data.memberId, user: profile }));
+                dispatch(setAuth(data.accessToken, profile));
                 navigate('/');
               }
             } catch (error) {
@@ -78,7 +78,7 @@ const AuthPage = () => {
       console.log('Sending profile data:', profileData); // 데이터 확인
 
       await updateProfile(profileData);
-      dispatch(setAuth({ oauth_id: token.memberId, user: profileData }));
+      dispatch(setAuth(token.accessToken, profileData));
       console.log('회원가입 성공');
       navigate('/');
     } catch (error) {
