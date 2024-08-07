@@ -8,10 +8,12 @@ import com.ssafy.ptpt.api.preset.response.PresetInfoResponse;
 import com.ssafy.ptpt.api.preset.service.PresetService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/preset")
@@ -56,9 +58,21 @@ public class PresetController {
 
     @DeleteMapping("/{presetId}")
     @Operation(summary = "프리셋 삭제")
-    public ResponseEntity<?> deletePreset(@PathVariable("presetId") Long presetId){
+    public ResponseEntity<Void> deletePreset(@PathVariable("presetId") Long presetId){
         int complete = presetService.deletePreset(presetId);
         return complete == 1 ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+    }
+
+    @PutMapping("/{presetId}")
+    @Operation(summary = "프리셋 업데이트")
+    public ResponseEntity<Void> updatePreset(@PathVariable("presetId") Long presetId,
+                                                @RequestBody Map<String, Object> presetData) {
+        try {
+            presetService.updatePresetById(presetId, presetData);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
 }

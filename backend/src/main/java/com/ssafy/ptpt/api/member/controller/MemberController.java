@@ -1,6 +1,7 @@
 package com.ssafy.ptpt.api.member.controller;
 
 import com.google.gson.JsonParser;
+import com.ssafy.ptpt.api.member.request.MemberNicknameRequest;
 import com.ssafy.ptpt.api.member.request.MemberOauthIdRequest;
 import com.ssafy.ptpt.api.member.request.MemberUpdateRequest;
 import com.ssafy.ptpt.api.member.response.MemberProfileResponse;
@@ -14,7 +15,6 @@ import com.ssafy.ptpt.api.security.service.GoogleAuthService;
 import com.ssafy.ptpt.api.security.service.KakaoService;
 import com.ssafy.ptpt.api.transformer.Trans;
 import com.ssafy.ptpt.db.jpa.entity.Member;
-import com.ssafy.ptpt.db.jpa.entity.Statistic;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -285,7 +285,7 @@ public class MemberController {
     })
     @PostMapping("/report")
     @Operation(summary = "유저 신고")
-    public ResponseEntity<Void> memberReport(@RequestBody @Valid MemberOauthIdRequest memberOauthIdRequest) {
+    public ResponseEntity<Void> memberReport(@RequestBody @Valid MemberNicknameRequest memberOauthIdRequest) {
         memberService.memberReport(memberOauthIdRequest);
         return ResponseEntity.ok().build();
     }
@@ -308,7 +308,7 @@ public class MemberController {
     })
     @PostMapping("/statistic")
     @Operation(summary = "프로필 화면에서 통개를 조회할수 있습니다")
-    public ResponseEntity<MemberStatisticResponse> findMemberStatistic(@RequestBody @Valid MemberOauthIdRequest memberOauthIdRequest) {
+    public ResponseEntity<MemberStatisticResponse> findMemberStatistic(@RequestBody @Valid MemberNicknameRequest memberOauthIdRequest) {
         MemberStatisticResponse memberStatisticResponse = memberService.findMemberStatistic(memberOauthIdRequest);
         return ResponseEntity.ok().body(memberStatisticResponse);
     }
