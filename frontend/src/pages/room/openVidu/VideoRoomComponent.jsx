@@ -47,6 +47,7 @@ const APPLICATION_SERVER_URL =
     ? ''
     : `${import.meta.env.VITE_OPENVIDU_URL}/`;
     // : `${import.meta.env.VITE_API_URL}/`;
+    console.log("!!!!!!!!" + APPLICATION_SERVER_URL);
 function withNavigation(Component) {
   return (props) => <Component navigate={useNavigate()} {...props} />;
 }
