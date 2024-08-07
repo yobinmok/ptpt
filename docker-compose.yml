@@ -14,10 +14,12 @@ services:
     container_name: ptpt-dev-frontend
 
     # restart: unless-stopped
-    volumes:
-      - /opt/openvidu/custom-nginx-locations/react:/react_build
+    # volumes:
+    #   - /opt/openvidu/custom-nginx-locations/react:/react_build
+    # ports:
+    #   - 5173:5173
     ports:
-      - 5173:5173
+      - 5173:80 # 프론트가 nginx를 가지고 있으므로 컨테이너에서는 80포트를 연 상태
 
   mysql:
     image: mysql:8.0.37
