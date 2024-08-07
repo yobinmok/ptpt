@@ -45,7 +45,8 @@ var localUser = new UserModel();
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production'
     ? ''
-    : `${import.meta.env.VITE_API_URL}/`;
+    : `${import.meta.env.VITE_OPENVIDU_URL}/`;
+    // : `${import.meta.env.VITE_API_URL}/`;
 function withNavigation(Component) {
   return (props) => <Component navigate={useNavigate()} {...props} />;
 }
