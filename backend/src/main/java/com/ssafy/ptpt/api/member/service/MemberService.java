@@ -2,11 +2,11 @@ package com.ssafy.ptpt.api.member.service;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.ptpt.api.member.request.MemberNicknameRequest;
 import com.ssafy.ptpt.api.member.request.MemberOauthIdRequest;
 import com.ssafy.ptpt.api.member.request.MemberUpdateRequest;
 import com.ssafy.ptpt.api.member.response.MemberProfileResponse;
 import com.ssafy.ptpt.api.member.response.MemberStatisticResponse;
-import com.ssafy.ptpt.api.studyroom.response.StudyRoomInfoResponse;
 import com.ssafy.ptpt.db.jpa.entity.*;
 import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
 import com.ssafy.ptpt.db.jpa.repository.ProfileRepository;
@@ -77,8 +77,8 @@ public class MemberService {
     }
 
     // 사용자 신고횟수 조회 로직 추가
-    public void memberReport(MemberOauthIdRequest memberOauthIdRequest) {
-        Member member = memberRepository.findByOauthId(memberOauthIdRequest.getOauthId());
+    public void memberReport(MemberNicknameRequest memberNicknameRequest) {
+        Member member = memberRepository.findByOauthId(memberNicknameRequest.getNickname());
         int memberReportCount = member.getMemberReportCount();
         if (memberReportCount == 2) {
             // 사용자 정지기능 추가
@@ -92,8 +92,8 @@ public class MemberService {
         return memberRepository.findByNickname(nickname);
     }
 
-    public MemberStatisticResponse findMemberStatistic(MemberOauthIdRequest memberOauthIdRequest) {
-        Statistic statistic = statisticRepository.findByOauthId(memberOauthIdRequest.getOauthId());
+    public MemberStatisticResponse findMemberStatistic(MemberNicknameRequest memberNicknameRequest) {
+        Statistic statistic = statisticRepository.findByOauthId(memberNicknameRequest.getNickname());
         return MemberStatisticResponse.from(statistic);
     }
 }
