@@ -38,6 +38,7 @@ public class VoiceModelController {
     private final VoiceModelService voiceModelService;
 
     @PostMapping("/audio")
+    @Operation(summary = "음성 변환")
     public Mono<ResponseEntity<String>> getTtsVoice(
             @RequestPart(name = "audio") MultipartFile audio,
             @RequestPart(name = "fileName") String fileName
@@ -77,14 +78,13 @@ public class VoiceModelController {
     @Value("${audioFile.preTrain}")
     private String PRETRAIN_UPLOAD_PATH;
     @PostMapping("/train")
-    @Operation(summary = "음성모델 생성")
+    @Operation(summary = "음성모델 생성", description = "음성모델을 학습하여 생성합니다.")
     public ResponseEntity<?> voiceModelTrain(@RequestPart(name="audio") MultipartFile audio, @RequestPart(name="oauthId") String oauthId) throws IOException {
         if (audio.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File is empty");
         }
 
         // 1. 원본 파일 (PRETRAIN DATA) 저장
-        String today = new SimpleDateFormat("yyMMdd").format(new Date());
         String saveFolder = PRETRAIN_UPLOAD_PATH + File.separator + oauthId;
         File folder = new File(saveFolder);
         if (!folder.exists()) {
