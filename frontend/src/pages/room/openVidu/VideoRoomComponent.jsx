@@ -41,19 +41,18 @@ const StyledLayoutBounds = styled.div`
 `;
 
 var localUser = new UserModel();
+// 주소 마지막에 슬래시(/) 꼭!! 붙이기
 const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? '' : `${ import.meta.env.VITE_API_URL }`;
+  process.env.NODE_ENV === 'production'
+    ? ''
+    : `${import.meta.env.VITE_API_URL}/`;
 function withNavigation(Component) {
   return (props) => <Component navigate={useNavigate()} {...props} />;
 }
-// 참가자 목록 관리를 위한 redux
-// const dispatch = useDispatch();
-// const participants = useSelector((state) => state.participant.participants);
 
 class VideoRoomComponent extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props.sessionInfo);
     this.hasBeenUpdated = false;
     this.layout = new OpenViduLayout();
     let sessionName = this.props.sessionInfo
@@ -62,8 +61,6 @@ class VideoRoomComponent extends Component {
     let userName = this.props.user
       ? this.props.user
       : 'OpenVidu_User' + Math.floor(Math.random() * 100);
-    console.log('sessionName  ' + sessionName);
-    console.log('user  ' + userName);
     this.remotes = [];
     this.localUserAccessAllowed = false;
     this.state = {
@@ -75,8 +72,6 @@ class VideoRoomComponent extends Component {
       chatDisplay: 'none',
       currentVideoDevice: undefined,
     };
-    console.log('init state');
-    console.log(this.state);
 
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
@@ -93,7 +88,6 @@ class VideoRoomComponent extends Component {
     this.toggleChat = this.toggleChat.bind(this);
     this.checkNotification = this.checkNotification.bind(this);
     this.checkSize = this.checkSize.bind(this);
-    // this.navigateHome = this.navigateHome.bind(this);
   }
 
   componentDidMount() {
@@ -124,13 +118,11 @@ class VideoRoomComponent extends Component {
     window.removeEventListener('beforeunload', this.onbeforeunload);
     window.removeEventListener('resize', this.updateLayout);
     window.removeEventListener('resize', this.checkSize);
-    console.log('component will be mount');
     this.leaveSession();
   }
 
   onbeforeunload(event) {
     this.leaveSession();
-    console.log('on before unload');
   }
 
   joinSession() {
@@ -216,7 +208,6 @@ class VideoRoomComponent extends Component {
       publishAudio: localUser.isAudioActive(),
       publishVideo: localUser.isVideoActive(),
       resolution: '640x480',
-      // resolution: '320x240',
       frameRate: 30,
       insertMode: 'APPEND',
     });
@@ -274,13 +265,7 @@ class VideoRoomComponent extends Component {
         this.updateLayout();
       }
     );
-    console.log('260 : ' + this.state.subscribers);
   }
-
-  // navigateHome() {
-  //   const navigate = useNavigate();
-  //   navigate('/');
-  // }
 
   leaveSession() {
     const mySession = this.state.session;
@@ -301,11 +286,8 @@ class VideoRoomComponent extends Component {
     console.log(this.props.leaveSession);
     if (this.props.leaveSession) {
       this.props.leaveSession();
-      console.log('get out');
     }
     console.log('default leave');
-    // this.props.navigate('/', { replace: true });
-    // 방을 떠나고, 필요한 정보가 있다면 props넘기기
   }
   camStatusChanged() {
     localUser.setVideoActive(!localUser.isVideoActive());
@@ -347,8 +329,6 @@ class VideoRoomComponent extends Component {
   subscribeToStreamCreated() {
     this.state.session.on('streamCreated', (event) => {
       const subscriber = this.state.session.subscribe(event.stream, undefined);
-      // var subscribers = this.state.subscribers;
-      console.log('347 : ' + subscriber);
       subscriber.on('streamPlaying', (e) => {
         this.checkSomeoneShareScreen();
         subscriber.videos[0].video.parentElement.classList.remove(
@@ -362,11 +342,9 @@ class VideoRoomComponent extends Component {
       const nickname = event.stream.connection.data.split('%')[0];
       newUser.setNickname(JSON.parse(nickname).clientData);
       this.remotes.push(newUser);
-      console.log('361 : ' + newUser);
       if (this.localUserAccessAllowed) {
         this.updateSubscribers();
       }
-      console.log('345 : ' + this.state.subscribers);
     });
   }
 
@@ -410,11 +388,11 @@ class VideoRoomComponent extends Component {
         },
         () => this.checkSomeoneShareScreen()
       );
-      // 여기서 api 호출해서 db에 저장하기
-      console.log('11111111111111111');
-      console.log(this.state.subscribers);
-
-      // dispatch(setParticipants())
+      // redux - participants에 사용자들 저장하기
+      // 사용자들이 들어올 때마다 저장됨
+      const nicknames = this.state.subscribers.map((user) => user.nickname);
+      nicknames.push(this.state.myUserName);
+      this.props.setParticipants(nicknames);
     });
   }
 
@@ -666,19 +644,7 @@ class VideoRoomComponent extends Component {
               />
             </div>
           ))}
-          {/* chat Component */}
-          {/* {localUser !== undefined && localUser.getStreamManager() !== undefined && (
-                        <div className="OT_root OT_publisher custom-class" style={chatDisplay}>
-                            <ChatComponent
-                                user={localUser}
-                                chatDisplay={this.state.chatDisplay}
-                                close={this.toggleChat}
-                                messageReceived={this.checkNotification}
-                            />
-                        </div>
-                    )} */}
         </StyledLayoutBounds>
-        {/* <Sidebar /> */}
       </div>
     );
   }
@@ -729,6 +695,20 @@ class VideoRoomComponent extends Component {
 const mapStateToProps = (state) => ({
   user: state.user.data,
   sessionInfo: state.room,
+  participants: state.participants,
 });
+
+// const mapDispatchToProps = (dispatch) => ({
+// setParticipants: (participants) => dispatch(setParticipants(participants)),
+// });
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setParticipants: (participants) => dispatch(setParticipants(participants)),
+  };
+};
+
 // export default VideoRoomComponent;
-export default connect(mapStateToProps)(withNavigation(VideoRoomComponent));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withNavigation(VideoRoomComponent));

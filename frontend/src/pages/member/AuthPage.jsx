@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom'; // useNavigate 추가
-import { useDispatch } from 'react-redux'; // useDispatch 추가
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import {
   googleSignin,
   verifyGoogleAccessToken,
   getProfile,
+  updateProfile,
 } from '../../apis/auth';
 import { setAuth } from '../../store/actions/authActions';
 import UserInfoModal from '../../components/organisms/UserInfoModal';
@@ -39,16 +40,25 @@ const AuthPage = () => {
           console.log('Token verification result:', verificationResult);
           setTokenVerified(verificationResult.message === 'Valid Token');
 
-          try {
-            const profile = await getProfile(data.oauthId);
-            if (!profile.nickname) {
-              setShowModal(true);
-            } else {
-              dispatch(setAuth({ oauth_id: data.oauthId, user: profile }));
-              navigate('/');
+          if (data.message === 'Existing Member') {
+            try {
+              const profile = await getProfile(data.memberId);
+              console.log('Profile data:', profile);
+
+              if (profile) {
+                // 기존 회원인 경우
+                console.log('기존회원입니다. 메인페이지로 이동');
+                dispatch(setAuth({ oauth_id: data.memberId, user: profile }));
+                navigate('/');
+              }
+            } catch (error) {
+              console.error('Error fetching profile:', error);
+              console.log('신규 회원입니다. 정보 입력 모달');
+              setShowModal(true); // 프로필 조회 실패 시에도 모달을 띄움
             }
-          } catch (error) {
-            console.error('Error fetching profile:', error);
+          } else {
+            console.log('신규 회원입니다. 정보 입력 모달');
+            setShowModal(true); // 신규 회원인 경우
           }
         })
         .catch((error) => {
@@ -57,16 +67,25 @@ const AuthPage = () => {
     }
   }, [location, dispatch, navigate]);
 
-  const handleModalSubmit = (nickname, voiceModel) => {
-    // 추가 사용자 정보를 백엔드로 전송하고 메인 페이지로 이동
-    dispatch(
-      setAuth({
-        oauth_id: token.oauth_id,
-        user: { ...token.user, nickname, voiceModel },
-      })
-    );
-    navigate('/');
+  const handleSubmit = async (nickname, profilePicture) => {
+    try {
+      const profileData = {
+        oauthId: token.memberId,
+        nickName: nickname,
+        memberPicture: profilePicture || 'default-profile.png',
+      };
+
+      console.log('Sending profile data:', profileData); // 데이터 확인
+
+      await updateProfile(profileData);
+      dispatch(setAuth({ oauth_id: token.memberId, user: profileData }));
+      console.log('회원가입 성공');
+      navigate('/');
+    } catch (error) {
+      console.error('회원가입 에러', error);
+    }
   };
+
   return (
     <div>
       <h1>Google Processing Authentication...</h1>
@@ -91,7 +110,7 @@ const AuthPage = () => {
         <UserInfoModal
           showModal={showModal}
           setShowModal={setShowModal}
-          handleSubmit={handleSubmit}
+          // handleSubmit={handleSubmit}
         />
       )}
     </div>

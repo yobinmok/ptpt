@@ -2,13 +2,7 @@ import axios from 'axios';
 import { Axios } from '../util/http-commons';
 const { VITE_API_URL } = import.meta.env;
 
-// Axios 인스턴스를 생성하여 기본 설정 지정
-const instance = axios.create({
-  baseURL: VITE_API_URL, // 백엔드 서버 주소
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+const instance = Axios();
 
 // authorization code를 사용하여 백엔드에서 access token과 id token을 요청
 // 구글 로그인 요청 함수
@@ -75,6 +69,17 @@ export const getProfile = async (oauthId) => {
     return response.data;
   } catch (error) {
     console.error('Error fetching profile:', error);
+    throw error;
+  }
+};
+
+// 회원 정보 수정 함수
+export const updateProfile = async (profileData) => {
+  try {
+    const response = await instance.put('/member/modify', profileData);
+    return response.data;
+  } catch (error) {
+    console.error('업데이트 프로필 에러', error);
     throw error;
   }
 };
