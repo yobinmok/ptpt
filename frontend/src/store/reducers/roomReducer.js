@@ -5,6 +5,9 @@ const initialState = {
   selectedTab: null,
   isSelectScriptTab: true,
   editFlag: null,
+  isAnonymous: 0,
+  isStart: false, // false : 진행 전 혹은 종료?, true : 진행 중
+  presentationTime: null,
 };
 
 const roomReducer = (state = initialState, action) => {
@@ -40,6 +43,21 @@ const roomReducer = (state = initialState, action) => {
         ...state,
         editFlag: action.flag,
         isSelectScriptTab: !state.isSelectScriptTab,
+      };
+    case 'EVALUATE_ANONYMOUS':
+      return {
+        ...state,
+        isAnonymous: action.payload,
+      };
+    case 'IS_START_PRESANTATION':
+      return {
+        ...state,
+        isStart: !state.isStart,
+      };
+    case 'PRESENTATION_TIME':
+      return {
+        ...state,
+        presentationTime: action.payload,
       };
     default:
       return {

@@ -5,7 +5,7 @@ import CustomTextarea from '../../molecules/CustomTextarea';
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleScriptSelect } from '../../../store/actions/room';
-import { useTempScript } from '../../../store/actions/solo';
+import { useTempScript } from '../../../store/actions/soloActions';
 
 const SelectScriptTab = () => {
   const soloPreset = useSelector((state) => state.solo);

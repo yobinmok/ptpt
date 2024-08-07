@@ -69,7 +69,7 @@ function Navbar() {
       </div>
       <RightContainer>
         {/* 사용자가 인증되었는지 여부에 따라 다른 링크를 표시 */}
-        {isAuthenticated ? (
+        {!isAuthenticated ? (
           <>
             {/* 인증된 사용자에게는 내 정보 링크와 프로필 이미지를 표시 */}
             <NavLink to='/myinfo'>

@@ -1,5 +1,4 @@
 export const base64ToBlob = (base64, fileType) => {
-  console.log(base64);
   let typeHeader = 'data:application/' + fileType + ';base64,'; // base64 헤더 파일 유형 정의
   let audioSrc = typeHeader + base64;
   let arr = audioSrc.split(',');

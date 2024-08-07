@@ -1,8 +1,6 @@
 import { combineReducers } from 'redux';
 import user from './userReducer';
 import authReducer from './authReducer';
-// import roomReducer from './roomReducer';
-// import soloReducer from './soloReducer';
 import room from './roomReducer.js';
 import solo from './soloReducer.js';
 import evaluationReducer from './evaluationReducer';
@@ -12,6 +10,7 @@ import statisticsReducer from './statisticsReducer';
 import feedbackReducer from './feedbackReducer';
 import { persistReducer } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session';
+import participantReducer from './participantReducer.js';
 
 // persistConfig를 통해 저장할 상태 설정
 const persistConfig = {
@@ -25,6 +24,7 @@ const persistConfig = {
     'savedRooms',
     'voiceModel',
     'statistics',
+    'participant',
     'feedback',
   ], // 저장할 상태만 선택
 };
@@ -39,11 +39,11 @@ const rootReducer = combineReducers({
   savedRooms: savedRoomsReducer,
   voiceModel: voiceModelReducer,
   statistics: statisticsReducer,
-  feedback: feedbackReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
+// combinedReducer는 persistReducer를 적용한 리듀서를 반환하도록 수정
 export default function combinedReducer(state, action) {
   // soloReducer는 persistReducer를 적용하지 않으므로
   // state와 action을 combinedReducer로 전달합니다.

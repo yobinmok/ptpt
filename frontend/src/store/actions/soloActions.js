@@ -6,13 +6,14 @@ import {
   UPDATE_SCRIPT,
   CREATE_SCRIPT,
   DELETE_SCRIPT,
-} from '../types/solo';
+  REGISTER_VOICERECORD,
+} from '../types/soloTypes';
 
 // 액션 생성자(dispatch 인수로 사용)
 // 혼자 하기 프리셋 업데이트 관련
-export const registerGuideline = (index, guideline) => ({
+export const registerGuideline = (index, guideline, setting) => ({
   type: REGISTER_GUIDELINE,
-  payload: { index, guideline },
+  payload: { index, guideline, setting },
 });
 
 export const updateVoiceSetting = (index, newVoiceSetting) => ({
@@ -39,4 +40,9 @@ export const createScript = (index, script) => ({
 export const deleteScript = (index) => ({
   type: DELETE_SCRIPT,
   index,
+});
+
+export const registerVoicerecord = (title, data) => ({
+  type: REGISTER_VOICERECORD,
+  payload: { title, data },
 });
