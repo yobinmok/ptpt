@@ -58,8 +58,8 @@ class VideoRoomComponent extends Component {
     let sessionName = this.props.sessionInfo
       ? this.props.sessionInfo.sessionName
       : 'SessionA';
-    let userName = this.props.user
-      ? this.props.user
+    let userName = this.props.nickname
+      ? this.props.nickname
       : 'OpenVidu_User' + Math.floor(Math.random() * 100);
     this.remotes = [];
     this.localUserAccessAllowed = false;
@@ -693,7 +693,7 @@ class VideoRoomComponent extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  user: state.user.data,
+  nickname: state.user.nickname,
   sessionInfo: state.room,
   participants: state.participants,
 });

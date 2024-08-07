@@ -8,6 +8,7 @@ const initialState = {
   isAnonymous: 0,
   isStart: false, // false : 진행 전 혹은 종료?, true : 진행 중
   presentationTime: null,
+  hostId: null,
 };
 
 const roomReducer = (state = initialState, action) => {
@@ -58,6 +59,11 @@ const roomReducer = (state = initialState, action) => {
       return {
         ...state,
         presentationTime: action.payload,
+      };
+    case 'SET_HOST_NAME':
+      return {
+        ...state,
+        hostId: action.payload,
       };
     default:
       return {

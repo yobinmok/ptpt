@@ -7,6 +7,7 @@ import {
   EVALUATE_ANONYMOUS,
   IS_START_PRESANTATION,
   PRESENTATION_TIME,
+  SET_HOST_NAME,
 } from '../types/room';
 
 const toggleScriptSelect = (flag) => ({
@@ -53,6 +54,7 @@ const setAnonymous = (isAnonymous) => {
   };
 };
 
+// 지금 안쓰고 있음
 const isStartPresantation = (flag) => {
   return {
     type: IS_START_PRESANTATION,
@@ -67,6 +69,13 @@ const setPresentationTime = (time) => {
   };
 };
 
+const setHost = (userId) => {
+  return {
+    type: SET_HOST_NAME,
+    payload: userId,
+  };
+};
+
 export {
   setRoomSession,
   clearRoomSession,
@@ -77,4 +86,5 @@ export {
   setAnonymous,
   isStartPresantation,
   setPresentationTime,
+  setHost,
 };

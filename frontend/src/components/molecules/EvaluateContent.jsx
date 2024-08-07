@@ -14,7 +14,7 @@ const EvaluateContent = ({}) => {
     logic: 0,
     suitability: 0,
     commentContent: '',
-    isAnonymous: 0,
+    anonymity: 0,
     master: '',
     slave: '',
   });
@@ -23,7 +23,7 @@ const EvaluateContent = ({}) => {
   const participants = useSelector((state) => state.participant.participants);
   // const userId = useSelector((state) => state.user.data);
   // 자기 자신을 제외한 참가자 목록을 평가지에 올림
-  const userId = 'OpenVidu_User54';
+  const userId = 'G41';
   const participantsWithoutMe = participants.filter(
     (participant) => participant !== userId
   );
@@ -33,13 +33,13 @@ const EvaluateContent = ({}) => {
     if (isAnonymous) {
       setEvaluateInfo((prevInfo) => ({
         ...prevInfo,
-        isAnonymous: isAnonymous,
+        anonymity: isAnonymous,
         master: userId,
       }));
     } else {
       setEvaluateInfo((prevInfo) => ({
         ...prevInfo,
-        isAnonymous: isAnonymous,
+        anonymity: isAnonymous,
       }));
     }
   }, [isAnonymous]);
@@ -64,6 +64,9 @@ const EvaluateContent = ({}) => {
   const onEvaluateInfoInput = (e) => {
     setEvaluateInfo({ ...evaluateInfo, [e.target.name]: e.target.value });
     // evaluateInfo.commentContent = e.target.value;
+    console.log(e.target.name);
+    console.log(e.target.value);
+    console.log(evaluateInfo);
   };
 
   // 점수와 코멘트 제출
@@ -152,7 +155,6 @@ const EvaluateContent = ({}) => {
       <p>코멘트</p>
 
       <TextField
-        //   id='outlined-multiline-static'
         name='commentContent'
         label='Comment'
         multiline
