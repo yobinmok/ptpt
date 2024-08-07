@@ -55,7 +55,8 @@ public class MemberService {
                                 profile.member.memberId,
                                 profile.voiceModel.voiceModelId,
                                 profile.statistic.statisticId,
-                                profile.presetId))
+                                profile.presetId,
+                                qmember.voiceModelCreated))
                 .from(qmember)
                 .leftJoin(qmember.profile, profile)
                 .where(qmember.memberId.eq(member.getMemberId()))

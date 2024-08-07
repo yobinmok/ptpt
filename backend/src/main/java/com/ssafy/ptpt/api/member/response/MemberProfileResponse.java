@@ -15,4 +15,5 @@ public class MemberProfileResponse {
     private Long voiceModelId;
     private Long statisticId;
     private Long presetId;
+    private int voiceModelCreated;
 }
