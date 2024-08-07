@@ -8,7 +8,7 @@ import { textToSpeechApi, uploadAudioApi } from '../../../apis/voice';
 import {
   registerGuideline,
   updateVoiceSetting,
-} from '../../../store/actions/solo';
+} from '../../../store/actions/soloActions';
 
 const VoiceTab = () => {
   const dispatch = useDispatch();
@@ -51,7 +51,6 @@ const VoiceTab = () => {
         formData,
         ({ data }) => {
           console.log('성공');
-          console.log(data);
           resolve(data); // Promise를 성공으로 마치고 resultAudioBlob을 반환
         },
         () => {
@@ -88,13 +87,23 @@ const VoiceTab = () => {
           if (voiceSetting.current.model === 4) {
             uploadAudio(data.audioContent)
               .then((base64) => {
-                dispatch(registerGuideline(scriptIdx, base64));
+                dispatch(
+                  registerGuideline(scriptIdx, base64, voiceSetting.current)
+                );
               })
               .catch((error) => {
                 console.log(error);
               });
+          } else {
+            dispatch(
+              registerGuideline(
+                scriptIdx,
+                data.audioContent,
+                voiceSetting.current
+              )
+            );
           }
-          dispatch(updateVoiceSetting(scriptIdx, voiceSetting.current));
+          console.log('가이드라인 등록 완');
         } else {
           // 가이드라인 재생
           if (voiceSetting.current.model === 4) {
