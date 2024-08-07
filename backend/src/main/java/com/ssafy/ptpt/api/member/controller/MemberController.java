@@ -70,7 +70,7 @@ public class MemberController {
             memberService.saveProfile(member);
             return ResponseEntity.ok(TokenResponseBody.of(200, "Success", tokenString, oauthId));
         }else{
-            return ResponseEntity.ok(TokenResponseBody.of(200, "Existing Member", tokenString, oauthId));
+            return ResponseEntity.ok(TokenResponseBody.of(201, "Existing Member", tokenString, oauthId));
         }
     }
 
