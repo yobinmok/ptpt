@@ -41,7 +41,7 @@ public class VoiceModelController {
     @PostMapping("/refresh")
     public void inferRefresh()throws IOException {
         System.out.println("??????????????????????/");
-        WebClient webClient = WebClient.create("https://i11b207.p.ssafy.io");
+        WebClient webClient = WebClient.create("https://i11b207.p.ssafy.io/rvc");
         ObjectMapper mapper = new ObjectMapper();
 
         ObjectNode rootNode = mapper.createObjectNode();
