@@ -1,7 +1,5 @@
 package com.ssafy.ptpt.api.preset.controller;
 
-//import io.swagger.annotations.ApiOperation;
-
 import com.ssafy.ptpt.api.preset.request.PresetCreateRequest;
 import com.ssafy.ptpt.api.preset.request.PresetSearchRequest;
 import com.ssafy.ptpt.api.preset.response.PresetInfoResponse;

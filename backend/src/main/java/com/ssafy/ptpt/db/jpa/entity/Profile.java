@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 
 @Entity
 @Getter
@@ -24,7 +22,7 @@ public class Profile {
     @JoinColumn(name = "statistic_id")
     private Statistic statistic;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "member_id")
     private Member member;
 

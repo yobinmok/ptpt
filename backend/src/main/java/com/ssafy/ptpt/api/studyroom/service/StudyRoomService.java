@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -145,7 +144,8 @@ public class StudyRoomService {
         List<EntryList> entryList = new ArrayList<>();
         for (String nickname : nicknameList) {
             Member member = memberRepository.findByNickname(nickname);
-            EntryList entry = new EntryList(studyRoomCreateEntryRequest.getStudyRoomId(),
+            StudyRoom studyRoom = studyRoomRepository.findByStudyRoomId(studyRoomCreateEntryRequest.getStudyRoomId());
+            EntryList entry = new EntryList(studyRoom,
                                                 member.getMemberId());
             entryList.add(entry);
         }

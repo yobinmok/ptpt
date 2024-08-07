@@ -21,7 +21,6 @@ import java.util.List;
 public class EvaluationController {
 
     private final EvaluationService evaluationService;
-    private final StatisticService statisticService;
 
     // 평가 등록 될때 통계 업데이트
     //평가가 등록될때 코멘트도 값이 등록이 되어야 한다

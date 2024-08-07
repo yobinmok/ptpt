@@ -5,26 +5,26 @@ import com.ssafy.ptpt.api.evaluation.service.EvaluationService;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomCreateEntryRequest;
 import com.ssafy.ptpt.api.studyroom.request.StudyRoomCreateRequest;
 import com.ssafy.ptpt.api.studyroom.service.StudyRoomService;
-import com.ssafy.ptpt.db.jpa.entity.*;
-import com.ssafy.ptpt.db.jpa.repository.*;
+import com.ssafy.ptpt.db.jpa.entity.Member;
+import com.ssafy.ptpt.db.jpa.entity.StudyRoom;
+import com.ssafy.ptpt.db.jpa.repository.EntryListRepository;
+import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
+import com.ssafy.ptpt.db.jpa.repository.StatisticRepository;
+import com.ssafy.ptpt.db.jpa.repository.StudyRoomRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class DataInitializer {
 
-    private final EntryListRepository entryListRepository;
     private final EvaluationService evaluationService;
     private final MemberRepository memberRepository;
-    private final StatisticRepository statisticRepository;
     private final StudyRoomService studyRoomService;
     private final StudyRoomRepository studyRoomRepository;
 
