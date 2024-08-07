@@ -1,8 +1,6 @@
 import { combineReducers } from 'redux';
 import user from './userReducer';
 import authReducer from './authReducer';
-// import roomReducer from './roomReducer';
-// import soloReducer from './soloReducer';
 import room from './roomReducer.js';
 import solo from './soloReducer.js';
 import evaluationReducer from './evaluationReducer';

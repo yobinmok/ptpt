@@ -5,13 +5,19 @@ import PauseIcon from '@mui/icons-material/PauseCircleOutlined';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import FastForwardIcon from '@mui/icons-material/FastForward';
 import DropdownMenu from '../atoms/DropdownMenu';
+import { useSelector } from 'react-redux';
+import { base64ToBlob } from '../../hooks/voice';
+import AudioRecorder from './AudioRecorder';
 
-const BottomBar = ({ src }) => {
+const BottomBar = () => {
   const audioRef = useRef(null);
+  const [audioSrc, setAudioSrc] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isSliderHovered, setIsSliderHovered] = useState(false);
+  const script = useSelector((state) => state.solo.script);
+  const guideline = script.filter((item) => item.guideline && item.title);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -24,14 +30,27 @@ const BottomBar = ({ src }) => {
       setCurrentTime(audio.currentTime);
     };
 
+    const handleEnded = () => {
+      setIsPlaying(false);
+    };
+
     audio.addEventListener('loadeddata', handleLoadedData);
     audio.addEventListener('timeupdate', handleTimeUpdate);
+    audio.addEventListener('ended', handleEnded);
 
     return () => {
       audio.removeEventListener('loadeddata', handleLoadedData);
       audio.removeEventListener('timeupdate', handleTimeUpdate);
+      audio.removeEventListener('ended', handleEnded);
     };
   }, []);
+
+  useEffect(() => {
+    if (audioSrc) {
+      setIsPlaying(false);
+      setCurrentTime(0);
+    }
+  }, [audioSrc]);
 
   const handlePlayPause = () => {
     const audio = audioRef.current;
@@ -107,7 +126,18 @@ const BottomBar = ({ src }) => {
       >
         {/* Left: DropdownMenu */}
         <Box sx={{ flexGrow: 0 }}>
-          <DropdownMenu />
+          <DropdownMenu
+            options={guideline.map((item) => ({
+              value: item.guideline,
+              label: item.title,
+            }))}
+            onSelect={(base64) => {
+              const src = window.URL.createObjectURL(
+                base64ToBlob(base64, 'wav')
+              );
+              setAudioSrc(src);
+            }}
+          />
         </Box>
 
         {/* Center: Playback Controls */}
@@ -147,13 +177,13 @@ const BottomBar = ({ src }) => {
         <Box
           sx={{ flexGrow: 0, display: 'flex', gap: '10px', marginRight: '5px' }}
         >
-          <Button variant='contained'>발표 시작</Button>
+          <AudioRecorder />
           <Button variant='contained' color='error'>
             나가기
           </Button>
         </Box>
       </Box>
-      <audio ref={audioRef} src={src} />
+      <audio ref={audioRef} src={audioSrc} />
     </Box>
   );
 };
