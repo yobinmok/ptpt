@@ -66,7 +66,7 @@ public class EvaluationService {
 
             commentRepository.save(comment);
 
-            Statistic statistic = statisticRepository.findByOauthId(member.getMemberId());
+            Statistic statistic = statisticRepository.findByOauthId(member.getOauthId());
             // 데이터가 없다면 통계 테이블에 값 삽입
             if (statistic == null) {
                 statistic = new Statistic();

@@ -6,6 +6,7 @@ import solo from './soloReducer.js';
 import evaluationReducer from './evaluationReducer';
 import savedRoomsReducer from './savedRoomsReducer';
 import voiceModelReducer from './voiceModelReducer';
+import statisticsReducer from './statisticsReducer';
 import { persistReducer } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session';
 import participantReducer from './participantReducer.js';
@@ -21,6 +22,7 @@ const persistConfig = {
     'evaluation',
     'savedRooms',
     'voiceModel',
+    'statistics',
     'participant',
   ], // 저장할 상태만 선택
 };
@@ -34,6 +36,7 @@ const rootReducer = combineReducers({
   evaluation: evaluationReducer,
   savedRooms: savedRoomsReducer,
   voiceModel: voiceModelReducer,
+  statistics: statisticsReducer,
   participant: participantReducer,
 });
 

@@ -44,7 +44,7 @@ public class StudyRoomController {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
     })
-    @GetMapping("/{studyRoomTitle}")
+    @GetMapping("/search/{studyRoomTitle}")
     @Operation(summary = "스터디룸 검색", description = "대기실 화면에서 스터디룸을 검색 할수 있습니다.")
     public ResponseEntity<StudyRoomInfoResponse> findByRoomTitle(@PathVariable("studyRoomTitle") String studyRoomTitle) {
         StudyRoomInfoResponse studyRoomInfoResponse = studyRoomService.findByStudyRoomTitle(studyRoomTitle);

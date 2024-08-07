@@ -1,9 +1,10 @@
 package com.ssafy.ptpt.api.member.controller;
 
 import com.google.gson.JsonParser;
-import com.ssafy.ptpt.api.member.request.MemberIdRequest;
+import com.ssafy.ptpt.api.member.request.MemberOauthIdRequest;
 import com.ssafy.ptpt.api.member.request.MemberUpdateRequest;
 import com.ssafy.ptpt.api.member.response.MemberProfileResponse;
+import com.ssafy.ptpt.api.member.response.MemberStatisticResponse;
 import com.ssafy.ptpt.api.member.service.MemberService;
 import com.ssafy.ptpt.api.security.model.request.AccessTokenRequestBody;
 import com.ssafy.ptpt.api.security.model.request.AuthorizationCodeRequestBody;
@@ -13,6 +14,7 @@ import com.ssafy.ptpt.api.security.service.GoogleAuthService;
 import com.ssafy.ptpt.api.security.service.KakaoService;
 import com.ssafy.ptpt.api.transformer.Trans;
 import com.ssafy.ptpt.db.jpa.entity.Member;
+import com.ssafy.ptpt.db.jpa.entity.Statistic;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -214,8 +216,8 @@ public class MemberController {
     })
     @DeleteMapping("/withdraw")
     @Operation(summary = "회원 탈퇴")
-    public ResponseEntity<Void> withdrawMember(@RequestBody @Valid MemberIdRequest memberIdRequest){
-        int complete = memberService.withdrawMember(memberIdRequest);
+    public ResponseEntity<Void> withdrawMember(@RequestBody @Valid MemberOauthIdRequest memberOauthIdRequest){
+        int complete = memberService.withdrawMember(memberOauthIdRequest);
         return complete == 1 ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
@@ -242,12 +244,11 @@ public class MemberController {
     })
     @PostMapping("/profile")
     @Operation(summary = "프로필 조회")
-    public ResponseEntity<MemberProfileResponse> findUserProfile(@RequestBody @Valid MemberIdRequest memberIdRequest) {
-        MemberProfileResponse memberProfile = memberService.findMemberProfile(memberIdRequest.getOauthId());
+    public ResponseEntity<MemberProfileResponse> findUserProfile(@RequestBody @Valid MemberOauthIdRequest memberOauthIdRequest) {
+        MemberProfileResponse memberProfile = memberService.findMemberProfile(memberOauthIdRequest.getOauthId());
         return ResponseEntity.ok().body(memberProfile);
     }
 
-    // 프로필 조회
 
     /**
      * 사용자 신고기능
@@ -263,8 +264,8 @@ public class MemberController {
     })
     @PostMapping("/report")
     @Operation(summary = "유저 신고")
-    public ResponseEntity<Void> memberReport(@RequestBody @Valid MemberIdRequest memberIdRequest) {
-        memberService.memberReport(memberIdRequest);
+    public ResponseEntity<Void> memberReport(@RequestBody @Valid MemberOauthIdRequest memberOauthIdRequest) {
+        memberService.memberReport(memberOauthIdRequest);
         return ResponseEntity.ok().build();
     }
 
@@ -280,5 +281,15 @@ public class MemberController {
                 : ResponseEntity.badRequest().body("입력한 닉네임이 이미 사용 중입니다.");
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+    })
+    @PostMapping("/statistic")
+    @Operation(summary = "프로필 화면에서 통개를 조회할수 있습니다")
+    public ResponseEntity<MemberStatisticResponse> findMemberStatistic(@RequestBody @Valid MemberOauthIdRequest memberOauthIdRequest) {
+        MemberStatisticResponse memberStatisticResponse = memberService.findMemberStatistic(memberOauthIdRequest);
+        return ResponseEntity.ok().body(memberStatisticResponse);
+    }
 
 }

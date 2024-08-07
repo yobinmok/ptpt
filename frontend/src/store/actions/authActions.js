@@ -2,9 +2,10 @@ import axios from 'axios';
 import { SET_AUTH, LOG_OUT } from '../types/authTypes';
 
 // 인증 상태 설정 액션 생성자
-export const setAuth = (token) => ({
+export const setAuth = (token, user) => ({
   type: SET_AUTH,
   token,
+  user,
 });
 
 // 로그아웃 액션 생성자
@@ -16,7 +17,8 @@ export const logOut = () => ({
 export const login = (credentials) => async (dispatch) => {
   try {
     const response = await axios.post('/member/signin', credentials); // 로그인 엔드포인트 수정
-    dispatch(setAuth(response.data.token));
+    const { token, user } = response.data;
+    dispatch(setAuth(token, user));
   } catch (error) {
     console.error('Error logging in:', error);
   }
@@ -34,7 +36,8 @@ export const logout = () => async (dispatch) => {
 
 // Demo 로그인 액션 생성자
 export const demoLogin = () => (dispatch) => {
-  dispatch(setAuth('demo-token'));
+  const demoUser = { oauthId: 'demo-oauth-id', nickname: 'Demo User' };
+  dispatch(setAuth('demo-token', demoUser));
 };
 
 // Demo 로그아웃 액션 생성자

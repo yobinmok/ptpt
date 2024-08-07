@@ -20,7 +20,7 @@ const SavedRoomsPage = () => {
 
   return (
     <div>
-      <h1>저장한 스터디룸 페이지</h1>
+      <h1>저장한 스터디룸 페이지22</h1>
       {/* 저장한 스터디룸 데이터를 기반으로 표시 */}
       {savedRooms.length > 0 ? (
         <ul>
