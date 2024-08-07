@@ -12,5 +12,6 @@ import java.util.Objects;
 @AllArgsConstructor
 public class PresetCreateRequest {
     private String oauthId;
+    private String presetType;
     private Map<String, Object> presetData;
 }
