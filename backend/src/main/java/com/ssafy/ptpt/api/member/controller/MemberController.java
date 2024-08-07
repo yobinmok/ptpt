@@ -25,10 +25,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
@@ -40,6 +44,9 @@ public class MemberController {
     private final GoogleAuthService googleAuthService;
     private final KakaoService kakaoService;
     private final MemberService memberService;
+
+    @Value("${imageFile.path}")
+    private String IMAGE_UPLOAD_PATH;
 
     @Operation(
             summary = "카카오 액세스 토큰 발급",
@@ -190,47 +197,18 @@ public class MemberController {
         return ResponseEntity.ok(BaseResponseBody.of(401, "Invalid Token"));
     }
 
-    @PutMapping("/signout")
-    @Operation(
-            summary = "로그아웃",
-            description = "현재 사용자의 세션을 종료하거나 액세스 토큰을 무효화합니다.",
-            security = @SecurityRequirement(name = "bearerAuth"),
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "로그아웃 성공",
-                            content = @Content(
-                                    schema = @Schema(
-                                            description = "로그아웃 성공 응답",
-                                            example = "{ \"message\": \"로그아웃이 성공적으로 완료되었습니다.\" }"
-                                    )
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "401",
-                            description = "인증 실패 또는 요청이 잘못됨",
-                            content = @Content(
-                                    schema = @Schema(
-                                            description = "로그아웃 실패 응답",
-                                            example = "{ \"message\": \"로그아웃에 실패하였습니다. 인증 정보를 확인하세요.\" }"
-                                    )
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "500",
-                            description = "서버 오류",
-                            content = @Content(
-                                    schema = @Schema(
-                                            description = "서버 오류 응답",
-                                            example = "{ \"message\": \"서버에서 오류가 발생했습니다. 나중에 다시 시도해 주세요.\" }"
-                                    )
-                            )
-                    )
-            }
-    )
-    public ResponseEntity<?> signout(@RequestParam("ACCESS_TOKEN") String ACCESS_TOKEN){
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @PostMapping("/signout/google")
+//    @Operation(
+//            summary = "구글 로그아웃",
+//            description = "구글 사용자의 세션을 종료하거나 액세스 토큰을 무효화합니다.",
+//            responses = {
+//                    @ApiResponse(responseCode = "200", description = "로그아웃 성공"),
+//                    @ApiResponse(responseCode = "401", description = "로그아웃 실패")
+//            })
+//    public ResponseEntity<?> googleLogout(@RequestBody AccessTokenRequestBody accessTokenRequestBody) {
+//        SecurityContextHolder.clearContext();
+//        return ResponseEntity.ok(BaseResponseBody.of(200, "로그아웃 성공"));
+//    }
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
@@ -253,7 +231,25 @@ public class MemberController {
                     @ApiResponse(responseCode = "401",
                             description = "수정 실패")
             })
-    public ResponseEntity<Void> modifyMemberInfo(@RequestBody MemberUpdateRequest memberUpdateRequest){
+    public ResponseEntity<Void> modifyMemberInfo(@RequestPart(name = "memberUpdateRequest") MemberUpdateRequest memberUpdateRequest, @RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
+
+        // 이미지파일 입력이 있을 경우 이미지를 서버에 저장
+        if(image != null && !image.isEmpty()){
+            String saveFolder = IMAGE_UPLOAD_PATH;
+            File folder = new File(saveFolder);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+
+            String originalFileName = image.getOriginalFilename();
+            String saveFileName = memberUpdateRequest.getOauthId() + originalFileName.substring(originalFileName.lastIndexOf('.'));
+            File originalFile = new File(folder, saveFileName);
+            image.transferTo(originalFile);
+
+            // 파일 경로를 memberUpdateRequest에 저장
+            memberUpdateRequest.setMemberPicture(saveFolder + File.separator + saveFileName);
+        }
+
         int complete = memberService.modifyMemberInfo(memberUpdateRequest);
         return complete == 1 ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
