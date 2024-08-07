@@ -23,7 +23,6 @@ import java.util.Optional;
 public class EvaluationService {
     private final EvaluationRepository evaluationRepository;
     private final StatisticRepository statisticRepository;
-    private final StudyRoomRepository studyRoomRepository;
     private final EntryListRepository entryListRepository;
     private final JPAQueryFactory jpaQueryFactory;
     //test

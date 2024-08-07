@@ -4,7 +4,6 @@ import com.ssafy.ptpt.api.evaluation.request.EvaluationCreateRequest;
 import com.ssafy.ptpt.api.evaluation.request.FeedBackSearchRequest;
 import com.ssafy.ptpt.api.evaluation.response.FeedBackInfoResponse;
 import com.ssafy.ptpt.api.evaluation.service.EvaluationService;
-import com.ssafy.ptpt.api.evaluation.service.StatisticService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
