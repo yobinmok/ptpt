@@ -6,10 +6,7 @@
  * SET_SAVED_ROOMS, FETCH_SAVED_ROOMS_ERROR 액션을 처리합니다.
  */
 
-import {
-  SET_SAVED_ROOMS,
-  FETCH_SAVED_ROOMS_ERROR,
-} from '../types/savedRoomsTypes';
+import { SET_SAVED_ROOMS } from '../types/savedRoomsTypes';
 
 // 초기 상태 정의
 const initialState = {
@@ -24,14 +21,8 @@ const savedRoomsReducer = (state = initialState, action) => {
     case SET_SAVED_ROOMS:
       return {
         ...state, // 기존 상태를 복사
-        data: action.data, // 새로운 저장한 스터디룸 데이터로 업데이트
+        data: action.payload, // 새로운 저장한 스터디룸 데이터로 업데이트
         error: null, // 에러 상태 초기화
-      };
-    // 저장한 스터디룸 데이터 가져오기 에러 처리
-    case FETCH_SAVED_ROOMS_ERROR:
-      return {
-        ...state, // 기존 상태를 복사
-        error: action.error, // 에러 상태 업데이트
       };
     // 기본적으로 기존 상태를 반환
     default:

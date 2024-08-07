@@ -31,6 +31,7 @@ const AuthPage = () => {
       // authorization code를 사용하여 백엔드에서 access token과 id token을 요청
       googleSignin(code)
         .then(async (data) => {
+          // data = {accessToken, memberId(oauthId), message, statusCode}
           console.log('Token received:', data);
           setToken(data);
 
@@ -48,7 +49,12 @@ const AuthPage = () => {
               if (profile) {
                 // 기존 회원인 경우
                 console.log('기존회원입니다. 메인페이지로 이동');
-                dispatch(setAuth(data.accessToken, profile));
+                dispatch(
+                  setAuth(data.accessToken, {
+                    oauthId: data.memberId,
+                    nickname: profile.nickname,
+                  })
+                );
                 navigate('/');
               }
             } catch (error) {
@@ -78,7 +84,12 @@ const AuthPage = () => {
       console.log('Sending profile data:', profileData); // 데이터 확인
 
       await updateProfile(profileData);
-      dispatch(setAuth(token.accessToken, profileData));
+      dispatch(
+        setAuth(token.accessToken, {
+          oauthId: token.memberId,
+          nickname: nickname,
+        })
+      );
       console.log('회원가입 성공');
       navigate('/');
     } catch (error) {

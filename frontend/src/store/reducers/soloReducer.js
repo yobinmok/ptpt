@@ -6,10 +6,9 @@ const initialState = {
     'ko-KR-Standard-B',
     'ko-KR-Standard-C',
     'ko-KR-Standard-D',
-    'test1.pth', // 내 음성모델 불러오기 -> 모델명은 'vm + oauth_id'
   ],
-  studyRoomTitle: null,
-  script: [{ title: '디폴트', content: '안녕하세요 기본값입니다.' }],
+  title: null,
+  script: [], // { title: '디폴트', content: '안녕하세요 기본값입니다.' }
   // {title: "", content: "", voiceSetting: {model: 0, tone: 3, speakingRate: 2}} 리스트 형식 -> 불러올 때는 인덱스 사용
   voiceRecord: [], // 내 녹음본
   guideline: [], // 가이드라인 [오디오 태그의 src값 저장..?ㅠ]
@@ -25,23 +24,6 @@ const initialState = {
 const soloReducer = (state = initialState, action) => {
   // STATE를 수정하는 방식을 다 정해둠 -> type : type에 따른 처리
   switch (action.type) {
-    // case 'REGISTER_GUIDELINE':
-    //   const { index, guideline, setting } = action.payload;
-    //   const guidelineExists = state.guideline.some((g) => g.index === index);
-
-    //   if (guidelineExists) {
-    //     return {
-    //       ...state,
-    //       guideline: state.guideline.map((g) =>
-    //         g.index === index ? { ...g, guideline } : g
-    //       ),
-    //     };
-    //   } else {
-    //     return {
-    //       ...state,
-    //       guideline: [...state.guideline, { index, guideline }],
-    //     };
-    //   }
     case 'REGISTER_GUIDELINE':
       return {
         ...state,
@@ -86,6 +68,23 @@ const soloReducer = (state = initialState, action) => {
       return {
         ...state,
         voiceRecord: [...state.voiceRecord, action.payload],
+      };
+    case 'INIT_PRESET':
+      if (action.payload === null) {
+        return initialState;
+      }
+      return {
+        ...state,
+        title: action.payload.title,
+        createdTime: action.payload.createdTime,
+        isCompleted: action.payload.isCompleted,
+        presentationSheet: action.payload.presentationSheet,
+        script: action.payload.script,
+      };
+    case 'ADD_VOICEMODEL':
+      return {
+        ...state,
+        voiceModel: [...state.voiceModel, 'vm' + action.payload + '.pth'],
       };
     default:
       return state;
