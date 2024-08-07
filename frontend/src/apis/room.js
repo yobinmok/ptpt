@@ -92,8 +92,8 @@ export const submitEvaluate = async (evaluateInfo, studyRoomId) => {
       logic: evaluateInfo.logic,
       suitability: evaluateInfo.suitability,
       master: evaluateInfo.master, // 평가 주는 사람 : null 가능
-      // slave: evaluateInfo.slave, // 평가 당하는 사람
-      slave: 'testMember',
+      slave: evaluateInfo.slave, // 평가 당하는 사람
+      // slave: 'testMember',
       commentContent: '',
       isAnonymous: evaluateInfo.isAnonymous,
       studyRoomId: studyRoomId,
@@ -124,5 +124,27 @@ export const adminParticipants = async (studyRoomId, participants) => {
     });
   } catch (error) {
     console.log('admin participants error : ' + error);
+  }
+};
+
+// 참가자 신고 및 발표자 지정 api
+export const reportParticipants = async (nickname) => {
+  try {
+    const response = await axios.post(`member/report`, {
+      nickname: nickname,
+    });
+  } catch (error) {
+    console.log('report error : ' + error);
+  }
+};
+
+export const assignationParticipants = async (studyRoomId, nickname) => {
+  try {
+    const response = await axios.post(`studyRoom/assignation`, {
+      studyRoomId: studyRoomId,
+      nickname: nickname,
+    });
+  } catch (error) {
+    console.log('assignation error : ' + error);
   }
 };
