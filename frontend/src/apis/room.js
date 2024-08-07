@@ -18,18 +18,18 @@ const axios = Axios();
 //   }
 // };
 
-export const createStudyRoom = async (user, roomInfo) => {
+export const createStudyRoom = async (userId, roomInfo) => {
   try {
     const response = await axios.post(`/studyRoom`, {
       studyRoomTitle: roomInfo.roomname,
       studyRoomPw: roomInfo.roompw,
-      memberId: user, // 방장 아이디(host)
+      oauthId: userId, // 방장 아이디(host) -> oauth_id로 수정 필요
       isPublic: roomInfo.roomopen,
       presentationTime: roomInfo.roomtime,
       subject: roomInfo.roomtopic,
       description: roomInfo.roomcomment,
       anonymity: roomInfo.roomhidden,
-      entryList: [0], // 사용자 추가
+      entryList: [userId], // 사용자 추가
     });
     // response.data == roomId
     return response.data;
@@ -93,8 +93,7 @@ export const submitEvaluate = async (evaluateInfo, studyRoomId) => {
       suitability: evaluateInfo.suitability,
       master: evaluateInfo.master, // 평가 주는 사람 : null 가능
       slave: evaluateInfo.slave, // 평가 당하는 사람
-      // slave: 'testMember',
-      commentContent: '',
+      commentContent: evaluateInfo.commentContent,
       isAnonymous: evaluateInfo.isAnonymous,
       studyRoomId: studyRoomId,
     });

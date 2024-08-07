@@ -4,6 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.ssafy.ptpt.db.jpa.entity.Member;
+import com.ssafy.ptpt.db.jpa.entity.Profile;
+import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
+import com.ssafy.ptpt.db.jpa.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,15 +27,17 @@ public class VoiceModelService {
 
     private final WebClient webClient;
     private final ObjectMapper objectMapper;
+    private final MemberRepository memberRepository;
     @Value("${external.api.convert}")
     private String CONVERT; // 추후 application.yml 파일에 추가 예정
     @Value("${external.api.select}")
     private String SELECT;
 
     @Autowired
-    public VoiceModelService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper) {
+    public VoiceModelService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper, MemberRepository memberRepository) {
         this.webClient = webClientBuilder.build();
         this.objectMapper = objectMapper;
+        this.memberRepository = memberRepository;
     }
 
     public Mono<String> inferConvert(String ttsPath) {
@@ -99,6 +105,7 @@ public class VoiceModelService {
                     System.err.println("오류 발생: " + error.getMessage());
                     return Mono.just("처리 중 오류 발생");
                 });
+
     }
 
     public String convertFileToBase64(String filePath) throws IOException {
@@ -107,5 +114,14 @@ public class VoiceModelService {
 
         // 바이트 배열을 Base64 형식으로 인코딩
         return Base64.getEncoder().encodeToString(fileBytes);
+    }
+
+
+
+    public void updateVoiceModelCreated(String oauthId) {
+        Member member = memberRepository.findByOauthId(oauthId);
+
+        member.setVoiceModelCreated(1);
+        memberRepository.save(member);
     }
 }

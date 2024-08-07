@@ -1,5 +1,6 @@
-package com.ssafy.ptpt.api.studyroom.request;
+package com.ssafy.ptpt.api.member.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudyRoomStatusRequest {
-    private Long studyRoomId;
+public class MemberNicknameRequest {
+
+    @NotNull
     private String nickname;
 }

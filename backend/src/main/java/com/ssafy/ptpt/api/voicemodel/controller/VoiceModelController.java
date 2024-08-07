@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.io.File;
@@ -37,7 +38,28 @@ public class VoiceModelController {
     private String UPLOAD_PATH;
     private final VoiceModelService voiceModelService;
 
+    @PostMapping("/refresh")
+    public void inferRefresh()throws IOException {
+        System.out.println("??????????????????????/");
+        WebClient webClient = WebClient.create("http://localhost:7897");
+        ObjectMapper mapper = new ObjectMapper();
+
+        ObjectNode rootNode = mapper.createObjectNode();
+
+        ArrayNode dataNode = mapper.createArrayNode();
+
+        rootNode.set("data", dataNode);
+        Mono<String> response = webClient.post()
+                .uri("/run/infer_refresh")
+                .bodyValue(rootNode)
+                .retrieve()
+                .bodyToMono(String.class);
+
+        response.subscribe(System.out::println);
+    }
+
     @PostMapping("/audio")
+    @Operation(summary = "음성 변환")
     public Mono<ResponseEntity<String>> getTtsVoice(
             @RequestPart(name = "audio") MultipartFile audio,
             @RequestPart(name = "fileName") String fileName
@@ -77,14 +99,13 @@ public class VoiceModelController {
     @Value("${audioFile.preTrain}")
     private String PRETRAIN_UPLOAD_PATH;
     @PostMapping("/train")
-    @Operation(summary = "음성모델 생성")
+    @Operation(summary = "음성모델 생성", description = "음성모델을 학습하여 생성합니다.")
     public ResponseEntity<?> voiceModelTrain(@RequestPart(name="audio") MultipartFile audio, @RequestPart(name="oauthId") String oauthId) throws IOException {
         if (audio.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File is empty");
         }
 
         // 1. 원본 파일 (PRETRAIN DATA) 저장
-        String today = new SimpleDateFormat("yyMMdd").format(new Date());
         String saveFolder = PRETRAIN_UPLOAD_PATH + File.separator + oauthId;
         File folder = new File(saveFolder);
         if (!folder.exists()) {
@@ -116,6 +137,7 @@ public class VoiceModelController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception occurred: " + e.getMessage());
         }
 
+        voiceModelService.updateVoiceModelCreated(oauthId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

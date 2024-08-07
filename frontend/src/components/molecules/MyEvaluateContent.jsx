@@ -20,23 +20,27 @@ const MyEvaluateContent = () => {
 
   // back-end response
   /*
+  [
   {
-    "evaluationId": 1,
-    "studyRoomId": 37,
+    "evaluationId": 4,
+    "studyRoomId": 2,
     "oauthId": null,
     "delivery": 100,
     "expression": 100,
-    "preparation": 100,
-    "logic": 100,
-    "suitability": 100,
-    "commentContent": "testContent",
-    "nickname": "testNickname",
-    "isAnonymous": 0
+    "preparation": 55,
+    "logic": 55,
+    "suitability": 60,
+    "commentContent": "",
+    "nickname": "OpenVidu_User43",
+    "anonymity": 0
   }
+]
   */
+  // oauth_id로 내 평가 호출해오기
   const getMyEval = async () => {
     try {
-      const userId = 'G123';
+      // const userId = 'G123';
+      const userId = useSelector((state) => state.user.userId);
       const response = await takeMyEvaluate(studyRoomId, userId);
       if (response && response.data) {
         const {

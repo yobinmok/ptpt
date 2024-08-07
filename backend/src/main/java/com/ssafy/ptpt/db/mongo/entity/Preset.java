@@ -29,12 +29,18 @@ public class Preset {
 
     // solo or multi
     @Field
+    private Long memberId;
+
+    // solo or multi
+    @Field
     private String presetType;
 
-    @Field(name = "json_data")
-    private Map<String, Object> jsonData;
+    @Field(name = "preset_data")
+    private Map<String, Object> presetData;
 
-    public Preset(Map<String, Object> jsonData) {
-        this.jsonData = jsonData;
+    public Preset(Long memberId, String presetType, Map<String, Object> presetData) {
+        this.memberId = memberId;
+        this.presetType = presetType;
+        this.presetData = presetData;
     }
 }

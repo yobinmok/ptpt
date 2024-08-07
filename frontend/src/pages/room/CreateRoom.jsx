@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { createStudyRoom } from '../../apis/room';
+import { setHost } from '../../store/actions/room';
 
 import {
   Box,
@@ -29,6 +30,7 @@ const ProfileWrapper = styled.div`
 const CreateRoom = ({ onSave, onClose }) => {
   // user정보 불러와야함
   // const user = useSelector((state) => state.user.data.oauth_id);
+  const nickname = useSelector((state) => state.user.nickname);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const minDateTime = new Date();
@@ -47,6 +49,7 @@ const CreateRoom = ({ onSave, onClose }) => {
     };
     // console.log('create room ' + this.sessionData);
     dispatch(setRoomSession(sessionData));
+    dispatch(setHost(nickname));
     // navigate('/room/detail');
     // navigate('/multi');
     navigate(`/multi/${roomId}`);
@@ -78,9 +81,9 @@ const CreateRoom = ({ onSave, onClose }) => {
       return;
     }
     // axios -> 방 생성 api 실행
-    // const user = 'hwang';
-    const user = 789;
-    const response = await createStudyRoom(user, roomInfo);
+    const userId = useSelector((state) => state.user.userId);
+    // const user = 789;
+    const response = await createStudyRoom(userId, roomInfo);
     onHandleEnterRoom(response); // roomId를 props
   };
 

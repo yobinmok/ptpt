@@ -1,17 +1,15 @@
 package com.ssafy.ptpt.api.preset.request;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Map;
-import java.util.Objects;
 
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PresetCreateRequest {
-    private String oauthId;
-    private String presetType;
+public class PresetUpdateRequest {
+    private Long presetId;
     private Map<String, Object> presetData;
 }
