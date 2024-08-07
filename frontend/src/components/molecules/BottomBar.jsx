@@ -8,6 +8,7 @@ import DropdownMenu from '../atoms/DropdownMenu';
 import { useSelector } from 'react-redux';
 import { base64ToBlob } from '../../hooks/voice';
 import AudioRecorder from './AudioRecorder';
+import { useNavigate } from 'react-router-dom';
 
 const BottomBar = () => {
   const audioRef = useRef(null);
@@ -18,6 +19,7 @@ const BottomBar = () => {
   const [isSliderHovered, setIsSliderHovered] = useState(false);
   const script = useSelector((state) => state.solo.script);
   const guideline = script.filter((item) => item.guideline && item.title);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -178,7 +180,11 @@ const BottomBar = () => {
           sx={{ flexGrow: 0, display: 'flex', gap: '10px', marginRight: '5px' }}
         >
           <AudioRecorder />
-          <Button variant='contained' color='error'>
+          <Button
+            variant='contained'
+            color='error'
+            onClick={() => navigate('/')} // Add this click handler
+          >
             나가기
           </Button>
         </Box>
