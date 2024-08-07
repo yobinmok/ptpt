@@ -36,6 +36,7 @@ public class EvaluationService {
     public Long createEvaluation(EvaluationCreateRequest evaluationCreateRequest) {
         // 발표한 사람의 정보를 알아야함
         Member slave = memberRepository.findByNickname(evaluationCreateRequest.getSlave());
+        Statistic slaveStatistic = slave.getProfile().getStatistic();
 
         // 현재 사용자가 참가중인 스터디 방을 알아야지 어떻게? 참가자 리스트를 확인해서
         // 스터디 룸이 종료가 된다면 참가자 리스트를 관리하기 때문에 참여한 멤버는 1명만 조회될 예정
@@ -52,7 +53,8 @@ public class EvaluationService {
                 evaluationCreateRequest.getLogic(),
                 evaluationCreateRequest.getSuitability(),
                 slave.getNickname(),
-                slave);
+                slave,
+                slaveStatistic);
 
         evaluationRepository.save(evaluation);
 

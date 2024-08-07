@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 
@@ -19,14 +20,13 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roleId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private String roleType;
+    private String roleType = "common";
 
-    public Role(Member member, String roleType) {
+    public Role(Member member) {
         this.member = member;
-        this.roleType = roleType;
     }
 }

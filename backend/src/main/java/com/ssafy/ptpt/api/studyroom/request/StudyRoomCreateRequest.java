@@ -32,5 +32,4 @@ public class StudyRoomCreateRequest {
     private int anonymity;
 
     private String oauthId;
-
 }

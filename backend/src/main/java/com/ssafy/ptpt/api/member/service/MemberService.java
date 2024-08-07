@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@Transactional(readOnly = false)
+@Transactional
 @RequiredArgsConstructor
 public class MemberService {
 
@@ -56,7 +56,6 @@ public class MemberService {
                                 qmember.profile.profileId,
                                 profile.member.memberId,
                                 profile.statistic.statisticId,
-                                profile.presetId,
                                 qmember.voiceModelCreated))
                 .from(qmember)
                 .leftJoin(qmember.profile, profile)

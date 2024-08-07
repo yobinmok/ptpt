@@ -28,8 +28,12 @@ public class Statistic {
     private int totalPreparation;
     private int totalLogic;
     private int totalSuitability;
-
     private int evaluateQuantity;
+
+    public Statistic(Profile profile) {
+        this.profile = profile;
+    }
+
     public void createStatistic(Evaluation evaluation) {
         this.totalDelivery = evaluation.getDelivery();
         this.totalExpression = evaluation.getExpression();
@@ -37,6 +41,7 @@ public class Statistic {
         this.totalLogic = evaluation.getLogic();
         this.totalSuitability = evaluation.getSuitability();
         this.evaluateQuantity++;
+
     }
 
     public void updateStatistic(Evaluation evaluation){

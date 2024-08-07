@@ -20,7 +20,7 @@ public class Profile {
     @Column(name = "profile_id")
     private Long profileId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "statistic_id")
     private Statistic statistic;
 
@@ -28,9 +28,8 @@ public class Profile {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private Long presetId;
-
     public Profile(Member member) {
         this.member = member;
+        this.statistic = new Statistic(this);
     }
 }

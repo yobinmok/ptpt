@@ -88,9 +88,6 @@ public class StudyRoomService {
 
         studyRoomRepository.save(studyRoom);
 
-        // 방 생성될때는 호스트만 참가자
-        EntryList entryList = new EntryList(studyRoom.getStudyRoomId() ,studyRoom.getMemberId());
-        entryListRepository.save(entryList);
         return studyRoom.getStudyRoomId();
     }
 
@@ -145,7 +142,6 @@ public class StudyRoomService {
     // 스터디룸 입장 참가자 저장
     public void studyRoomEntryRegister(StudyRoomCreateEntryRequest studyRoomCreateEntryRequest) {
         List<String> nicknameList = studyRoomCreateEntryRequest.getNicknameList();
-        System.out.println(nicknameList.toString());
         List<EntryList> entryList = new ArrayList<>();
         for (String nickname : nicknameList) {
             Member member = memberRepository.findByNickname(nickname);
