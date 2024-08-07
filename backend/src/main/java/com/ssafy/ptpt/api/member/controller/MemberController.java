@@ -307,7 +307,7 @@ public class MemberController {
             @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @PostMapping("/statistic")
-    @Operation(summary = "프로필 화면에서 통개를 조회할수 있습니다")
+    @Operation(summary = "프로필 화면에서 통계를 조회할수 있습니다")
     public ResponseEntity<MemberStatisticResponse> findMemberStatistic(@RequestBody @Valid MemberNicknameRequest memberOauthIdRequest) {
         MemberStatisticResponse memberStatisticResponse = memberService.findMemberStatistic(memberOauthIdRequest);
         return ResponseEntity.ok().body(memberStatisticResponse);
