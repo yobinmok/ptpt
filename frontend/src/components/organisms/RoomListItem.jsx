@@ -5,10 +5,10 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import LockIcon from '@mui/icons-material/Lock';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { detailStudyRoom } from '../../apis/room';
 import { setRoomSession } from '../../store/actions/room';
 import { checkStudyRoomPW } from '../../apis/room';
-import axios from 'axios';
+import { setAnonymous } from '../../store/actions/room';
+import { setPresentationTime } from '../../store/actions/room';
 const { VITE_API_URL } = import.meta.env;
 
 const Card = styled.div`
@@ -60,10 +60,12 @@ const RoomListItem = ({
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  dispatch(setPresentationTime(presentationTime));
+  dispatch(setAnonymous(anonymity));
 
   const [showModal, setShowModal] = useState(false);
   const [password, setPassword] = useState('');
-  const [roomInfo, setRoomInfo] = useState(null);
+  const [roomInfo, setRoomInfo] = useState(0);
   const [isJoinDisabled, setIsJoinDisabled] = useState(false);
 
   const handleOpen = () => setShowModal(true);
@@ -71,21 +73,14 @@ const RoomListItem = ({
 
   const handleJoin = async () => {
     if (studyRoomPw === '') {
-      console.log('roomId');
-      console.log(studyRoomId);
-      const response = await detailStudyRoom(studyRoomId);
-      console.log('list item detail res : ' + response);
-      setRoomInfo(response);
-      navigate('/multi');
+      setRoomInfo(studyRoomId);
       return;
     } else {
       console.log('id : ' + studyRoomId + ' pw : ' + password);
       const response = await checkStudyRoomPW(studyRoomId, password);
       console.log(response);
       if (response.status == '200') {
-        const response = await detailStudyRoom(studyRoomId);
-        console.log('list item detail res : ' + response); // undefined
-        setRoomInfo(response);
+        setRoomInfo(studyRoomId);
       } else {
         alert('비밀번호 오류');
         return;
@@ -96,12 +91,12 @@ const RoomListItem = ({
   useEffect(() => {
     if (roomInfo) {
       const sessionData = {
-        sessionName: `Session${roomInfo.studyRoomId}`,
-        roomId: roomInfo.studyRoomId,
+        sessionName: `Session${roomInfo}`,
+        roomId: roomInfo,
       };
       console.log('roominfo : ', roomInfo);
       dispatch(setRoomSession(sessionData));
-      navigate('/room/detail');
+      navigate(`/multi/${roomInfo}`);
     }
   }, [roomInfo]);
 

@@ -27,6 +27,7 @@ public class Preset {
     @Id
     private Long presetId;
 
+    // solo or multi
     @Field
     private Long memberId;
 

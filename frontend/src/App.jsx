@@ -10,7 +10,8 @@ import PracticePage from './pages/presentation/PracticePage';
 import VoiceTestPage from './pages/VoiceTestPage';
 import SoloPage from './pages/presentation/SoloPage';
 import MultiPage from './pages/presentation/MultiPage';
-import MyInfo from './pages/member/MyInfoPage';
+import MyInfoPage from './pages/member/MyInfoPage';
+import StatisticsPage from './components/organisms/myInfo/StatisticsPage';
 import Nav from './components/organisms/Navbar';
 // import VideoRoomComponent from './components/room/openVidu/VideoRoomComponent';
 import CreateRoom from './pages/room/CreateRoom';
@@ -31,7 +32,7 @@ function App() {
         <Route path='/practice' element={<PracticePage />} />
         <Route path='/solo' element={<SoloPage />} />
         <Route path='/multi' element={<MultiPage />} />
-        <Route path='/myinfo/*' element={<MyInfo />} />
+        <Route path='/myinfo/*' element={<MyInfoPage />} />
         <Route path='/createroom' element={<CreateRoom />} />
         <Route path='/room/detail' element={<VideoRoomComponent />} />
         <Route path='room/list' element={<RoomListPage />} />
