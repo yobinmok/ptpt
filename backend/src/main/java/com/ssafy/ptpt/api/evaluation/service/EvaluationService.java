@@ -76,7 +76,8 @@ public class EvaluationService {
             statisticRepository.save(statistic);
 
         } else {
-            // 데이터가 없다면 통계 테이블에 값 삽입
+            // 데이터가 없다면 통계 테이블에 값 삽입 
+            // 멤버 식별자로 값을 조회하여 넣어주자
             Statistic newStatistic = new Statistic();
             newStatistic.createStatistic(evaluation);
             // 평가 등록 처리

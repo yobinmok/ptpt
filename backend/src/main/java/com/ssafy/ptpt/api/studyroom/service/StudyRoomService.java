@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -71,9 +72,7 @@ public class StudyRoomService {
     //방 생성
     @Transactional
     public Long createStudyRoom(StudyRoomCreateRequest studyRoomCreateRequest) {
-        memberRepository.findById(studyRoomCreateRequest.getMemberId());
-
-
+        Member member = memberRepository.findByOauthId(studyRoomCreateRequest.getOauthId());
 
         // 공개 여부에 따른 코드 추가 필요
         StudyRoom studyRoom = new StudyRoom(studyRoomCreateRequest.getStudyRoomTitle()
@@ -83,9 +82,9 @@ public class StudyRoomService {
                                     , studyRoomCreateRequest.getSubject()
                                     , studyRoomCreateRequest.getDescription()
                                     , studyRoomCreateRequest.getAnonymity()
-                                    , studyRoomCreateRequest.getMemberId()
+                                    , member.getMemberId()
                                     , "스터디룸 코드값 추가 예정"
-                                    , studyRoomCreateRequest.getMemberId());
+                                    , member.getMemberId());
 
         studyRoomRepository.save(studyRoom);
 
