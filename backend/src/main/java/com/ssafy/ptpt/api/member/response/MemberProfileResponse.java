@@ -12,7 +12,7 @@ public class MemberProfileResponse {
     private String memberPicture;
     private Long profileId;
     private Long memberId;
-    private Long voiceModelId;
     private Long statisticId;
     private Long presetId;
+    private int voiceModelCreated;
 }

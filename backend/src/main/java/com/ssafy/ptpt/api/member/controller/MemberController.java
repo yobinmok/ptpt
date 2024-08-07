@@ -1,9 +1,11 @@
 package com.ssafy.ptpt.api.member.controller;
 
 import com.google.gson.JsonParser;
-import com.ssafy.ptpt.api.member.request.MemberIdRequest;
+import com.ssafy.ptpt.api.member.request.MemberNicknameRequest;
+import com.ssafy.ptpt.api.member.request.MemberOauthIdRequest;
 import com.ssafy.ptpt.api.member.request.MemberUpdateRequest;
 import com.ssafy.ptpt.api.member.response.MemberProfileResponse;
+import com.ssafy.ptpt.api.member.response.MemberStatisticResponse;
 import com.ssafy.ptpt.api.member.service.MemberService;
 import com.ssafy.ptpt.api.security.model.request.AccessTokenRequestBody;
 import com.ssafy.ptpt.api.security.model.request.AuthorizationCodeRequestBody;
@@ -13,6 +15,7 @@ import com.ssafy.ptpt.api.security.service.GoogleAuthService;
 import com.ssafy.ptpt.api.security.service.KakaoService;
 import com.ssafy.ptpt.api.transformer.Trans;
 import com.ssafy.ptpt.db.jpa.entity.Member;
+import com.ssafy.ptpt.db.jpa.entity.Statistic;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -102,6 +105,27 @@ public class MemberController {
         return ResponseEntity.ok(BaseResponseBody.of(401, "Invalid Token"));
     }
 
+
+    @PostMapping("/signout/kakao")
+    @Operation(
+            summary = "카카오 로그아웃",
+            description = "카카오 사용자의 세션을 종료하거나 액세스 토큰을 무효화합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "로그아웃 성공"),
+                    @ApiResponse(responseCode = "401", description = "로그아웃 실패")
+            })
+    public ResponseEntity<?> kakaoLogout(@RequestBody AccessTokenRequestBody accessTokenRequestBody) {
+        try {
+            boolean result = kakaoService.logout(accessTokenRequestBody.getAccessToken());
+            if (result) {
+                return ResponseEntity.ok(BaseResponseBody.of(200, "로그아웃 성공"));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseResponseBody.of(401, "로그아웃 실패"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(BaseResponseBody.of(500, "서버 오류"));
+        }
+    }
 
     @Operation(
             summary = "구글 액세스 토큰 발급",
@@ -214,8 +238,8 @@ public class MemberController {
     })
     @DeleteMapping("/withdraw")
     @Operation(summary = "회원 탈퇴")
-    public ResponseEntity<Void> withdrawMember(@RequestBody @Valid MemberIdRequest memberIdRequest){
-        int complete = memberService.withdrawMember(memberIdRequest);
+    public ResponseEntity<Void> withdrawMember(@RequestBody @Valid MemberOauthIdRequest memberOauthIdRequest){
+        int complete = memberService.withdrawMember(memberOauthIdRequest);
         return complete == 1 ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
@@ -242,12 +266,11 @@ public class MemberController {
     })
     @PostMapping("/profile")
     @Operation(summary = "프로필 조회")
-    public ResponseEntity<MemberProfileResponse> findUserProfile(@RequestBody @Valid MemberIdRequest memberIdRequest) {
-        MemberProfileResponse memberProfile = memberService.findMemberProfile(memberIdRequest.getOauthId());
+    public ResponseEntity<MemberProfileResponse> findUserProfile(@RequestBody @Valid MemberOauthIdRequest memberOauthIdRequest) {
+        MemberProfileResponse memberProfile = memberService.findMemberProfile(memberOauthIdRequest.getOauthId());
         return ResponseEntity.ok().body(memberProfile);
     }
 
-    // 프로필 조회
 
     /**
      * 사용자 신고기능
@@ -263,8 +286,8 @@ public class MemberController {
     })
     @PostMapping("/report")
     @Operation(summary = "유저 신고")
-    public ResponseEntity<Void> memberReport(@RequestBody @Valid MemberIdRequest memberIdRequest) {
-        memberService.memberReport(memberIdRequest);
+    public ResponseEntity<Void> memberReport(@RequestBody @Valid MemberNicknameRequest memberOauthIdRequest) {
+        memberService.memberReport(memberOauthIdRequest);
         return ResponseEntity.ok().build();
     }
 
@@ -280,5 +303,15 @@ public class MemberController {
                 : ResponseEntity.badRequest().body("입력한 닉네임이 이미 사용 중입니다.");
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+    })
+    @PostMapping("/statistic")
+    @Operation(summary = "프로필 화면에서 통계를 조회할수 있습니다")
+    public ResponseEntity<MemberStatisticResponse> findMemberStatistic(@RequestBody @Valid MemberNicknameRequest memberOauthIdRequest) {
+        MemberStatisticResponse memberStatisticResponse = memberService.findMemberStatistic(memberOauthIdRequest);
+        return ResponseEntity.ok().body(memberStatisticResponse);
+    }
 
 }

@@ -12,4 +12,5 @@ npm create vite@latest <br />
 입력 후, react와 java script 선택 
 
 npm install <br />
+install 에러날 경우 npm install --legacy-peer-deps로 진행
 npm run dev

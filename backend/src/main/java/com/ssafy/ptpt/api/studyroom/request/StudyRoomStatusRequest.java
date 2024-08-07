@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class StudyRoomStatusRequest {
     private Long studyRoomId;
-    private String oauthId;
+    private String nickname;
 }

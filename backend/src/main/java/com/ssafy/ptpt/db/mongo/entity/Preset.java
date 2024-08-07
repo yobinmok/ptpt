@@ -1,29 +1,46 @@
 package com.ssafy.ptpt.db.mongo.entity;
 
+import com.mongodb.client.model.CollationStrength;
 import jakarta.persistence.Id;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.annotation.Collation;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Getter
 @Setter
-@Document(collation = "preset")
+@Document(collection  = "preset")
+@ToString
+@NoArgsConstructor
 public class Preset {
 
+    @Transient
+    public static final String SEQUENCE_NAME = "preset_sequence";
+
     @Id
-    private String presetId;
+    private Long presetId;
 
+    // solo or multi
     @Field
-    private String presetName;
+    private Long memberId;
 
-    @Field(name = "json_data")
-    private Map<String, String> jsonData;
+    // solo or multi
+    @Field
+    private String presetType;
 
-    public Preset(String presetName, Map<String, String> jsonData) {
-        this.presetName = presetName;
-        this.jsonData = jsonData;
+    @Field(name = "preset_data")
+    private Map<String, Object> presetData;
+
+    public Preset(Long memberId, String presetType, Map<String, Object> presetData) {
+        this.memberId = memberId;
+        this.presetType = presetType;
+        this.presetData = presetData;
     }
 }

@@ -31,6 +31,8 @@ public class Member {
 
     private int memberReportCount;
 
+    private int voiceModelCreated;
+
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Profile profile;
 
@@ -39,6 +41,8 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<Evaluation> evaluation;
+
+    private int voiceModelRegister;
 
     public Member(String oauthId) {
         this.oauthId = oauthId;

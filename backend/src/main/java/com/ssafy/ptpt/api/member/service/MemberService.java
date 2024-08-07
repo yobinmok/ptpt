@@ -2,12 +2,15 @@ package com.ssafy.ptpt.api.member.service;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.ptpt.api.member.request.MemberIdRequest;
+import com.ssafy.ptpt.api.member.request.MemberNicknameRequest;
+import com.ssafy.ptpt.api.member.request.MemberOauthIdRequest;
 import com.ssafy.ptpt.api.member.request.MemberUpdateRequest;
 import com.ssafy.ptpt.api.member.response.MemberProfileResponse;
+import com.ssafy.ptpt.api.member.response.MemberStatisticResponse;
 import com.ssafy.ptpt.db.jpa.entity.*;
 import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
 import com.ssafy.ptpt.db.jpa.repository.ProfileRepository;
+import com.ssafy.ptpt.db.jpa.repository.StatisticRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,10 +25,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final ProfileRepository profileRepository;
     private final JPAQueryFactory jpaQueryFactory;
-
-    public Member findMemberByOauthId(String memberId){
-        return memberRepository.findByOauthId(memberId);
-    }
+    private final StatisticRepository statisticRepository;
 
     public Member saveMember(String oauthId){
         Member member = memberRepository.findByOauthId(oauthId);
@@ -33,6 +33,8 @@ public class MemberService {
             member = new Member(oauthId);
             return memberRepository.save(member);
         }
+
+        // TODO : null 반환로직은 수정하자
         return null;
     }
 
@@ -53,9 +55,9 @@ public class MemberService {
                                 qmember.memberPicture,
                                 qmember.profile.profileId,
                                 profile.member.memberId,
-                                profile.voiceModel.voiceModelId,
                                 profile.statistic.statisticId,
-                                profile.presetId))
+                                profile.presetId,
+                                qmember.voiceModelCreated))
                 .from(qmember)
                 .leftJoin(qmember.profile, profile)
                 .where(qmember.memberId.eq(member.getMemberId()))
@@ -63,8 +65,8 @@ public class MemberService {
     }
 
     // 사용자 탈퇴 기능
-    public int withdrawMember(MemberIdRequest memberIdRequest) {
-        return memberRepository.deleteMemberByOauthId(memberIdRequest.getOauthId());
+    public int withdrawMember(MemberOauthIdRequest memberOauthIdRequest) {
+        return memberRepository.deleteMemberByOauthId(memberOauthIdRequest.getOauthId());
     }
 
     // 사용자 정보 수정 기능
@@ -75,8 +77,8 @@ public class MemberService {
     }
 
     // 사용자 신고횟수 조회 로직 추가
-    public void memberReport(MemberIdRequest memberIdRequest) {
-        Member member = memberRepository.findByOauthId(memberIdRequest.getOauthId());
+    public void memberReport(MemberNicknameRequest memberNicknameRequest) {
+        Member member = memberRepository.findByOauthId(memberNicknameRequest.getNickname());
         int memberReportCount = member.getMemberReportCount();
         if (memberReportCount == 2) {
             // 사용자 정지기능 추가
@@ -88,5 +90,10 @@ public class MemberService {
 
     public Member nicknameDuplicateCheck(String nickname) {
         return memberRepository.findByNickname(nickname);
+    }
+
+    public MemberStatisticResponse findMemberStatistic(MemberNicknameRequest memberNicknameRequest) {
+        Statistic statistic = statisticRepository.findByOauthId(memberNicknameRequest.getNickname());
+        return MemberStatisticResponse.from(statistic);
     }
 }

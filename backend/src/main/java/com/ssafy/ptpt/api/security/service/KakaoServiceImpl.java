@@ -57,4 +57,12 @@ public class KakaoServiceImpl implements KakaoService {
         }
         return false;  // 토큰이 유효하지 않음
     }
+
+    public boolean logout(String accessToken) {
+        String uri = KAKAO_API_HOST + "/v1/user/logout";
+        String response = httpCallService.CallwithToken("POST", uri, accessToken);
+
+        JsonElement element = JsonParser.parseString(response);
+        return element.getAsJsonObject().get("id") != null;
+    }
 }

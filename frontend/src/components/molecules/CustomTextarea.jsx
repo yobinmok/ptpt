@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleScriptSelect } from '../../store/actions/room';
-import { useTempScript, deleteScript } from '../../store/actions/solo';
+import { useTempScript, deleteScript } from '../../store/actions/soloActions';
 import { DeleteDialog } from './DeleteDialog';
 
 function CustomTextarea({ placeholder, editFlag }) {

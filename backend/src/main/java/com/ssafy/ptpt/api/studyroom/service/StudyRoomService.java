@@ -128,7 +128,7 @@ public class StudyRoomService {
     //스터디룸 호스트가 발표자 지정
     @Transactional
     public int presentatorAssignation(StudyRoomStatusRequest studyRoomStatusRequest) {
-        Member member = memberRepository.findByOauthId(studyRoomStatusRequest.getOauthId());
+        Member member = memberRepository.findByNickname(studyRoomStatusRequest.getNickname());
         return studyRoomRepository.updatePresentatorAssignation(studyRoomStatusRequest.getStudyRoomId()
         , member.getMemberId());
     }
@@ -136,7 +136,7 @@ public class StudyRoomService {
     // 스터디룸 퇴장
     @Transactional
     public int studyRoomExit(StudyRoomStatusRequest studyRoomStatusRequest) {
-        Member member = memberRepository.findByOauthId(studyRoomStatusRequest.getOauthId());
+        Member member = memberRepository.findByNickname(studyRoomStatusRequest.getNickname());
         StudyRoom studyRoom = studyRoomRepository.findByStudyRoomIdAndMemberId(studyRoomStatusRequest.getStudyRoomId(),
                 member.getMemberId());
         return studyRoomRepository.deleteByStudyRoomIdAndOauthId(studyRoomStatusRequest.getStudyRoomId()

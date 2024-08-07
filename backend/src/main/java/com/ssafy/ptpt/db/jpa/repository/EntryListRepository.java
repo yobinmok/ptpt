@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EntryListRepository extends JpaRepository<EntryList, Long> {
     void deleteByStudyRoomId(Long studyRoomId);
+    Long findStudyRoomIdByMemberId(Long MemberId);
 }
