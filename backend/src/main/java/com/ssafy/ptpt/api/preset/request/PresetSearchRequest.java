@@ -1,6 +1,5 @@
-package com.ssafy.ptpt.api.member.request;
+package com.ssafy.ptpt.api.preset.request;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberIdRequest {
-
-    @NotNull
+public class PresetSearchRequest {
     private String oauthId;
+    private Long presetId;
+
 }

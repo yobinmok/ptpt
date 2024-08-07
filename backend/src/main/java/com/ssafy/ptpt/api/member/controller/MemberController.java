@@ -1,6 +1,7 @@
 package com.ssafy.ptpt.api.member.controller;
 
 import com.google.gson.JsonParser;
+import com.ssafy.ptpt.api.member.request.MemberNicknameRequest;
 import com.ssafy.ptpt.api.member.request.MemberOauthIdRequest;
 import com.ssafy.ptpt.api.member.request.MemberUpdateRequest;
 import com.ssafy.ptpt.api.member.response.MemberProfileResponse;
@@ -104,6 +105,27 @@ public class MemberController {
         return ResponseEntity.ok(BaseResponseBody.of(401, "Invalid Token"));
     }
 
+
+    @PostMapping("/signout/kakao")
+    @Operation(
+            summary = "카카오 로그아웃",
+            description = "카카오 사용자의 세션을 종료하거나 액세스 토큰을 무효화합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "로그아웃 성공"),
+                    @ApiResponse(responseCode = "401", description = "로그아웃 실패")
+            })
+    public ResponseEntity<?> kakaoLogout(@RequestBody AccessTokenRequestBody accessTokenRequestBody) {
+        try {
+            boolean result = kakaoService.logout(accessTokenRequestBody.getAccessToken());
+            if (result) {
+                return ResponseEntity.ok(BaseResponseBody.of(200, "로그아웃 성공"));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseResponseBody.of(401, "로그아웃 실패"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(BaseResponseBody.of(500, "서버 오류"));
+        }
+    }
 
     @Operation(
             summary = "구글 액세스 토큰 발급",
@@ -264,7 +286,7 @@ public class MemberController {
     })
     @PostMapping("/report")
     @Operation(summary = "유저 신고")
-    public ResponseEntity<Void> memberReport(@RequestBody @Valid MemberOauthIdRequest memberOauthIdRequest) {
+    public ResponseEntity<Void> memberReport(@RequestBody @Valid MemberNicknameRequest memberOauthIdRequest) {
         memberService.memberReport(memberOauthIdRequest);
         return ResponseEntity.ok().build();
     }
@@ -286,8 +308,8 @@ public class MemberController {
             @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @PostMapping("/statistic")
-    @Operation(summary = "프로필 화면에서 통개를 조회할수 있습니다")
-    public ResponseEntity<MemberStatisticResponse> findMemberStatistic(@RequestBody @Valid MemberOauthIdRequest memberOauthIdRequest) {
+    @Operation(summary = "프로필 화면에서 통계를 조회할수 있습니다")
+    public ResponseEntity<MemberStatisticResponse> findMemberStatistic(@RequestBody @Valid MemberNicknameRequest memberOauthIdRequest) {
         MemberStatisticResponse memberStatisticResponse = memberService.findMemberStatistic(memberOauthIdRequest);
         return ResponseEntity.ok().body(memberStatisticResponse);
     }

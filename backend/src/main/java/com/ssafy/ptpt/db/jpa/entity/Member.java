@@ -31,6 +31,8 @@ public class Member {
 
     private int memberReportCount;
 
+    private int voiceModelCreated;
+
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Profile profile;
 
