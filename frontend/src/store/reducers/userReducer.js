@@ -9,7 +9,8 @@ import { SET_USER_PROFILE, LOG_OUT, UPDATE_NICKNAME } from '../types/userTypes';
 // 초기 상태 정의
 const initialState = {
   isLogin: false, // 사용자의 로그인 상태를 나타냅니다.
-  data: null, // 사용자 정보를 저장합니다.
+  userId: null, // oauth_id
+  nickname: null,
 };
 
 // 사용자 리듀서 정의

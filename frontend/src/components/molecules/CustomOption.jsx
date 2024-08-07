@@ -6,38 +6,50 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useSelector } from 'react-redux';
 import { reportParticipants, assignationParticipants } from '../../apis/room';
 
-const otherOptions = ['발표자 지정', '신고'];
-const myOptions = ['발표자 지정'];
+const hostOptions = ['발표자 지정', '신고'];
+const myOptions = [''];
+const otherOptions = ['신고'];
 
 const ITEM_HEIGHT = 48;
 
 export default function CustomOption({ participant }) {
-  const userId = useSelector((state) => state.user.userId);
+  // const userId = useSelector((state) => state.user.userId);
+  const nickname = useSelector((state) => state.user.nickname); // 내 닉네임
   const studyRoomId = useSelector((state) => state.room.roomId);
   //   const userId = 'OpenVidu_User48';
+  const hostId = useSelector((state) => state.room.hostId);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  // 사용자와 participant가 같으면 myOptions, 다르면 otherOptions 사용
-  const options = participant === userId ? myOptions : otherOptions;
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  // host인지 구분
+  // host 이면 신고와 지정
+  // 내 option은 없고, 타인의 option을 클릭하면 신고 기능
+  var options = null;
+  if (nickname === hostId) {
+    options = hostOptions;
+  } else {
+    options = participant === nickname ? myOptions : otherOptions;
+  }
+  // const options = hostOptions;
 
   const onHandleOption = (option, person) => {
     if (option === '발표자 지정') {
       console.log('발표자 지정 호출');
       //   reportParticipants -> nickname
       // oauthId로 post할 수 없음 -> 신고자는 상대방의 oauthId를 알 수 없다
-      const response = reportParticipants(person);
+      const response = assignationParticipants(studyRoomId, person);
     } else if (option === '신고') {
       console.log('신고');
       //assignationParticipants -> studyroomId, nickname
-      const response = assignationParticipants(studyRoomId, person);
+      const response = reportParticipants(person);
     }
+  };
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -71,6 +83,7 @@ export default function CustomOption({ participant }) {
           <MenuItem
             key={option}
             onClick={() => {
+              onHandleOption(option, participant);
               console.log(`${option} clicked for ${participant}`);
               handleClose();
             }}
