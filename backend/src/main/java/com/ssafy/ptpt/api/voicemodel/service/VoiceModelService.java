@@ -32,6 +32,8 @@ public class VoiceModelService {
     private String CONVERT; // 추후 application.yml 파일에 추가 예정
     @Value("${external.api.select}")
     private String SELECT;
+    @Value("${external.api.refresh}")
+    private String REFRESH;
 
     @Autowired
     public VoiceModelService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper, MemberRepository memberRepository) {
@@ -81,6 +83,24 @@ public class VoiceModelService {
         return webClient.post()
                 .uri(SELECT)
                 .bodyValue(jsonObject)
+                .retrieve()
+                .bodyToMono(String.class);
+    }
+
+    public Mono<String> inferRefresh() {
+        System.out.println("in inferRefresh");
+
+        // JSON 객체 생성
+//        ObjectNode jsonObject = objectMapper.createObjectNode();
+//        ArrayNode jsonArray = objectMapper.createArrayNode();
+//        jsonArray.add(fileName);
+//        jsonArray.add(0.33);
+//        jsonArray.add(0.33);
+//        jsonObject.set("data", jsonArray);
+
+        return webClient.post()
+                .uri(REFRESH)
+//                .bodyValue(jsonObject)
                 .retrieve()
                 .bodyToMono(String.class);
     }
