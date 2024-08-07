@@ -7,7 +7,7 @@ import {
   Overlay,
   Content,
 } from '../components/styles/MainPageStyles';
-import { testRVC } from '../apis/voice';
+
 const MainPage = () => {
   const navigate = useNavigate();
   const [isSection2Visible, setIsSection2Visible] = useState(false);
@@ -37,19 +37,6 @@ const MainPage = () => {
     };
   }, [isAuthenticated]);
 
-  const rvctest = () => {
-    testRVC(
-      {
-        data: [],
-      },
-      (res) => {
-        console.log(res);
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-  };
   return (
     <Container isAuthenticated={isAuthenticated}>
       <Overlay />
@@ -57,7 +44,6 @@ const MainPage = () => {
         <Content isVisible={true}>
           <h1>Main Page - Logged In</h1>
           <h2>Welcome, User!</h2>
-          <Button onClick={rvctest}>test</Button>
           <Button onClick={MoveCreateRoom}>Create Room</Button>
         </Content>
       ) : (
@@ -75,7 +61,6 @@ const MainPage = () => {
             <h2>Section 3</h2>
             <p>This is the third section of the main page content.</p>
             <Button onClick={MoveCreateRoom}>방 생성하기</Button>
-            <Button onClick={rvctest}>test</Button>
           </Content>
         </>
       )}

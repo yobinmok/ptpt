@@ -44,7 +44,7 @@ var localUser = new UserModel();
 // 주소 마지막에 슬래시(/) 꼭!! 붙이기
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production'
-    ? `${import.meta.env.VITE_API_URL}/`
+    ? ''
     : `${import.meta.env.VITE_API_URL}/`;
 function withNavigation(Component) {
   return (props) => <Component navigate={useNavigate()} {...props} />;
