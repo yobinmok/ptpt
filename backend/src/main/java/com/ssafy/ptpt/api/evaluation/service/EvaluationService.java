@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -24,7 +23,6 @@ import java.util.stream.Collectors;
 public class EvaluationService {
     private final EvaluationRepository evaluationRepository;
     private final StatisticRepository statisticRepository;
-    private final StudyRoomRepository studyRoomRepository;
     private final EntryListRepository entryListRepository;
     private final JPAQueryFactory jpaQueryFactory;
     //test
@@ -36,12 +34,11 @@ public class EvaluationService {
     public Long createEvaluation(EvaluationCreateRequest evaluationCreateRequest) {
         // 발표한 사람의 정보를 알아야함
         Member slave = memberRepository.findByNickname(evaluationCreateRequest.getSlave());
+        Statistic slaveStatistic = slave.getProfile().getStatistic();
 
         // 현재 사용자가 참가중인 스터디 방을 알아야지 어떻게? 참가자 리스트를 확인해서
         // 스터디 룸이 종료가 된다면 참가자 리스트를 관리하기 때문에 참여한 멤버는 1명만 조회될 예정
-        Long studyRoomId = entryListRepository.findStudyRoomIdByMemberId(slave.getMemberId());
-        StudyRoom studyRoom = studyRoomRepository.findByStudyRoomId(studyRoomId);
-
+        StudyRoom studyRoom = entryListRepository.findStudyRoomByMemberId(slave.getMemberId());
 
         // 발표한 사람의 평가를 입력하는 로직
         Evaluation evaluation = new Evaluation(
@@ -52,7 +49,8 @@ public class EvaluationService {
                 evaluationCreateRequest.getLogic(),
                 evaluationCreateRequest.getSuitability(),
                 slave.getNickname(),
-                slave);
+                slave,
+                slaveStatistic);
 
         evaluationRepository.save(evaluation);
 
@@ -76,7 +74,8 @@ public class EvaluationService {
             statisticRepository.save(statistic);
 
         } else {
-            // 데이터가 없다면 통계 테이블에 값 삽입
+            // 데이터가 없다면 통계 테이블에 값 삽입 
+            // 멤버 식별자로 값을 조회하여 넣어주자
             Statistic newStatistic = new Statistic();
             newStatistic.createStatistic(evaluation);
             // 평가 등록 처리

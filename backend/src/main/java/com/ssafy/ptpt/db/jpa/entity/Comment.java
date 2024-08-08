@@ -18,7 +18,7 @@ public class Comment {
     @Column(name = "comment_id")
     private Long commentId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "evaluation_id")
     private Evaluation evaluation;
 
@@ -34,5 +34,9 @@ public class Comment {
         this.nickname = nickname;
         this.commentContent = commentContent;
         this.anonymity = anonymity;
+    }
+
+    public Comment(Evaluation evaluation) {
+        this.evaluation = evaluation;
     }
 }

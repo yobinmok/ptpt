@@ -71,9 +71,7 @@ public class StudyRoomService {
     //방 생성
     @Transactional
     public Long createStudyRoom(StudyRoomCreateRequest studyRoomCreateRequest) {
-        memberRepository.findById(studyRoomCreateRequest.getMemberId());
-
-
+        Member member = memberRepository.findByOauthId(studyRoomCreateRequest.getOauthId());
 
         // 공개 여부에 따른 코드 추가 필요
         StudyRoom studyRoom = new StudyRoom(studyRoomCreateRequest.getStudyRoomTitle()
@@ -83,15 +81,12 @@ public class StudyRoomService {
                                     , studyRoomCreateRequest.getSubject()
                                     , studyRoomCreateRequest.getDescription()
                                     , studyRoomCreateRequest.getAnonymity()
-                                    , studyRoomCreateRequest.getMemberId()
+                                    , member.getMemberId()
                                     , "스터디룸 코드값 추가 예정"
-                                    , studyRoomCreateRequest.getMemberId());
+                                    , member.getMemberId());
 
         studyRoomRepository.save(studyRoom);
 
-        // 방 생성될때는 호스트만 참가자
-        EntryList entryList = new EntryList(studyRoom.getStudyRoomId() ,studyRoom.getMemberId());
-        entryListRepository.save(entryList);
         return studyRoom.getStudyRoomId();
     }
 
@@ -129,8 +124,8 @@ public class StudyRoomService {
     @Transactional
     public int presentatorAssignation(StudyRoomStatusRequest studyRoomStatusRequest) {
         Member member = memberRepository.findByNickname(studyRoomStatusRequest.getNickname());
-        return studyRoomRepository.updatePresentatorAssignation(studyRoomStatusRequest.getStudyRoomId()
-        , member.getMemberId());
+        return studyRoomRepository.updatePresentatorAssignation(member.getMemberId(),
+                studyRoomStatusRequest.getStudyRoomId());
     }
 
     // 스터디룸 퇴장
@@ -146,11 +141,11 @@ public class StudyRoomService {
     // 스터디룸 입장 참가자 저장
     public void studyRoomEntryRegister(StudyRoomCreateEntryRequest studyRoomCreateEntryRequest) {
         List<String> nicknameList = studyRoomCreateEntryRequest.getNicknameList();
-        System.out.println(nicknameList.toString());
         List<EntryList> entryList = new ArrayList<>();
         for (String nickname : nicknameList) {
             Member member = memberRepository.findByNickname(nickname);
-            EntryList entry = new EntryList(studyRoomCreateEntryRequest.getStudyRoomId(),
+            StudyRoom studyRoom = studyRoomRepository.findByStudyRoomId(studyRoomCreateEntryRequest.getStudyRoomId());
+            EntryList entry = new EntryList(studyRoom,
                                                 member.getMemberId());
             entryList.add(entry);
         }
