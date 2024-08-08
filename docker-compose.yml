@@ -21,6 +21,22 @@ services:
     ports:
       - 5173:80 # 프론트가 nginx를 가지고 있으므로 컨테이너에서는 80포트를 연 상태
 
+  # frontend-master:
+  #   image: ptpt-master-frontend:latest
+  #   container_name: ptpt-master-frontend-server
+  #   ports:
+  #     - 5174:80
+  #   volumes:
+  #     - /opt/openvidu/custom-nginx-locations/frontend-server-conf:/frontend-server-conf
+
+  # backend-master:
+  #   image: ptpt-master-backend:latest
+  #   container_name: ptpt-master-backend-server
+  #   ports:
+  #     - 8082:8080
+  #   volumes:
+  #     - /opt/openvidu/custom-nginx-locations/backend-server-conf:/backend-server-conf
+
   mysql:
     image: mysql:8.0.37
     container_name: mysql

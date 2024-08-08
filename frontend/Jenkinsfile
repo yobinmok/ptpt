@@ -41,6 +41,7 @@ pipeline {
                 script {
                     sh 'docker stop ptpt-dev-frontend'
                     sh 'docker rm ptpt-dev-frontend' 
+                    sh 'docker rmi ptpt-dev-frontend:latest'
                 }
             }
         }
