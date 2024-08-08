@@ -21,12 +21,12 @@ const EvaluateContent = ({}) => {
   const studyRoomId = useSelector((state) => state.room.roomId);
   const isAnonymous = useSelector((state) => state.room.isAnonymous);
   const participants = useSelector((state) => state.participant.participants);
-  // const userId = useSelector((state) => state.user.data);
   // 자기 자신을 제외한 참가자 목록을 평가지에 올림
   // const userId = 'G41';
-  const userId = useSelector((state) => state.user.userId);
+  // 평가를 등록할 때 master의 정보는 nickname으로 전송, 참가자 목록에서 nickname을 통해 자기 자신 제외
+  const nickname = useSelector((state) => state.user.nickname);
   const participantsWithoutMe = participants.filter(
-    (participant) => participant !== userId
+    (participant) => participant !== nickname
   );
 
   // 익명 평가이면, master 공백으로 넘김
@@ -35,7 +35,7 @@ const EvaluateContent = ({}) => {
       setEvaluateInfo((prevInfo) => ({
         ...prevInfo,
         anonymity: isAnonymous,
-        master: userId,
+        master: nickname,
       }));
     } else {
       setEvaluateInfo((prevInfo) => ({
@@ -44,23 +44,6 @@ const EvaluateContent = ({}) => {
       }));
     }
   }, [isAnonymous]);
-
-  /*
-  {     평가 한 사람도 필요
-  "studyRoomId": 0,
-  "delivery": 0,
-  "expression": 0,
-  "preparation": 0,
-  "logic": 0,
-  "suitability": 0,
-  "master": "string", // 평가하는 사람
-  "slave" : "string", // 평가 당하는 사람
-  "commentContent": "string",
-  "anonymity": 0
-} 
-
-
-  */
 
   const onEvaluateInfoInput = (e) => {
     setEvaluateInfo({ ...evaluateInfo, [e.target.name]: e.target.value });
