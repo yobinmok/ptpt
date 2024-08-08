@@ -16,6 +16,7 @@ const MyEvaluateContent = () => {
   const [myComment, setMyComment] = useState([]);
   const studyRoomId = useSelector((state) => state.room.roomId);
   const userId = useSelector((state) => state.auth.user.oauthId);
+
   let anonymity = 0;
   // oauth_id로 내 평가 호출해오기
   const getMyEval = async () => {

@@ -31,6 +31,7 @@ const EvaluateContent = ({}) => {
   // const userId = 'G41';
   // 평가를 등록할 때 master의 정보는 nickname으로 전송, 참가자 목록에서 nickname을 통해 자기 자신 제외
   const nickname = useSelector((state) => state.auth.user.nickname);
+
   const participantsWithoutMe = participants.filter(
     (participant) => participant !== nickname
   );
@@ -63,7 +64,6 @@ const EvaluateContent = ({}) => {
   const onHandleSubmit = async () => {
     const response = await submitEvaluate(evaluateInfo, studyRoomId);
     // 평가는 제출하면 끝이므로 추가적인 로직 필요 없음
-    dispatch(isParticipantsEval(evaluateInfo.slave));
   };
 
   const handleSelectChange = (value) => {
