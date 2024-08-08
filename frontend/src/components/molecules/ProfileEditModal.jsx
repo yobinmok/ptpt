@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { Axios } from '../../util/http-commons';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   updateNickname,
@@ -18,6 +19,7 @@ const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 `;
 
 // 모달의 콘텐츠 스타일
@@ -63,6 +65,10 @@ const CheckResult = styled.div`
   text-align: center;
 `;
 
+// axios 인스턴스
+
+const instance = Axios();
+
 // ProfileEditModal 컴포넌트 정의
 const ProfileEditModal = ({ onClose, oauthId }) => {
   const dispatch = useDispatch();
@@ -82,7 +88,7 @@ const ProfileEditModal = ({ onClose, oauthId }) => {
   // 닉네임 중복 확인 핸들러
   const handleNicknameCheck = async () => {
     try {
-      const response = await axios.put(`/member/${oauthId}`, {
+      const response = await instance.put(`/member/${oauthId}`, {
         nickname: tempNickname,
         checkOnly: true,
       });
@@ -102,7 +108,7 @@ const ProfileEditModal = ({ onClose, oauthId }) => {
   const handleSave = async () => {
     if (isAvailable) {
       try {
-        await axios.put(`/member/${oauthId}`, { nickname: tempNickname });
+        await instance.put(`/member/${oauthId}`, { nickname: tempNickname });
         dispatch(updateNickname(tempNickname));
         onClose();
       } catch (error) {

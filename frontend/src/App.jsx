@@ -5,6 +5,7 @@ import MainPage from './pages/MainPage';
 import LoginPage from './pages/member/LoginPage';
 import AuthPage from './pages/member/AuthPage';
 import KakaoAuthPage from './pages/member/KakaoAuthPage';
+import UserInfoPage from './pages/member/UserInfoPage';
 import SignupPage from './pages/SignupPage';
 import PracticePage from './pages/presentation/PracticePage';
 import VoiceTestPage from './pages/VoiceTestPage';
@@ -29,6 +30,7 @@ function App() {
         <Route path='/signup' element={<SignupPage />} />
         <Route path='/auth' element={<AuthPage />} />
         <Route path='/auth/kakao' element={<KakaoAuthPage />} />
+        <Route path='/userinfo' element={<UserInfoPage />} />
         <Route path='/practice' element={<PracticePage />} />
         <Route path='/solo' element={<SoloPage />} />
         <Route path='/multi' element={<MultiPage />} />
