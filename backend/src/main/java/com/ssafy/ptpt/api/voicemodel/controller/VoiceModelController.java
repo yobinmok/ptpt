@@ -37,10 +37,13 @@ public class VoiceModelController {
     private String UPLOAD_PATH;
     private final VoiceModelService voiceModelService;
 
+    @Value("${external.api.base}")
+    private String externalApiBase;
+
     @PostMapping("/refresh")
     public void inferRefresh()throws IOException {
         System.out.println("??????????????????????/");
-        WebClient webClient = WebClient.create("https://i11b207.p.ssafy.io/rvc");
+        WebClient webClient = WebClient.create(externalApiBase);
         ObjectMapper mapper = new ObjectMapper();
 
         ObjectNode rootNode = mapper.createObjectNode();
