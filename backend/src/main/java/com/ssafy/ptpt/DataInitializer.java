@@ -1,25 +1,31 @@
 package com.ssafy.ptpt;
 
-import com.ssafy.ptpt.db.jpa.entity.*;
-import com.ssafy.ptpt.db.jpa.repository.*;
+import com.ssafy.ptpt.api.evaluation.request.EvaluationCreateRequest;
+import com.ssafy.ptpt.api.evaluation.service.EvaluationService;
+import com.ssafy.ptpt.api.studyroom.request.StudyRoomCreateEntryRequest;
+import com.ssafy.ptpt.api.studyroom.request.StudyRoomCreateRequest;
+import com.ssafy.ptpt.api.studyroom.service.StudyRoomService;
+import com.ssafy.ptpt.db.jpa.entity.Member;
+import com.ssafy.ptpt.db.jpa.entity.StudyRoom;
+import com.ssafy.ptpt.db.jpa.repository.EntryListRepository;
+import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
+import com.ssafy.ptpt.db.jpa.repository.StatisticRepository;
+import com.ssafy.ptpt.db.jpa.repository.StudyRoomRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class DataInitializer {
 
-    private final CommentRepository commentRepository;
-    private final EntryListRepository entryListRepository;
-    private final EvaluationRepository evaluationRepository;
+    private final EvaluationService evaluationService;
     private final MemberRepository memberRepository;
-    private final RoleRepository roleRepository;
-    private final ProfileRepository profileRepository;
-    private final StatisticRepository statisticRepository;
+    private final StudyRoomService studyRoomService;
     private final StudyRoomRepository studyRoomRepository;
 
     @PostConstruct
@@ -35,11 +41,8 @@ public class DataInitializer {
                 "test@gmail.com",
                 time,
                 0,
-                time,
-                null,
-                null
+                time
         );
-        memberRepository.save(member);
 
         Member member2 = new Member(
                 "testMember2",
@@ -49,26 +52,14 @@ public class DataInitializer {
                 "test2@gmail.com",
                 time,
                 0,
-                time,
-                null,
-                null
+                time
         );
+
+        memberRepository.save(member);
         memberRepository.save(member2);
 
-        // Role 저장
-        Role role = new Role(member, "admin");
-        roleRepository.save(role);
-
-        // Profile 저장
-        Profile profile = new Profile(member);
-        profileRepository.save(profile);
-
-        // statistic 저장
-        Statistic statistic = new Statistic();
-        statisticRepository.save(statistic);
-
-        // StudyRoom 저장
-        StudyRoom studyRoom = new StudyRoom(
+//         StudyRoom 저장
+        StudyRoomCreateRequest studyRoomCreateRequest = new StudyRoomCreateRequest(
                 "testStudyRoom",
                 1,
                 "123",
@@ -76,70 +67,47 @@ public class DataInitializer {
                 "테스트",
                 "test",
                 1,
-                member.getMemberId(),
-                "studyRoomCode",
-                member.getMemberId()
+                member.getOauthId()
         );
 
-        studyRoom = studyRoomRepository.save(studyRoom);
+        Long studyRoomId = studyRoomService.createStudyRoom(studyRoomCreateRequest);
+        StudyRoom studyRoom = studyRoomRepository.findByStudyRoomId(studyRoomId);
+//
+//        // entryList 저장
+        List<String> entryList = new ArrayList<>();
+        entryList.add(member.getNickname());
+        entryList.add(member2.getNickname());
+        StudyRoomCreateEntryRequest saveEntryRequest = new StudyRoomCreateEntryRequest(studyRoom.getStudyRoomId()
+                                                                                ,entryList);
+        studyRoomService.studyRoomEntryRegister(saveEntryRequest);
 
-        // entryList 저장
-        EntryList entryList = new EntryList(studyRoom.getStudyRoomId(), studyRoom.getMemberId());
-        entryListRepository.save(entryList);
-
-        Comment comment1 = new Comment();
-        commentRepository.save(comment1);
-
-        Evaluation evaluation1 = new Evaluation(
-                studyRoom,
-                statistic,
-                comment1,
-                member,
+        EvaluationCreateRequest evaluationCreateRequest1 = new EvaluationCreateRequest(
+                studyRoom.getStudyRoomId(),
                 100,
                 100,
                 100,
                 100,
                 100,
-                member.getNickname()
+                member.getNickname(),
+                member2.getNickname(),
+                "DataInitializer season2",
+                0
         );
-        evaluationRepository.save(evaluation1);
 
-        comment1.setEvaluation(evaluation1);
-        comment1.setCommentContent("testContent");
-        comment1.setAnonymity(0);
-        comment1.setNickname("testNickname");
-
-        commentRepository.save(comment1);
-
-        statistic.createStatistic(evaluation1);
-
-        Comment comment2 = new Comment();
-        commentRepository.save(comment2);
-
-        Evaluation evaluation2 = new Evaluation(
-                studyRoom,
-                statistic,
-                comment2,
-                member2,
+        EvaluationCreateRequest evaluationCreateRequest2 = new EvaluationCreateRequest(
+                studyRoom.getStudyRoomId(),
                 90,
                 90,
                 90,
                 90,
                 90,
-                member2.getNickname()
+                member2.getNickname(),
+                member.getNickname(),
+                "DataInitializer season2",
+                0
         );
-        evaluationRepository.save(evaluation2);
 
-        comment2.setEvaluation(evaluation2);
-        comment2.setCommentContent("testContent");
-        comment2.setAnonymity(0);
-        comment2.setNickname("testNickname2");
-        commentRepository.save(comment2);
-
-        statistic.updateStatistic(evaluation2);
-        statisticRepository.save(statistic);
-
-        profile.setStatistic(statistic);
-        profileRepository.save(profile);
+        evaluationService.createEvaluation(evaluationCreateRequest1);
+        evaluationService.createEvaluation(evaluationCreateRequest2);
     }
 }

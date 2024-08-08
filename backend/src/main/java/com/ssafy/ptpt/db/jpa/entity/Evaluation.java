@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
@@ -27,7 +25,7 @@ public class Evaluation {
     @JoinColumn(name = "statistic_id")
     private Statistic statistic;
 
-    @OneToOne(mappedBy = "evaluation", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "evaluation", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Comment comment;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,7 +41,7 @@ public class Evaluation {
     // 평가를 받은사람
     private String nickname;
 
-    public Evaluation(StudyRoom studyRoom, int delivery, int expression, int preparation, int logic, int suitability, String nickname, Member member) {
+    public Evaluation(StudyRoom studyRoom, int delivery, int expression, int preparation, int logic, int suitability, String nickname, Member member, Statistic statistic) {
         this.studyRoom = studyRoom;
         this.delivery = delivery;
         this.expression = expression;
@@ -52,12 +50,12 @@ public class Evaluation {
         this.suitability = suitability;
         this.nickname = nickname;
         this.member = member;
+        this.statistic = statistic;
     }
 
-    public Evaluation(StudyRoom studyRoom, Statistic statistic, Comment comment, Member member, int delivery, int expression, int preparation, int logic, int suitability, String nickname) {
+    public Evaluation(StudyRoom studyRoom, Statistic statistic, Member member, int delivery, int expression, int preparation, int logic, int suitability, String nickname) {
         this.studyRoom = studyRoom;
         this.statistic = statistic;
-        this.comment = comment;
         this.member = member;
         this.delivery = delivery;
         this.expression = expression;
@@ -65,5 +63,6 @@ public class Evaluation {
         this.logic = logic;
         this.suitability = suitability;
         this.nickname = nickname;
+        this.comment = new Comment(this);
     }
 }

@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@Transactional(readOnly = false)
+@Transactional
 @RequiredArgsConstructor
 public class MemberService {
 
@@ -56,7 +56,6 @@ public class MemberService {
                                 qmember.profile.profileId,
                                 profile.member.memberId,
                                 profile.statistic.statisticId,
-                                profile.presetId,
                                 qmember.voiceModelCreated))
                 .from(qmember)
                 .leftJoin(qmember.profile, profile)
@@ -71,6 +70,17 @@ public class MemberService {
 
     // 사용자 정보 수정 기능
     public int modifyMemberInfo(MemberUpdateRequest memberUpdateRequest) {
+
+        Member existingMember = memberRepository.findByOauthId(memberUpdateRequest.getOauthId());
+
+        if (memberUpdateRequest.getNickName() == null || memberUpdateRequest.getNickName().isEmpty()) {
+            memberUpdateRequest.setNickName(existingMember.getNickname());
+        }
+
+        if (memberUpdateRequest.getMemberPicture() == null || memberUpdateRequest.getMemberPicture().isEmpty()) {
+            memberUpdateRequest.setMemberPicture(existingMember.getMemberPicture());
+        }
+
         return memberRepository.modifyMemberInfo(memberUpdateRequest.getOauthId(),
                                                     memberUpdateRequest.getNickName(),
                                                     memberUpdateRequest.getMemberPicture());

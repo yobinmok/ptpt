@@ -9,6 +9,4 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PresetSearchRequest {
     private String oauthId;
-    private Long presetId;
-
 }

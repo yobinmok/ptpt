@@ -1,18 +1,18 @@
 package com.ssafy.ptpt.api.voicemodel.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ssafy.ptpt.api.voicemodel.service.VoiceModelService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import io.swagger.v3.oas.annotations.Operation;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -20,10 +20,9 @@ import reactor.core.publisher.Mono;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.UUID;
-import org.springframework.web.client.RestTemplate;
-import java.util.Collections;
 
 @RestController
 @RequestMapping("/voiceModel")
@@ -41,7 +40,7 @@ public class VoiceModelController {
     @PostMapping("/refresh")
     public void inferRefresh()throws IOException {
         System.out.println("??????????????????????/");
-        WebClient webClient = WebClient.create("http://localhost:7897");
+        WebClient webClient = WebClient.create("https://i11b207.p.ssafy.io/rvc");
         ObjectMapper mapper = new ObjectMapper();
 
         ObjectNode rootNode = mapper.createObjectNode();
@@ -99,7 +98,7 @@ public class VoiceModelController {
     @Value("${audioFile.preTrain}")
     private String PRETRAIN_UPLOAD_PATH;
     @PostMapping("/train")
-    @Operation(summary = "음성모델 생성", description = "음성모델을 학습하여 생성합니다.")
+    @Operation(summary = "음성모델 생성", description = "음성모델을 학습하여 생성합니다. 학습 전 데이터 저장 경로: src\\preTrain\\ [OauthId], 생성된 음성모델 저장 경로: RVC1006Nvidia\\assets\\weights\\vm[OauthId].pth")
     public ResponseEntity<?> voiceModelTrain(@RequestPart(name="audio") MultipartFile audio, @RequestPart(name="oauthId") String oauthId) throws IOException {
         if (audio.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File is empty");

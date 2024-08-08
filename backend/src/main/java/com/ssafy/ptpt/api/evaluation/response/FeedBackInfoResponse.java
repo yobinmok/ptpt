@@ -2,9 +2,10 @@ package com.ssafy.ptpt.api.evaluation.response;
 
 import com.ssafy.ptpt.db.jpa.entity.Comment;
 import com.ssafy.ptpt.db.jpa.entity.Evaluation;
-import lombok.*;
-
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
