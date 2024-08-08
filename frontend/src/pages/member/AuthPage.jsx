@@ -5,7 +5,6 @@ import {
   googleSignin,
   verifyGoogleAccessToken,
   getProfile,
-  updateProfile,
 } from '../../apis/auth';
 import { setAuth } from '../../store/actions/authActions';
 import { setUserProfile } from '../../store/actions/userActions';
@@ -18,7 +17,6 @@ const AuthPage = () => {
   const [authCode, setAuthCode] = useState(null); // 인가 코드 상태
   const [token, setToken] = useState(null); // 액세스 토큰 및 ID 토큰 상태
   const [tokenVerified, setTokenVerified] = useState(null); // 토큰 검증 상태
-  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     // URL에서 authorization code를 추출
@@ -60,12 +58,16 @@ const AuthPage = () => {
               }
             } catch (error) {
               console.error('Error fetching profile:', error);
-              console.log('신규 회원입니다. 정보 입력 모달');
-              setShowModal(true); // 프로필 조회 실패 시에도 모달을 띄움
+              console.log('신규 회원입니다. 정보 입력 페이지로 이동');
+              navigate('/userinfo', {
+                state: { token: data.accessToken, memberId: data.memberId },
+              }); // 프로필 조회 실패 시에도 페이지 이동
             }
           } else {
-            console.log('신규 회원입니다. 정보 입력 모달');
-            setShowModal(true); // 신규 회원인 경우
+            console.log('신규 회원입니다. 정보 입력 페이지로 이동');
+            navigate('/userinfo', {
+              state: { token: data.accessToken, memberId: data.memberId },
+            }); // 신규 회원인 경우 페이지 이동
           }
         })
         .catch((error) => {
@@ -122,13 +124,6 @@ const AuthPage = () => {
         <div>
           <p>Token Verified: {tokenVerified ? 'Yes' : 'No'}</p>
         </div>
-      )}
-      {showModal && (
-        <UserInfoModal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          handleSubmit={handleSubmit}
-        />
       )}
     </div>
   );

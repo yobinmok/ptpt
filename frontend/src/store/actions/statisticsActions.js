@@ -12,12 +12,13 @@ export const setStatistics = (data) => ({
 });
 
 // 통계 데이터를 가져오는 비동기 액션 생성자
-export const fetchStatistics = (oauthId) => async (dispatch) => {
+// 닉네임으로
+export const fetchStatistics = (nickname) => async (dispatch) => {
   dispatch({ type: STATISTICS_REQUEST });
 
   try {
-    console.log('Fetching statistics for oauthId:', oauthId);
-    const response = await Axios().post('/member/statistic', { oauthId });
+    console.log('Fetching statistics for nickname:', nickname);
+    const response = await Axios().post('/member/statistic', { nickname });
     dispatch({
       type: STATISTICS_SUCCESS,
       payload: response.data,
