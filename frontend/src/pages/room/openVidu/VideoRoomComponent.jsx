@@ -698,9 +698,6 @@ const mapStateToProps = (state) => ({
   participants: state.participants,
 });
 
-// const mapDispatchToProps = (dispatch) => ({
-// setParticipants: (participants) => dispatch(setParticipants(participants)),
-// });
 const mapDispatchToProps = (dispatch) => {
   return {
     setParticipants: (participants) => dispatch(setParticipants(participants)),
