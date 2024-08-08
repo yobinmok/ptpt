@@ -14,7 +14,7 @@ const ITEM_HEIGHT = 48;
 
 export default function CustomOption({ participant }) {
   // const userId = useSelector((state) => state.user.userId);
-  const nickname = useSelector((state) => state.user.nickname); // 내 닉네임
+  const nickname = useSelector((state) => state.auth.user.nickname); // 내 닉네임
   const studyRoomId = useSelector((state) => state.room.roomId);
   //   const userId = 'OpenVidu_User48';
   const hostId = useSelector((state) => state.room.hostId);

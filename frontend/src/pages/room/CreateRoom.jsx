@@ -30,8 +30,8 @@ const ProfileWrapper = styled.div`
 const CreateRoom = ({ onSave, onClose }) => {
   // user정보 불러와야함
   // const user = useSelector((state) => state.user.data.oauth_id);
-  const nickname = useSelector((state) => state.user.nickname);
-  const userId = useSelector((state) => state.user.userId);
+  const nickname = useSelector((state) => state.auth.user.nickname);
+  const userId = useSelector((state) => state.auth.user.oauthId);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const minDateTime = new Date();
