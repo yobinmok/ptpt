@@ -106,7 +106,7 @@ const UserInfoPage = () => {
     setProfilePicture(e.target.files[0]);
   };
 
-  const ahandleFormSubmit = async (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     const profileData = new FormData();
 
@@ -151,7 +151,7 @@ const UserInfoPage = () => {
 
   return (
     <Container>
-      <Form onSubmit={ahandleFormSubmit}>
+      <Form onSubmit={handleFormSubmit}>
         <h2>Enter Your Information</h2>
         <NicknameContainer>
           <Input
