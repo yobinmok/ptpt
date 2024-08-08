@@ -9,9 +9,11 @@ import { useSelector } from 'react-redux';
 import { base64ToBlob } from '../../hooks/voice';
 import AudioRecorder from './AudioRecorder';
 import { useNavigate } from 'react-router-dom';
+import { ExitModal } from './ExitModal';
 
 const BottomBar = () => {
   const audioRef = useRef(null);
+  const [open, setOpen] = useState(false);
   const [audioSrc, setAudioSrc] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -20,6 +22,9 @@ const BottomBar = () => {
   const script = useSelector((state) => state.solo.script);
   const guideline = script.filter((item) => item.guideline && item.title);
   const navigate = useNavigate();
+
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -180,16 +185,13 @@ const BottomBar = () => {
           sx={{ flexGrow: 0, display: 'flex', gap: '10px', marginRight: '5px' }}
         >
           <AudioRecorder />
-          <Button
-            variant='contained'
-            color='error'
-            onClick={() => navigate('/')} // Add this click handler
-          >
+          <Button variant='contained' color='error' onClick={handleClickOpen}>
             나가기
           </Button>
         </Box>
       </Box>
       <audio ref={audioRef} src={audioSrc} />
+      <ExitModal open={open} handleClose={handleClose} />
     </Box>
   );
 };

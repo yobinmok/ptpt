@@ -7,10 +7,22 @@ import {
   CREATE_SCRIPT,
   DELETE_SCRIPT,
   REGISTER_VOICERECORD,
+  INIT_PRESET,
+  ADD_VOICEMODEL,
 } from '../types/soloTypes';
 
 // 액션 생성자(dispatch 인수로 사용)
 // 혼자 하기 프리셋 업데이트 관련
+export const initPreset = (preset) => ({
+  type: INIT_PRESET,
+  payload: preset,
+});
+
+export const addVoiceModel = (oauthId) => ({
+  type: ADD_VOICEMODEL,
+  payload: oauthId,
+});
+
 export const registerGuideline = (index, guideline, setting) => ({
   type: REGISTER_GUIDELINE,
   payload: { index, guideline, setting },
