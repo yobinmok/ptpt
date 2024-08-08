@@ -29,7 +29,7 @@ export const createStudyRoom = async (userId, roomInfo) => {
       subject: roomInfo.roomtopic,
       description: roomInfo.roomcomment,
       anonymity: roomInfo.roomhidden,
-      entryList: [userId], // 사용자 추가
+      entryList: [], // 사용자 추가
     });
     // response.data == roomId
     return response.data;
