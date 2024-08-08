@@ -33,15 +33,13 @@ public class MemberService {
             member = new Member(oauthId);
             return memberRepository.save(member);
         }
-
-        // TODO : null 반환로직은 수정하자
-        return null;
+        return member;
     }
 
-    public void saveProfile(Member member){
-        Profile profile = new Profile(member);
-        profileRepository.save(profile);
-    }
+//    public void saveProfile(Member member){
+//        Profile profile = new Profile(member);
+//        profileRepository.save(profile);
+//    }
 
     // 보이스 모델 ID를 추가해야 하는 로직
     public MemberProfileResponse findMemberProfile(String oauthId) {
@@ -73,8 +71,8 @@ public class MemberService {
 
         Member existingMember = memberRepository.findByOauthId(memberUpdateRequest.getOauthId());
 
-        if (memberUpdateRequest.getNickName() == null || memberUpdateRequest.getNickName().isEmpty()) {
-            memberUpdateRequest.setNickName(existingMember.getNickname());
+        if (memberUpdateRequest.getNickname() == null || memberUpdateRequest.getNickname().isEmpty()) {
+            memberUpdateRequest.setNickname(existingMember.getNickname());
         }
 
         if (memberUpdateRequest.getMemberPicture() == null || memberUpdateRequest.getMemberPicture().isEmpty()) {
@@ -82,7 +80,7 @@ public class MemberService {
         }
 
         return memberRepository.modifyMemberInfo(memberUpdateRequest.getOauthId(),
-                                                    memberUpdateRequest.getNickName(),
+                                                    memberUpdateRequest.getNickname(),
                                                     memberUpdateRequest.getMemberPicture());
     }
 
