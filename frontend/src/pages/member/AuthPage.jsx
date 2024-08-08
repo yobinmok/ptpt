@@ -80,7 +80,7 @@ const AuthPage = () => {
     try {
       const profileData = {
         oauthId: token.memberId,
-        nickName: nickname,
+        nickname: nickname,
         memberPicture: profilePicture || 'default-profile.png',
       };
 
