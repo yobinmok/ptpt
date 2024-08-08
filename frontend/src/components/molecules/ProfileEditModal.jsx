@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { Axios } from '../../util/http-commons';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   updateNickname,

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setAuth } from '../../store/actions/authActions';
+import { updateProfile } from '../../apis/auth';
 
 const Container = styled.div`
   display: flex;
@@ -129,6 +130,7 @@ const UserInfoPage = () => {
     try {
       console.log(`Checking nickname: ${nickname}`);
       const response = await axios.get(`/member/${nickname}`);
+      console.log(response);
       if (response.status === 200) {
         setNicknameMessage('사용 가능한 닉네임입니다.');
         setIsNicknameValid(true);
