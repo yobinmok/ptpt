@@ -280,7 +280,7 @@ public class MemberController {
     })
     @PostMapping("/report")
     @Operation(summary = "유저 신고")
-    public ResponseEntity<Void> memberReport(@RequestBody @Valid MemberNicknameRequest memberOauthIdRequest) {
+    public ResponseEntity<Void> memberReport(@RequestBody @Valid MemberOauthIdRequest memberOauthIdRequest) {
         memberService.memberReport(memberOauthIdRequest);
         return ResponseEntity.ok().build();
     }
@@ -303,7 +303,7 @@ public class MemberController {
     })
     @PostMapping("/statistic")
     @Operation(summary = "프로필 화면에서 통계를 조회할수 있습니다")
-    public ResponseEntity<MemberStatisticResponse> findMemberStatistic(@RequestBody @Valid MemberNicknameRequest memberOauthIdRequest) {
+    public ResponseEntity<MemberStatisticResponse> findMemberStatistic(@RequestBody @Valid MemberOauthIdRequest memberOauthIdRequest) {
         MemberStatisticResponse memberStatisticResponse = memberService.findMemberStatistic(memberOauthIdRequest);
         return ResponseEntity.ok().body(memberStatisticResponse);
     }
