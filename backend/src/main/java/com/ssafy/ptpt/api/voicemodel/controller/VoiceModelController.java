@@ -98,7 +98,7 @@ public class VoiceModelController {
     @Value("${audioFile.preTrain}")
     private String PRETRAIN_UPLOAD_PATH;
     @PostMapping("/train")
-    @Operation(summary = "음성모델 생성", description = "음성모델을 학습하여 생성합니다.")
+    @Operation(summary = "음성모델 생성", description = "음성모델을 학습하여 생성합니다. 학습 전 데이터 저장 경로: src\\preTrain\\ [OauthId], 생성된 음성모델 저장 경로: RVC1006Nvidia\\assets\\weights\\vm[OauthId].pth")
     public ResponseEntity<?> voiceModelTrain(@RequestPart(name="audio") MultipartFile audio, @RequestPart(name="oauthId") String oauthId) throws IOException {
         if (audio.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File is empty");
