@@ -73,9 +73,22 @@ export const getProfile = async (oauthId) => {
 export const updateProfile = async (profileData) => {
   try {
     const response = await instance.put('/member/modify', profileData);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error('업데이트 프로필 에러', error);
+    throw error;
+  }
+};
+
+// 닉네임 중복 검사 함수
+export const checkNicknameDuplicate = async (nickname) => {
+  try {
+    const response = await instance.get(`/member/${nickname}`);
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.error('닉error', error);
     throw error;
   }
 };
