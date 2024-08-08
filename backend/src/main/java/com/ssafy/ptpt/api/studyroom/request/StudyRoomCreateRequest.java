@@ -1,13 +1,9 @@
 package com.ssafy.ptpt.api.studyroom.request;
 
-import jakarta.persistence.ElementCollection;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -31,8 +27,5 @@ public class StudyRoomCreateRequest {
 
     private int anonymity;
 
-    private Long memberId;
-
-    @ElementCollection
-    private List<String> entryList = new ArrayList<>();
+    private String oauthId;
 }

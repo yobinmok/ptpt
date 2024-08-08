@@ -33,7 +33,7 @@ public class Member {
 
     private int voiceModelCreated;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Profile profile;
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -42,13 +42,13 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Evaluation> evaluation;
 
-    private int voiceModelRegister;
-
     public Member(String oauthId) {
         this.oauthId = oauthId;
+        this.profile = new Profile(this);
+        this.role = new Role(this);
     }
 
-    public Member(String nickname, String memberPicture, String oauthProvider, String oauthId, String oauthEmail, Timestamp registerTime, int isWithdraw, Timestamp withdrawTime, Role role, List<Evaluation> evaluation) {
+    public Member(String nickname, String memberPicture, String oauthProvider, String oauthId, String oauthEmail, Timestamp registerTime, int isWithdraw, Timestamp withdrawTime) {
         this.nickname = nickname;
         this.memberPicture = memberPicture;
         this.oauthProvider = oauthProvider;
@@ -57,8 +57,8 @@ public class Member {
         this.registerTime = registerTime;
         this.isWithdraw = isWithdraw;
         this.withdrawTime = withdrawTime;
-        this.role = role;
-        this.evaluation = evaluation;
+        this.profile = new Profile(this);
+        this.role = new Role(this);
     }
 
     // 탈퇴여부가 1이면 정지회원
