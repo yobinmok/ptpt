@@ -17,7 +17,7 @@ import svgr from 'vite-plugin-svgr';
 // });
 
 export default defineConfig({
-  base: './',
+  base: '/',
   plugins: [react()],
   assetsInclude: ['**/*.jpg'],
 });
