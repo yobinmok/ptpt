@@ -1,4 +1,4 @@
-import { React, useEffect } from 'react';
+import { React } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -8,6 +8,8 @@ import {
   setAuth,
   demoLogin,
   demoLogout,
+  kakaoLogout,
+  googleLogout,
 } from '../../store/actions/authActions';
 
 import {
@@ -23,6 +25,7 @@ function Navbar() {
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth?.isAuthenticated); // ?. 연산자를 사용하여 null 체크
   const user = useSelector((state) => state.auth?.user);
+  const accessToken = useSelector((state) => state.auth.token);
 
   console.log('isAuthenticated:', isAuthenticated); // 상태가 변경될 때마다 출력 확인
   console.log('user:', user); // 상태가 변경될 때마다 출력 확인
@@ -56,6 +59,12 @@ function Navbar() {
     dispatch(demoLogout()); // Demo 로그아웃 액션 생성자 호출
   };
 
+  // Kakao 로그아웃 핸들러
+  const handleKakaoLogout = () => {
+    if (accessToken) {
+      dispatch(kakaoLogout(accessToken));
+    }
+  };
   return (
     <StyledNavbar>
       <LeftContainer>
@@ -83,6 +92,8 @@ function Navbar() {
             <button onClick={handleLogout}>Logout</button>
             {/* Demo 로그아웃 버튼 */}
             <button onClick={handleDemoLogout}>Demo Logout</button>
+            {/* Kakao 로그아웃 버튼 */}
+            <button onClick={handleKakaoLogout}>Kakao Logout</button>
           </>
         ) : (
           <>
