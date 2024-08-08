@@ -3,8 +3,9 @@ import { useState } from 'react';
 import CustomSlider from './CustomSlider';
 import { TextField, Box, Divider, Button } from '@mui/material';
 import { submitEvaluate } from '../../apis/room';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import CustomSelect from './CustomSelect';
+import { isParticipantsEval } from '../../store/actions/participant';
 
 const EvaluateContent = ({}) => {
   const [evaluateInfo, setEvaluateInfo] = useState({
@@ -18,20 +19,26 @@ const EvaluateContent = ({}) => {
     master: '',
     slave: '',
   });
+  const dispatch = useDispatch();
   const studyRoomId = useSelector((state) => state.room.roomId);
   const isAnonymous = useSelector((state) => state.room.isAnonymous);
   const participants = useSelector((state) => state.participant.participants);
+  // 평가한 사람 등록
+  const isParticipants = useSelector(
+    (state) => state.participant.isParticipantsEval
+  );
   // 자기 자신을 제외한 참가자 목록을 평가지에 올림
   // const userId = 'G41';
   // 평가를 등록할 때 master의 정보는 nickname으로 전송, 참가자 목록에서 nickname을 통해 자기 자신 제외
-  const nickname = useSelector((state) => state.user.nickname);
+  const nickname = useSelector((state) => state.auth.user.nickname);
+
   const participantsWithoutMe = participants.filter(
     (participant) => participant !== nickname
   );
 
   // 익명 평가이면, master 공백으로 넘김
   useEffect(() => {
-    if (isAnonymous) {
+    if (isAnonymous === 0) {
       setEvaluateInfo((prevInfo) => ({
         ...prevInfo,
         anonymity: isAnonymous,

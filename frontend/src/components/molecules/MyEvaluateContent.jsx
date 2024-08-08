@@ -15,13 +15,14 @@ const MyEvaluateContent = () => {
   });
   const [myComment, setMyComment] = useState([]);
   const studyRoomId = useSelector((state) => state.room.roomId);
-  const userId = useSelector((state) => state.user.userId);
+  const userId = useSelector((state) => state.auth.user.oauthId);
+
   let anonymity = 0;
   // oauth_id로 내 평가 호출해오기
   const getMyEval = async () => {
     try {
       const response = await takeMyEvaluate(studyRoomId, userId);
-      console.log(response.length);
+      console.log(response);
       if (response) {
         // 익명 여부와 평가 길이
         anonymity = response[0].anonymity;

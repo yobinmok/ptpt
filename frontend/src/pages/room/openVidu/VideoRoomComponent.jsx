@@ -707,7 +707,7 @@ class VideoRoomComponent extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  nickname: state.user.nickname,
+  nickname: state.auth.user.nickname,
   sessionInfo: state.room,
   participants: state.participants,
 });
