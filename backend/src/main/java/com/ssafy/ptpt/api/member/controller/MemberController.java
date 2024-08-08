@@ -224,7 +224,7 @@ public class MemberController {
     @PutMapping("/modify")
     @Operation(
             summary = "회원 정보 수정",
-            description = "회원 정보 수정",
+            description = "이미지 파일은 API주소/profileImage/oauthId 에 맵핑됩니다.",
             responses = {
                     @ApiResponse(responseCode = "200",
                             description = "수정 성공"),
@@ -246,8 +246,9 @@ public class MemberController {
             File originalFile = new File(folder, saveFileName);
             image.transferTo(originalFile);
 
-            // 파일 경로를 memberUpdateRequest에 저장
-            memberUpdateRequest.setMemberPicture(saveFolder + File.separator + saveFileName);
+            // 웹 서버에서 접근할 수 있는 경로를 memberUpdateRequest에 저장
+            String imageUrl = "/profileImage/" + saveFileName;
+            memberUpdateRequest.setMemberPicture(imageUrl);
         }
 
         int complete = memberService.modifyMemberInfo(memberUpdateRequest);
