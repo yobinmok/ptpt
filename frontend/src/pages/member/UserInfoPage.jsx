@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setAuth } from '../../store/actions/authActions';
@@ -103,35 +102,26 @@ const UserInfoPage = () => {
   };
 
   const handleProfilePictureChange = (e) => {
+    console.log(e.target.files[0]);
     setProfilePicture(e.target.files[0]);
   };
-
-  // const handleFormSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const profileData = {
-  //       oauthId: memberId,
-  //       nickName: nickname,
-  //       memberPicture: profilePicture || 'default-profile.png',
-  //     };
-
-  //     console.log('Sending profile data:', profileData); // 데이터 확인
-
-  //     await updateProfile(profileData);
-  //     dispatch(setAuth(token, profileData));
-  //     console.log('회원가입 성공');
-  //     navigate('/');
-  //   } catch (error) {
-  //     console.error('회원가입 에러', error);
-  //   }
-  // };
 
   const ahandleFormSubmit = async (e) => {
     e.preventDefault();
     const profileData = new FormData();
-    profileData.append('oauthId', memberId);
-    profileData.append('nickname', nickname);
+
+    const memberUpdateRequest = {
+      oauthId: memberId,
+      nickname: nickname,
+    };
+    profileData.append(
+      'memberUpdateRequest',
+      new Blob([JSON.stringify(memberUpdateRequest)], {
+        type: 'application/json',
+      })
+    );
     profileData.append('image', profilePicture);
+
     try {
       const response = await updateProfile(profileData);
       if (response) {
@@ -141,6 +131,9 @@ const UserInfoPage = () => {
       console.error('ddddd', error);
       throw error;
     }
+    dispatch(setAuth(token, memberUpdateRequest));
+    // response가 없으므로 무조건 메인으로 이동
+    navigate('/');
   };
 
   const handlecheckNicknameDuplicate = async () => {

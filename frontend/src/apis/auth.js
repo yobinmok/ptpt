@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { Axios } from '../util/http-commons';
+import { Axios, AxiosMulti } from '../util/http-commons';
 const { VITE_API_URL } = import.meta.env;
 
 const instance = Axios();
+const multiinstance = AxiosMulti();
 
 // authorization code를 사용하여 백엔드에서 access token과 id token을 요청
 // 구글 로그인 요청 함수
@@ -72,7 +73,7 @@ export const getProfile = async (oauthId) => {
 // 회원 정보 수정 함수
 export const updateProfile = async (profileData) => {
   try {
-    const response = await instance.put('/member/modify', profileData);
+    const response = await multiinstance.put('/member/modify', profileData);
     console.log(response.data);
     return response.data;
   } catch (error) {

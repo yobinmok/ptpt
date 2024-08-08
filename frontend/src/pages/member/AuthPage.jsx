@@ -33,6 +33,7 @@ const AuthPage = () => {
           // data = {accessToken, memberId(oauthId), message, statusCode}
           console.log('Token received:', data);
           setToken(data);
+          dispatch(setAuth(data.accessToken));
 
           const verificationResult = await verifyGoogleAccessToken(
             data.accessToken
@@ -80,7 +81,7 @@ const AuthPage = () => {
     try {
       const profileData = {
         oauthId: token.memberId,
-        nickName: nickname,
+        nickname: nickname,
         memberPicture: profilePicture || 'default-profile.png',
       };
 
