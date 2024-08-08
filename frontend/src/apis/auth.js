@@ -60,11 +60,7 @@ export const verifyKakaoAccessToken = async (accessToken) => {
 // 프로필 조회 함수
 export const getProfile = async (oauthId) => {
   try {
-    const response = await instance.get('/member/profile', {
-      params: {
-        oauthId,
-      },
-    });
+    const response = await instance.post('/member/profile', { oauthId });
     console.log('Profile response:', response.data);
     return response.data;
   } catch (error) {

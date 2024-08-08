@@ -11,6 +11,10 @@ const initialState = {
   isLogin: false, // 사용자의 로그인 상태를 나타냅니다.
   userId: null, // oauth_id
   nickname: null,
+  // data: {
+  //   userId: null,
+  //   nickname: null
+  // }
 };
 
 // 사용자 리듀서 정의
@@ -21,7 +25,9 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state, // 기존 상태를 복사
         isLogin: true, // 로그인 상태를 true로 변경
-        data: { ...action.data }, // 새로운 사용자 정보로 업데이트
+        // data: { ...action.data },
+        userId: action.data.oauthId,
+        nickname: action.data.nickname,
       };
     // 로그아웃 액션 처리
     case LOG_OUT:

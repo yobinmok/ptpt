@@ -31,6 +31,7 @@ const CreateRoom = ({ onSave, onClose }) => {
   // user정보 불러와야함
   // const user = useSelector((state) => state.user.data.oauth_id);
   const nickname = useSelector((state) => state.user.nickname);
+  const userId = useSelector((state) => state.user.userId);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const minDateTime = new Date();
@@ -81,7 +82,6 @@ const CreateRoom = ({ onSave, onClose }) => {
       return;
     }
     // axios -> 방 생성 api 실행
-    const userId = useSelector((state) => state.user.userId);
     // const user = 789;
     const response = await createStudyRoom(userId, roomInfo);
     onHandleEnterRoom(response); // roomId를 props

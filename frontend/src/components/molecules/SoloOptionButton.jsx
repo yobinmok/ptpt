@@ -2,7 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import soloImage from '../../assets/images/solo.png';
-
+import { initPreset } from '../../store/actions/soloActions';
+import { useDispatch } from 'react-redux';
 // 버튼 컨테이너 스타일
 const ButtonContainer = styled.div`
   position: relative;
@@ -39,10 +40,12 @@ const Label = styled.span`
 `;
 
 const SoloOptionButton = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // 버튼 클릭 시 /solo 페이지로 이동
   const handleClick = () => {
+    dispatch(initPreset(null)); // state 초기화
     navigate('/solo');
   };
 

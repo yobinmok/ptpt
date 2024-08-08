@@ -122,8 +122,9 @@ const UserInfoModal = ({ showModal, setShowModal, handleSubmit }) => {
   const checkNicknameDuplicate = async () => {
     try {
       console.log(`Checking nickname: ${nickname}`);
+      // TODO: API 함수로 수정
       const response = await axios.get(`/member/${nickname}`);
-      console.log('Nickname check response:', response.data);
+      console.log('Nickname check response:', response);
       if (response.status === 200) {
         setNicknameMessage('사용 가능한 닉네임입니다.');
         setIsNicknameValid(true);

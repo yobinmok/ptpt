@@ -7,6 +7,8 @@ import {
   getProfile,
 } from '../../apis/auth';
 import { setAuth } from '../../store/actions/authActions';
+import { setUserProfile } from '../../store/actions/userActions';
+import UserInfoModal from '../../components/organisms/UserInfoModal';
 
 const AuthPage = () => {
   const location = useLocation();
@@ -28,6 +30,7 @@ const AuthPage = () => {
       // authorization code를 사용하여 백엔드에서 access token과 id token을 요청
       googleSignin(code)
         .then(async (data) => {
+          // data = {accessToken, memberId(oauthId), message, statusCode}
           console.log('Token received:', data);
           setToken(data);
 
@@ -45,7 +48,12 @@ const AuthPage = () => {
               if (profile) {
                 // 기존 회원인 경우
                 console.log('기존회원입니다. 메인페이지로 이동');
-                dispatch(setAuth(data.accessToken, profile));
+                dispatch(
+                  setAuth(data.accessToken, {
+                    oauthId: data.memberId,
+                    nickname: profile.nickname,
+                  })
+                );
                 navigate('/');
               }
             } catch (error) {
@@ -67,6 +75,35 @@ const AuthPage = () => {
         });
     }
   }, [location, dispatch, navigate]);
+
+  const handleSubmit = async (nickname, profilePicture) => {
+    try {
+      const profileData = {
+        oauthId: token.memberId,
+        nickName: nickname,
+        memberPicture: profilePicture || 'default-profile.png',
+      };
+
+      console.log('Sending profile data:', profileData); // 데이터 확인
+      // userReducer에 oauthId와 nickname 저장
+      const userInfo = {
+        oauthId: token.memberId,
+        nickname: nickname,
+      };
+      dispatch(setUserProfile(userInfo));
+      await updateProfile(profileData);
+      dispatch(
+        setAuth(token.accessToken, {
+          oauthId: token.memberId,
+          nickname: nickname,
+        })
+      );
+      console.log('회원가입 성공');
+      navigate('/');
+    } catch (error) {
+      console.error('회원가입 에러', error);
+    }
+  };
 
   return (
     <div>
