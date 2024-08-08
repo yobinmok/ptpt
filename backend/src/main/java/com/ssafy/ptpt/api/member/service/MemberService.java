@@ -70,6 +70,17 @@ public class MemberService {
 
     // 사용자 정보 수정 기능
     public int modifyMemberInfo(MemberUpdateRequest memberUpdateRequest) {
+
+        Member existingMember = memberRepository.findByOauthId(memberUpdateRequest.getOauthId());
+
+        if (memberUpdateRequest.getNickName() == null || memberUpdateRequest.getNickName().isEmpty()) {
+            memberUpdateRequest.setNickName(existingMember.getNickname());
+        }
+
+        if (memberUpdateRequest.getMemberPicture() == null || memberUpdateRequest.getMemberPicture().isEmpty()) {
+            memberUpdateRequest.setMemberPicture(existingMember.getMemberPicture());
+        }
+
         return memberRepository.modifyMemberInfo(memberUpdateRequest.getOauthId(),
                                                     memberUpdateRequest.getNickName(),
                                                     memberUpdateRequest.getMemberPicture());
