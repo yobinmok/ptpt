@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStatistics } from '../../../store/actions/statisticsActions';
 import RadarChart from './RadarChart';
-import FeedbackListItem from './FeedbackListItem';
+import ExplanationSection from './ExplanationSection';
+import FeedbackSection from './FeedbackSection';
 import styled from 'styled-components';
 
 // 구분선 스타일 정의
@@ -12,17 +13,10 @@ const Divider = styled.hr`
   margin: 20px 0;
 `;
 
-const FeedbackListContainer = styled.div`
+const ChartContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const FeedbackHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  font-weight: bold;
+  align-items: flex-start;
+  justify-content: flex-start;
 `;
 
 const StatisticsPage = () => {
@@ -30,11 +24,13 @@ const StatisticsPage = () => {
   const { loading, statistics, error } = useSelector(
     (state) => state.statistics
   );
+  const nickname = useSelector((state) => state.auth.user.nickname);
 
   useEffect(() => {
-    const oauthId = 'your_oauth_id_here'; // 실제 oauthId를 설정합니다.
-    dispatch(fetchStatistics(oauthId));
-  }, [dispatch]);
+    if (nickname) {
+      dispatch(fetchStatistics(nickname));
+    }
+  }, [dispatch, nickname]);
 
   useEffect(() => {
     console.log('Loading state:', loading);
@@ -58,10 +54,23 @@ const StatisticsPage = () => {
     },
   ];
 
+  // 설명 데이터
+  const explanations = {
+    delivery:
+      '발표력이 낮으면 발표력이 낮아지고, 신뢰성이 떨어질 수 있어요. 이로 인해 청중을 설득하기 어려워집니다.',
+    expression:
+      '표현력이 낮으면 청중의 이해도가 낮아지고, 발표의 신뢰성이 떨어질 수 있어요. 이로 인해 청중을 설득하기 어려워집니다.',
+    logic:
+      '논리성이 낮으면 발표의 이해도가 낮아지고, 발표의 신뢰성이 떨어질 수 있어요. 이로 인해 청중을 설득하기 어려워집니다.',
+    preparation:
+      '준비성이 낮으면 발표의 신뢰성이 떨어질 수 있어요. 이로 인해 청중을 설득하기 어려워집니다.',
+    suitability:
+      '적합성이 낮으면 발표의 신뢰성이 떨어질 수 있어요. 이로 인해 청중을 설득하기 어려워집니다.',
+  };
+
   return (
     <div>
       <h1>통계 페이지</h1>
-      {/* 구분선 */}
       <Divider />
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
@@ -69,35 +78,18 @@ const StatisticsPage = () => {
         {/* 평가 점수 섹션 */}
         <div>
           <h2>평가 점수</h2>
-          {statistics && (
-            <div style={{ width: '400px', height: '400px' }}>
-              <RadarChart data={statistics} />
-            </div>
-          )}
+          <ChartContainer>
+            {statistics && (
+              <div style={{ width: '400px', height: '400px' }}>
+                <RadarChart data={statistics} />
+              </div>
+            )}
+            <ExplanationSection explanations={explanations} />
+          </ChartContainer>
         </div>
 
         {/* 피드백 모아보기 섹션 */}
-        <div>
-          <h2>피드백 모아보기</h2>
-          {/* 구분선 */}
-          <Divider />
-          <FeedbackHeader>
-            <span>스터디룸 이름</span>
-            <span>날짜</span>
-            <span>주제</span>
-          </FeedbackHeader>
-          <FeedbackListContainer>
-            {feedbackData.map((feedback) => (
-              <FeedbackListItem
-                key={feedback.roomId}
-                roomName={feedback.roomName}
-                date={feedback.date}
-                subject={feedback.subject}
-                roomId={feedback.roomId}
-              />
-            ))}
-          </FeedbackListContainer>
-        </div>
+        <FeedbackSection feedbackData={feedbackData} />
       </div>
     </div>
   );

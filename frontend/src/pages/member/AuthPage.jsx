@@ -5,9 +5,9 @@ import {
   googleSignin,
   verifyGoogleAccessToken,
   getProfile,
-  updateProfile,
 } from '../../apis/auth';
 import { setAuth } from '../../store/actions/authActions';
+import { setUserProfile } from '../../store/actions/userActions';
 import UserInfoModal from '../../components/organisms/UserInfoModal';
 
 const AuthPage = () => {
@@ -17,7 +17,6 @@ const AuthPage = () => {
   const [authCode, setAuthCode] = useState(null); // 인가 코드 상태
   const [token, setToken] = useState(null); // 액세스 토큰 및 ID 토큰 상태
   const [tokenVerified, setTokenVerified] = useState(null); // 토큰 검증 상태
-  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     // URL에서 authorization code를 추출
@@ -31,6 +30,7 @@ const AuthPage = () => {
       // authorization code를 사용하여 백엔드에서 access token과 id token을 요청
       googleSignin(code)
         .then(async (data) => {
+          // data = {accessToken, memberId(oauthId), message, statusCode}
           console.log('Token received:', data);
           setToken(data);
 
@@ -48,17 +48,26 @@ const AuthPage = () => {
               if (profile) {
                 // 기존 회원인 경우
                 console.log('기존회원입니다. 메인페이지로 이동');
-                dispatch(setAuth(data.accessToken, profile));
+                dispatch(
+                  setAuth(data.accessToken, {
+                    oauthId: data.memberId,
+                    nickname: profile.nickname,
+                  })
+                );
                 navigate('/');
               }
             } catch (error) {
               console.error('Error fetching profile:', error);
-              console.log('신규 회원입니다. 정보 입력 모달');
-              setShowModal(true); // 프로필 조회 실패 시에도 모달을 띄움
+              console.log('신규 회원입니다. 정보 입력 페이지로 이동');
+              navigate('/userinfo', {
+                state: { token: data.accessToken, memberId: data.memberId },
+              }); // 프로필 조회 실패 시에도 페이지 이동
             }
           } else {
-            console.log('신규 회원입니다. 정보 입력 모달');
-            setShowModal(true); // 신규 회원인 경우
+            console.log('신규 회원입니다. 정보 입력 페이지로 이동');
+            navigate('/userinfo', {
+              state: { token: data.accessToken, memberId: data.memberId },
+            }); // 신규 회원인 경우 페이지 이동
           }
         })
         .catch((error) => {
@@ -76,9 +85,19 @@ const AuthPage = () => {
       };
 
       console.log('Sending profile data:', profileData); // 데이터 확인
-
+      // userReducer에 oauthId와 nickname 저장
+      const userInfo = {
+        oauthId: token.memberId,
+        nickname: nickname,
+      };
+      dispatch(setUserProfile(userInfo));
       await updateProfile(profileData);
-      dispatch(setAuth(token.accessToken, profileData));
+      dispatch(
+        setAuth(token.accessToken, {
+          oauthId: token.memberId,
+          nickname: nickname,
+        })
+      );
       console.log('회원가입 성공');
       navigate('/');
     } catch (error) {
@@ -105,13 +124,6 @@ const AuthPage = () => {
         <div>
           <p>Token Verified: {tokenVerified ? 'Yes' : 'No'}</p>
         </div>
-      )}
-      {showModal && (
-        <UserInfoModal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          handleSubmit={handleSubmit}
-        />
       )}
     </div>
   );

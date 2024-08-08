@@ -23,7 +23,8 @@ const EvaluateContent = ({}) => {
   const participants = useSelector((state) => state.participant.participants);
   // const userId = useSelector((state) => state.user.data);
   // 자기 자신을 제외한 참가자 목록을 평가지에 올림
-  const userId = 'G41';
+  // const userId = 'G41';
+  const userId = useSelector((state) => state.user.userId);
   const participantsWithoutMe = participants.filter(
     (participant) => participant !== userId
   );

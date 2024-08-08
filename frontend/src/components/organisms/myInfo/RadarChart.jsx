@@ -18,6 +18,7 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+8;
 
 const RadarChart = ({ data }) => {
   const chartData = {

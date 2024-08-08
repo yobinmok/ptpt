@@ -36,11 +36,20 @@ pipeline {
                 }
             }
         }
+        stage('Remove old image') {
+            steps {
+                script {
+                    sh 'docker stop ptpt-dev-frontend'
+                    sh 'docker rm ptpt-dev-frontend' 
+                }
+            }
+        }
+
         stage('Depoly') {
             steps {
                 script {
-                    sh 'docker-compose stop frontend || true'
-                    sh 'docker-compose rm -f frontend || true'
+                    // sh 'docker-compose stop frontend || true'
+                    // sh 'docker-compose rm -f frontend || true'
                     sh 'docker-compose up frontend -d'
                 }
             }

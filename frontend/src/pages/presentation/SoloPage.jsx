@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Button } from '@mui/material';
+import React, { useEffect } from 'react';
+import { Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import VoiceIcon from '@mui/icons-material/SpatialAudioOffOutlined';
 import ScriptIcon from '@mui/icons-material/DescriptionOutlined';
@@ -13,8 +13,10 @@ import ScriptTab from '../../components/organisms/solo/ScrpitTab';
 import CompareTab from '../../components/organisms/solo/CompareTab';
 import SettingTab from '../../components/organisms/solo/SettingTab';
 import PresentationMain from '../../components/organisms/solo/PresentationMain';
-import { toggleSidebar, selectTab, clearTab } from '../../store/actions/room';
+import { toggleSidebar, selectTab } from '../../store/actions/room';
 import BottomBar from '../../components/molecules/BottomBar';
+import { getProfile } from '../../apis/auth';
+import { addVoiceModel } from '../../store/actions/soloActions';
 
 const SoloPage = () => {
   const tabItem = [
@@ -25,6 +27,7 @@ const SoloPage = () => {
   ];
 
   const dispatch = useDispatch();
+  const oauthId = useSelector((state) => state.auth.user.oauthId);
   const isSidebarOpen = useSelector((state) => state.room.isSidebarOpen);
   const selectedTab = useSelector((state) => state.room.selectedTab);
 
@@ -32,7 +35,6 @@ const SoloPage = () => {
   const handleTabClick = (index) => {
     if (selectedTab === index) {
       dispatch(toggleSidebar());
-      // dispatch(clearTab());
     } else {
       dispatch(selectTab(index));
       if (!isSidebarOpen) {
@@ -45,6 +47,21 @@ const SoloPage = () => {
   const getTabContent = (index) => {
     return index !== null ? tabItem[index] : tabItem[0];
   };
+
+  useEffect(() => {
+    // 비동기 함수 정의
+    const fetchData = async () => {
+      try {
+        const profile = await getProfile(oauthId);
+        if (profile.voiceModelCreated == 1) dispatch(addVoiceModel(oauthId));
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+
+    // 비동기 함수 호출
+    fetchData();
+  }, [oauthId]); // 의존성 배열에 oauthId 추가
 
   return (
     <>
@@ -67,16 +84,9 @@ const SoloPage = () => {
           <BottomBar src='' />
         </Box>
         {/* 여닫히는 커스텀 사이드바 */}
-        <SideTab
-          item={getTabContent(selectedTab)}
-          // isSidebarOpen={isSidebarOpen}
-        />
+        <SideTab item={getTabContent(selectedTab)} />
         {/* 우측 고정된 세로탭 */}
-        <Sidebar
-          tabItem={tabItem}
-          handleTabClick={handleTabClick}
-          // selectedTab={selectedTab}
-        />
+        <Sidebar tabItem={tabItem} handleTabClick={handleTabClick} />
       </Box>
     </>
   );
