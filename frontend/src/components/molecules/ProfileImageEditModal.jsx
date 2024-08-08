@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
+import { Axios } from '../../util/http-commons';
 
 // 모달의 배경을 어둡게 만드는 오버레이 스타일
 const ModalOverlay = styled.div`
@@ -81,6 +81,9 @@ const FileName = styled.div`
   color: #333;
   text-align: center;
 `;
+// axios 인스턴스
+
+const instance = Axios();
 
 // ProfileImageEditModal 컴포넌트 정의
 const ProfileImageEditModal = ({ onClose, oauthId }) => {
@@ -102,7 +105,7 @@ const ProfileImageEditModal = ({ onClose, oauthId }) => {
     }
 
     try {
-      const response = await axios.put(`/member/${oauthId}`, formData, {
+      const response = await instance.put(`/member/${oauthId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

@@ -40,6 +40,7 @@ const rootReducer = combineReducers({
   voiceModel: voiceModelReducer,
   statistics: statisticsReducer,
   feedback: feedbackReducer,
+  participant: participantReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
