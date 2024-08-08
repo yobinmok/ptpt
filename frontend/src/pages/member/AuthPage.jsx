@@ -8,6 +8,7 @@ import {
   updateProfile,
 } from '../../apis/auth';
 import { setAuth } from '../../store/actions/authActions';
+import { setUserProfile } from '../../store/actions/userActions';
 import UserInfoModal from '../../components/organisms/UserInfoModal';
 
 const AuthPage = () => {
@@ -76,7 +77,12 @@ const AuthPage = () => {
       };
 
       console.log('Sending profile data:', profileData); // 데이터 확인
-
+      // userReducer에 oauthId와 nickname 저장
+      const userInfo = {
+        oauthId: token.memberId,
+        nickname: nickname,
+      };
+      dispatch(setUserProfile(userInfo));
       await updateProfile(profileData);
       dispatch(setAuth(token.accessToken, profileData));
       console.log('회원가입 성공');
