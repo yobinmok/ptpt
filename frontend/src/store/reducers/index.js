@@ -39,6 +39,7 @@ const rootReducer = combineReducers({
   savedRooms: savedRoomsReducer,
   voiceModel: voiceModelReducer,
   statistics: statisticsReducer,
+  feedback: feedbackReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStatistics } from '../../../store/actions/statisticsActions';
 import RadarChart from './RadarChart';
-import FeedbackListItem from './FeedbackListItem';
+import ExplanationSection from './ExplanationSection';
+import FeedbackSection from './FeedbackSection';
 import styled from 'styled-components';
 
 // 구분선 스타일 정의
@@ -12,37 +13,10 @@ const Divider = styled.hr`
   margin: 20px 0;
 `;
 
-const FeedbackListContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const FeedbackHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  font-weight: bold;
-`;
-
 const ChartContainer = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-`;
-
-const ExplanationContainer = styled.div`
-  max-width: 600px;
-  padding: 0 20px;
-  margin-left: 100px;
-`;
-
-const ExplanationTitle = styled.h3`
-  margin-bottom: 10px;
-`;
-
-const ExplanationText = styled.p`
-  margin-bottom: 10px;
 `;
 
 const StatisticsPage = () => {
@@ -50,11 +24,13 @@ const StatisticsPage = () => {
   const { loading, statistics, error } = useSelector(
     (state) => state.statistics
   );
+  const nickname = useSelector((state) => state.auth.user.nickname);
 
   useEffect(() => {
-    const oauthId = 'your_oauth_id_here';
-    dispatch(fetchStatistics(oauthId));
-  }, [dispatch]);
+    if (nickname) {
+      dispatch(fetchStatistics(nickname));
+    }
+  }, [dispatch, nickname]);
 
   useEffect(() => {
     console.log('Loading state:', loading);
@@ -95,7 +71,6 @@ const StatisticsPage = () => {
   return (
     <div>
       <h1>통계 페이지</h1>
-      {/* 구분선 */}
       <Divider />
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
@@ -109,39 +84,12 @@ const StatisticsPage = () => {
                 <RadarChart data={statistics} />
               </div>
             )}
-            <ExplanationContainer>
-              <ExplanationTitle>평가 점수 설명</ExplanationTitle>
-              <ExplanationText>{explanations.delivery}</ExplanationText>
-              <ExplanationText>{explanations.expression}</ExplanationText>
-              <ExplanationText>{explanations.logic}</ExplanationText>
-              <ExplanationText>{explanations.preparation}</ExplanationText>
-              <ExplanationText>{explanations.suitability}</ExplanationText>
-            </ExplanationContainer>
+            <ExplanationSection explanations={explanations} />
           </ChartContainer>
         </div>
 
         {/* 피드백 모아보기 섹션 */}
-        <div>
-          <h2>피드백 모아보기</h2>
-          {/* 구분선 */}
-          <Divider />
-          <FeedbackHeader>
-            <span>스터디룸 이름</span>
-            <span>날짜</span>
-            <span>주제</span>
-          </FeedbackHeader>
-          <FeedbackListContainer>
-            {feedbackData.map((feedback) => (
-              <FeedbackListItem
-                key={feedback.roomId}
-                roomName={feedback.roomName}
-                date={feedback.date}
-                subject={feedback.subject}
-                roomId={feedback.roomId}
-              />
-            ))}
-          </FeedbackListContainer>
-        </div>
+        <FeedbackSection feedbackData={feedbackData} />
       </div>
     </div>
   );
