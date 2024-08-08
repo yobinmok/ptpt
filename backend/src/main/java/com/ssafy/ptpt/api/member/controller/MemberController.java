@@ -73,11 +73,10 @@ public class MemberController {
         String oauthId = "K"+Trans.id(kakaoService.getProfile(tokenString), new JsonParser());
 
         Member member = memberService.saveMember(oauthId);
-        if(member != null){
-            memberService.saveProfile(member);
-            return ResponseEntity.ok(TokenResponseBody.of(200, "Success", tokenString, oauthId));
-        }else{
-            return ResponseEntity.ok(TokenResponseBody.of(201, "Existing Member", tokenString, oauthId));
+        if (member.getNickname() == null) {
+            return ResponseEntity.ok(TokenResponseBody.of(201, "Success", tokenString, oauthId));
+        } else {
+            return ResponseEntity.ok(TokenResponseBody.of(200, "Existing Member", tokenString, oauthId));
         }
     }
 
@@ -157,11 +156,10 @@ public class MemberController {
         String oauthId = "G"+googleAuthService.getUserResource(tokens[0]).get("id").asText();
 
         Member member = memberService.saveMember(oauthId);
-        if(member != null){
-            memberService.saveProfile(member);
+        if (member.getNickname() == null) {
+            return ResponseEntity.ok(TokenResponseBody.of(201, "Success", accessToken, oauthId));
+        } else {
             return ResponseEntity.ok(TokenResponseBody.of(200, "Existing Member", accessToken, oauthId));
-        }else{
-            return ResponseEntity.ok(TokenResponseBody.of(200, "Success", accessToken, oauthId));
         }
     }
 
