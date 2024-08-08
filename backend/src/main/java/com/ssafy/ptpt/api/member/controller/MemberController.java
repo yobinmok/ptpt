@@ -280,8 +280,8 @@ public class MemberController {
     })
     @PostMapping("/report")
     @Operation(summary = "유저 신고")
-    public ResponseEntity<Void> memberReport(@RequestBody @Valid MemberOauthIdRequest memberOauthIdRequest) {
-        memberService.memberReport(memberOauthIdRequest);
+    public ResponseEntity<Void> memberReport(@RequestBody @Valid MemberNicknameRequest memberNicknameRequest) {
+        memberService.memberReport(memberNicknameRequest);
         return ResponseEntity.ok().build();
     }
 

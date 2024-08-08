@@ -85,8 +85,8 @@ public class MemberService {
     }
 
     // 사용자 신고횟수 조회 로직 추가
-    public void memberReport(MemberOauthIdRequest memberOauthIdRequest) {
-        Member member = memberRepository.findByOauthId(memberOauthIdRequest.getOauthId());
+    public void memberReport(MemberNicknameRequest memberNicknameRequest) {
+        Member member = memberRepository.findByNickname(memberNicknameRequest.getNickname());
         int memberReportCount = member.getMemberReportCount();
         if (memberReportCount == 2) {
             // 사용자 정지기능 추가
