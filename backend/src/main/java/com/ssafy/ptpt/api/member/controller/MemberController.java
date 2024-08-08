@@ -224,7 +224,7 @@ public class MemberController {
     @PutMapping("/modify")
     @Operation(
             summary = "회원 정보 수정",
-            description = "이미지 파일은 API주소/profileImage/oauthId 에 맵핑됩니다.",
+            description = "이미지 파일은 API주소/member_picture 에 맵핑됩니다.",
             responses = {
                     @ApiResponse(responseCode = "200",
                             description = "수정 성공"),
