@@ -12,6 +12,6 @@ import lombok.Setter;
 public class MemberUpdateRequest {
 
     private String oauthId;
-    private String nickName;
+    private String nickname;
     private String memberPicture;
 }
