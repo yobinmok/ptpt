@@ -100,8 +100,8 @@ public class MemberService {
         return memberRepository.findByNickname(nickname);
     }
 
-    public MemberStatisticResponse findMemberStatistic(MemberNicknameRequest memberNicknameRequest) {
-        Statistic statistic = statisticRepository.findByOauthId(memberNicknameRequest.getNickname());
+    public MemberStatisticResponse findMemberStatistic(MemberOauthIdRequest memberOauthIdRequest) {
+        Statistic statistic = statisticRepository.findByOauthId(memberOauthIdRequest.getOauthId());
         return MemberStatisticResponse.from(statistic);
     }
 }
