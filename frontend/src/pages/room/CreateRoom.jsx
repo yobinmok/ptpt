@@ -2,12 +2,11 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { setRoomSession } from '../../store/actions/room';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { createStudyRoom } from '../../apis/room';
 import { setHost } from '../../store/actions/room';
-
+import { saveMultiPreset } from '../../store/actions/multiAction';
 import {
   Box,
   Button,
@@ -84,6 +83,7 @@ const CreateRoom = ({ onSave, onClose }) => {
     // axios -> 방 생성 api 실행
     // const user = 789;
     const response = await createStudyRoom(userId, roomInfo);
+    dispatch(saveMultiPreset(roomInfo));
     onHandleEnterRoom(response); // roomId를 props
   };
 

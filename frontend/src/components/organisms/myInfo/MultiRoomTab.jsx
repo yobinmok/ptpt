@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import MultiRoomItem from '../../molecules/MultiRoomItem';
+import MultiRoomListItem from '../MultiRoomListItem';
 
 const MultiRoomTab = () => {
   const savedRoom = useSelector((state) => state.savedRooms.data);
@@ -9,7 +10,7 @@ const MultiRoomTab = () => {
     <>
       {multiRoom.length > 0 ? (
         multiRoom.map((preset) => (
-          <MultiRoomItem key={preset.presetId} item={preset.presetData} />
+          <MultiRoomListItem key={preset.presetId} item={preset.presetData} />
         ))
       ) : (
         <p>저장한 스터디룸이 없습니다.</p>
