@@ -1,6 +1,7 @@
 const initialState = {
   participants: [],
   isUseParticipants: false,
+  isParticipantsEval: [],
 };
 
 const participantReducer = (state = initialState, action) => {
@@ -15,6 +16,12 @@ const participantReducer = (state = initialState, action) => {
       return {
         ...state,
         participants: action.payload,
+      };
+
+    case 'EVAL_PARTICIPANTS':
+      return {
+        ...state,
+        isParticipantsEval: { ...action.payload },
       };
     default:
       return state;

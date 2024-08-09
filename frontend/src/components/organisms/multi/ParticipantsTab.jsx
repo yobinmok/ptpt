@@ -8,9 +8,9 @@ import CustomOption from '../../molecules/CustomOption';
 
 const ParticipantsTab = () => {
   // const userId = 'myUserId';
-  const nickname = useSelector((state) => state.user.nickname);
+  const nickname = useSelector((state) => state.auth.user.nickname);
   const participants = useSelector((state) => state.participant.participants);
-
+  const hostNickname = useSelector((state) => state.room.hostId);
   const participantsWithoutMe = participants.filter(
     (participant) => participant !== nickname
   );
@@ -19,14 +19,22 @@ const ParticipantsTab = () => {
     <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
       <List>
         <ListItem secondaryAction={<CustomOption participant={nickname} />}>
-          <ListItemText primary={nickname} />
+          {nickname === hostNickname ? (
+            <ListItemText primary={`${nickname}(host)`} />
+          ) : (
+            <ListItemText primary={nickname} />
+          )}
         </ListItem>
         {participantsWithoutMe.map((participant, index) => (
           <ListItem
             key={index}
             secondaryAction={<CustomOption participant={participant} />}
           >
-            <ListItemText primary={participant} />
+            {participant === hostNickname ? (
+              <ListItemText primary={`${participant}(host)`} />
+            ) : (
+              <ListItemText primary={participant} />
+            )}
           </ListItem>
         ))}
       </List>

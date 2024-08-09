@@ -14,6 +14,8 @@ import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { setParticipants } from '../../../store/actions/participant';
+import { Box } from '@mui/material';
+import ToolbarComponent2 from './toolbar/BottomToolBar';
 
 // const StyledLayoutBounds = styled.div`
 //   background-color: rgba(0, 0, 0, 0.3);
@@ -38,6 +40,11 @@ const StyledLayoutBounds = styled.div`
   overflow-y: hidden;
   background-size: cover;
   background-repeat: no-repeat;
+`;
+
+const StyledTool = styled.div`
+  width: 100%,
+  overflow-y: hidden;
 `;
 
 var localUser = new UserModel();
@@ -598,11 +605,11 @@ class VideoRoomComponent extends Component {
 
     return (
       <div
-        style={{ height: '100vh', width: '100%', display: 'flex' }}
-        className='container'
-        id='container'
+      // style={{ height: '100vh', width: '100%', display: 'flex' }}
+      // className='container'
+      // id='container'
       >
-        <ToolbarComponent
+        <ToolbarComponent2
           sessionId={mySessionId}
           user={localUser}
           // showNotification={this.state.messageReceived}
@@ -614,15 +621,22 @@ class VideoRoomComponent extends Component {
           switchCamera={this.switchCamera}
           leaveSession={this.leaveSession}
           // toggleChat={this.toggleChat}
+          sx={{
+            width: '100%',
+            height: '100%',
+            maxWidth: `calc(100% - 240px)`, // Sidebar 너비를 고려하여 조정
+          }}
         />
-
         <DialogExtensionComponent
           showDialog={this.state.showExtensionDialog}
           cancelClicked={this.closeDialogExtension}
         />
-
         {/* <StyledLayoutBounds id="layout" className="bounds"> */}
-        <StyledLayoutBounds id='layout'>
+        <StyledLayoutBounds
+          id='layout'
+          style={{ height: '100vh', width: '100%', display: 'flex' }}
+          className='container'
+        >
           {localUser !== undefined &&
             localUser.getStreamManager() !== undefined && (
               <div className='OT_root OT_publisher custom-class' id='localUser'>
@@ -694,7 +708,7 @@ class VideoRoomComponent extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  nickname: state.user.nickname,
+  nickname: state.auth.user.nickname,
   sessionInfo: state.room,
   participants: state.participants,
 });
