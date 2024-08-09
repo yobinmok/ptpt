@@ -128,7 +128,7 @@ public class VoiceModelController {
             for (int i = 0; i < 4; i++) {
                 String jsonPayload = createJsonPayload(folderPath, oauthId);
                 ResponseEntity<String> response = callExternalApi(jsonPayload, externalApiTrain);
-
+                System.out.println(response);
                 if (response == null || response.getStatusCode() != HttpStatus.OK) {
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process the request at step " + (i + 1));
                 }
