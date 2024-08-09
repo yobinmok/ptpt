@@ -1,13 +1,17 @@
+import React, { useState } from 'react';
 import { Dialog, DialogActions, DialogContent, Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { savePreset } from '../../apis/preset';
+import styled from 'styled-components';
 
 export const ExitModal = ({ open, handleClose }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const soloPreset = useSelector((state) => state.solo);
   const oauthId = useSelector((state) => state.auth.user.oauthId);
+
+  const [title, setTitle] = useState(''); // 제목을 입력받기 위한 state
 
   console.log(soloPreset);
   const now = new Date();
@@ -19,7 +23,7 @@ export const ExitModal = ({ open, handleClose }) => {
   const createdTime = `${year}-${month}-${date}`;
 
   const presetData = {
-    title: '제목',
+    title: title || '제목', // 사용자가 입력한 제목
     createdTime: createdTime,
     isCompleted: false,
     presentationSheet: '',
@@ -45,10 +49,12 @@ export const ExitModal = ({ open, handleClose }) => {
     navigate('/');
     handleClose();
   };
+
   const exitClickListener = () => {
     navigate('/');
     handleClose();
   };
+
   return (
     <>
       <Dialog open={open} onClose={handleClose}>
@@ -63,6 +69,12 @@ export const ExitModal = ({ open, handleClose }) => {
         >
           <div>발표 연습에 사용한 데이터를 저장하시겠습니까?</div>
           <div>저장한 정보는 내 정보에서 확인할 수 있습니다.</div>
+          <StyledInput
+            type='text'
+            placeholder='제목을 입력하세요'
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
         </DialogContent>
         <DialogActions
           sx={{
@@ -95,3 +107,24 @@ export const ExitModal = ({ open, handleClose }) => {
     </>
   );
 };
+
+// Styled Component for the input
+const StyledInput = styled.input`
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px 12px;
+  width: 100%;
+  max-width: 400px;
+  margin-top: 20px;
+  box-sizing: border-box;
+  font-size: 16px;
+
+  &::placeholder {
+    color: #888;
+  }
+
+  &:focus {
+    border-color: #999;
+    outline: none;
+  }
+`;

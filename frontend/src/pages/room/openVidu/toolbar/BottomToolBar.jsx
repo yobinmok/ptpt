@@ -161,6 +161,7 @@ function ExitBtn() {
   let navigate = useNavigate();
 
   const handleExit = () => {
+    // 발표 프리셋 저장하는 모달 띄우기
     navigate('/');
   };
 
