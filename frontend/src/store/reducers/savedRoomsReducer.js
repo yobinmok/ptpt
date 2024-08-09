@@ -1,31 +1,31 @@
 import {
-  SET_SAVED_STUDY_ROOMS,
-  SAVED_STUDY_ROOMS_SUCCESS,
-  SAVED_STUDY_ROOMS_FAILURE,
-} from '../types/savedStudyRoomsTypes';
+  SET_SAVED_ROOMS,
+  SAVED_ROOMS_SUCCESS,
+  SAVED_ROOMS_FAILURE,
+} from '../types/savedRoomsTypes';
 
 // 초기 상태 정의
 const initialState = {
-  savedStudyRooms: [],
+  savedRooms: [],
   loading: false,
   error: null,
 };
 
 // 저장한 스터디룸 리듀서 정의
-const savedStudyRoomsReducer = (state = initialState, action) => {
+const savedRoomsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_SAVED_STUDY_ROOMS:
+    case SET_SAVED_ROOMS:
       return {
         ...state,
         loading: true,
       };
-    case SAVED_STUDY_ROOMS_SUCCESS:
+    case SAVED_ROOMS_SUCCESS:
       return {
         ...state,
         savedStudyRooms: action.payload,
         loading: false,
       };
-    case SAVED_STUDY_ROOMS_FAILURE:
+    case SAVED_ROOMS_FAILURE:
       return {
         ...state,
         error: action.payload,
@@ -36,4 +36,4 @@ const savedStudyRoomsReducer = (state = initialState, action) => {
   }
 };
 
-export default savedStudyRoomsReducer;
+export default savedRoomsReducer;
