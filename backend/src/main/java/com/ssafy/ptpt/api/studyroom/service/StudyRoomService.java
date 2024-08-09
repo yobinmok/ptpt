@@ -111,11 +111,13 @@ public class StudyRoomService {
 
     // 방 비밀번호 일치여부 확인
     @Transactional
-    public boolean studyRoomPwCheck(StudyRoomConnectRequest studyRoomConnectRequest) {
+    public void studyRoomPwCheck(StudyRoomConnectRequest studyRoomConnectRequest) {
         StudyRoom findStudyRoom = studyRoomRepository.findById(studyRoomConnectRequest.getStudyRoomId())
                 .orElseThrow(() -> new NotFoundException(NotFoundException.STUDY_ROOM_NOT_FOUND));
 
-        return studyRoomConnectRequest.getStudyRoomPw().equals(findStudyRoom.getStudyRoomPw());
+        if (!studyRoomConnectRequest.getStudyRoomPw().equals(findStudyRoom.getStudyRoomPw())) {
+            throw new NotMatchException(NotMatchException.PW_NOT_MATCH);
+        }
     }
 
     //스터디룸 호스트가 발표자 지정

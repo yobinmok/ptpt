@@ -99,15 +99,8 @@ public class StudyRoomController {
     @PostMapping("/pwCheck")
     @Operation(summary = "스터디룸 비밀번호 체크", description = "스터디룸의 비밀번호 체크")
     public ResponseEntity<Void> findById(@RequestBody @Valid StudyRoomConnectRequest studyRoomConnectRequest) {
-        try {
-            boolean isPwCorrect = studyRoomService.studyRoomPwCheck(studyRoomConnectRequest);
-            if (isPwCorrect) {
-                return ResponseEntity.ok().build();
-            }
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        } catch (NotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        studyRoomService.studyRoomPwCheck(studyRoomConnectRequest);
+        return ResponseEntity.ok().build();
     }
 
     /**
