@@ -1,23 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSavedRooms } from '../../../store/actions/savedRoomsActions';
+import {
+  fetchSavedStudyRooms,
+  setSavedStudyRooms,
+} from '../../../store/actions/savedStudyRoomActions';
+
 import { getPresetList } from '../../../apis/preset';
 import SoloRoomTab from './SoloRoomTab';
 import MultiRoomTab from './MultiRoomTab';
 
-const SavedRoomsPage = () => {
+const SavedStudyRoomsPage = () => {
   const dispatch = useDispatch();
   const [selectedOption, setSelectedOption] = useState('alone'); // 선택된 옵션 상태
   const oauthId = useSelector((state) => state.auth.user.oauthId); // 사용자 ID 가져오기
-  const savedRooms = useSelector((state) => state.savedRooms);
+  const savedStudyRooms = useSelector((state) => state.savedStudyRooms); // Redux 상태에서 저장된 스터디룸 가져오기
+
+  useEffect(() => {
+    if (oauthId) {
+      dispatch(fetchSavedStudyRooms(oauthId)); // 저장된 스터디룸 데이터 가져오기
+    }
+  }, [dispatch, oauthId]);
 
   useEffect(() => {
     getPresetList(
       { oauthId },
       ({ data }) => {
         console.log(data);
-        dispatch(setSavedRooms(data));
-        console.log(savedRooms);
+        dispatch(setSavedStudyRooms(data));
       },
       (err) => {
         console.log(err);
@@ -64,4 +73,4 @@ const SavedRoomsPage = () => {
   );
 };
 
-export default SavedRoomsPage;
+export default SavedStudyRoomsPage;

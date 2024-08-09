@@ -4,7 +4,7 @@ import authReducer from './authReducer';
 import room from './roomReducer.js';
 import solo from './soloReducer.js';
 import evaluationReducer from './evaluationReducer';
-import savedRoomsReducer from './savedRoomsReducer';
+import savedStudyRoomsReducer from './savedStudyRoomsReducer.js';
 import voiceModelReducer from './voiceModelReducer';
 import statisticsReducer from './statisticsReducer';
 import feedbackReducer from './feedbackReducer';
@@ -21,7 +21,7 @@ const persistConfig = {
     'user',
     'room',
     'evaluation',
-    'savedRooms',
+    'savedStudyRooms',
     'voiceModel',
     'statistics',
     'participant',
@@ -36,7 +36,7 @@ const rootReducer = combineReducers({
   room,
   solo, // solo는 persistReducer로 감싸지 않음
   evaluation: evaluationReducer,
-  savedRooms: savedRoomsReducer,
+  savedStudyRooms: savedStudyRoomsReducer,
   voiceModel: voiceModelReducer,
   statistics: statisticsReducer,
   feedback: feedbackReducer,

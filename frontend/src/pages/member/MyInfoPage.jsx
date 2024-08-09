@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 import MyInfoSidebar from '../../components/organisms/myInfo/MyInfoSidebar';
 import StatisticsPage from '../../components/organisms/myInfo/StatisticsPage';
-import SavedRoomsPage from '../../components/organisms/myInfo/SavedRoomsPage';
+import SavedStudyRoomsPage from '../../components/organisms/myInfo/SavedStudyRoomsPage';
 import VoiceModelPage from '../../components/organisms/myInfo/VoiceModelPage';
 import FeedbackDetailsPage from '../../components/organisms/myInfo/FeedbackDetailsPage';
 import { useSelector } from 'react-redux';
@@ -29,7 +29,7 @@ const MyInfoPage = () => {
             path='statistics/evaluation/feedBack/:roomId'
             element={<FeedbackDetailsPage />}
           />
-          <Route path='saved-rooms' element={<SavedRoomsPage />} />
+          <Route path='saved-rooms' element={<SavedStudyRoomsPage />} />
           <Route path='voice-model' element={<VoiceModelPage />} />
           <Route path='/' element={<div>Welcome to My Info</div>} />
         </Routes>

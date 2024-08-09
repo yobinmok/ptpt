@@ -1,1 +1,0 @@
-export const SET_SAVED_ROOMS = 'SET_SAVED_ROOMS';

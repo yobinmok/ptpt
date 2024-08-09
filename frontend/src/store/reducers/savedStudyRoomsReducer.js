@@ -6,8 +6,9 @@ import {
 
 // 초기 상태 정의
 const initialState = {
-  data: [], // 저장한 스터디룸 데이터를 저장합니다.
-  error: null, // 에러 정보를 저장합니다.
+  savedStudyRooms: [],
+  loading: false,
+  error: null,
 };
 
 // 저장한 스터디룸 리듀서 정의
@@ -21,7 +22,7 @@ const savedStudyRoomsReducer = (state = initialState, action) => {
     case SAVED_STUDY_ROOMS_SUCCESS:
       return {
         ...state,
-        savedStudyRooms: action.payload, // 상태 이름 변경
+        savedStudyRooms: action.payload,
         loading: false,
       };
     case SAVED_STUDY_ROOMS_FAILURE:

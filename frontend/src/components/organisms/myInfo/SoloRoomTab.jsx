@@ -6,8 +6,12 @@ import { useNavigate } from 'react-router';
 const SoloRoomTab = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const savedRoom = useSelector((state) => state.savedRooms.data);
-  const soloRoom = savedRoom.filter((preset) => preset.presetType === 'solo');
+  const savedStudyRooms = useSelector(
+    (state) => state.savedStudyRooms.data || []
+  ); // 기본값으로 빈 배열 설정
+  const soloRoom = savedStudyRooms.filter(
+    (preset) => preset.presetType === 'solo'
+  );
 
   const handleItemClick = (item) => {
     console.log('Clicked item:', item);

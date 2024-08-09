@@ -24,13 +24,13 @@ const StatisticsPage = () => {
   const { loading, statistics, error } = useSelector(
     (state) => state.statistics
   );
-  const nickname = useSelector((state) => state.auth.user.nickname);
-
+  const oauthId = useSelector((state) => state.auth.user.oauthId);
+  console.log('접속한 oauthId', oauthId);
   useEffect(() => {
-    if (nickname) {
-      dispatch(fetchStatistics(nickname));
+    if (oauthId) {
+      dispatch(fetchStatistics(oauthId));
     }
-  }, [dispatch, nickname]);
+  }, [dispatch, oauthId]);
 
   useEffect(() => {
     console.log('Loading state:', loading);
