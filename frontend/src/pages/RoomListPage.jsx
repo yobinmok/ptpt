@@ -74,6 +74,7 @@ const RoomListPage = () => {
   }, []); // 빈 배열을 추가하여 useEffect가 처음 렌더링될 때 한 번만 실행되도록 설정
 
   const [currentList, setCurrentList] = useState([]);
+  // const [searchList, setSearchList] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchType, setSearchType] = useState('roomname'); // 검색 유형 상태
   const [searchName, setSearchName] = useState(''); // 검색어 상태
@@ -103,10 +104,10 @@ const RoomListPage = () => {
   const handleSearch = () => {
     if (searchType === 'roomname') {
       // 제목으로 찾기
-      console.log(searchName);
       const response = searchByStudyRoomName(searchName);
+      // setSearchList([...response]);
+      console.log(response.studyRoomId);
       // response 보고 수정하기
-      setCurrentList([...response.data]);
     } else if (searchType === 'subject') {
       // 주제로 찾기
       console.log(selectedTopics);
@@ -186,9 +187,7 @@ const RoomListPage = () => {
               open={isModalOpen}
               onClose={handleModalClose}
               title='방 생성'
-              // onSave={handleRoomSave}
             >
-              {/* <CreateRoom onSave={handleRoomSave} onClose={handleModalClose} /> */}
               <CreateRoom onClose={handleModalClose} />
             </Modal>
           </div>
@@ -196,16 +195,11 @@ const RoomListPage = () => {
             {currentList.length === 0 ? (
               <RecommendLetter color={'#EAF1FF'}>
                 최근에 만들어진 방이 없어요.
-                {/* <LiButton onClick={() => navigate('/createroom')}>
-                  방을 만들어볼까요?
-                </LiButton> */}
               </RecommendLetter>
             ) : (
-              <>
-                {currentList.map((room, index) => (
-                  <RoomListItem {...room} key={index} />
-                ))}
-              </>
+              currentList.map((room, index) => (
+                <RoomListItem {...room} key={index} />
+              ))
             )}
           </RecommendInnerWrapper>
         </div>

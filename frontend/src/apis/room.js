@@ -59,7 +59,7 @@ export const loadRoomList = async () => {
 
 export const searchByStudyRoomName = async (studyRoomTitle) => {
   try {
-    const response = axios.get(`/studyRoom/${studyRoomTitle}`);
+    const response = axios.get(`/studyRoom/search/${studyRoomTitle}`);
     return response;
   } catch (error) {
     console.log('searchByStudyRoomTitle error : ' + error);
