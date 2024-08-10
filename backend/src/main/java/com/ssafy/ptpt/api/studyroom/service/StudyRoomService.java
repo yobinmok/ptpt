@@ -35,24 +35,22 @@ public class StudyRoomService {
 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    //방 조회
-    public StudyRoomInfoResponse findByStudyRoomTitle(String studyRoomTitle) {
+    // 방 제목으로 검색 - 페이징 적용
+    public Page<StudyRoomInfoResponse> findByStudyRoomTitle(String studyRoomTitle, Pageable pageable) {
         //제목을 통해 정보를 조회해온다
-        StudyRoom studyRoom = studyRoomRepository.findByStudyRoomTitle(studyRoomTitle)
-                .orElseThrow(() -> new NotFoundException(NotFoundException.STUDY_ROOM_NOT_FOUND));
-        return StudyRoomInfoResponse.from(studyRoom);
+        return studyRoomRepository.findByStudyRoomTitle(studyRoomTitle, pageable)
+                .map(StudyRoomInfoResponse::from);
     }
 
-    // 사용자 방 조회
-    public List<StudyRoomInfoResponse> findByMemberId(Long memberId) {
+    // 사용자 방 조회 - 페이징 적용
+    public Page<StudyRoomInfoResponse> findByMemberId(Long memberId, Pageable pageable) {
         // 아이디를 통해 정보를 조회해온다
-        List<StudyRoom> studyRoom = studyRoomRepository.findByMemberId(memberId);
-        return studyRoom.stream()
-                .map(StudyRoomInfoResponse::from)
-                .collect(Collectors.toList());
+
+        return studyRoomRepository.findByMemberId(memberId, pageable)
+                .map(StudyRoomInfoResponse::from);
     }
 
-    //방 리스트 전체 조회 - 페이징 적용
+    // 방 리스트 전체 조회 - 페이징 적용
     public Page<StudyRoomListResponse> findBySearchRequest(Member member,
                                                            StudyRoomSearchRequest request,
                                                            Pageable pageable) {
@@ -61,7 +59,7 @@ public class StudyRoomService {
                 .map(StudyRoomListResponse::from);
     }
 
-    //    // 방 리스트 전체 조회 - 페이징 전
+//    // 방 리스트 전체 조회 - 페이징 전
 //    public List<StudyRoomListResponse> findBySearchRequest() {
 //        List<StudyRoom> studyRoomList = studyRoomRepository.findAll();
 //
