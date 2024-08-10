@@ -13,19 +13,13 @@ import lombok.Setter;
 public class StudyRoomInfoResponse {
     private Long studyRoomId;
     private String studyRoomTitle;
-    private String studyRoomCode;
-    private String studyRoomPw;
-    private Long memberId;
-    private Long presentationHost;
+    private String subject;
 
     public static StudyRoomInfoResponse from(StudyRoom studyRoom){
         StudyRoomInfoResponse studyRoomInfoResponse = new StudyRoomInfoResponse();
         studyRoomInfoResponse.studyRoomId = studyRoom.getStudyRoomId();
         studyRoomInfoResponse.studyRoomTitle = studyRoom.getStudyRoomTitle();
-        studyRoomInfoResponse.studyRoomCode = studyRoom.getStudyRoomCode();
-        studyRoomInfoResponse.studyRoomPw = studyRoom.getStudyRoomPw();
-        studyRoomInfoResponse.memberId = studyRoom.getMemberId();
-        studyRoomInfoResponse.presentationHost = studyRoom.getPresentationHost();
+        studyRoomInfoResponse.subject = studyRoom.getSubject();
 
         return studyRoomInfoResponse;
     }
