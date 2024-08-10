@@ -32,7 +32,7 @@ const soloReducer = (state = initialState, action) => {
             ? {
                 ...item,
                 guideline: action.payload.guideline,
-                voiceSetting: action.payload.setting,
+                voiceSetting: action.payload.voiceSetting,
               }
             : item
         ),

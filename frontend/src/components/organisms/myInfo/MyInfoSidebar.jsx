@@ -46,10 +46,9 @@ const FileInput = styled.input`
 
 // MyInfoSidebar 컴포넌트 정의
 const MyInfoSidebar = () => {
-  // Redux에서 사용자 데이터를 가져옴 (Navbar와 동일한 상태 참조)
-  const user = useSelector((state) => state.auth?.user) || {};
-  const [isModalOpen, setIsModalOpen] = useState(false); // 프로필 수정 모달 상태 관리
-  const [isImageModalOpen, setIsImageModalOpen] = useState(false); // 프로필 이미지 수정 모달 상태 관리
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const user = useSelector((state) => state.user.data) || {};
   const { oauthId, nickname, memberPicture } = user;
 
   // 프로필 수정 모달 열기 핸들러
@@ -77,16 +76,16 @@ const MyInfoSidebar = () => {
       <ProfileSection>
         {/* 프로필 이미지 (클릭 시 파일 입력 창 열기) */}
         <ProfileImage
-          src={memberPicture || 'default-profile.png'} // 프로필 이미지가 없으면 기본 이미지 사용
+          src={memberPicture || '/path-to-default-profile-image'}
           alt='Profile'
           onClick={handleImageClick}
         />
-        {/* 프로필 이름 (닉네임이 없으면 '닉네임 없음' 표시) */}
-        <ProfileName>{nickname || '닉네임 없음'}</ProfileName>
+        {/* 프로필 이름 */}
+        <ProfileName>{nickname}</ProfileName>
         {/* 프로필 수정 모달 열기 버튼 */}
         <button onClick={handleOpenModal}>Edit profile</button>
       </ProfileSection>
-      {/* 사이드바 옵션들 */}
+      {/* 사이드바 옵션 */}
       <MyInfoSidebarOption to='/myinfo/statistics' icon='📊'>
         통계
       </MyInfoSidebarOption>

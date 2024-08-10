@@ -8,11 +8,6 @@ services:
     ports:
     # 임시로 8081할당
       - 8081:8080
-
-    # image를 위한 볼륨 경로 설정
-    # nginx에서 접근 가능한 볼륨으로 설정
-    volumes:
-      - /opt/openvidu/custom-nginx-locations/ptpt-dev-backend:/home/ubuntu/uploads
   
   frontend:
     image: ptpt-dev-frontend:latest

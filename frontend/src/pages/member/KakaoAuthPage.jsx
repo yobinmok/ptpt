@@ -5,8 +5,10 @@ import {
   kakaoSignin,
   verifyKakaoAccessToken,
   getProfile,
+  updateProfile,
 } from '../../apis/auth';
 import { setAuth } from '../../store/actions/authActions';
+import UserInfoModal from '../../components/organisms/UserInfoModal';
 
 const KakaoAuthPage = () => {
   const location = useLocation();
@@ -15,6 +17,7 @@ const KakaoAuthPage = () => {
   const [authCode, setAuthCode] = useState(null);
   const [token, setToken] = useState(null);
   const [tokenVerified, setTokenVerified] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
@@ -26,7 +29,6 @@ const KakaoAuthPage = () => {
 
       kakaoSignin(code)
         .then(async (data) => {
-          // data = {accessToken, memberId(oauthId), message, statusCode}
           console.log('Token received:', data);
           setToken(data);
 
@@ -44,26 +46,17 @@ const KakaoAuthPage = () => {
               if (profile) {
                 // 기존 회원인 경우
                 console.log('기존회원입니다. 메인페이지로 이동');
-                dispatch(
-                  setAuth(data.accessToken, {
-                    oauthId: data.memberId,
-                    nickname: profile.nickname,
-                  })
-                );
+                dispatch(setAuth(data.accessToken, profile));
                 navigate('/');
               }
             } catch (error) {
               console.error('Error fetching profile:', error);
-              console.log('신규 회원입니다. 정보 입력 페이지로 이동');
-              navigate('/userinfo', {
-                state: { token: data.accessToken, memberId: data.memberId },
-              }); // 프로필 조회 실패 시에도 페이지 이동
+              console.log('신규 회원입니다. 정보 입력 모달');
+              setShowModal(true); // 프로필 조회 실패 시에도 모달을 띄움
             }
           } else {
             console.log('신규 회원입니다. 정보 입력 모달');
-            navigate('/userinfo', {
-              state: { token: data.accessToken, memberId: data.memberId },
-            }); // 신규 회원인 경우 페이지 이동
+            setShowModal(true); // 신규 회원인 경우
           }
         })
         .catch((error) => {
@@ -71,6 +64,25 @@ const KakaoAuthPage = () => {
         });
     }
   }, [location, dispatch, navigate]);
+
+  const handleSubmit = async (nickname, profilePicture) => {
+    try {
+      const profileData = {
+        oauthId: token.memberId,
+        nickName: nickname,
+        memberPicture: profilePicture || 'default-profile.png',
+      };
+
+      console.log('Sending profile data:', profileData); // 데이터 확인
+
+      await updateProfile(profileData);
+      dispatch(setAuth(token.accessToken, profileData));
+      console.log('회원가입 성공');
+      navigate('/');
+    } catch (error) {
+      console.error('회원가입 에러', error);
+    }
+  };
 
   return (
     <div>
@@ -84,13 +96,19 @@ const KakaoAuthPage = () => {
         <div>
           <p>Access Token: {token.accessToken}</p>
           <p>Member Id: {token.memberId}</p>
-          <p>ID Token: {token.id_token}</p>
         </div>
       )}
       {tokenVerified !== null && (
         <div>
           <p>Token Verified: {tokenVerified ? 'Yes' : 'No'}</p>
         </div>
+      )}
+      {showModal && (
+        <UserInfoModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          handleSubmit={handleSubmit}
+        />
       )}
     </div>
   );

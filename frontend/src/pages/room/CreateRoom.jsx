@@ -2,11 +2,12 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { setRoomSession } from '../../store/actions/room';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { createStudyRoom } from '../../apis/room';
 import { setHost } from '../../store/actions/room';
-import { saveMultiPreset } from '../../store/actions/multiAction';
+
 import {
   Box,
   Button,
@@ -29,8 +30,8 @@ const ProfileWrapper = styled.div`
 const CreateRoom = ({ onSave, onClose }) => {
   // user정보 불러와야함
   // const user = useSelector((state) => state.user.data.oauth_id);
-  const nickname = useSelector((state) => state.auth.user.nickname);
-  const userId = useSelector((state) => state.auth.user.oauthId);
+  const nickname = useSelector((state) => state.user.nickname);
+  const userId = useSelector((state) => state.user.userId);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const minDateTime = new Date();
@@ -83,7 +84,6 @@ const CreateRoom = ({ onSave, onClose }) => {
     // axios -> 방 생성 api 실행
     // const user = 789;
     const response = await createStudyRoom(userId, roomInfo);
-    dispatch(saveMultiPreset(roomInfo));
     onHandleEnterRoom(response); // roomId를 props
   };
 

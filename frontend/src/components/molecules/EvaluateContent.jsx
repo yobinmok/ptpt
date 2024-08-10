@@ -3,9 +3,8 @@ import { useState } from 'react';
 import CustomSlider from './CustomSlider';
 import { TextField, Box, Divider, Button } from '@mui/material';
 import { submitEvaluate } from '../../apis/room';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import CustomSelect from './CustomSelect';
-import { isParticipantsEval } from '../../store/actions/participant';
 
 const EvaluateContent = ({}) => {
   const [evaluateInfo, setEvaluateInfo] = useState({
@@ -19,30 +18,24 @@ const EvaluateContent = ({}) => {
     master: '',
     slave: '',
   });
-  const dispatch = useDispatch();
   const studyRoomId = useSelector((state) => state.room.roomId);
   const isAnonymous = useSelector((state) => state.room.isAnonymous);
   const participants = useSelector((state) => state.participant.participants);
-  // 평가한 사람 등록
-  const evaluateParticipants = useSelector(
-    (state) => state.participant.evaluateParticipants
-  );
+  // const userId = useSelector((state) => state.user.data);
   // 자기 자신을 제외한 참가자 목록을 평가지에 올림
   // const userId = 'G41';
-  // 평가를 등록할 때 master의 정보는 nickname으로 전송, 참가자 목록에서 nickname을 통해 자기 자신 제외
-  const nickname = useSelector((state) => state.auth.user.nickname);
-
+  const userId = useSelector((state) => state.user.userId);
   const participantsWithoutMe = participants.filter(
-    (participant) => participant !== nickname
+    (participant) => participant !== userId
   );
 
   // 익명 평가이면, master 공백으로 넘김
   useEffect(() => {
-    if (isAnonymous === 0) {
+    if (isAnonymous) {
       setEvaluateInfo((prevInfo) => ({
         ...prevInfo,
         anonymity: isAnonymous,
-        master: nickname,
+        master: userId,
       }));
     } else {
       setEvaluateInfo((prevInfo) => ({
@@ -51,6 +44,23 @@ const EvaluateContent = ({}) => {
       }));
     }
   }, [isAnonymous]);
+
+  /*
+  {     평가 한 사람도 필요
+  "studyRoomId": 0,
+  "delivery": 0,
+  "expression": 0,
+  "preparation": 0,
+  "logic": 0,
+  "suitability": 0,
+  "master": "string", // 평가하는 사람
+  "slave" : "string", // 평가 당하는 사람
+  "commentContent": "string",
+  "anonymity": 0
+} 
+
+
+  */
 
   const onEvaluateInfoInput = (e) => {
     setEvaluateInfo({ ...evaluateInfo, [e.target.name]: e.target.value });
@@ -64,7 +74,6 @@ const EvaluateContent = ({}) => {
   const onHandleSubmit = async () => {
     const response = await submitEvaluate(evaluateInfo, studyRoomId);
     // 평가는 제출하면 끝이므로 추가적인 로직 필요 없음
-    dispatch(isParticipantsEval(evaluateInfo.slave));
   };
 
   const handleSelectChange = (value) => {
@@ -155,25 +164,14 @@ const EvaluateContent = ({}) => {
         onChange={onEvaluateInfoInput}
         value={evaluateInfo.commentContent}
       />
-      {evaluateParticipants.includes(evaluateInfo.slave) ? (
-        <Button
-          variant='contained'
-          color='primary'
-          disabled
-          sx={{ mt: '10px', marginRight: '8px' }}
-        >
-          평가 완료
-        </Button>
-      ) : (
-        <Button
-          variant='contained'
-          color='primary'
-          onClick={onHandleSubmit}
-          sx={{ mt: '10px', marginRight: '8px' }}
-        >
-          평가 제출하기
-        </Button>
-      )}
+      <Button
+        variant='contained'
+        color='primary'
+        onClick={onHandleSubmit}
+        sx={{ mt: '10px', marginRight: '8px' }}
+      >
+        평가 제출하기
+      </Button>
     </div>
   );
 };

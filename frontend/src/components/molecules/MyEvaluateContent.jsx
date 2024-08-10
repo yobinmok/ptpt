@@ -2,8 +2,6 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { takeMyEvaluate } from '../../apis/room';
-import MultiRadarChart from '../organisms/myInfo/MultiRadarChart';
-import { Box, Typography, Paper, Divider } from '@mui/material';
 
 const MyEvaluateContent = () => {
   const [myEvaluate, setMyEvaluate] = useState({
@@ -13,51 +11,56 @@ const MyEvaluateContent = () => {
     logic: 0,
     suitability: 0,
   });
-  const [myComment, setMyComment] = useState([]);
+  const [myComment, setMyComment] = useState({
+    nickname: '',
+    commentContent: '',
+  });
+  // const userId = useSelector((state) => state.user.data.oauth_id);
   const studyRoomId = useSelector((state) => state.room.roomId);
-  const userId = useSelector((state) => state.auth.user.oauthId);
 
-  let anonymity = 0;
+  // back-end response
+  /*
+  [
+  {
+    "evaluationId": 4,
+    "studyRoomId": 2,
+    "oauthId": null,
+    "delivery": 100,
+    "expression": 100,
+    "preparation": 55,
+    "logic": 55,
+    "suitability": 60,
+    "commentContent": "",
+    "nickname": "OpenVidu_User43",
+    "anonymity": 0
+  }
+]
+  */
   // oauth_id로 내 평가 호출해오기
   const getMyEval = async () => {
     try {
+      // const userId = 'G123';
+      const userId = useSelector((state) => state.user.userId);
       const response = await takeMyEvaluate(studyRoomId, userId);
-      console.log(response);
-      if (response) {
-        // 익명 여부와 평가 길이
-        anonymity = response[0].anonymity;
-        const totalEvaluate = response.reduce(
-          (acc, curr) => ({
-            delivery: acc.delivery + curr.delivery,
-            expression: acc.expression + curr.expression,
-            preparation: acc.preparation + curr.preparation,
-            logic: acc.logic + curr.logic,
-            suitability: acc.suitability + curr.suitability,
-          }),
-          {
-            delivery: 0,
-            expression: 0,
-            preparation: 0,
-            logic: 0,
-            suitability: 0,
-          }
-        );
-        const averageEvaluate = {
-          delivery: totalEvaluate.delivery / response.length,
-          expression: totalEvaluate.expression / response.length,
-          preparation: totalEvaluate.preparation / response.length,
-          logic: totalEvaluate.logic / response.length,
-          suitability: totalEvaluate.suitability / response.length,
-        };
-
-        const comments = response.map(({ nickname, commentContent }) => ({
+      if (response && response.data) {
+        const {
+          delivery,
+          expression,
+          preparation,
+          logic,
+          suitability,
           nickname,
           commentContent,
-        }));
-
-        setMyEvaluate(averageEvaluate);
-        console.log(myEvaluate);
-        setMyComment(comments);
+          anonymity, // 필요한가?
+        } = response.data;
+        setMyEvaluate({
+          delivery,
+          expression,
+          preparation,
+          logic,
+          suitability,
+        });
+        setMyComment({ nickname, commentContent });
       }
     } catch (error) {
       console.log('get my evaluate error : ' + error);
@@ -70,34 +73,20 @@ const MyEvaluateContent = () => {
 
   return (
     <div>
-      <Box sx={{ padding: 0 }}>
-        <Typography variant='h5' gutterBottom>
-          내 평가
-        </Typography>
-        <Box sx={{ marginBottom: 3 }}>
-          <MultiRadarChart data={myEvaluate} />
-        </Box>
-        <Box>
-          <Typography variant='h6' gutterBottom>
-            코멘트
-          </Typography>
-          {myComment.map((comment, index) => (
-            <Paper
-              key={index}
-              elevation={4}
-              sx={{ padding: 2, marginBottom: 2 }}
-            >
-              {anonymity === 0 && (
-                <Typography variant='subtitle1' gutterBottom>
-                  {comment.nickname}
-                </Typography>
-              )}
-              <Divider />
-              <Typography variant='body1'>{comment.commentContent}</Typography>
-            </Paper>
-          ))}
-        </Box>
-      </Box>
+      <p>내 평가</p>
+      <div>
+        <h3>평가 점수</h3>
+        <p>Delivery: {myEvaluate.delivery}</p>
+        <p>Expression: {myEvaluate.expression}</p>
+        <p>Preparation: {myEvaluate.preparation}</p>
+        <p>Logic: {myEvaluate.logic}</p>
+        <p>Suitability: {myEvaluate.suitability}</p>
+      </div>
+      <div>
+        <h3>코멘트</h3>
+        <p>Nickname: {myComment.nickname}</p>
+        <p>Comment: {myComment.commentContent}</p>
+      </div>
     </div>
   );
 };

@@ -25,7 +25,6 @@ const MultiSidebar = ({ tabItem }) => {
 
   // dispatch(setPresentationTime('2024-08-07T15:37'));
   // hasExecuteRef.current = false;
-  // const response = adminParticipants(studyRoomId, participants);
 
   // 시간 호출
   useEffect(() => {
@@ -33,6 +32,10 @@ const MultiSidebar = ({ tabItem }) => {
   }, []);
   useInterval(() => {
     setRealTime(moment());
+    // console.log('moment : ' + moment(realTime).toString());
+    // console.log(presentationTime);
+    // console.log(moment(presentationTime).toString());
+    // console.log('hasExecuteRef : ' + hasExecuteRef.current);
     if (
       !hasExecuteRef.current &&
       moment(realTime).isAfter(presentationTime) &&

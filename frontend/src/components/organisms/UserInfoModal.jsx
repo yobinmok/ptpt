@@ -1,35 +1,46 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setAuth } from '../../store/actions/authActions';
-import { updateProfile } from '../../apis/auth';
 
-const Container = styled.div`
+const ModalBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const ModalContainer = styled.div`
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: #f9f9f9;
+  width: 400px;
+  position: relative;
 `;
 
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  width: 300px;
-  gap: 10px;
-  padding: 20px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
 `;
 
 const Input = styled.input`
-  padding: 8px;
-  font-size: 16px;
   margin-bottom: 10px;
+  padding: 8px;
+  width: 100%;
 `;
 
 const Button = styled.button`
@@ -39,11 +50,11 @@ const Button = styled.button`
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin-left: 10px;
 
   &:hover {
     background-color: #0056b3;
   }
-
   &:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
@@ -81,11 +92,7 @@ const Label = styled.label`
   text-align: left;
 `;
 
-const UserInfoPage = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { token, memberId } = location.state || {};
+const UserInfoModal = ({ showModal, setShowModal, handleSubmit }) => {
   const [nickname, setNickname] = useState('');
   const [profilePicture, setProfilePicture] = useState(null);
   const [voiceModel, setVoiceModel] = useState(null);
@@ -103,34 +110,21 @@ const UserInfoPage = () => {
   };
 
   const handleProfilePictureChange = (e) => {
-    setProfilePicture(e.target.files[0]);
+    setProfilePicture(e.target.value);
   };
 
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    try {
-      const profileData = {
-        oauthId: memberId,
-        nickName: nickname,
-        memberPicture: profilePicture || 'default-profile.png',
-      };
-
-      console.log('Sending profile data:', profileData); // 데이터 확인
-
-      await updateProfile(profileData);
-      dispatch(setAuth(token, profileData));
-      console.log('회원가입 성공');
-      navigate('/');
-    } catch (error) {
-      console.error('회원가입 에러', error);
-    }
+    handleSubmit(nickname, profilePicture || 'default-profile.png');
+    setShowModal(false);
   };
 
   const checkNicknameDuplicate = async () => {
     try {
       console.log(`Checking nickname: ${nickname}`);
+      // TODO: API 함수로 수정
       const response = await axios.get(`/member/${nickname}`);
-      console.log(response);
+      console.log('Nickname check response:', response);
       if (response.status === 200) {
         setNicknameMessage('사용 가능한 닉네임입니다.');
         setIsNicknameValid(true);
@@ -148,36 +142,41 @@ const UserInfoPage = () => {
   };
 
   return (
-    <Container>
-      <Form onSubmit={handleFormSubmit}>
-        <h2>Enter Your Information</h2>
-        <NicknameContainer>
-          <Input
-            type='text'
-            placeholder='Nickname'
-            value={nickname}
-            onChange={handleNicknameChange}
-            required
-          />
-          <Button type='button' onClick={checkNicknameDuplicate}>
-            Check
-          </Button>
-        </NicknameContainer>
-        {nicknameMessage && (
-          <Message $isError={!isNicknameValid}>{nicknameMessage}</Message>
-        )}
-        <Label>Profile Picture</Label>
-        <FileInput type='file' onChange={handleProfilePictureChange} />
-        <Label>Voice Model</Label>
-        <FileInput type='file' onChange={handleVoiceModelChange} />
-        <ButtonContainer>
-          <Button type='submit' disabled={!isNicknameValid}>
-            회원가입
-          </Button>
-        </ButtonContainer>
-      </Form>
-    </Container>
+    showModal && (
+      <ModalBackground>
+        <ModalContainer>
+          <CloseButton onClick={() => setShowModal(false)}>&times;</CloseButton>
+          <h2>Enter Your Information</h2>
+          <form onSubmit={handleFormSubmit}>
+            <NicknameContainer>
+              <Input
+                type='text'
+                placeholder='Nickname'
+                value={nickname}
+                onChange={handleNicknameChange}
+                required
+              />
+              <Button type='button' onClick={checkNicknameDuplicate}>
+                Check
+              </Button>
+            </NicknameContainer>
+            {nicknameMessage && (
+              <Message $isError={!isNicknameValid}>{nicknameMessage}</Message>
+            )}
+            <Label>Profile Picture</Label>
+            <FileInput type='file' onChange={handleProfilePictureChange} />
+            <Label>Voice Model</Label>
+            <FileInput type='file' onChange={handleVoiceModelChange} />
+            <ButtonContainer>
+              <Button type='submit' disabled={!isNicknameValid}>
+                회원가입
+              </Button>
+            </ButtonContainer>
+          </form>
+        </ModalContainer>
+      </ModalBackground>
+    )
   );
 };
 
-export default UserInfoPage;
+export default UserInfoModal;

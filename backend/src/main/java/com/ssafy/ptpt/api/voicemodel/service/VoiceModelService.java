@@ -40,13 +40,12 @@ public class VoiceModelService {
 
     public Mono<String> inferConvert(String ttsPath) {
         System.out.println("in inferConvert");
-        String resultPath = "https://i11b207.p.ssafy.io" + ttsPath.substring(ttsPath.indexOf("/uploads"));
-        System.out.println(resultPath);
+
         // JSON 객체 생성
         ObjectNode jsonObject = objectMapper.createObjectNode();
         ArrayNode jsonArray = objectMapper.createArrayNode();
         jsonArray.add(0);
-        jsonArray.add(resultPath); // "C:\\Users\\SSAFY\\Desktop\\src\\tts.wav"
+        jsonArray.add(ttsPath); // "C:\\Users\\SSAFY\\Desktop\\src\\tts.wav"
         jsonArray.add(0);
         jsonArray.addNull();
         jsonArray.add("rmvpe");

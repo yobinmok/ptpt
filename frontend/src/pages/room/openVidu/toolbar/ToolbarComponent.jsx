@@ -9,7 +9,7 @@ import MicIcon from '@mui/icons-material/Mic';
 import MicOffIcon from '@mui/icons-material/MicOff';
 
 const ToolBar = styled.div`
-  width: 80%;
+  width: 100%;
   height: 60px; /* 원하는 높이로 설정 */
   color: #ffffff;
   background-color: #333333;

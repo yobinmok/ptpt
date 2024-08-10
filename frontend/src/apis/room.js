@@ -59,7 +59,7 @@ export const loadRoomList = async () => {
 
 export const searchByStudyRoomName = async (studyRoomTitle) => {
   try {
-    const response = axios.get(`/studyRoom/search/${studyRoomTitle}`);
+    const response = axios.get(`/studyRoom/${studyRoomTitle}`);
     return response;
   } catch (error) {
     console.log('searchByStudyRoomTitle error : ' + error);
@@ -106,9 +106,9 @@ export const takeMyEvaluate = async (studyRoomId, userId) => {
   try {
     const response = await axios.post(`/evaluation/feedBack`, {
       studyRoomId: studyRoomId,
-      oauthId: userId,
+      oauthId: 'G123',
     });
-    return response.data;
+    return response;
   } catch (error) {
     console.log('take my evaluate info error : ' + error);
   }

@@ -14,6 +14,7 @@ const MainPage = () => {
   const [isSection2Visible, setIsSection2Visible] = useState(false);
   const [isSection3Visible, setIsSection3Visible] = useState(false);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
   const MoveCreateRoom = () => {
     navigate('/createroom');
   };

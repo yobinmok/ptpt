@@ -1,1 +1,0 @@
-export const SAVE_MULTI_PRESET = 'SAVE_MULTI_PRESET';

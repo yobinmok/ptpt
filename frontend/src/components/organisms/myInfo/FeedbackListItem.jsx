@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
+// 피드백 항목 스타일 정의
 const FeedbackItemContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -36,6 +37,7 @@ const FeedbackItemSubject = styled.p`
   color: #555;
 `;
 
+// FeedbackListItem 컴포넌트 정의
 const FeedbackListItem = ({ roomName, date, subject, roomId }) => {
   const navigate = useNavigate();
 

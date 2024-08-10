@@ -4,13 +4,7 @@
  * SET_USER_PROFILE, LOG_OUT, UPDATE_NICKNAME 액션을 처리합니다.
  */
 
-import {
-  SET_USER_PROFILE,
-  LOG_OUT,
-  UPDATE_NICKNAME,
-  UPDATE_PROFILE_PICTURE,
-  SET_PROFILE_IMAGE,
-} from '../types/userTypes';
+import { SET_USER_PROFILE, LOG_OUT, UPDATE_NICKNAME } from '../types/userTypes';
 
 // 초기 상태 정의
 const initialState = {
@@ -50,20 +44,6 @@ const userReducer = (state = initialState, action) => {
           ...state.data, // 기존 사용자 정보를 복사
           nickname: action.payload, // 닉네임만 업데이트
         },
-      };
-    // 프로필 업데이트 액션 처리
-    case UPDATE_PROFILE_PICTURE:
-      return {
-        ...state,
-        data: {
-          ...state.data,
-          memberPicture: action.payload,
-        },
-      };
-    case SET_PROFILE_IMAGE:
-      return {
-        ...state,
-        profileImage: action.payload,
       };
     // 기본적으로 기존 상태를 반환
     default:

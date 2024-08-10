@@ -1,8 +1,10 @@
-import {
-  SET_SAVED_ROOMS,
-  SAVED_ROOMS_SUCCESS,
-  SAVED_ROOMS_FAILURE,
-} from '../types/savedRoomsTypes';
+/**
+ * 저장한 스터디룸 리듀서
+ * 초기 상태를 정의하고, 액션 타입에 따라 상태를 업데이트합니다.
+ * SET_SAVED_ROOMS, FETCH_SAVED_ROOMS_ERROR 액션을 처리합니다.
+ */
+
+import { SET_SAVED_ROOMS } from '../types/savedRoomsTypes';
 
 // 초기 상태 정의
 const initialState = {
@@ -13,23 +15,15 @@ const initialState = {
 // 저장한 스터디룸 리듀서 정의
 const savedRoomsReducer = (state = initialState, action) => {
   switch (action.type) {
+    // 저장한 스터디룸 데이터 설정 액션 처리
     case SET_SAVED_ROOMS:
       return {
-        ...state,
-        loading: true,
+        ...state, // 기존 상태를 복사
+        data: action.data, // 새로운 저장한 스터디룸 데이터로 업데이트
+        error: null, // 에러 상태 초기화
       };
-    case SAVED_ROOMS_SUCCESS:
-      return {
-        ...state,
-        savedStudyRooms: action.payload, // 상태 이름 변경
-        loading: false,
-      };
-    case SAVED_ROOMS_FAILURE:
-      return {
-        ...state,
-        error: action.payload,
-        loading: false,
-      };
+
+    // 기본적으로 기존 상태를 반환
     default:
       return state;
   }

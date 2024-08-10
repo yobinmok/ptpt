@@ -4,7 +4,7 @@
  * SET_AUTH, LOG_OUT 액션을 처리합니다.
  */
 
-import { SET_AUTH, LOG_OUT, UPDATE_NICKNAME } from '../types/authTypes';
+import { SET_AUTH, LOG_OUT } from '../types/authTypes';
 
 // 초기 상태 정의
 const initialState = {
@@ -31,14 +31,6 @@ const authReducer = (state = initialState, action) => {
         isAuthenticated: false, // 인증 상태를 false로 변경
         token: null, // 토큰을 초기화
         user: null, // 사용자 정보를 초기화
-      };
-    case UPDATE_NICKNAME:
-      return {
-        ...state,
-        user: {
-          ...state.user,
-          nickname: action.payload, // 닉네임 업데이트
-        },
       };
     // 기본적으로 기존 상태를 반환
     default:
