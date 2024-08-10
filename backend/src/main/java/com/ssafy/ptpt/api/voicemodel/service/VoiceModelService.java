@@ -1,5 +1,6 @@
 package com.ssafy.ptpt.api.voicemodel.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -109,14 +110,21 @@ public class VoiceModelService {
     }
 
     // 음성 변환 프로세스를 체이닝하는 메서드
-    public Mono<String> processVoiceConversion(String fileName, String ttsPath) {
+    public Mono<String> processVoiceConversion(String voiceModel, String ttsPath) {
         return uploadAudioFile(ttsPath)
                 .flatMap(uploadResponse -> {
                     // 여기서 `uploadResponse`는 `uploadAudioFile`의 응답입니다.
                     // inferChangeVoice 호출 후, 이 응답을 inferConvert에 사용합니다.
-                    System.out.println("upload 경로 확인: " + uploadResponse);
-                    return inferChangeVoice(fileName)
-                            .flatMap(changeVoiceResponse -> inferConvert(uploadResponse))
+                    String uploadPath;
+                    try {
+                        JsonNode rootNode = objectMapper.readTree(uploadResponse);
+                        uploadPath = rootNode.path("data").get(0).asText();
+                    } catch (JsonProcessingException e) {
+                        return Mono.error(new RuntimeException(e));
+                    }
+                    System.out.println("upload 경로 확인: " + uploadPath);
+                    return inferChangeVoice(voiceModel)
+                            .flatMap(changeVoiceResponse -> inferConvert(uploadPath))
                             .flatMap(convertResponse -> {
                                 ObjectMapper objectMapper = new ObjectMapper();
                                 try {
