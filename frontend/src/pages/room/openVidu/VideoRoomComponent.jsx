@@ -14,14 +14,26 @@ import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { setParticipants } from '../../../store/actions/participant';
-import { Box } from '@mui/material';
 import ToolbarComponent2 from './toolbar/BottomToolBar';
 import {
   setOpenviduSessionId,
   setRecordSessionId,
   setIsRecording,
 } from '../../../store/actions/room';
-import { startRecording, stopRecording } from '../../../apis/record';
+import {
+  getRecording,
+  startRecording,
+  stopRecording,
+} from '../../../apis/record';
+
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+  Typography,
+} from '@mui/material';
 
 // const StyledLayoutBounds = styled.div`
 //   background-color: rgba(0, 0, 0, 0.3);
@@ -84,6 +96,7 @@ class VideoRoomComponent extends Component {
       subscribers: [],
       chatDisplay: 'none',
       currentVideoDevice: undefined,
+      openModal: false,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -103,6 +116,7 @@ class VideoRoomComponent extends Component {
     this.checkSize = this.checkSize.bind(this);
     this.startRecord = this.startRecord.bind(this);
     this.stopRecord = this.stopRecord.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
   }
 
   componentDidMount() {
@@ -608,21 +622,24 @@ class VideoRoomComponent extends Component {
 
   // recording
   async startRecord() {
-    // try {
-    console.log(this.props.isRecord);
     this.props.setIsRecording(); //false -> true
     const response = await startRecording(this.props.openviduSessionId);
-    console.log('---------------');
-    console.log(response.data);
-    console.log(this.props.isRecord);
     this.props.setRecordSessionId(response.data.id); // 더 필요한 정보가 있으면 추후 저장
   }
 
-  stopRecord() {
-    const response = stopRecording(this.props.recordSessionId);
+  async stopRecord() {
+    const response = await stopRecording(this.props.recordSessionId);
     this.props.setIsRecording();
-    console.log('==============');
-    console.log(this.props.isRecord);
+
+    const getResponse = await getRecording(response.data.id);
+    console.log(getResponse);
+
+    const fileUrl = getResponse.data.url;
+    this.setState({ fileUrl, openModal: true });
+  }
+
+  handleCloseModal() {
+    this.setState({ openModal: false });
   }
 
   render() {
@@ -689,6 +706,31 @@ class VideoRoomComponent extends Component {
             </div>
           ))}
         </StyledLayoutBounds>
+        {/* 모달 컴포넌트 */}
+        <Dialog
+          open={this.state.openModal}
+          onClose={this.handleCloseModal}
+          aria-labelledby='alert-dialog-title'
+          aria-describedby='alert-dialog-description'
+        >
+          <DialogTitle id='alert-dialog-title'>{'녹화 파일 URL'}</DialogTitle>
+          <DialogContent>
+            <Typography variant='body1'>
+              <a
+                href={this.state.fileUrl}
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                {this.state.fileUrl}
+              </a>
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleCloseModal} color='primary'>
+              닫기
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }

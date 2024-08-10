@@ -160,11 +160,6 @@ class ToolbarComponent2 extends Component {
               </Tooltip>
             )}
           </IconButton>
-          {/* 문제 대비 버튼
-              - start를 누른 뒤 stop을 누르지 않고 start를 누르면 에러 발생
-              - 위의 버튼이 state를 통해 변동되지 않는 경우를 대비하여 일단 둡니다
-          */}
-
           {!isRecord ? (
             <IconButton className='navButton' onClick={this.startRecord}>
               <Tooltip title='녹화 시작' placement='top'>

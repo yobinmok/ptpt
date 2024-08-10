@@ -15,16 +15,15 @@ export const startRecording = async (sessionName) => {
         hasVideo: true,
       }
     );
-    console.log(response);
     return response;
   } catch (error) {
     console.log('start recording error : ' + error);
   }
 };
 
-export const stopRecording = (recordSessionId) => {
+export const stopRecording = async (recordSessionId) => {
   try {
-    const response = axios.post(
+    const response = await axios.post(
       // zip 형식으로 저장
       `${VITE_NODE_API_URL}/recording-node/api/recording/stop`,
       {
@@ -41,8 +40,9 @@ export const stopRecording = (recordSessionId) => {
 export const getRecording = (recordSessionId) => {
   try {
     const response = axios.get(
-      `http://localhost:5173/recording-node/api/recording/get/${recordSessionId}`
+      `${VITE_NODE_API_URL}/recording-node/api/recording/get/${recordSessionId}`
     );
+    return response;
   } catch (error) {
     console.log('get recording error : ' + error);
   }
