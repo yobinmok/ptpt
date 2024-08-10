@@ -56,7 +56,6 @@ const VoiceTab = () => {
         formData,
         ({ data }) => {
           console.log('성공');
-          console.log(data);
           resolve(data); // Promise를 성공으로 마치고 resultAudioBlob을 반환
         },
         () => {
