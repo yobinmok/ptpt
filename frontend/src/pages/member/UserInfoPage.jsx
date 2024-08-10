@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setAuth } from '../../store/actions/authActions';
-import { updateProfile } from '../../apis/auth';
+import { checkNicknameDuplicate, updateProfile } from '../../apis/auth';
 
 const Container = styled.div`
   display: flex;
@@ -103,47 +102,50 @@ const UserInfoPage = () => {
   };
 
   const handleProfilePictureChange = (e) => {
+    console.log(e.target.files[0]);
     setProfilePicture(e.target.files[0]);
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    const profileData = new FormData();
+
+    const memberUpdateRequest = {
+      oauthId: memberId,
+      nickname: nickname,
+    };
+    profileData.append(
+      'memberUpdateRequest',
+      new Blob([JSON.stringify(memberUpdateRequest)], {
+        type: 'application/json',
+      })
+    );
+    profileData.append('image', profilePicture);
+
     try {
-      const profileData = {
-        oauthId: memberId,
-        nickName: nickname,
-        memberPicture: profilePicture || 'default-profile.png',
-      };
-
-      console.log('Sending profile data:', profileData); // 데이터 확인
-
-      await updateProfile(profileData);
-      dispatch(setAuth(token, profileData));
-      console.log('회원가입 성공');
-      navigate('/');
+      const response = await updateProfile(profileData);
+      if (response) {
+        console.log('성공', response);
+      }
     } catch (error) {
-      console.error('회원가입 에러', error);
+      console.error('ddddd', error);
+      throw error;
     }
+    dispatch(setAuth(token, memberUpdateRequest));
+    // response가 없으므로 무조건 메인으로 이동
+    navigate('/');
   };
 
-  const checkNicknameDuplicate = async () => {
+  const handleNicknameCheck = async () => {
     try {
-      console.log(`Checking nickname: ${nickname}`);
-      const response = await axios.get(`/member/${nickname}`);
-      console.log(response);
-      if (response.status === 200) {
+      const response = await checkNicknameDuplicate(nickname);
+      if (response) {
         setNicknameMessage('사용 가능한 닉네임입니다.');
         setIsNicknameValid(true);
       }
     } catch (error) {
-      if (error.response && error.response.status === 400) {
-        setNicknameMessage('이미 존재하는 닉네임입니다.');
-        setIsNicknameValid(false);
-      } else {
-        setNicknameMessage('닉네임 중복 확인 중 오류가 발생했습니다.');
-        setIsNicknameValid(false);
-      }
-      console.error('Error checking nickname:', error);
+      setNicknameMessage('이미 존재하는 닉네임입니다.');
+      setIsNicknameValid(false);
     }
   };
 
@@ -159,7 +161,7 @@ const UserInfoPage = () => {
             onChange={handleNicknameChange}
             required
           />
-          <Button type='button' onClick={checkNicknameDuplicate}>
+          <Button type='button' onClick={handleNicknameCheck}>
             Check
           </Button>
         </NicknameContainer>

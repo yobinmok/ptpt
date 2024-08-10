@@ -20,6 +20,7 @@ const FeedbackHeader = styled.div`
   padding: 10px 0;
   font-weight: bold;
 `;
+
 const FeedbackSection = ({ feedbackData }) => {
   return (
     <div>
@@ -32,13 +33,12 @@ const FeedbackSection = ({ feedbackData }) => {
       </FeedbackHeader>
       <FeedbackListContainer>
         {feedbackData.map((feedback) => (
-          // FeedbackItem 컴포넌트로 분리
           <FeedbackListItem
-            key={feedback.roomId}
-            roomName={feedback.roomName}
-            date={feedback.date}
-            subject={feedback.subject}
-            roomId={feedback.roomId}
+            key={feedback.studyRoomId}
+            roomName={`Study Room ${feedback.studyRoomId}`}
+            date={'2024-08-09'} // 실제 날짜를 사용해야 합니다.
+            subject={'Sample Subject'} // 실제 주제를 사용해야 합니다.
+            roomId={feedback.studyRoomId}
           />
         ))}
       </FeedbackListContainer>

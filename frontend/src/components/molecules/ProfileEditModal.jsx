@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import axios from 'axios';
-import { Axios } from '../../util/http-commons';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   updateNickname,
   fetchUserProfile,
 } from '../../store/actions/userActions';
+import { updateProfile, checkNicknameDuplicate } from '../../apis/auth';
+import styled from 'styled-components';
 
 // 모달의 배경을 어둡게 만드는 오버레이 스타일
 const ModalOverlay = styled.div`
@@ -65,15 +64,12 @@ const CheckResult = styled.div`
   text-align: center;
 `;
 
-// axios 인스턴스
-
-const instance = Axios();
-
 // ProfileEditModal 컴포넌트 정의
 const ProfileEditModal = ({ onClose, oauthId }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.data) || {};
   const { nickname = '' } = user;
+  const userOauthId = useSelector((state) => state.auth.user.oauthId); // oauthId 가져오기
 
   useEffect(() => {
     if (oauthId) {
@@ -81,26 +77,30 @@ const ProfileEditModal = ({ onClose, oauthId }) => {
     }
   }, [dispatch, oauthId]);
 
-  const [tempNickname, setTempNickname] = useState(nickname);
-  const [checkResult, setCheckResult] = useState(null);
-  const [isAvailable, setIsAvailable] = useState(false);
+  const [tempNickname, setTempNickname] = useState(nickname); // 입력된 닉네임 상태
+  const [checkResult, setCheckResult] = useState(null); // 닉네임 중복 검사 결과 상태
+  const [isAvailable, setIsAvailable] = useState(false); // 닉네임 사용 가능 여부 상태
 
   // 닉네임 중복 확인 핸들러
   const handleNicknameCheck = async () => {
     try {
-      const response = await instance.put(`/member/${oauthId}`, {
-        nickname: tempNickname,
-        checkOnly: true,
-      });
-      const available = response.data.isAvailable;
-      setCheckResult(
-        available ? 'Nickname is available.' : 'Nickname is already taken.'
-      );
-      setIsAvailable(available);
+      const response = await checkNicknameDuplicate(tempNickname);
+      if (response === '입력한 닉네임 사용 가능.') {
+        setCheckResult('Nickname is available.');
+        setIsAvailable(true);
+      } else {
+        setCheckResult('Nickname is already taken.');
+        setIsAvailable(false);
+      }
     } catch (error) {
-      console.error('Error checking nickname:', error);
-      setCheckResult('Error checking nickname.');
-      setIsAvailable(false);
+      if (error.response && error.response.status === 400) {
+        setCheckResult('Nickname is already taken.');
+        setIsAvailable(false);
+      } else {
+        console.error('Error checking nickname:', error);
+        setCheckResult('Error checking nickname.');
+        setIsAvailable(false);
+      }
     }
   };
 
@@ -108,11 +108,29 @@ const ProfileEditModal = ({ onClose, oauthId }) => {
   const handleSave = async () => {
     if (isAvailable) {
       try {
-        await instance.put(`/member/${oauthId}`, { nickname: tempNickname });
-        dispatch(updateNickname(tempNickname));
-        onClose();
+        const memberUpdateRequest = {
+          oauthId: userOauthId, // oauthId가 올바르게 설정되었는지 확인
+          nickname: tempNickname,
+        };
+
+        const profileData = new FormData();
+        profileData.append(
+          'memberUpdateRequest',
+          new Blob([JSON.stringify(memberUpdateRequest)], {
+            type: 'application/json',
+          })
+        );
+
+        const response = await updateProfile(profileData);
+        console.log('Profile update response:', response); // 응답을 콘솔에 출력
+        // 응답이 없어서 모달이 안 닫혀요
+        dispatch(updateNickname(tempNickname)); // Redux 상태 업데이트
+        onClose(); // 모달 닫기
+        if (response) {
+        }
       } catch (error) {
-        setCheckResult('Error saving nickname.');
+        console.error('Profile update error:', error); // 에러를 콘솔에 출력
+        setCheckResult('Error saving profile.');
       }
     }
   };

@@ -37,10 +37,13 @@ public class VoiceModelController {
     private String UPLOAD_PATH;
     private final VoiceModelService voiceModelService;
 
+    @Value("${external.api.base}")
+    private String externalApiBase;
+
     @PostMapping("/refresh")
     public void inferRefresh()throws IOException {
         System.out.println("??????????????????????/");
-        WebClient webClient = WebClient.create("https://i11b207.p.ssafy.io/rvc");
+        WebClient webClient = WebClient.create(externalApiBase);
         ObjectMapper mapper = new ObjectMapper();
 
         ObjectNode rootNode = mapper.createObjectNode();
@@ -125,7 +128,7 @@ public class VoiceModelController {
             for (int i = 0; i < 4; i++) {
                 String jsonPayload = createJsonPayload(folderPath, oauthId);
                 ResponseEntity<String> response = callExternalApi(jsonPayload, externalApiTrain);
-
+                System.out.println(response);
                 if (response == null || response.getStatusCode() != HttpStatus.OK) {
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process the request at step " + (i + 1));
                 }

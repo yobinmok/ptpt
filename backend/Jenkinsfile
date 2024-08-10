@@ -39,23 +39,30 @@ pipeline {
                 }
             }
         }
-        stage('Remove old image') {
-            steps {
-                script {
-                    sh 'docker stop ptpt-dev-backend'
-                    sh 'docker rm ptpt-dev-backend'
-                }
-            }
-        }
+        // stage('Stop old Container') {
+        //     steps {
+        //         script {
+        //             sh 'docker stop ptpt-dev-backend'
+        //             sh 'docker rm ptpt-dev-backend'
+        //         }
+        //     }
+        // }
 
         stage('Depoly') {
             steps {
                 script { 
-                    // sh 'docker-compose stop backend || true'
-                    // sh 'docker-compose rm -f backend || true'
+                    sh 'docker-compose stop backend || true'
+                    sh 'docker-compose rm -f backend || true'
                     sh 'docker-compose up backend -d'
                     // sh 'docker-compose up -d'
                     
+                }
+            }
+        }
+        stage('Remove old Image') {
+            steps {
+                script {
+                    sh 'docker image prune -f'
                 }
             }
         }

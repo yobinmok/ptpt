@@ -1,5 +1,6 @@
 package com.ssafy.ptpt.api.studyroom.controller;
 
+import com.ssafy.ptpt.api.member.request.MemberOauthIdRequest;
 import com.ssafy.ptpt.api.studyroom.request.*;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomInfoResponse;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomListResponse;
@@ -60,10 +61,10 @@ public class StudyRoomController {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
     })
-    @GetMapping("/{oauthId}")
-    @Operation(summary = "스터디룸 조회", description = "프로필에서 사용자의 스터디룸을 확인할수 있습니다.")
-    public ResponseEntity<List<StudyRoomInfoResponse>> findByOauthId(@PathVariable("oauthId") String oauthId) {
-        Member member = memberRepository.findByOauthId(oauthId);
+    @PostMapping("/search")
+    @Operation(summary = "사용자 스터디룸 조회", description = "프로필에서 사용자의 스터디룸을 확인할수 있습니다.")
+    public ResponseEntity<List<StudyRoomInfoResponse>> findByOauthId(@RequestBody MemberOauthIdRequest MemberOauthIdRequest) {
+        Member member = memberRepository.findByOauthId(MemberOauthIdRequest.getOauthId());
         List<StudyRoomInfoResponse> studyRoomInfoResponse = studyRoomService.findByMemberId(member.getMemberId());
         return ResponseEntity.ok().body(studyRoomInfoResponse);
     }
