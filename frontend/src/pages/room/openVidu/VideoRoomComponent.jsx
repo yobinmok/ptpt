@@ -296,6 +296,7 @@ class VideoRoomComponent extends Component {
     }
     console.log('default leave');
   }
+
   camStatusChanged() {
     localUser.setVideoActive(!localUser.isVideoActive());
     localUser.getStreamManager().publishVideo(localUser.isVideoActive());

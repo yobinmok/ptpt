@@ -7,6 +7,7 @@ import com.ssafy.ptpt.api.studyroom.response.StudyRoomListResponse;
 import com.ssafy.ptpt.api.studyroom.service.StudyRoomService;
 import com.ssafy.ptpt.db.jpa.entity.Member;
 import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
+import com.ssafy.ptpt.exception.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -90,9 +92,9 @@ public class StudyRoomController {
     }
 
     // 스터디룸 비밀번호 확인
-    // TODO : 성공시 200 실패시 ?? 반환할수 있도록 수정예정
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
     })
     @PostMapping("/pwCheck")

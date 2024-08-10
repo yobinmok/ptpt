@@ -1,7 +1,7 @@
 const initialState = {
   participants: [],
   isUseParticipants: false,
-  isParticipantsEval: [],
+  evaluateParticipants: [],
 };
 
 const participantReducer = (state = initialState, action) => {
@@ -21,7 +21,7 @@ const participantReducer = (state = initialState, action) => {
     case 'EVAL_PARTICIPANTS':
       return {
         ...state,
-        isParticipantsEval: { ...action.payload },
+        evaluateParticipants: [...state.evaluateParticipants, action.payload],
       };
     default:
       return state;

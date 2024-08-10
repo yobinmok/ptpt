@@ -24,8 +24,8 @@ const EvaluateContent = ({}) => {
   const isAnonymous = useSelector((state) => state.room.isAnonymous);
   const participants = useSelector((state) => state.participant.participants);
   // 평가한 사람 등록
-  const isParticipants = useSelector(
-    (state) => state.participant.isParticipantsEval
+  const evaluateParticipants = useSelector(
+    (state) => state.participant.evaluateParticipants
   );
   // 자기 자신을 제외한 참가자 목록을 평가지에 올림
   // const userId = 'G41';
@@ -64,6 +64,7 @@ const EvaluateContent = ({}) => {
   const onHandleSubmit = async () => {
     const response = await submitEvaluate(evaluateInfo, studyRoomId);
     // 평가는 제출하면 끝이므로 추가적인 로직 필요 없음
+    dispatch(isParticipantsEval(evaluateInfo.slave));
   };
 
   const handleSelectChange = (value) => {
@@ -154,14 +155,25 @@ const EvaluateContent = ({}) => {
         onChange={onEvaluateInfoInput}
         value={evaluateInfo.commentContent}
       />
-      <Button
-        variant='contained'
-        color='primary'
-        onClick={onHandleSubmit}
-        sx={{ mt: '10px', marginRight: '8px' }}
-      >
-        평가 제출하기
-      </Button>
+      {evaluateParticipants.includes(evaluateInfo.slave) ? (
+        <Button
+          variant='contained'
+          color='primary'
+          disabled
+          sx={{ mt: '10px', marginRight: '8px' }}
+        >
+          평가 완료
+        </Button>
+      ) : (
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={onHandleSubmit}
+          sx={{ mt: '10px', marginRight: '8px' }}
+        >
+          평가 제출하기
+        </Button>
+      )}
     </div>
   );
 };

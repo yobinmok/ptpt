@@ -12,8 +12,12 @@ function uploadAudioApi(param, success, fail) {
   axiosMulti.post('/voiceModel/audio', param).then(success).catch(fail);
 }
 
+function trainModelApi(param, success, fail) {
+  axiosMulti.post('voiceModel/train', param).then(success).catch(fail);
+}
+
 function testRVC(param, success, fail) {
   axios.post('/voiceModel/refresh', param).then(success).catch(fail);
 }
 
-export { textToSpeechApi, uploadAudioApi, testRVC };
+export { textToSpeechApi, uploadAudioApi, trainModelApi, testRVC };
