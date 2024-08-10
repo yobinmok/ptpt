@@ -13,6 +13,8 @@ import com.ssafy.ptpt.exception.NotFoundException;
 import com.ssafy.ptpt.exception.NotMatchException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,22 +52,24 @@ public class StudyRoomService {
                 .collect(Collectors.toList());
     }
 
-    //방 리스트 전체 조회 - 페이징 추가 해야함
-//    public Page<StudyRoomListResponse> findBySearchRequest(Member member,
-//                                                           StudyRoomSearchRequest request,
-//                                                           Pageable pageable) {
-//        return findStudyRoomList.map(StudyRoomListResponse::from);
-//    }
+    //방 리스트 전체 조회 - 페이징 적용
+    public Page<StudyRoomListResponse> findBySearchRequest(Member member,
+                                                           StudyRoomSearchRequest request,
+                                                           Pageable pageable) {
 
-    // 방 리스트 전체 조회 - 페이징 전
-    public List<StudyRoomListResponse> findBySearchRequest() {
-        List<StudyRoom> studyRoomList = studyRoomRepository.findAll();
-
-        // 결과를 변환하여 List 반환
-        return studyRoomList.stream()
-                .map(StudyRoomListResponse::from)
-                .collect(Collectors.toList());
+        return studyRoomRepository.findAll(pageable)
+                .map(StudyRoomListResponse::from);
     }
+
+    //    // 방 리스트 전체 조회 - 페이징 전
+//    public List<StudyRoomListResponse> findBySearchRequest() {
+//        List<StudyRoom> studyRoomList = studyRoomRepository.findAll();
+//
+//        // 결과를 변환하여 List 반환
+//        return studyRoomList.stream()
+//                .map(StudyRoomListResponse::from)
+//                .collect(Collectors.toList());
+//    }
 
 
     //방 생성
