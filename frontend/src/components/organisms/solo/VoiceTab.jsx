@@ -115,9 +115,11 @@ const VoiceTab = () => {
           if (voiceSetting.current.model === 4) {
             uploadAudio(data.audioContent)
               .then((base64) => {
-                let audioBlob = base64ToBlob(base64, 'wav');
+                console.log(base64);
+                // let audioBlob = base64ToBlob(base64, 'wav');
                 var audioFile = new Audio();
-                audioFile.src = window.URL.createObjectURL(audioBlob);
+                audioFile.src = base64;
+                // audioFile.src = window.URL.createObjectURL(audioBlob);
                 audioFile.play();
               })
               .catch((error) => {
