@@ -6,7 +6,7 @@ import {
 
 const initialState = {
   loading: false,
-  statistics: {},
+  statistics: null,
   error: null,
 };
 
@@ -28,7 +28,7 @@ const statisticsReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: action.error,
       };
     default:
       return state;

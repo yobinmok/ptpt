@@ -136,7 +136,7 @@ const UserInfoPage = () => {
     navigate('/');
   };
 
-  const handlecheckNicknameDuplicate = async () => {
+  const handleNicknameCheck = async () => {
     try {
       const response = await checkNicknameDuplicate(nickname);
       if (response) {
@@ -161,7 +161,7 @@ const UserInfoPage = () => {
             onChange={handleNicknameChange}
             required
           />
-          <Button type='button' onClick={handlecheckNicknameDuplicate}>
+          <Button type='button' onClick={handleNicknameCheck}>
             Check
           </Button>
         </NicknameContainer>

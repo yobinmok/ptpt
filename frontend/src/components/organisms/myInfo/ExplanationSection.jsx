@@ -19,11 +19,6 @@ const ExplanationSection = ({ explanations }) => {
   return (
     <ExplanationContainer>
       <ExplanationTitle>평가 점수 설명</ExplanationTitle>
-      <ExplanationText>{explanations.delivery}</ExplanationText>
-      <ExplanationText>{explanations.expression}</ExplanationText>
-      <ExplanationText>{explanations.logic}</ExplanationText>
-      <ExplanationText>{explanations.preparation}</ExplanationText>
-      <ExplanationText>{explanations.suitability}</ExplanationText>
     </ExplanationContainer>
   );
 };

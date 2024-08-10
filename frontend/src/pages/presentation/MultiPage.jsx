@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toggleSidebar, selectTab, clearTab } from '../../store/actions/room';
 import EvaluteTab from '../../components/organisms/multi/EvaluateTab';
 import ParticipantsTab from '../../components/organisms/multi/ParticipantsTab';
+import ToolbarComponent from '../room/openVidu/toolbar/ToolbarComponent';
 
 const MultiPage = () => {
   const tabItem = [

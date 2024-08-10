@@ -101,7 +101,10 @@ public class MemberService {
     }
 
     public MemberStatisticResponse findMemberStatistic(MemberNicknameRequest memberNicknameRequest) {
-        Statistic statistic = statisticRepository.findByOauthId(memberNicknameRequest.getNickname());
+        Statistic statistic = statisticRepository.findByOauthId(memberNicknameRequest.getOauthId());
+        if (statistic == null) {
+            throw new RuntimeException("Statistic not found for oauthId: " + memberNicknameRequest.getOauthId());
+        }
         return MemberStatisticResponse.from(statistic);
     }
 }

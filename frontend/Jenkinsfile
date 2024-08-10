@@ -36,7 +36,7 @@ pipeline {
                 }
             }
         }
-        stage('Remove old image') {
+        stage('Stop old Container') {
             steps {
                 script {
                     sh 'docker stop ptpt-dev-frontend'
@@ -51,6 +51,14 @@ pipeline {
                     // sh 'docker-compose stop frontend || true'
                     // sh 'docker-compose rm -f frontend || true'
                     sh 'docker-compose up frontend -d'
+                }
+            }
+        }
+
+        stage('Remove old image') {
+            steps {
+                script {
+                    sh 'docker image prune -f'
                 }
             }
         }

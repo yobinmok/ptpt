@@ -1,6 +1,4 @@
-import axios from 'axios';
 import { Axios, AxiosMulti } from '../util/http-commons';
-const { VITE_API_URL } = import.meta.env;
 
 const instance = Axios();
 const multiinstance = AxiosMulti();

@@ -5,8 +5,8 @@ import MyInfoSidebar from '../../components/organisms/myInfo/MyInfoSidebar';
 import StatisticsPage from '../../components/organisms/myInfo/StatisticsPage';
 import SavedRoomsPage from '../../components/organisms/myInfo/SavedRoomsPage';
 import VoiceModelPage from '../../components/organisms/myInfo/VoiceModelPage';
-import FeedbackDetailsPage from '../../components/organisms/myInfo/FeedbackDetailsPage';
-
+import FeedbackDetail from '../../components/organisms/myInfo/FeedbackDetail';
+import { useSelector } from 'react-redux';
 const Container = styled.div`
   display: flex;
 `;
@@ -16,8 +16,9 @@ const MyInfoContent = styled.div`
   padding: 20px;
   background: #f9f9f9;
 `;
-
+console.log('--------------');
 const MyInfoPage = () => {
+  console.log(useSelector((state) => state.auth.user.oauthId));
   return (
     <Container>
       <MyInfoSidebar />
@@ -26,7 +27,7 @@ const MyInfoPage = () => {
           <Route path='statistics' element={<StatisticsPage />} />
           <Route
             path='statistics/evaluation/feedBack/:roomId'
-            element={<FeedbackDetailsPage />}
+            element={<FeedbackDetail />}
           />
           <Route path='saved-rooms' element={<SavedRoomsPage />} />
           <Route path='voice-model' element={<VoiceModelPage />} />
