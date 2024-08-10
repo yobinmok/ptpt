@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  fetchSavedRooms,
-  setSavedRooms,
-} from '../../../store/actions/savedRoomActions';
+import { setSavedRooms } from '../../../store/actions/savedRoomActions';
 
 import { getPresetList } from '../../../apis/preset';
 import SoloRoomTab from './SoloRoomTab';
@@ -18,9 +15,9 @@ const SavedRoomsPage = () => {
   useEffect(() => {
     const fetchPresetList = async () => {
       try {
-        const data = await getPresetList({ oauthId });
-        console.log(data);
-        dispatch(setSavedRooms(data));
+        const response = await getPresetList({ oauthId });
+        console.log(response.data);
+        dispatch(setSavedRooms(response.data));
         console.log(savedRooms);
       } catch (err) {
         console.log(err);

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ToolbarComponent.css';
 import { useSelector, connect } from 'react-redux';
-
+import { MultiExitModal } from '../../../../components/molecules/MultiExitModal';
 import Toolbar from '@mui/material/Toolbar';
 
 // mui
@@ -31,6 +31,10 @@ class ToolbarComponent2 extends Component {
     this.switchCamera = this.switchCamera.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
     this.toggleChat = this.toggleChat.bind(this);
+  }
+
+  openStatusChanged() {
+    this.props.openStatusChanged();
   }
 
   micStatusChanged() {
@@ -152,6 +156,8 @@ class ToolbarComponent2 extends Component {
             <ExitBtn />
           </IconButton>
         </div>
+
+        {/* TODO: 추후 추가 <MultiExitModal /> */}
       </Toolbar>
     );
   }
@@ -162,6 +168,7 @@ function ExitBtn() {
 
   const handleExit = () => {
     // 발표 프리셋 저장하는 모달 띄우기
+
     navigate('/');
   };
 
