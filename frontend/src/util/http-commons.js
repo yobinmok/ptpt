@@ -1,7 +1,11 @@
 import axios from 'axios';
 
-const { VITE_API_URL, VITE_GOOGLE_API_KEY, VITE_GOOGLE_TTS_API_URL } =
-  import.meta.env;
+const {
+  VITE_API_URL,
+  VITE_GOOGLE_API_KEY,
+  VITE_GOOGLE_TTS_API_URL,
+  VITE_NODE_API_URL,
+} = import.meta.env;
 
 function Axios() {
   const instance = axios.create({
@@ -48,4 +52,15 @@ function Google_STT() {
   return instance;
 }
 
-export { Axios, AxiosMulti, Google, Google_STT };
+function RecordOV() {
+  const instance = axios.create({
+    baseURL: VITE_NODE_API_URL,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  return instance;
+}
+
+export { Axios, AxiosMulti, Google, Google_STT, RecordOV };
