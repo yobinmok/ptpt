@@ -16,18 +16,20 @@ const SavedRoomsPage = () => {
   const savedRooms = useSelector((state) => state.savedRooms); // Redux 상태에서 저장된 스터디룸 가져오기
 
   useEffect(() => {
-    getPresetList(
-      { oauthId },
-      ({ data }) => {
+    const fetchPresetList = async () => {
+      try {
+        const data = await getPresetList({ oauthId });
         console.log(data);
         dispatch(setSavedRooms(data));
         console.log(savedRooms);
-      },
-      (err) => {
+      } catch (err) {
         console.log(err);
       }
-    );
-  }, [oauthId]); // 빈 배열이면 onMounted와 동일 / prev: [dispatch, oauthId]);
+    };
+
+    fetchPresetList();
+  }, [oauthId]);
+  // 빈 배열이면 onMounted와 동일 / prev: [dispatch, oauthId]);
 
   const handleOptionChange = (option) => {
     setSelectedOption(option);
