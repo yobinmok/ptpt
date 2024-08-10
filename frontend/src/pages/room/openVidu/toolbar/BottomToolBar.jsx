@@ -18,6 +18,8 @@ import StopScreenShareIcon from '@mui/icons-material/StopScreenShare';
 import Tooltip from '@mui/material/Tooltip';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import IconButton from '@mui/material/IconButton';
+import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
+import StopCircleIcon from '@mui/icons-material/StopCircle';
 
 class ToolbarComponent2 extends Component {
   constructor(props) {
@@ -31,6 +33,8 @@ class ToolbarComponent2 extends Component {
     this.switchCamera = this.switchCamera.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
     this.toggleChat = this.toggleChat.bind(this);
+    this.startRecord = this.startRecord.bind(this);
+    this.stopRecord = this.stopRecord.bind(this);
   }
 
   micStatusChanged() {
@@ -66,9 +70,18 @@ class ToolbarComponent2 extends Component {
     this.props.toggleChat();
   }
 
+  startRecord() {
+    this.props.startRecord();
+  }
+
+  stopRecord() {
+    this.props.stopRecord();
+  }
+
   render() {
     const localUser = this.props.user;
     const isSideTab = this.props.isSideTab; // true이면 열린거
+    const isRecord = this.props.isRecord;
     return (
       <Toolbar
         className='toolbar'
@@ -147,6 +160,24 @@ class ToolbarComponent2 extends Component {
               </Tooltip>
             )}
           </IconButton>
+          {/* 문제 대비 버튼
+              - start를 누른 뒤 stop을 누르지 않고 start를 누르면 에러 발생
+              - 위의 버튼이 state를 통해 변동되지 않는 경우를 대비하여 일단 둡니다
+          */}
+
+          {!isRecord ? (
+            <IconButton className='navButton' onClick={this.startRecord}>
+              <Tooltip title='녹화 시작' placement='top'>
+                <PlayCircleFilledWhiteIcon />
+              </Tooltip>
+            </IconButton>
+          ) : (
+            <IconButton className='navButton' onClick={this.stopRecord}>
+              <Tooltip title='녹화 중지' placement='top'>
+                <StopCircleIcon />
+              </Tooltip>
+            </IconButton>
+          )}
 
           <IconButton id='navChatButton' onClick={this.leaveSession}>
             <ExitBtn />
@@ -184,6 +215,7 @@ function ExitBtn() {
 }
 const mapStateToProps = (state) => ({
   isSideTab: state.room.isSidebarOpen,
+  isRecord: state.room.isRecord,
 });
 
 export default connect(mapStateToProps)(ToolbarComponent2);
