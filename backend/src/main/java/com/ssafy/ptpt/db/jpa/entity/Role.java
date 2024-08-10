@@ -23,7 +23,7 @@ public class Role {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private String roleType = "common";
+    private String roleType = "COMMON";
 
     public Role(Member member) {
         this.member = member;

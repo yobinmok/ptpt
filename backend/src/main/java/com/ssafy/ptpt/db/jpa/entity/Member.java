@@ -2,8 +2,12 @@ package com.ssafy.ptpt.db.jpa.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -71,5 +75,9 @@ public class Member {
 
     public void memberReportCount(int memberReportCount) {
         this.memberReportCount = ++memberReportCount;
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority(role.getRoleType()));
     }
 }

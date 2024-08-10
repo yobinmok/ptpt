@@ -11,6 +11,7 @@ import com.ssafy.ptpt.api.security.model.request.AccessTokenRequestBody;
 import com.ssafy.ptpt.api.security.model.request.AuthorizationCodeRequestBody;
 import com.ssafy.ptpt.api.security.model.response.BaseResponseBody;
 import com.ssafy.ptpt.api.security.model.response.TokenResponseBody;
+import com.ssafy.ptpt.api.security.service.CustomUserDetailsService;
 import com.ssafy.ptpt.api.security.service.GoogleAuthService;
 import com.ssafy.ptpt.api.security.service.KakaoService;
 import com.ssafy.ptpt.api.transformer.Trans;
@@ -27,7 +28,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,6 +48,7 @@ public class MemberController {
     private final GoogleAuthService googleAuthService;
     private final KakaoService kakaoService;
     private final MemberService memberService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Value("${imageFile.path}")
     private String IMAGE_UPLOAD_PATH;
@@ -73,11 +79,23 @@ public class MemberController {
         String oauthId = "K"+Trans.id(kakaoService.getProfile(tokenString), new JsonParser());
 
         Member member = memberService.saveMember(oauthId);
-        if (member.getNickname() == null) {
-            return ResponseEntity.ok(TokenResponseBody.of(201, "Success", tokenString, oauthId));
-        } else {
-            return ResponseEntity.ok(TokenResponseBody.of(200, "Existing Member", tokenString, oauthId));
-        }
+        System.out.println(member);
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(oauthId);
+
+        System.out.println("유저 디테일 입니다");
+        System.out.println(userDetails.getAuthorities());
+
+        // 인증 객체 생성
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+        System.out.println("아니 생성이 안됬다고?ㄴ");
+        System.out.println(authentication);
+        // 인증을 SecurityContext에 설정
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        securityContext.setAuthentication(authentication);
+
+        return ResponseEntity.ok(TokenResponseBody.of(201, "Success", tokenString, oauthId));
+
     }
 
 
@@ -156,11 +174,22 @@ public class MemberController {
         String oauthId = "G"+googleAuthService.getUserResource(tokens[0]).get("id").asText();
 
         Member member = memberService.saveMember(oauthId);
-        if (member.getNickname() == null) {
-            return ResponseEntity.ok(TokenResponseBody.of(201, "Success", accessToken, oauthId));
-        } else {
-            return ResponseEntity.ok(TokenResponseBody.of(200, "Existing Member", accessToken, oauthId));
-        }
+        System.out.println(member);
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(oauthId);
+
+        System.out.println("유저 디테일 입니다");
+        System.out.println(userDetails.getAuthorities());
+
+        // 인증 객체 생성
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+        System.out.println("아니 생성이 안됬다고?ㄴ");
+        System.out.println(authentication);
+        // 인증을 SecurityContext에 설정
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        securityContext.setAuthentication(authentication);
+
+        return ResponseEntity.ok(TokenResponseBody.of(201, "Success", accessToken, oauthId));
     }
 
 
