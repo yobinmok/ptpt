@@ -14,6 +14,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,7 +55,7 @@ public class StudyRoomController {
         return ResponseEntity.ok().body(studyRoomInfoResponse);
     }
 
-    //스터디룸 조회
+    //스터디룸 사용자로 조회
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
@@ -82,12 +84,11 @@ public class StudyRoomController {
 
 
     //스터디룸 리스트 전체 조회
-    //페이징 처리 전  -----------------------------------------
     @GetMapping
     @Operation(summary = "스터디룸 전체 조회", description = "대기실 화면에 있는 스터디룸의 리스트를 확인할수 있습니다.")
-    public ResponseEntity<List<StudyRoomListResponse>> findBySearchRequest(){
-        List<StudyRoomListResponse> body = studyRoomService.findBySearchRequest();
-        return ResponseEntity.ok().body(body);
+    public ResponseEntity<Page<StudyRoomListResponse>> findBySearchRequest(Pageable pageable){
+        Page<StudyRoomListResponse> studyRooms = studyRoomService.findBySearchRequest(null, null, pageable);
+        return ResponseEntity.ok(studyRooms);
     }
 
     // 스터디룸 비밀번호 확인
