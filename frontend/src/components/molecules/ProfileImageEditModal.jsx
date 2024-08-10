@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateProfile } from '../../apis/auth';
+import { updateProfilePicture } from '../../store/actions/userActions';
 import styled from 'styled-components';
-import { Axios } from '../../util/http-commons';
 
 // 모달의 배경을 어둡게 만드는 오버레이 스타일
 const ModalOverlay = styled.div`
@@ -81,39 +83,71 @@ const FileName = styled.div`
   color: #333;
   text-align: center;
 `;
-// axios 인스턴스
+const CancelButton = styled.button`
+  background-color: #dc3545;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+`;
 
-const instance = Axios();
+// 파일 이름 및 취소 버튼을 포함하는 컨테이너 스타일
+const FileNameContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 버튼을 오른쪽으로 정렬 */
+  margin-top: 10px;
+`;
 
 // ProfileImageEditModal 컴포넌트 정의
 const ProfileImageEditModal = ({ onClose, oauthId }) => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileName, setFileName] = useState('');
 
   // 파일 선택 시 호출되는 핸들러
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    setSelectedFile(file);
-    setFileName(file ? file.name : '');
+    if (file) {
+      setSelectedFile(file);
+      setFileName(file.name);
+    }
+  };
+  const handleCancel = () => {
+    setSelectedFile(null);
+    setFileName('');
   };
 
   // 저장 버튼 클릭 시 호출되는 핸들러
   const handleSave = async () => {
-    const formData = new FormData();
     if (selectedFile) {
-      formData.append('file', selectedFile);
-    }
+      try {
+        const memberUpdateRequest = {
+          oauthId: user.oauthId,
+          nickname: user.nickname,
+        };
 
-    try {
-      const response = await instance.put(`/member/${oauthId}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      console.log('Profile image updated:', response.data);
-      onClose();
-    } catch (error) {
-      console.error('Error updating profile image:', error);
+        const profileData = new FormData();
+        profileData.append(
+          'memberUpdateRequest',
+          new Blob([JSON.stringify(memberUpdateRequest)], {
+            type: 'application/json',
+          })
+        );
+        profileData.append('image', selectedFile);
+
+        const response = await updateProfile(profileData);
+        console.log('Profile image update response:', response);
+        if (response) {
+          dispatch(updateProfilePicture(response.memberPicture)); // Redux 상태 업데이트
+          dispatch(setProfileImage(response.memberPicture)); // 전역 상태에 이미지 URL 저장
+          onClose(); // 모달 닫기
+        }
+      } catch (error) {
+        console.error('Error updating profile image:', error);
+      }
     }
   };
 
@@ -128,8 +162,12 @@ const ProfileImageEditModal = ({ onClose, oauthId }) => {
           onChange={handleFileChange}
         />
         <FileLabel htmlFor='fileInput'>Choose File</FileLabel>
-        {/* 선택한 파일 이름 표시 */}
-        {fileName && <FileName>Selected file: {fileName}</FileName>}
+        <FileNameContainer>
+          <FileName>Selected file: {fileName}</FileName>
+          {selectedFile && (
+            <CancelButton onClick={handleCancel}>Cancel</CancelButton>
+          )}
+        </FileNameContainer>
         <div
           style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}
         >

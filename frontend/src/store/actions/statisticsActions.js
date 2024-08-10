@@ -16,7 +16,7 @@ export const fetchStatistics = (oauthId) => async (dispatch) => {
   dispatch({ type: STATISTICS_REQUEST });
 
   try {
-    console.log('Fetching statistics for nickname:', oauthId);
+    console.log('Fetching statistics for oauthId:', oauthId);
     const response = await Axios().post('/member/statistic', { oauthId });
     dispatch({
       type: STATISTICS_SUCCESS,

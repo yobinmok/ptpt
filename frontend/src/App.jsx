@@ -12,6 +12,7 @@ import SoloPage from './pages/presentation/SoloPage';
 import MultiPage from './pages/presentation/MultiPage';
 import MyInfoPage from './pages/member/MyInfoPage';
 import StatisticsPage from './components/organisms/myInfo/StatisticsPage';
+import FeedbackDetail from './components/organisms/myInfo/FeedbackDetail'; // 피드백 상세 페이지 추가
 import Nav from './components/organisms/Navbar';
 // import VideoRoomComponent from './components/room/openVidu/VideoRoomComponent';
 import CreateRoom from './pages/room/CreateRoom';
@@ -38,6 +39,11 @@ function App() {
         <Route path='room/list' element={<RoomListPage />} />
         <Route path='/room/:roomId' element={<RoomDetail />} />
         <Route path='/test' element={<VoiceTestPage />} />
+        <Route
+          path='/myinfo/statistics/evaluation/feedBack/:roomId'
+          element={<FeedbackDetail />}
+        />{' '}
+        {/* 피드백 상세 페이지 라우트 */}
       </Routes>
     </div>
   );

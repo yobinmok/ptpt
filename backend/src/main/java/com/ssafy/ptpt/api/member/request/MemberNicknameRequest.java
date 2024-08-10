@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 public class MemberNicknameRequest {
 
     @NotNull
-    private String nickname;
+    private String oauthId;
 }

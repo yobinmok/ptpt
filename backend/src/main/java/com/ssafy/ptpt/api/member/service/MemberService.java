@@ -86,7 +86,7 @@ public class MemberService {
 
     // 사용자 신고횟수 조회 로직 추가
     public void memberReport(MemberNicknameRequest memberNicknameRequest) {
-        Member member = memberRepository.findByNickname(memberNicknameRequest.getNickname());
+        Member member = memberRepository.findByOauthId(memberNicknameRequest.getNickname());
         int memberReportCount = member.getMemberReportCount();
         if (memberReportCount == 2) {
             // 사용자 정지기능 추가
@@ -100,8 +100,11 @@ public class MemberService {
         return memberRepository.findByNickname(nickname);
     }
 
-    public MemberStatisticResponse findMemberStatistic(MemberOauthIdRequest memberOauthIdRequest) {
-        Statistic statistic = statisticRepository.findByOauthId(memberOauthIdRequest.getOauthId());
+    public MemberStatisticResponse findMemberStatistic(MemberNicknameRequest memberNicknameRequest) {
+        Statistic statistic = statisticRepository.findByOauthId(memberNicknameRequest.getOauthId());
+        if (statistic == null) {
+            throw new RuntimeException("Statistic not found for oauthId: " + memberNicknameRequest.getOauthId());
+        }
         return MemberStatisticResponse.from(statistic);
     }
 }
