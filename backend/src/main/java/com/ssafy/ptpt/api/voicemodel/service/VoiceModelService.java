@@ -132,7 +132,7 @@ public class VoiceModelService {
                                     JsonNode dataNode = rootNode.path("data").get(1); // data 배열의 두 번째 요소 가져오기
                                     String filePath = dataNode.path("name").asText(); // name 값 추출
                                     System.out.println("data[1].name: " + filePath);
-                                    String resultUrl  ="http://70.12.130.121:7897/file=" + filePath;
+                                    String resultUrl  ="http://175.209.203.185:7897/file=" + filePath;
                                     return Mono.just(resultUrl);
                                 } catch (Exception e) {
                                     return Mono.error(e);
