@@ -8,8 +8,6 @@ import styled from 'styled-components';
 const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3열로 설정 */
-  gap: 10px; /* 각 카드 간의 간격 */
-  padding: 10px; /* 그리드 내의 전체적인 패딩 */
 `;
 
 const MultiRoomTab = () => {
