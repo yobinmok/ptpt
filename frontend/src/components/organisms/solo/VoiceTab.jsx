@@ -93,7 +93,7 @@ const VoiceTab = () => {
           if (voiceSetting.current.model === 4) {
             uploadAudio(data.audioContent)
               .then((base64) => {
-                // base64 대신 http url 반환
+                console.log(base64);
                 dispatch(
                   registerGuideline(scriptIdx, base64, voiceSetting.current)
                 );

@@ -89,6 +89,7 @@ public class VoiceModelController {
         return voiceModelService.processVoiceConversion(fileName, ttsPath)
                 .map(response -> {
                     System.out.println("base64 응답 성공!");
+                    System.out.println(response);
                     return ResponseEntity.ok(response); // response가 일케 옴
                 })
                 .onErrorResume(error -> {

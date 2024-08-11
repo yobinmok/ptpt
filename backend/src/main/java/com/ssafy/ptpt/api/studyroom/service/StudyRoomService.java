@@ -13,6 +13,8 @@ import com.ssafy.ptpt.exception.NotFoundException;
 import com.ssafy.ptpt.exception.NotMatchException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,39 +35,39 @@ public class StudyRoomService {
 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    //방 조회
-    public StudyRoomInfoResponse findByStudyRoomTitle(String studyRoomTitle) {
+    // 방 제목으로 검색 - 페이징 적용
+    public Page<StudyRoomInfoResponse> findByStudyRoomTitle(String studyRoomTitle, Pageable pageable) {
         //제목을 통해 정보를 조회해온다
-        StudyRoom studyRoom = studyRoomRepository.findByStudyRoomTitle(studyRoomTitle)
-                .orElseThrow(() -> new NotFoundException(NotFoundException.STUDY_ROOM_NOT_FOUND));
-        return StudyRoomInfoResponse.from(studyRoom);
+        return studyRoomRepository.findByStudyRoomTitle(studyRoomTitle, pageable)
+                .map(StudyRoomInfoResponse::from);
     }
 
-    // 사용자 방 조회
-    public List<StudyRoomInfoResponse> findByMemberId(Long memberId) {
+    // 사용자 방 조회 - 페이징 적용
+    public Page<StudyRoomInfoResponse> findByMemberId(Long memberId, Pageable pageable) {
         // 아이디를 통해 정보를 조회해온다
-        List<StudyRoom> studyRoom = studyRoomRepository.findByMemberId(memberId);
-        return studyRoom.stream()
-                .map(StudyRoomInfoResponse::from)
-                .collect(Collectors.toList());
+
+        return studyRoomRepository.findByMemberId(memberId, pageable)
+                .map(StudyRoomInfoResponse::from);
     }
 
-    //방 리스트 전체 조회 - 페이징 추가 해야함
-//    public Page<StudyRoomListResponse> findBySearchRequest(Member member,
-//                                                           StudyRoomSearchRequest request,
-//                                                           Pageable pageable) {
-//        return findStudyRoomList.map(StudyRoomListResponse::from);
+    // 방 리스트 전체 조회 - 페이징 적용
+    public Page<StudyRoomListResponse> findBySearchRequest(Member member,
+                                                           StudyRoomSearchRequest request,
+                                                           Pageable pageable) {
+
+        return studyRoomRepository.findAll(pageable)
+                .map(StudyRoomListResponse::from);
+    }
+
+//    // 방 리스트 전체 조회 - 페이징 전
+//    public List<StudyRoomListResponse> findBySearchRequest() {
+//        List<StudyRoom> studyRoomList = studyRoomRepository.findAll();
+//
+//        // 결과를 변환하여 List 반환
+//        return studyRoomList.stream()
+//                .map(StudyRoomListResponse::from)
+//                .collect(Collectors.toList());
 //    }
-
-    // 방 리스트 전체 조회 - 페이징 전
-    public List<StudyRoomListResponse> findBySearchRequest() {
-        List<StudyRoom> studyRoomList = studyRoomRepository.findAll();
-
-        // 결과를 변환하여 List 반환
-        return studyRoomList.stream()
-                .map(StudyRoomListResponse::from)
-                .collect(Collectors.toList());
-    }
 
 
     //방 생성
