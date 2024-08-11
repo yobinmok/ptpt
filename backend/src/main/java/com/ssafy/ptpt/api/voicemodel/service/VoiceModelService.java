@@ -15,6 +15,12 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -132,8 +138,11 @@ public class VoiceModelService {
                                     JsonNode dataNode = rootNode.path("data").get(1); // data 배열의 두 번째 요소 가져오기
                                     String filePath = dataNode.path("name").asText(); // name 값 추출
                                     System.out.println("data[1].name: " + filePath);
-                                    String resultUrl  ="http://70.12.130.121/:7897/file=" + filePath;
-                                    return Mono.just(resultUrl);
+                                    String httpPath  ="http://70.12.130.121/:7897/file=" + filePath;
+                                    // 위 경로의 오디오 파일을 ttsPath에 저장 -> 덮어쓰기
+                                    downloadAudioFile(httpPath, ttsPath);
+                                    String resultPath = "https://i11b207.p.ssafy.io" + ttsPath.substring(ttsPath.indexOf("/uploads"));
+                                    return Mono.just(resultPath);
                                 } catch (Exception e) {
                                     return Mono.error(e);
                                 }
@@ -146,14 +155,30 @@ public class VoiceModelService {
 
     }
 
-    public String convertFileToBase64(String filePath) throws IOException {
-        Path path = Paths.get(filePath); // 파일을 바이트 배열로 읽기
-        byte[] fileBytes = Files.readAllBytes(path);
+    // 다운로드 및 저장하는 함수
+    public static void downloadAudioFile(String fileUrl, String outputFilePath) {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(fileUrl))
+                .build();
 
-        // 바이트 배열을 Base64 형식으로 인코딩
-        return Base64.getEncoder().encodeToString(fileBytes);
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
+                .thenApply(HttpResponse::body)
+                .thenAccept(inputStream -> {
+                    try (InputStream in = inputStream;
+                         OutputStream out = Files.newOutputStream(Paths.get(outputFilePath))) {
+                        byte[] buffer = new byte[1024];
+                        int bytesRead;
+                        while ((bytesRead = in.read(buffer)) != -1) {
+                            out.write(buffer, 0, bytesRead);
+                        }
+                        System.out.println("File downloaded and saved to " + outputFilePath);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                })
+                .join();  // Blocking call to wait for completion
     }
-
 
 
     public void updateVoiceModelCreated(String oauthId) {
