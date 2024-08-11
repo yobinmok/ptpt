@@ -129,7 +129,7 @@ public class VoiceModelService {
                                     JsonNode rootNode = objectMapper.readTree(convertResponse);
                                     JsonNode dataNode = rootNode.path("data").get(1);
                                     String filePath = dataNode.path("name").asText();
-                                    String httpPath = "http://70.12.130.121:7897/file=" + filePath;
+                                    String httpPath = "http://175.209.203.185:7897/file=" + filePath;
                                     System.out.println("httpPath: " + httpPath);
                                     return downloadFile(httpPath, ttsPath)
                                             .then(Mono.just("https://i11b207.p.ssafy.io" + ttsPath.substring(ttsPath.indexOf("/uploads"))));
