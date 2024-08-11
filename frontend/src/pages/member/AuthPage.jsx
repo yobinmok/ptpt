@@ -74,6 +74,39 @@ const AuthPage = () => {
     }
   }, [location, dispatch, navigate]);
 
+<<<<<<< Updated upstream
+=======
+  const handleSubmit = async (nickname, profilePicture) => {
+    try {
+      const profileData = {
+        oauthId: token.memberId,
+        nickname: nickname,
+        memberPicture: profilePicture || 'default-profile.png',
+      };
+
+      console.log('Sending profile data:', profileData); // 데이터 확인
+      // userReducer에 oauthId와 nickname 저장
+      const userInfo = {
+        oauthId: token.memberId,
+        nickname: nickname,
+      };
+      dispatch(setUserProfile(userInfo));
+      const response = await updateProfile(profileData);
+      console.log(response)
+      dispatch(
+        setAuth(token.accessToken, {
+          oauthId: response,
+          nickname: nickname,
+        })
+      );
+      console.log('회원가입 성공');
+      navigate('/');
+    } catch (error) {
+      console.error('회원가입 에러', error);
+    }
+  };
+
+>>>>>>> Stashed changes
   return (
     <div>
       <h1>Google Processing Authentication...</h1>

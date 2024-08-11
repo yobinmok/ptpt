@@ -15,6 +15,7 @@ const initialState = {
 
 // 인증 리듀서 정의
 const authReducer = (state = initialState, action) => {
+  console.log(action);
   switch (action.type) {
     // 인증 상태 설정 액션 처리
     case SET_AUTH:

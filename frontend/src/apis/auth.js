@@ -1,4 +1,15 @@
 import { Axios, AxiosMulti } from '../util/http-commons';
+<<<<<<< Updated upstream
+=======
+import { useDispatch } from 'react-redux';
+/////////////  test
+import * as jwtDecode from 'jwt-decode';
+import Cookies from 'js-cookie'; 
+///////////// test
+
+const { VITE_API_URL } = import.meta.env;
+>>>>>>> Stashed changes
+
 
 const instance = Axios();
 const multiinstance = AxiosMulti();
@@ -44,11 +55,9 @@ export const kakaoSignin = async (code) => {
 };
 
 // 카카오 액세스 토큰을 검증하는 함수
-export const verifyKakaoAccessToken = async (accessToken) => {
+export const verifyKakaoAccessToken = async () => {
   try {
-    const response = await instance.post('/member/auth/kakao', {
-      accessToken,
-    });
+    const response = await instance.post('/member/auth/kakao')
     return response.data;
   } catch (error) {
     console.error('Error during Kakao access token verification:', error);
@@ -84,6 +93,8 @@ export const updateProfile = async (profileData) => {
 export const checkNicknameDuplicate = async (nickname) => {
   try {
     const response = await instance.get(`/member/${nickname}`);
+   
+
     console.log(response);
     return response.data;
   } catch (error) {
