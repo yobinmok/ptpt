@@ -4,6 +4,16 @@
   min-height: 45px !important;
   padding: 0 !important;
   z-index: 999999;
+  display: flex;
+  justify-content: space-between; /* 왼쪽과 오른쪽 끝에 요소를 배치 */
+}
+
+.buttonsContent {
+  display: flex;
+  align-items: center;
+}
+#recordingButtons {
+  margin-left: auto; /* 오른쪽 끝으로 이동 */
 }
 
 .headerLight {

@@ -14,8 +14,26 @@ import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { setParticipants } from '../../../store/actions/participant';
-import { Box } from '@mui/material';
 import ToolbarComponent2 from './toolbar/BottomToolBar';
+import {
+  setOpenviduSessionId,
+  setRecordSessionId,
+  setIsRecording,
+} from '../../../store/actions/room';
+import {
+  getRecording,
+  startRecording,
+  stopRecording,
+} from '../../../apis/record';
+
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+  Typography,
+} from '@mui/material';
 
 // const StyledLayoutBounds = styled.div`
 //   background-color: rgba(0, 0, 0, 0.3);
@@ -78,6 +96,7 @@ class VideoRoomComponent extends Component {
       subscribers: [],
       chatDisplay: 'none',
       currentVideoDevice: undefined,
+      openModal: false,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -95,6 +114,9 @@ class VideoRoomComponent extends Component {
     this.toggleChat = this.toggleChat.bind(this);
     this.checkNotification = this.checkNotification.bind(this);
     this.checkSize = this.checkSize.bind(this);
+    this.startRecord = this.startRecord.bind(this);
+    this.stopRecord = this.stopRecord.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
   }
 
   componentDidMount() {
@@ -598,6 +620,28 @@ class VideoRoomComponent extends Component {
     }
   }
 
+  // recording
+  async startRecord() {
+    this.props.setIsRecording(); //false -> true
+    const response = await startRecording(this.props.openviduSessionId);
+    this.props.setRecordSessionId(response.data.id); // 더 필요한 정보가 있으면 추후 저장
+  }
+
+  async stopRecord() {
+    const response = await stopRecording(this.props.recordSessionId);
+    this.props.setIsRecording();
+
+    const getResponse = await getRecording(response.data.id);
+    console.log(getResponse);
+
+    const fileUrl = getResponse.data.url;
+    this.setState({ fileUrl, openModal: true });
+  }
+
+  handleCloseModal() {
+    this.setState({ openModal: false });
+  }
+
   render() {
     const mySessionId = this.state.mySessionId;
     const localUser = this.state.localUser;
@@ -621,6 +665,8 @@ class VideoRoomComponent extends Component {
           switchCamera={this.switchCamera}
           leaveSession={this.leaveSession}
           // toggleChat={this.toggleChat}
+          startRecord={this.startRecord}
+          stopRecord={this.stopRecord}
           sx={{
             width: '100%',
             height: '100%',
@@ -660,6 +706,31 @@ class VideoRoomComponent extends Component {
             </div>
           ))}
         </StyledLayoutBounds>
+        {/* 모달 컴포넌트 */}
+        <Dialog
+          open={this.state.openModal}
+          onClose={this.handleCloseModal}
+          aria-labelledby='alert-dialog-title'
+          aria-describedby='alert-dialog-description'
+        >
+          <DialogTitle id='alert-dialog-title'>{'녹화 파일 URL'}</DialogTitle>
+          <DialogContent>
+            <Typography variant='body1'>
+              <a
+                href={this.state.fileUrl}
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                {this.state.fileUrl}
+              </a>
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleCloseModal} color='primary'>
+              닫기
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }
@@ -681,6 +752,7 @@ class VideoRoomComponent extends Component {
    */
   async getToken() {
     const sessionId = await this.createSession(this.state.mySessionId);
+    this.props.setOpenviduSessionId(sessionId);
     return await this.createToken(sessionId);
   }
 
@@ -711,11 +783,19 @@ const mapStateToProps = (state) => ({
   nickname: state.auth.user.nickname,
   sessionInfo: state.room,
   participants: state.participants,
+  openviduSessionId: state.room.openviduSessionId,
+  recordSessionId: state.room.recordSessionId,
+  isRecord: state.room.isRecord,
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setParticipants: (participants) => dispatch(setParticipants(participants)),
+    setIsRecording: () => dispatch(setIsRecording()), // 녹화 중인지 확인
+    setOpenviduSessionId: (openviduSessionId) =>
+      dispatch(setOpenviduSessionId(openviduSessionId)), // session id
+    setRecordSessionId: (recordSessionId) =>
+      dispatch(setRecordSessionId(recordSessionId)), // 녹화 영상에 대한 session id
   };
 };
 

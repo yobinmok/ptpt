@@ -8,7 +8,8 @@ import savedRoomsReducer from './savedRoomsReducer';
 import voiceModelReducer from './voiceModelReducer';
 import statisticsReducer from './statisticsReducer';
 import feedbackReducer from './feedbackReducer';
-import participantReducer from './participantReducer';
+import multiReducer from './multiReducer.js';
+import participantReducer from './participantReducer.js';
 import { persistReducer } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session';
 
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   user,
   room,
   solo, // solo는 persistReducer로 감싸지 않음
+  multi: multiReducer,
   evaluation: evaluationReducer,
   savedRooms: savedRoomsReducer,
   voiceModel: voiceModelReducer,

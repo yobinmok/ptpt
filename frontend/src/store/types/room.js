@@ -19,3 +19,8 @@ export const PRESENTATION_TIME = 'PRESENTATION_TIME';
 
 // host 관리
 export const SET_HOST_NAME = 'SET_HOST_NAME';
+
+// record 관리
+export const IS_RECORDING = 'IS_RECORDING';
+export const OPENVIDU_SESSION_ID = 'OPENVIDU_SESSION_ID';
+export const RECORD_SESSION_ID = 'RECORD_SESSION_ID';

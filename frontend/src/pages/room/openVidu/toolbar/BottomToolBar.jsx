@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ToolbarComponent.css';
 import { useSelector, connect } from 'react-redux';
-
+import { MultiExitModal } from '../../../../components/molecules/MultiExitModal';
 import Toolbar from '@mui/material/Toolbar';
 
 // mui
@@ -18,6 +18,8 @@ import StopScreenShareIcon from '@mui/icons-material/StopScreenShare';
 import Tooltip from '@mui/material/Tooltip';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import IconButton from '@mui/material/IconButton';
+import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
+import StopCircleIcon from '@mui/icons-material/StopCircle';
 
 class ToolbarComponent2 extends Component {
   constructor(props) {
@@ -31,6 +33,12 @@ class ToolbarComponent2 extends Component {
     this.switchCamera = this.switchCamera.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
     this.toggleChat = this.toggleChat.bind(this);
+    this.startRecord = this.startRecord.bind(this);
+    this.stopRecord = this.stopRecord.bind(this);
+  }
+
+  openStatusChanged() {
+    this.props.openStatusChanged();
   }
 
   micStatusChanged() {
@@ -66,9 +74,18 @@ class ToolbarComponent2 extends Component {
     this.props.toggleChat();
   }
 
+  startRecord() {
+    this.props.startRecord();
+  }
+
+  stopRecord() {
+    this.props.stopRecord();
+  }
+
   render() {
     const localUser = this.props.user;
     const isSideTab = this.props.isSideTab; // true이면 열린거
+    const isRecord = this.props.isRecord;
     return (
       <Toolbar
         className='toolbar'
@@ -147,11 +164,26 @@ class ToolbarComponent2 extends Component {
               </Tooltip>
             )}
           </IconButton>
+          {!isRecord ? (
+            <IconButton className='navButton' onClick={this.startRecord}>
+              <Tooltip title='녹화 시작' placement='top'>
+                <PlayCircleFilledWhiteIcon />
+              </Tooltip>
+            </IconButton>
+          ) : (
+            <IconButton className='navButton' onClick={this.stopRecord}>
+              <Tooltip title='녹화 중지' placement='top'>
+                <StopCircleIcon />
+              </Tooltip>
+            </IconButton>
+          )}
 
           <IconButton id='navChatButton' onClick={this.leaveSession}>
             <ExitBtn />
           </IconButton>
         </div>
+
+        {/* TODO: 추후 추가 <MultiExitModal /> */}
       </Toolbar>
     );
   }
@@ -162,6 +194,7 @@ function ExitBtn() {
 
   const handleExit = () => {
     // 발표 프리셋 저장하는 모달 띄우기
+
     navigate('/');
   };
 
@@ -184,6 +217,7 @@ function ExitBtn() {
 }
 const mapStateToProps = (state) => ({
   isSideTab: state.room.isSidebarOpen,
+  isRecord: state.room.isRecord,
 });
 
 export default connect(mapStateToProps)(ToolbarComponent2);

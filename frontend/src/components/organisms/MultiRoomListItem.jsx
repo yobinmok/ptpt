@@ -5,13 +5,13 @@ import LockIcon from '@mui/icons-material/Lock';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
-const MultiRoomListItem = ({ item }) => {
+const MultiRoomListItem = ({ item, onClick }) => {
   // onClick 시 방 만들기 모달 띄우기
   return (
     <>
-      <Card>
+      <Card onClick={onClick}>
         <CardImage>
-          {!isPublic ? (
+          {!item.isPublic ? (
             <LockOpenIcon style={{ position: 'absolute', top: 8, right: 8 }} />
           ) : (
             <LockIcon style={{ position: 'absolute', top: 8, right: 8 }} />
