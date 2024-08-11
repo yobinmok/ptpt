@@ -125,14 +125,13 @@ const UserInfoPage = () => {
     try {
       const response = await updateProfile(profileData);
       if (response) {
-        dispatch(setAuth(token, response));
         console.log('성공', response);
       }
     } catch (error) {
       console.error('ddddd', error);
       throw error;
     }
-    // dispatch(setAuth(token, memberUpdateRequest));
+    dispatch(setAuth(token, memberUpdateRequest));
     // response가 없으므로 무조건 메인으로 이동
     navigate('/');
   };

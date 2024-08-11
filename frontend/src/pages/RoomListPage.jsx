@@ -11,9 +11,6 @@ import {
   MenuItem,
   FormControlLabel,
   Checkbox,
-  Typography,
-  Pagination,
-  Stack,
 } from '@mui/material';
 import CreateRoom from './room/CreateRoom';
 import Modal from '../components/molecules/RoomCreateModal';
@@ -77,20 +74,23 @@ const RoomListPage = () => {
   }, []); // 빈 배열을 추가하여 useEffect가 처음 렌더링될 때 한 번만 실행되도록 설정
 
   const [currentList, setCurrentList] = useState([]);
-  const [searchList, setSearchList] = useState({});
+  // const [searchList, setSearchList] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchType, setSearchType] = useState('roomname'); // 검색 유형 상태
   const [searchName, setSearchName] = useState(''); // 검색어 상태
   const [selectedTopics, setSelectedTopics] = useState([]); // 선택된 주제 상태
-  // page 처리 -> size와 sort도 선택을 원하면 추가
-  const [page, setPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(0);
 
   const onLoadRoomList = async () => {
-    const response = await loadRoomList(page - 1);
-    console.log(response);
-    setCurrentList([...response.data.content]);
-    setTotalPage(response.data.totalPages);
+    const response = await loadRoomList();
+    console.log('on load list : ' + response);
+    setCurrentList([...response.data]);
+    // 시간 순으로 정렬
+    // console.log(currentList);
+    // const sortedRooms = currentList.sort(
+    //   (a, b) => new Date(a.presentationTime) - new Date(b.presentationTime)
+    // );
+    // setCurrentList(sortedRooms);
+    // console.log([...currentList]);
   };
 
   const handleModalOpen = () => {
@@ -101,13 +101,12 @@ const RoomListPage = () => {
     setIsModalOpen(false);
   };
 
-  const handleSearch = async () => {
+  const handleSearch = () => {
     if (searchType === 'roomname') {
       // 제목으로 찾기
-      setPage(1);
-      const response = await searchByStudyRoomName(searchName, page - 1);
-      setTotalPage(response.data.totalPages);
-      setSearchList([...response.data.content]);
+      const response = searchByStudyRoomName(searchName);
+      // setSearchList([...response]);
+      console.log(response.studyRoomId);
       // response 보고 수정하기
     } else if (searchType === 'subject') {
       // 주제로 찾기
@@ -123,11 +122,9 @@ const RoomListPage = () => {
     );
   };
 
-  const handleChange = async (event, value) => {
-    setPage(value);
-    const response = await loadRoomList(value - 1);
-    setCurrentList([...response.data.content]);
-  };
+  // const handleRoomSave = (roomInfo) => {
+  //   handleModalClose();
+  // };
 
   return (
     <>
@@ -195,11 +192,7 @@ const RoomListPage = () => {
             </Modal>
           </div>
           <RecommendInnerWrapper>
-            {searchList.length > 0 ? (
-              searchList.map((room, index) => (
-                <RoomListItem {...room} key={index} />
-              ))
-            ) : currentList.length === 0 ? (
+            {currentList.length === 0 ? (
               <RecommendLetter color={'#EAF1FF'}>
                 최근에 만들어진 방이 없어요.
               </RecommendLetter>
@@ -209,17 +202,6 @@ const RoomListPage = () => {
               ))
             )}
           </RecommendInnerWrapper>
-        </div>
-        <div>
-          <Stack
-            spacing={2}
-            alignItems='center' // 가운데 정렬
-            justifyContent='center' // 가운데 정렬
-            sx={{ marginTop: '20px', marginBottom: '20px' }}
-          >
-            <Typography>Page: {page}</Typography>
-            <Pagination count={totalPage} page={page} onChange={handleChange} />
-          </Stack>
         </div>
       </div>
     </>

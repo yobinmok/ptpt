@@ -40,12 +40,12 @@ const LoginPage = () => {
 
   // 카카오 로그인 핸들러 함수
   const kakaoLoginHandler = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/kakao";
+    window.location.href = kakaoLink;
   };
 
   // 구글 로그인 핸들러 함수
   const googleLoginHandler = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+    window.location.href = googleLink;
   };
 
   return (
