@@ -7,22 +7,35 @@ import {
 
 const instance = Axios();
 
-// 전체 피드백을 가져오는 액션
-export const fetchFeedback = (oauthId, studyRoomIds) => async (dispatch) => {
+export const fetchFeedback = (oauthId) => async (dispatch) => {
   dispatch({ type: FEEDBACK_REQUEST });
 
   try {
-    // studyRoomIds 배열에 있는 모든 스터디룸의 피드백을 가져오기
-    const feedbackPromises = studyRoomIds.map((studyRoomId) =>
-      instance.post('/evaluation/feedBack', {
-        oauthId,
-        studyRoomId,
-      })
+    // 1. 스터디룸 정보를 가져옵니다.
+    const studyRoomResponse = await instance.post('/studyRoom/search', {
+      oauthId,
+    });
+
+    const studyRooms = studyRoomResponse.data;
+
+    // 2. 스터디룸 정보를 바탕으로 각 스터디룸의 피드백을 가져옵니다.
+    const feedbackPromises = studyRooms.map((room) =>
+      instance
+        .post('/evaluation/feedBack', {
+          oauthId,
+          studyRoomId: room.studyRoomId,
+        })
+        .then((response) => ({
+          ...response.data[0],
+          studyRoomTitle: room.studyRoomTitle,
+          subject: room.subject,
+        }))
     );
 
     const responses = await Promise.all(feedbackPromises);
 
-    const allFeedback = responses.flatMap((response) => response.data);
+    // 3. 피드백 데이터를 모두 합쳐서 관리합니다.
+    const allFeedback = responses.flatMap((response) => response);
 
     console.log('All Feedback:', allFeedback);
 
@@ -33,7 +46,6 @@ export const fetchFeedback = (oauthId, studyRoomIds) => async (dispatch) => {
   }
 };
 
-// 특정 스터디룸의 상세 피드백을 가져오는 액션
 export const fetchFeedbackDetail =
   (oauthId, studyRoomId) => async (dispatch) => {
     dispatch({ type: FEEDBACK_REQUEST });

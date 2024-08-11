@@ -8,6 +8,7 @@ const SoloRoomTab = () => {
   const navigate = useNavigate();
   const savedRooms = useSelector((state) => state.savedRooms.data || []); // 기본값으로 빈 배열 설정
   const soloRoom = savedRooms.filter((preset) => preset.presetType === 'solo');
+  console.log(savedRooms);
 
   const handleItemClick = (item) => {
     console.log('Clicked item:', item);

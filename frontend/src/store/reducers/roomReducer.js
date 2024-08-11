@@ -5,10 +5,15 @@ const initialState = {
   selectedTab: null,
   isSelectScriptTab: true,
   editFlag: null,
+  // 발표 관련
   isAnonymous: 0,
   isStart: false, // false : 진행 전 혹은 종료?, true : 진행 중
   presentationTime: null,
   hostId: null,
+  // 녹화관련
+  isRecord: false, // true : 녹화중
+  openviduSessionId: null, // openvidu에서 제공하는 sesison
+  recordSessionId: null, // 녹화 session id
 };
 
 const roomReducer = (state = initialState, action) => {
@@ -64,6 +69,21 @@ const roomReducer = (state = initialState, action) => {
       return {
         ...state,
         hostId: action.payload,
+      };
+    case 'IS_RECORDING':
+      return {
+        ...state,
+        isRecord: !state.isRecord,
+      };
+    case 'OPENVIDU_SESSION_ID':
+      return {
+        ...state,
+        openviduSessionId: action.payload,
+      };
+    case 'RECORD_SESSION_ID':
+      return {
+        ...state,
+        recordSessionId: action.payload,
       };
     default:
       return {

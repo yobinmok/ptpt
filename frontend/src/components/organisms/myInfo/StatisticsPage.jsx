@@ -32,13 +32,10 @@ const StatisticsPage = () => {
   } = useSelector((state) => state.feedback);
   const oauthId = useSelector((state) => state.auth.user.oauthId);
 
-  // 하드코딩된 스터디룸 ID 목록
-  const studyRoomIds = [1, 2, 11, 12, 13, 14]; // 실제 데이터베이스에 있는 ID들로 하드코딩
-
   useEffect(() => {
     if (oauthId) {
       dispatch(fetchStatistics(oauthId));
-      dispatch(fetchFeedback(oauthId, studyRoomIds)); // 모든 피드백 가져오기
+      dispatch(fetchFeedback(oauthId)); // 모든 피드백 가져오기
     }
   }, [dispatch, oauthId]);
 

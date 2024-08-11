@@ -81,6 +81,7 @@ const VoiceTab = () => {
     // 내 음성모델을 고른 경우
     if (voiceSetting.current.model === 4) {
       // 성별, 높낮이에 따라 음성 선택해야 함.
+      console.log('내 음성모델 선택');
       param.voice.name = soloPreset.voiceModel[additionalVoice];
     }
 
@@ -92,6 +93,7 @@ const VoiceTab = () => {
           if (voiceSetting.current.model === 4) {
             uploadAudio(data.audioContent)
               .then((base64) => {
+                // base64 대신 http url 반환
                 dispatch(
                   registerGuideline(scriptIdx, base64, voiceSetting.current)
                 );
@@ -114,9 +116,11 @@ const VoiceTab = () => {
           if (voiceSetting.current.model === 4) {
             uploadAudio(data.audioContent)
               .then((base64) => {
-                let audioBlob = base64ToBlob(base64, 'wav');
+                console.log(base64);
+                // let audioBlob = base64ToBlob(base64, 'wav');
                 var audioFile = new Audio();
-                audioFile.src = window.URL.createObjectURL(audioBlob);
+                audioFile.src = base64;
+                // audioFile.src = window.URL.createObjectURL(audioBlob);
                 audioFile.play();
               })
               .catch((error) => {
