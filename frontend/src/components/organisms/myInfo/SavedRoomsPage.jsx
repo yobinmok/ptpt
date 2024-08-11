@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSavedRooms } from '../../../store/actions/savedRoomActions';
-
 import { getPresetList } from '../../../apis/preset';
 import SoloRoomTab from './SoloRoomTab';
 import MultiRoomTab from './MultiRoomTab';
@@ -26,7 +25,6 @@ const SavedRoomsPage = () => {
 
     fetchPresetList();
   }, [oauthId]);
-  // 빈 배열이면 onMounted와 동일 / prev: [dispatch, oauthId]);
 
   const handleOptionChange = (option) => {
     setSelectedOption(option);
@@ -34,10 +32,16 @@ const SavedRoomsPage = () => {
 
   return (
     <div>
-      <h1>저장한 스터디룸 페이지</h1>
+      <h1>저장한 스터디룸</h1>
 
       {/* 옵션 선택 */}
-      <div style={{ marginBottom: '20px' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          marginBottom: '20px',
+        }}
+      >
         <span
           style={{
             cursor: 'pointer',
