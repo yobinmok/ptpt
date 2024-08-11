@@ -35,11 +35,11 @@ public class StudyRoomListResponse {
     // 익명여부
     private int anonymity;
 
-    // 호스트 ID
-    private Long memberId;
+    // 호스트 닉네임
+    private String hostNickname;
 
     // StudyRoom 객체를 StudyRoomListResponse 로 변환하는 정적 메서드
-    public static StudyRoomListResponse from(StudyRoom studyRoom) {
+    public static StudyRoomListResponse from(StudyRoom studyRoom, String hostNickname) {
         StudyRoomListResponse studyRoomListResponse = new StudyRoomListResponse();
         studyRoomListResponse.studyRoomId = studyRoom.getStudyRoomId();
         studyRoomListResponse.studyRoomTitle = studyRoom.getStudyRoomTitle();
@@ -50,7 +50,7 @@ public class StudyRoomListResponse {
         studyRoomListResponse.subject = studyRoom.getSubject();
         studyRoomListResponse.description = studyRoom.getDescription();
         studyRoomListResponse.anonymity = studyRoom.getAnonymity();
-        studyRoomListResponse.memberId = studyRoom.getMemberId();
+        studyRoomListResponse.hostNickname = hostNickname;
 
         return studyRoomListResponse;
     }

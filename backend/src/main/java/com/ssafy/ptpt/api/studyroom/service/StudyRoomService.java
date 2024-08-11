@@ -39,7 +39,12 @@ public class StudyRoomService {
     public Page<StudyRoomInfoResponse> findByStudyRoomTitle(String studyRoomTitle, Pageable pageable) {
         //제목을 통해 정보를 조회해온다
         return studyRoomRepository.findByStudyRoomTitleContainingAndIsCompleted(studyRoomTitle, 0, pageable)
-                .map(StudyRoomInfoResponse::from);
+                .map(studyRoom -> {
+                    String hostNickname = memberRepository.findById(studyRoom.getMemberId())
+                            .map(Member::getNickname)
+                            .orElse("Unknown");
+                    return StudyRoomInfoResponse.from(studyRoom, hostNickname);
+                });
     }
 
     // 사용자 방 조회 - 페이징 적용
@@ -47,7 +52,12 @@ public class StudyRoomService {
         // 아이디를 통해 정보를 조회해온다
 
         return studyRoomRepository.findByMemberId(memberId, pageable)
-                .map(StudyRoomInfoResponse::from);
+                .map(studyRoom -> {
+                    String hostNickname = memberRepository.findById(studyRoom.getMemberId())
+                            .map(Member::getNickname)
+                            .orElse("Unknown");
+                    return StudyRoomInfoResponse.from(studyRoom, hostNickname);
+                });
     }
 
     // 방 리스트 전체 조회 - 페이징 적용
@@ -56,7 +66,12 @@ public class StudyRoomService {
                                                            Pageable pageable) {
 
         return studyRoomRepository.findByIsCompleted(0, pageable)
-                .map(StudyRoomListResponse::from);
+                .map(studyRoom -> {
+                    String hostNickname = memberRepository.findById(studyRoom.getMemberId())
+                            .map(Member::getNickname)
+                            .orElse("Unknown");
+                    return StudyRoomListResponse.from(studyRoom, hostNickname);
+                });
     }
 
 //    // 방 리스트 전체 조회 - 페이징 전
