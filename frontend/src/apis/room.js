@@ -47,19 +47,31 @@ export const detailStudyRoom = async (path) => {
   }
 };
 
-export const loadRoomList = async () => {
+export const loadRoomList = async (page) => {
   try {
     await Axios.post;
-    const response = await axios.get(`/studyRoom`);
+    const response = await axios.get(`/studyRoom`, {
+      params: {
+        page: page,
+        size: 1,
+        sort: 'studyRoomId',
+      },
+    });
     return response;
   } catch (error) {
     console.log('list error : ', error);
   }
 };
 
-export const searchByStudyRoomName = async (studyRoomTitle) => {
+export const searchByStudyRoomName = async (studyRoomTitle, page) => {
   try {
-    const response = axios.get(`/studyRoom/search/${studyRoomTitle}`);
+    const response = await axios.get(`/studyRoom/search/${studyRoomTitle}`, {
+      params: {
+        page: page,
+        size: 1,
+        sort: 'studyRoomId',
+      },
+    });
     return response;
   } catch (error) {
     console.log('searchByStudyRoomTitle error : ' + error);
