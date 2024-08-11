@@ -1,12 +1,13 @@
 import React from 'react';
 import { Dialog, DialogActions, DialogContent, Button } from '@mui/material';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 import { savePreset } from '../../apis/preset';
 
 export const MultiExitModal = ({ open, handleClose }) => {
   const multiPreset = useSelector((state) => state.multi);
   const oauthId = useSelector((state) => state.auth.user.oauthId);
-
+  const navigate = useNavigate();
   console.log(multiPreset);
 
   const param = {
