@@ -38,7 +38,7 @@ public class StudyRoomService {
     // 방 제목으로 검색 - 페이징 적용
     public Page<StudyRoomInfoResponse> findByStudyRoomTitle(String studyRoomTitle, Pageable pageable) {
         //제목을 통해 정보를 조회해온다
-        return studyRoomRepository.findByStudyRoomTitle(studyRoomTitle, pageable)
+        return studyRoomRepository.findByStudyRoomTitleContaining(studyRoomTitle, pageable)
                 .map(StudyRoomInfoResponse::from);
     }
 
