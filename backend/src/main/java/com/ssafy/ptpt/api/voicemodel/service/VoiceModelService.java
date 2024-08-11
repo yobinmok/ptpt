@@ -17,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -129,10 +128,11 @@ public class VoiceModelService {
                                     JsonNode rootNode = objectMapper.readTree(convertResponse);
                                     JsonNode dataNode = rootNode.path("data").get(1);
                                     String filePath = dataNode.path("name").asText();
-                                    String httpPath = "http://70.12.130.121:7897/file=" + filePath;
+                                    String httpPath = "http://175.209.203.185:7897/file=" + filePath;
                                     System.out.println("httpPath: " + httpPath);
-                                    return downloadFile(httpPath, ttsPath)
-                                            .then(Mono.just("https://i11b207.p.ssafy.io" + ttsPath.substring(ttsPath.indexOf("/uploads"))));
+                                    String resultPath = ttsPath + "result";
+                                    return downloadFile(httpPath, resultPath)
+                                            .then(Mono.just("https://i11b207.p.ssafy.io" + resultPath.substring(resultPath.indexOf("/uploads"))));
                                 } catch (Exception e) {
                                     return Mono.error(e);
                                 }
