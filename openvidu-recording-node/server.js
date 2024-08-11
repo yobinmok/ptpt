@@ -23,7 +23,8 @@ var OPENVIDU_URL =
   "https://i11b207.p.ssafy.io:5443";
 // Environment variable: secret shared with our OpenVidu server
 var OPENVIDU_SECRET =
-  process.env.OPENVIDU_SECRET || process.argv[3] || "MY_SECRET";
+  // process.env.OPENVIDU_SECRET || process.argv[3] || "MY_SECRET";
+  "MY_SECRET";
 
 var useSSL = process.env.USE_SSL === "false" ? false : true;
 // useSSL = true;
