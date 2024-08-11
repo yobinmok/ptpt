@@ -7,11 +7,7 @@ import io.openvidu.java.client.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -93,6 +89,12 @@ public class OpenviduController {
         Recording recording = openvidu.startRecording(sessionId);
 
         return new ResponseEntity<>(recording.toString(), HttpStatus.OK);
+    }
+
+    @GetMapping("/api/recording/get/{recordingId}")
+    public ResponseEntity<?> getRecording(@PathVariable(value = "recordingId") String recordingId) throws OpenViduJavaClientException, OpenViduHttpException {
+        Recording recording = openvidu.getRecording(recordingId);
+        return new ResponseEntity<>(recording, HttpStatus.OK);
     }
 
 }
