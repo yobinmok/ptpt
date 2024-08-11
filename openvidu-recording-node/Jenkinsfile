@@ -38,8 +38,9 @@ pipeline {
                     //  sh 'docker build -t ptpt-dev-backend:latest ./backend'
 
                 // }
-                sh 'chmod +x ./docker/create_image.sh'
+                
                 dir('openvidu-recording-node') {
+                    sh 'chmod +x ./docker/create_image.sh'
                     sh './docker/create_image.sh openvidu-recording-node:latest'
                 }
             }
