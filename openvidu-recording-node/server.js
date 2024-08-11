@@ -19,7 +19,8 @@ var app = express(); // Create our app with express
 var SERVER_PORT = process.env.SERVER_PORT || 3000;
 // Environment variable: URL where our OpenVidu server is listening
 var OPENVIDU_URL =
-  process.env.OPENVIDU_URL || process.argv[2] || "http://localhost:4443";
+  // process.env.OPENVIDU_URL || process.argv[2] || "http://localhost:4443";
+  "https://i11b207.p.ssafy.io";
 // Environment variable: secret shared with our OpenVidu server
 var OPENVIDU_SECRET =
   process.env.OPENVIDU_SECRET || process.argv[3] || "MY_SECRET";
