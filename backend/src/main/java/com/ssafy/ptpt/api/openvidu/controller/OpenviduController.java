@@ -82,13 +82,13 @@ public class OpenviduController {
     }
     
     @PostMapping("/api/recording/stop")
-    public ResponseEntity<String> stopRecording(@RequestBody(required = false) Map<String, Object> params) throws OpenViduJavaClientException, OpenViduHttpException {
-        String sessionId = params.get("recording").toString();
+    public ResponseEntity<?> stopRecording(@RequestBody(required = false) Map<String, Object> params) throws OpenViduJavaClientException, OpenViduHttpException {
+        String sessionId = (String)params.get("recording");
         System.out.println(sessionId);
 
-        Recording recording = openvidu.startRecording(sessionId);
+        Recording recording = openvidu.stopRecording(sessionId);
 
-        return new ResponseEntity<>(recording.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(recording, HttpStatus.OK);
     }
 
     @GetMapping("/api/recording/get/{recordingId}")
