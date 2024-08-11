@@ -3,6 +3,7 @@ import {
   SET_PARTICIPANTS,
   USE_PARTICIPANTS,
   EVAL_PARTICIPANTS,
+  CLEAR_PARTICIPANTS,
 } from '../types/participant';
 
 const setParticipants = (data) => {
@@ -25,4 +26,15 @@ const isParticipantsEval = (nickname) => {
   };
 };
 
-export { setParticipants, useParticipants, isParticipantsEval };
+const clearParticipants = () => {
+  return {
+    type: CLEAR_PARTICIPANTS,
+  };
+};
+
+export {
+  setParticipants,
+  useParticipants,
+  isParticipantsEval,
+  clearParticipants,
+};
