@@ -21,23 +21,25 @@ const FeedbackHeader = styled.div`
   font-weight: bold;
 `;
 
+const FeedbackLabel = styled.span`
+  flex: 1; /* 텍스트를 균등하게 분배 */
+`;
+
 const FeedbackSection = ({ feedbackData }) => {
   return (
     <div>
       <h2>피드백 모아보기</h2>
       <Divider />
       <FeedbackHeader>
-        <span>스터디룸 이름</span>
-        <span>날짜</span>
-        <span>주제</span>
+        <FeedbackLabel>스터디룸 이름</FeedbackLabel>
+        <FeedbackLabel>주제</FeedbackLabel>
       </FeedbackHeader>
       <FeedbackListContainer>
         {feedbackData.map((feedback) => (
           <FeedbackListItem
             key={feedback.studyRoomId}
-            roomName={`Study Room ${feedback.studyRoomId}`}
-            date={'2024-08-09'} // 실제 날짜를 사용해야 합니다.
-            subject={'Sample Subject'} // 실제 주제를 사용해야 합니다.
+            roomName={feedback.studyRoomTitle}
+            subject={feedback.subject}
             roomId={feedback.studyRoomId}
           />
         ))}

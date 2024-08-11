@@ -4,7 +4,7 @@ import authReducer from './authReducer';
 import room from './roomReducer.js';
 import solo from './soloReducer.js';
 import evaluationReducer from './evaluationReducer';
-import savedRoomsReducer from './savedRoomsReducer.js';
+import savedRoomsReducer from './savedRoomsReducer';
 import voiceModelReducer from './voiceModelReducer';
 import statisticsReducer from './statisticsReducer';
 import feedbackReducer from './feedbackReducer';
