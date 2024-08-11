@@ -119,8 +119,6 @@ public class VoiceModelService {
     public Mono<String> processVoiceConversion(String voiceModel, String ttsPath) {
         return uploadAudioFile(ttsPath)
                 .flatMap(uploadResponse -> {
-                    // 여기서 `uploadResponse`는 `uploadAudioFile`의 응답입니다.
-                    // inferChangeVoice 호출 후, 이 응답을 inferConvert에 사용합니다.
                     String uploadPath;
                     try {
                         JsonNode rootNode = objectMapper.readTree(uploadResponse);
@@ -134,15 +132,15 @@ public class VoiceModelService {
                             .flatMap(convertResponse -> {
                                 ObjectMapper objectMapper = new ObjectMapper();
                                 try {
-                                    JsonNode rootNode = objectMapper.readTree(convertResponse); // JSON 문자열을 JsonNode로 변환
-                                    JsonNode dataNode = rootNode.path("data").get(1); // data 배열의 두 번째 요소 가져오기
-                                    String filePath = dataNode.path("name").asText(); // name 값 추출
+                                    JsonNode rootNode = objectMapper.readTree(convertResponse);
+                                    JsonNode dataNode = rootNode.path("data").get(1);
+                                    String filePath = dataNode.path("name").asText();
                                     System.out.println("data[1].name: " + filePath);
-                                    String httpPath  ="http://70.12.130.121/:7897/file=" + filePath;
+                                    String httpPath = "http://70.12.130.121/:7897/file=" + filePath;
+                                    System.out.println(httpPath);
                                     // 위 경로의 오디오 파일을 ttsPath에 저장 -> 덮어쓰기
-                                    downloadAudioFile(httpPath, ttsPath);
-                                    String resultPath = "https://i11b207.p.ssafy.io" + ttsPath.substring(ttsPath.indexOf("/uploads"));
-                                    return Mono.just(resultPath);
+                                    return downloadAudioFile(httpPath, ttsPath)
+                                            .then(Mono.just("https://i11b207.p.ssafy.io" + ttsPath.substring(ttsPath.indexOf("/uploads"))));
                                 } catch (Exception e) {
                                     return Mono.error(e);
                                 }
@@ -152,17 +150,18 @@ public class VoiceModelService {
                     System.err.println("오류 발생: " + error.getMessage());
                     return Mono.just("처리 중 오류 발생");
                 });
-
     }
 
+
     // 다운로드 및 저장하는 함수
-    public static void downloadAudioFile(String fileUrl, String outputFilePath) {
+    public Mono<Void> downloadAudioFile(String fileUrl, String outputFilePath) {
+        System.out.println(fileUrl);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(fileUrl))
                 .build();
 
-        client.sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
+        return Mono.fromFuture(client.sendAsync(request, HttpResponse.BodyHandlers.ofInputStream())
                 .thenApply(HttpResponse::body)
                 .thenAccept(inputStream -> {
                     try (InputStream in = inputStream;
@@ -176,8 +175,7 @@ public class VoiceModelService {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                })
-                .join();  // Blocking call to wait for completion
+                }));
     }
 
 
