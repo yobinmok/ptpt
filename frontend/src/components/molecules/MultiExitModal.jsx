@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Dialog, DialogActions, DialogContent, Button } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { savePreset } from '../../apis/preset';
+import { exitRoom, clearRoom } from '../../apis/room';
+import { Tooltip, IconButton } from '@mui/material';
+import { clearParticipants } from '../../store/actions/participant';
+import { clearRoomSession } from '../../store/actions/room';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
-export const MultiExitModal = ({ open, handleClose }) => {
+export const MultiExitModal = ({ leaveSession }) => {
   const multiPreset = useSelector((state) => state.multi);
   const oauthId = useSelector((state) => state.auth.user.oauthId);
+  const studyRoomId = useSelector((state) => state.room.roomId);
+  const nickname = useSelector((state) => state.auth.user.nickname);
+  const hostNickname = useSelector((state) => state.room.hostId);
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [open, setOpen] = useState(false); // modal 상태
   console.log(multiPreset);
 
   const param = {
@@ -17,6 +28,14 @@ export const MultiExitModal = ({ open, handleClose }) => {
   };
 
   const saveClickListener = () => {
+    dispatch(clearParticipants());
+    dispatch(clearRoomSession());
+    if (nickname === hostNickname) {
+      clearRoom(studyRoomId);
+    } else {
+      exitRoom(studyRoomId, nickname);
+    }
+    leaveSession();
     savePreset(
       param,
       (res) => {
@@ -31,12 +50,42 @@ export const MultiExitModal = ({ open, handleClose }) => {
   };
 
   const exitClickListener = () => {
+    dispatch(clearParticipants());
+    dispatch(clearRoomSession());
+    if (nickname === hostNickname) {
+      clearRoom(studyRoomId);
+    } else {
+      exitRoom(studyRoomId, nickname);
+    }
+    leaveSession();
     navigate('/');
     handleClose();
   };
 
+  const handleExit = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
+      <Tooltip title='회의 나가기' placement='top'>
+        <IconButton
+          onClick={handleExit}
+          id='navLeaveButton'
+          style={{
+            color: 'white',
+            backgroundColor: 'red',
+            borderRadius: '5px',
+            top: '-2px',
+          }}
+        >
+          <ExitToAppIcon fontSize='small' />
+        </IconButton>
+      </Tooltip>
       <Dialog open={open} onClose={handleClose}>
         <DialogContent
           sx={{

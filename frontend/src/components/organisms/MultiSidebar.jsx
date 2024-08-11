@@ -21,6 +21,8 @@ const MultiSidebar = ({ tabItem }) => {
   const studyRoomId = useSelector((state) => state.room.roomId);
   const presentationTime = useSelector((state) => state.room.presentationTime);
   const participants = useSelector((state) => state.participant.participants);
+  const hostNickname = useSelector((state) => state.room.hostId);
+  const nickname = useSelector((state) => state.auth.user.nickname);
   const hasExecuteRef = useRef(false);
 
   // dispatch(setPresentationTime('2024-08-07T15:37'));
@@ -30,20 +32,29 @@ const MultiSidebar = ({ tabItem }) => {
   // 시간 호출
   useEffect(() => {
     setRealTime(moment());
-  }, []);
+    hasExecuteRef.current = false;
+  }, [presentationTime]);
   useInterval(() => {
     setRealTime(moment());
+    console.log('222222222222222222');
+    console.log(moment(realTime).isAfter(moment(presentationTime)));
+    console.log(moment());
+    console.log(moment(presentationTime).add(1, 'minute'));
     if (
       !hasExecuteRef.current &&
-      moment(realTime).isAfter(presentationTime) &&
+      moment(realTime).isAfter(moment(presentationTime).add(1, 'minute')) &&
       presentationTime
     ) {
       // 시간이 지나면 api호출
-      const response = adminParticipants(studyRoomId, participants);
-      console.log('response : ' + response);
+      console.log('1111111111111111111');
+      console.log(hostNickname);
+      console.log(nickname);
+      if (hostNickname === nickname) {
+        const response = adminParticipants(studyRoomId, participants);
+      }
       hasExecuteRef.current = true;
     }
-  }, 1000); // 1초마다 확인
+  }, 10000); // 1초마다 확인
 
   // 탭 클릭 시 호출되는 핸들러
   const handleTabClick = (index) => {
@@ -72,7 +83,6 @@ const MultiSidebar = ({ tabItem }) => {
           isSelected={selectedTab === index}
         />
       ))}
-      {/* 여기에 세로 탭 컨텐츠 추가 */}
     </Box>
   );
 };
