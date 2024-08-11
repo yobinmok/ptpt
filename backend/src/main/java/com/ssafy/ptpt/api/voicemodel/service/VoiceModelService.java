@@ -136,7 +136,7 @@ public class VoiceModelService {
                                     JsonNode dataNode = rootNode.path("data").get(1);
                                     String filePath = dataNode.path("name").asText();
                                     System.out.println("data[1].name: " + filePath);
-                                    String httpPath = "http://70.12.130.121/:7897/file=" + filePath;
+                                    String httpPath = "http://70.12.130.121:7897/file=" + filePath;
                                     System.out.println(httpPath);
                                     // 위 경로의 오디오 파일을 ttsPath에 저장 -> 덮어쓰기
                                     return downloadAudioFile(httpPath, ttsPath)
