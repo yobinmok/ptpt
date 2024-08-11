@@ -7,7 +7,8 @@ export const startRecording = async (sessionName) => {
   try {
     const response = await axios.post(
       // var SERVE R_PORT = process.env.SERVER_PORT || 5002;
-      `${VITE_NODE_API_URL}/recording-node/api/recording/start`,
+      // `${VITE_NODE_API_URL}/recording-node/api/recording/start`,
+      `${VITE_NODE_API_URL}/api/recording/start`,
       {
         session: sessionName, // sessionId
         outputMode: 'COMPOSED',
