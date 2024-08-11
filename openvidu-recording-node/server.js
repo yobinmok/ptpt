@@ -26,6 +26,7 @@ var OPENVIDU_SECRET =
   process.env.OPENVIDU_SECRET || process.argv[3] || "MY_SECRET";
 
 var useSSL = process.env.USE_SSL === "false" ? false : true;
+useSSL = true;
 
 // Entrypoint to OpenVidu Node Client SDK
 var OV = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
