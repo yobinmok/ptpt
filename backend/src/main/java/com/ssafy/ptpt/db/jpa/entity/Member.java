@@ -64,6 +64,14 @@ public class Member {
 //        this.role = new Role(this);
     }
 
+    public Member(String oauthId, String username, String name, String roleType) {
+        this.oauthId = oauthId;
+        this.username = username;
+        this.name = name;
+        this.role = roleType;
+        this.profile = new Profile(this);
+    }
+
     // 탈퇴여부가 1이면 정지회원
     // 0이면 일반 회원
     // 사용자 탈퇴여부 변경 로직

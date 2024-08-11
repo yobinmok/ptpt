@@ -83,11 +83,11 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-//                        .requestMatchers("/", "/member/{nickname}", "/member/modify").permitAll()
-//                        .requestMatchers("/**").hasRole("USER")
-                        .requestMatchers("/**").permitAll()
-                        .anyRequest().authenticated());
-
+                        .requestMatchers("/", "/member/{nickname}", "/member/modify").permitAll() // 허용된 경로
+                        .requestMatchers("/api/sessions/**").permitAll() // 추가된 허용 경로
+                        .requestMatchers("/**").hasRole("USER") // 나머지 경로는 USER 역할이 있어야 접근 가능
+                        .anyRequest().authenticated() // 나머지 요청은 인증이 필요
+                );
         //세션 설정 : STATELESS
         http
                 .sessionManagement((session) -> session

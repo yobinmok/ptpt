@@ -74,18 +74,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Member existData = memberRepository.findByOauthId(oauthId);
         if (existData == null) {
             System.out.println("신규 회원");
-            Member member = new Member();
-            member.setOauthId(oauthId);
-            member.setUsername(username);
-            member.setName(name);
-            member.setRole("ROLE_USER");
+            Member member = new Member(oauthId, username, name, "ROLE_USER");
             memberRepository.save(member);
 
-            MemberDto memberDto = new MemberDto();
-            memberDto.setOauthId(oauthId);
-            memberDto.setUsername(username);
-            memberDto.setName(name);
-            memberDto.setRole("ROLE_USER");
+            MemberDto memberDto = new MemberDto(oauthId, username, name, "ROLE_USER");
 
             return new CustomOAuth2User(memberDto);
         }
@@ -95,11 +87,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
             memberRepository.save(existData);
 
-            MemberDto memberDto = new MemberDto();
-            memberDto.setOauthId(oauthId);
-            memberDto.setName(name);
-            memberDto.setUsername(username);
-            memberDto.setRole("ROLE_USER");
+            MemberDto memberDto = new MemberDto(oauthId, username, name, "ROLE_USER");
 
             return new CustomOAuth2User(memberDto);
         }

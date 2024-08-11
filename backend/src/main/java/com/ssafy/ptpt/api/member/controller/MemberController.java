@@ -38,7 +38,7 @@ public class MemberController {
     private String IMAGE_UPLOAD_PATH;
 
     // TODO : 테스팅 해보기
-//    @GetMapping("/user")
+//    @GetMapping("/login")
 //    public ResponseEntity<MemberInfoResponse> getUserInfo() {
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //
@@ -63,6 +63,7 @@ public class MemberController {
 //
 //        return ResponseEntity.ok(userInfoResponse);
 //    }
+
     @PostMapping("/auth/kakao")
     public ResponseEntity<?> kakaoAuthVerify() {
         System.out.println("");
