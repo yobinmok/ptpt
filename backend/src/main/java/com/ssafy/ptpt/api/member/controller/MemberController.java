@@ -1,211 +1,96 @@
 package com.ssafy.ptpt.api.member.controller;
 
-import com.google.gson.JsonParser;
 import com.ssafy.ptpt.api.member.request.MemberNicknameRequest;
 import com.ssafy.ptpt.api.member.request.MemberOauthIdRequest;
 import com.ssafy.ptpt.api.member.request.MemberUpdateRequest;
+import com.ssafy.ptpt.api.member.response.MemberInfoResponse;
 import com.ssafy.ptpt.api.member.response.MemberProfileResponse;
 import com.ssafy.ptpt.api.member.response.MemberStatisticResponse;
 import com.ssafy.ptpt.api.member.service.MemberService;
-import com.ssafy.ptpt.api.security.model.request.AccessTokenRequestBody;
-import com.ssafy.ptpt.api.security.model.request.AuthorizationCodeRequestBody;
-import com.ssafy.ptpt.api.security.model.response.BaseResponseBody;
-import com.ssafy.ptpt.api.security.model.response.TokenResponseBody;
-import com.ssafy.ptpt.api.security.service.GoogleAuthService;
-import com.ssafy.ptpt.api.security.service.KakaoService;
-import com.ssafy.ptpt.api.transformer.Trans;
-import com.ssafy.ptpt.db.jpa.entity.Member;
+import com.ssafy.ptpt.oauth2.dto.CustomOAuth2User;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 
 @RestController
 @RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final GoogleAuthService googleAuthService;
-    private final KakaoService kakaoService;
     private final MemberService memberService;
 
     @Value("${imageFile.path}")
     private String IMAGE_UPLOAD_PATH;
 
-    @Operation(
-            summary = "카카오 액세스 토큰 발급",
-            description = "카카오 액세스 토큰 발급.",
-            responses = {
-                     @ApiResponse(
-                             responseCode = "200",
-                             description = "액세스 토큰 반환",
-                             content = @Content(
-                                     schemaProperties = {
-                                             @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message")),
-                                             @SchemaProperty(name = "accessToken", schema = @Schema(type = "string", description = "액세스 토큰")),
-                                             @SchemaProperty(name = "oauthId", schema = @Schema(type = "string", description = "oauthId"))
-                                     }
-                             )
-                     )
-            }
-    )
-    @PostMapping("/signin/kakao")
-    public ResponseEntity<?> kakaoSignIn(@RequestBody AuthorizationCodeRequestBody authorizationCode) {
-        System.out.println("로그인 API");
-        String accessToken = kakaoService.getAccessToken(authorizationCode.getAuthorizationCode());
-        System.out.println("!!!!!!!!!!!!!!!!!" + accessToken);
-        String tokenString = Trans.token(accessToken, new JsonParser());
-        String oauthId = "K"+Trans.id(kakaoService.getProfile(tokenString), new JsonParser());
-
-        Member member = memberService.saveMember(oauthId);
-        if (member.getNickname() == null) {
-            return ResponseEntity.ok(TokenResponseBody.of(201, "Success", tokenString, oauthId));
-        } else {
-            return ResponseEntity.ok(TokenResponseBody.of(200, "Existing Member", tokenString, oauthId));
-        }
-    }
-
-
-    @Operation(
-            summary = "카카오 액세스 토큰 검증",
-            description = "카카오 액세스 토큰 검증",
-            responses = {
-                    @ApiResponse(responseCode = "200",
-                            description = "유효한 토큰",
-                            content = @Content(
-                                    schemaProperties = {
-                                            @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message"))
-                                    }
-                            )),
-                    @ApiResponse(responseCode = "401",
-                            description = "유효하지 않은 토큰",
-                            content = @Content(
-                                    schemaProperties = {
-                                            @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message"))
-                                    }
-                            ))
-            }
-    )
-    @PostMapping("/auth/kakao")
-    public ResponseEntity<?> kakaoAuthVerify(@RequestBody AccessTokenRequestBody accessToken) {
-        System.out.println("토큰검증 API");
-        if (kakaoService.verifyAccessToken(accessToken.getAccessToken())) {
-            return ResponseEntity.ok(BaseResponseBody.of(200, "Valid Token"));
-        }
-        return ResponseEntity.ok(BaseResponseBody.of(401, "Invalid Token"));
-    }
-
-
-    @PostMapping("/signout/kakao")
-    @Operation(
-            summary = "카카오 로그아웃",
-            description = "카카오 사용자의 세션을 종료하거나 액세스 토큰을 무효화합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "로그아웃 성공"),
-                    @ApiResponse(responseCode = "401", description = "로그아웃 실패")
-            })
-    public ResponseEntity<?> kakaoLogout(@RequestBody AccessTokenRequestBody accessTokenRequestBody) {
-        try {
-            boolean result = kakaoService.logout(accessTokenRequestBody.getAccessToken());
-            if (result) {
-                return ResponseEntity.ok(BaseResponseBody.of(200, "로그아웃 성공"));
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseResponseBody.of(401, "로그아웃 실패"));
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(BaseResponseBody.of(500, "서버 오류"));
-        }
-    }
-
-    @Operation(
-            summary = "구글 액세스 토큰 발급",
-            description = "구글 액세스 토큰 발급 (구글에서는 ID_Token이라 명명.",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "액세스 토큰 반환",
-                            content = @Content(
-                                    schemaProperties = {
-                                            @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message")),
-                                            @SchemaProperty(name = "accessToken", schema = @Schema(type = "string", description = "액세스 토큰")),
-                                            @SchemaProperty(name = "oauthId", schema = @Schema(type = "string", description = "oauthId"))
-                                    }
-                            )
-                    )
-            }
-    )
-    @PostMapping("/signin/google")
-    public ResponseEntity<?> googleSignIn(@RequestBody AuthorizationCodeRequestBody authorizationCode) {
-        String[] tokens = googleAuthService.getAccessToken(authorizationCode.getAuthorizationCode());
-        String accessToken = tokens[1];
-        String oauthId = "G"+googleAuthService.getUserResource(tokens[0]).get("id").asText();
-
-        Member member = memberService.saveMember(oauthId);
-        if (member.getNickname() == null) {
-            return ResponseEntity.ok(TokenResponseBody.of(201, "Success", accessToken, oauthId));
-        } else {
-            return ResponseEntity.ok(TokenResponseBody.of(200, "Existing Member", accessToken, oauthId));
-        }
-    }
-
-
-    @Operation(
-            summary = "구글 액세스 토큰 검증",
-            description = "구글 액세스 토큰 검증",
-            responses = {
-                    @ApiResponse(responseCode = "200",
-                            description = "유효한 토큰",
-                            content = @Content(
-                                    schemaProperties = {
-                                            @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message"))
-                                    }
-                            )),
-                    @ApiResponse(responseCode = "401",
-                            description = "유효하지 않은 토큰",
-                            content = @Content(
-                                    schemaProperties = {
-                                            @SchemaProperty(name = "message", schema = @Schema(type = "string", description = "message"))
-                                    }
-                            ))
-            }
-    )
-    @PostMapping("/auth/google")
-//    @ApiOperation(value = "Google Access Token 검증")
-    public ResponseEntity<?> googleAuthVerify(@RequestBody AccessTokenRequestBody accessToken) throws GeneralSecurityException, IOException {
-        System.out.println("ACCESS = " + accessToken.getAccessToken());
-        if(googleAuthService.verifyAccessToken(accessToken.getAccessToken())) {
-            return ResponseEntity.ok(BaseResponseBody.of(200, "Valid Token"));
-        }
-        return ResponseEntity.ok(BaseResponseBody.of(401, "Invalid Token"));
-    }
-
-//    @PostMapping("/signout/google")
-//    @Operation(
-//            summary = "구글 로그아웃",
-//            description = "구글 사용자의 세션을 종료하거나 액세스 토큰을 무효화합니다.",
-//            responses = {
-//                    @ApiResponse(responseCode = "200", description = "로그아웃 성공"),
-//                    @ApiResponse(responseCode = "401", description = "로그아웃 실패")
-//            })
-//    public ResponseEntity<?> googleLogout(@RequestBody AccessTokenRequestBody accessTokenRequestBody) {
-//        SecurityContextHolder.clearContext();
-//        return ResponseEntity.ok(BaseResponseBody.of(200, "로그아웃 성공"));
+    // TODO : 테스팅 해보기
+//    @GetMapping("/user")
+//    public ResponseEntity<MemberInfoResponse> getUserInfo() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//        // 인증이 되어 있지 않거나 인증 객체가 null인 경우
+//        if (authentication == null || !authentication.isAuthenticated()) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//
+//        // 인증된 사용자 정보 가져오기
+//        Object principal = authentication.getPrincipal();
+//        MemberInfoResponse userInfoResponse;
+//
+//        UserDetails userDetails = null;
+//        if (principal instanceof UserDetails) {
+//            userDetails = (UserDetails) principal;
+//            // UserDetails에서 사용자 정보를 가져와서 Response 객체에 담기
+//            userInfoResponse = new MemberInfoResponse(userDetails.getUsername());
+//        } else {
+//            // 인증된 사용자 정보가 UserDetails 타입이 아닌 경우 처리
+//            userInfoResponse = new MemberInfoResponse(userDetails.getUsername());
+//        }
+//
+//        return ResponseEntity.ok(userInfoResponse);
 //    }
+    @PostMapping("/auth/kakao")
+    public ResponseEntity<?> kakaoAuthVerify() {
+        System.out.println("");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // 인증이 되어 있지 않거나 인증 객체가 null인 경우
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // 인증된 사용자 정보 가져오기
+        Object principal = authentication.getPrincipal();
+        MemberInfoResponse userInfoResponse;
+
+        UserDetails userDetails = null;
+        if (principal instanceof UserDetails) {
+            userDetails = (UserDetails) principal;
+            // UserDetails에서 사용자 정보를 가져와서 Response 객체에 담기
+            userInfoResponse = new MemberInfoResponse(userDetails.getUsername());
+        } else {
+            // 인증된 사용자 정보가 UserDetails 타입이 아닌 경우 처리
+            userInfoResponse = new MemberInfoResponse(userDetails.getUsername());
+        }
+
+        return ResponseEntity.ok(userInfoResponse);
+    }
+
+
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
@@ -228,7 +113,22 @@ public class MemberController {
                     @ApiResponse(responseCode = "401",
                             description = "수정 실패")
             })
-    public ResponseEntity<Void> modifyMemberInfo(@RequestPart(name = "memberUpdateRequest") MemberUpdateRequest memberUpdateRequest, @RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
+    public ResponseEntity<String> modifyMemberInfo(@RequestPart(name = "memberUpdateRequest") MemberUpdateRequest memberUpdateRequest,
+                                                 @RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
+
+        String oauthId = "";
+        // 현재 인증된 사용자 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof CustomOAuth2User) {
+            CustomOAuth2User customOAuth2User = (CustomOAuth2User) authentication.getPrincipal();
+            String currentUsername = customOAuth2User.getUsername();
+            System.out.println("현재 사용자: " + currentUsername);
+            oauthId = customOAuth2User.getOauthId();
+            memberUpdateRequest.setOauthId(oauthId);
+        } else {
+            System.out.println("인증 정보가 없습니다.");
+        }
+
 
         // 이미지파일 입력이 있을 경우 이미지를 서버에 저장
         if(image != null && !image.isEmpty()){
@@ -249,7 +149,7 @@ public class MemberController {
         }
 
         int complete = memberService.modifyMemberInfo(memberUpdateRequest);
-        return complete == 1 ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+        return complete == 1 ? ResponseEntity.ok().body(oauthId) : ResponseEntity.badRequest().build();
     }
 
 

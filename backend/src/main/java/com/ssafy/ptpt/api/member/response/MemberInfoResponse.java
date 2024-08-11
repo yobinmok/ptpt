@@ -1,6 +1,5 @@
 package com.ssafy.ptpt.api.member.response;
 
-import com.ssafy.ptpt.db.jpa.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +22,8 @@ public class MemberInfoResponse {
     private LocalDateTime registerTime;
     private String isWithDraw;
     private String withDrawTime;
-    private Role role;
 
+
+    public MemberInfoResponse(String username) {
+    }
 }
