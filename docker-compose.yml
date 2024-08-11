@@ -60,3 +60,15 @@ services:
   #     ME_CONFIG_MONGODB_ADMINPASSWORD: 1234
   #     ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
   #     ME_CONFIG_BASICAUTH: false
+  
+  openvidu-recording-node:
+    image: openvidu-recording-node:latest
+    container_name: openvidu-recording-node
+    restart: unless-stopped
+    environment:
+      OPENVIDU_SECRET: MY_SECRET
+      OPENVIDU_RECORDING: true
+      OPENVIDU_RECORDING_PATH: /opt/openvidu/recordings
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/openvidu/recordings:/opt/openvidu/recordings

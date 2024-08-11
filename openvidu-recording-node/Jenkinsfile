@@ -1,0 +1,74 @@
+pipeline {
+    agent any
+
+    // environment {
+    //     TARGET_BRANCH='develop/be'
+    // }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    // def branch = env.gitlabSourceBranch ?: 'develop/be'
+                    // if(branch != env.TARGET_BRANCH) {
+                    //     error "This build is only for the '${env.TARGET_BRANCH}' branch, but was run on '${branch}'"
+                    // }
+
+                    checkout scm
+                }
+            }
+        }
+        // stage('Build') {
+        //     steps {
+        //         dir('openvidu-recording-node') {
+        //             // withCredentials([file(credentialsId: 'APPLICATION_YML', variable: 'application_yml')]) {
+        //             //     sh 'cp $application_yml ./src/main/resources/application.yml'
+        //             // }
+        //             sh 'chmod +x ./gradlew'
+        //             sh './gradlew clean build --no-daemon'
+        //             // sh './gradlew test -i'
+        //         }
+        //     }
+        // }
+        stage('Build Docker Image') {
+            steps {
+                // script {
+                    // def image = docker.build("ptpt-dev-backend:latest", 'backend/.')
+                    // image.push()
+                    //  sh 'docker build -t ptpt-dev-backend:latest ./backend'
+
+                // }
+                dir('openvidu-recording-node') {
+                    sh './docker/create_image.sh openvidu-recording-node:latest'
+                }
+            }
+        }
+        // stage('Stop old Container') {
+        //     steps {
+        //         script {
+        //             sh 'docker stop ptpt-dev-backend'
+        //             sh 'docker rm ptpt-dev-backend'
+        //         }
+        //     }
+        // }
+
+        stage('Depoly') {
+            steps {
+                script { 
+                    sh 'docker-compose stop openvidu-recording-node || true'
+                    sh 'docker-compose rm -f openvidu-recording-node || true'
+                    sh 'docker-compose up openvidu-recording-node -d'
+                    // sh 'docker-compose up -d'
+                    
+                }
+            }
+        }
+        stage('Remove old Image') {
+            steps {
+                script {
+                    sh 'docker image prune -f'
+                }
+            }
+        }
+    }
+}
