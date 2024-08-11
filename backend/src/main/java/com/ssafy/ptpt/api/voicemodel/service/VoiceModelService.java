@@ -130,7 +130,7 @@ public class VoiceModelService {
                                     String filePath = dataNode.path("name").asText();
                                     String httpPath = "http://175.209.203.185:7897/file=" + filePath;
                                     System.out.println("httpPath: " + httpPath);
-                                    String resultPath = ttsPath + "result";
+                                    String resultPath = addPrefixToFilename(ttsPath, "result_");
                                     return downloadFile(httpPath, resultPath)
                                             .then(Mono.just("https://i11b207.p.ssafy.io" + resultPath.substring(resultPath.indexOf("/uploads"))));
                                 } catch (Exception e) {
@@ -143,6 +143,19 @@ public class VoiceModelService {
                     return Mono.just("처리 중 오류 발생");
                 });
     }
+
+    public String addPrefixToFilename(String ttsPath, String prefix) {
+        // 마지막 슬래시('/')의 위치를 찾기
+        int lastSlashIndex = ttsPath.lastIndexOf("/");
+
+        // 파일 경로를 두 부분으로 나누고, prefix를 파일명 앞에 추가
+        String directory = ttsPath.substring(0, lastSlashIndex + 1);
+        String filename = ttsPath.substring(lastSlashIndex + 1);
+
+        // 새 파일 경로를 만들어 반환
+        return directory + prefix + filename;
+    }
+
 
     // WebClient를 사용하여 파일을 다운로드하는 함수
     public Mono<Void> downloadFile(String fileUrl, String outputFilePath) {
