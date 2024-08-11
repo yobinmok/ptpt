@@ -22,7 +22,6 @@ const MultiPage = () => {
   const isSidebarOpen = useSelector((state) => state.room.isSidebarOpen);
   const selectedTab = useSelector((state) => state.room.selectedTab);
   console.log('selec : ' + selectedTab + ' isside : ' + isSidebarOpen);
-
   // 탭 클릭 시 호출되는 핸들러
   const handleTabClick = (index) => {
     if (selectedTab === index) {

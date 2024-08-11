@@ -107,4 +107,5 @@ public class MemberService {
         }
         return MemberStatisticResponse.from(statistic);
     }
+
 }

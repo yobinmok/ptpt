@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  fetchSavedRooms,
-  setSavedRooms,
-} from '../../../store/actions/savedRoomActions';
+import { setSavedRooms } from '../../../store/actions/savedRoomActions';
 
 import { getPresetList } from '../../../apis/preset';
 import SoloRoomTab from './SoloRoomTab';
@@ -16,18 +13,20 @@ const SavedRoomsPage = () => {
   const savedRooms = useSelector((state) => state.savedRooms); // Redux 상태에서 저장된 스터디룸 가져오기
 
   useEffect(() => {
-    getPresetList(
-      { oauthId },
-      ({ data }) => {
-        console.log(data);
-        dispatch(setSavedRooms(data));
+    const fetchPresetList = async () => {
+      try {
+        const response = await getPresetList({ oauthId });
+        console.log(response.data);
+        dispatch(setSavedRooms(response.data));
         console.log(savedRooms);
-      },
-      (err) => {
+      } catch (err) {
         console.log(err);
       }
-    );
-  }, [oauthId]); // 빈 배열이면 onMounted와 동일 / prev: [dispatch, oauthId]);
+    };
+
+    fetchPresetList();
+  }, [oauthId]);
+  // 빈 배열이면 onMounted와 동일 / prev: [dispatch, oauthId]);
 
   const handleOptionChange = (option) => {
     setSelectedOption(option);

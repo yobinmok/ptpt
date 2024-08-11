@@ -56,7 +56,6 @@ const VoiceTab = () => {
         formData,
         ({ data }) => {
           console.log('성공');
-          console.log(data);
           resolve(data); // Promise를 성공으로 마치고 resultAudioBlob을 반환
         },
         () => {
@@ -82,6 +81,7 @@ const VoiceTab = () => {
     // 내 음성모델을 고른 경우
     if (voiceSetting.current.model === 4) {
       // 성별, 높낮이에 따라 음성 선택해야 함.
+      console.log('내 음성모델 선택');
       param.voice.name = soloPreset.voiceModel[additionalVoice];
     }
 

@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { base64ToBlob } from '../../hooks/voice';
 import AudioRecorder from './AudioRecorder';
 import { useNavigate } from 'react-router-dom';
-import { ExitModal } from './ExitModal';
+import { ExitModal } from './SoloExitModal';
 
 const BottomBar = () => {
   const audioRef = useRef(null);
@@ -21,7 +21,6 @@ const BottomBar = () => {
   const [isSliderHovered, setIsSliderHovered] = useState(false);
   const script = useSelector((state) => state.solo.script);
   const guideline = script.filter((item) => item.guideline && item.title);
-  const navigate = useNavigate();
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

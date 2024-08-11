@@ -8,6 +8,9 @@ import {
   IS_START_PRESANTATION,
   PRESENTATION_TIME,
   SET_HOST_NAME,
+  IS_RECORDING,
+  RECORD_SESSION_ID,
+  OPENVIDU_SESSION_ID,
 } from '../types/room';
 
 const toggleScriptSelect = (flag) => ({
@@ -76,6 +79,26 @@ const setHost = (userId) => {
   };
 };
 
+const setIsRecording = () => {
+  return {
+    type: IS_RECORDING,
+  };
+};
+
+const setOpenviduSessionId = (openviduSessionId) => {
+  return {
+    type: OPENVIDU_SESSION_ID,
+    payload: openviduSessionId,
+  };
+};
+
+const setRecordSessionId = (sessionId) => {
+  return {
+    type: RECORD_SESSION_ID,
+    payload: sessionId,
+  };
+};
+
 export {
   setRoomSession,
   clearRoomSession,
@@ -87,4 +110,7 @@ export {
   isStartPresantation,
   setPresentationTime,
   setHost,
+  setIsRecording,
+  setOpenviduSessionId,
+  setRecordSessionId,
 };
