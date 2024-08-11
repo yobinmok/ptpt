@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public interface StudyRoomRepository extends JpaRepository<StudyRoom, Long> {
 
-    Page<StudyRoom> findByStudyRoomTitle(String studyRoomTitle, Pageable pageable);
+    Page<StudyRoom> findByStudyRoomTitleContaining(String studyRoomTitle, Pageable pageable);
     StudyRoom findByStudyRoomId(Long studyRoomId);
     Page<StudyRoom> findByMemberId(Long memberId, Pageable pageable);
     StudyRoom findByStudyRoomIdAndMemberId(Long studyRoomId, Long memberId);

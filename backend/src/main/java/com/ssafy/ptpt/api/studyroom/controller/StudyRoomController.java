@@ -44,7 +44,6 @@ public class StudyRoomController {
     }
 
     //스터디룸 검색
-    //TODO : 사용자가 선택한 항목의 키워드를 입력받아 검색할수 있도록 수정예정
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
