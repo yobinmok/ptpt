@@ -20,25 +20,27 @@ const FeedbackHeader = styled.div`
   padding: 10px 0;
   font-weight: bold;
 `;
+
+const FeedbackLabel = styled.span`
+  flex: 1; /* 텍스트를 균등하게 분배 */
+`;
+
 const FeedbackSection = ({ feedbackData }) => {
   return (
     <div>
       <h2>피드백 모아보기</h2>
       <Divider />
       <FeedbackHeader>
-        <span>스터디룸 이름</span>
-        <span>날짜</span>
-        <span>주제</span>
+        <FeedbackLabel>스터디룸 이름</FeedbackLabel>
+        <FeedbackLabel>주제</FeedbackLabel>
       </FeedbackHeader>
       <FeedbackListContainer>
         {feedbackData.map((feedback) => (
-          // FeedbackItem 컴포넌트로 분리
           <FeedbackListItem
-            key={feedback.roomId}
-            roomName={feedback.roomName}
-            date={feedback.date}
+            key={feedback.studyRoomId}
+            roomName={feedback.studyRoomTitle}
             subject={feedback.subject}
-            roomId={feedback.roomId}
+            roomId={feedback.studyRoomId}
           />
         ))}
       </FeedbackListContainer>

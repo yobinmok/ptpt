@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toggleSidebar, selectTab, clearTab } from '../../store/actions/room';
 import EvaluteTab from '../../components/organisms/multi/EvaluateTab';
 import ParticipantsTab from '../../components/organisms/multi/ParticipantsTab';
+import ToolbarComponent from '../room/openVidu/toolbar/ToolbarComponent';
 
 const MultiPage = () => {
   const tabItem = [
@@ -21,7 +22,6 @@ const MultiPage = () => {
   const isSidebarOpen = useSelector((state) => state.room.isSidebarOpen);
   const selectedTab = useSelector((state) => state.room.selectedTab);
   console.log('selec : ' + selectedTab + ' isside : ' + isSidebarOpen);
-
   // 탭 클릭 시 호출되는 핸들러
   const handleTabClick = (index) => {
     if (selectedTab === index) {

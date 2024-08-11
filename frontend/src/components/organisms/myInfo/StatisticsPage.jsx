@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStatistics } from '../../../store/actions/statisticsActions';
+import { fetchFeedback } from '../../../store/actions/feedbackActions';
 import RadarChart from './RadarChart';
 import ExplanationSection from './ExplanationSection';
 import FeedbackSection from './FeedbackSection';
@@ -24,50 +25,36 @@ const StatisticsPage = () => {
   const { loading, statistics, error } = useSelector(
     (state) => state.statistics
   );
-  const nickname = useSelector((state) => state.auth.user.nickname);
+  const {
+    feedback,
+    loading: feedbackLoading,
+    error: feedbackError,
+  } = useSelector((state) => state.feedback);
+  const oauthId = useSelector((state) => state.auth.user.oauthId);
 
   useEffect(() => {
-    if (nickname) {
-      dispatch(fetchStatistics(nickname));
+    if (oauthId) {
+      dispatch(fetchStatistics(oauthId));
+      dispatch(fetchFeedback(oauthId)); // 모든 피드백 가져오기
     }
-  }, [dispatch, nickname]);
+  }, [dispatch, oauthId]);
 
   useEffect(() => {
     console.log('Loading state:', loading);
     console.log('Statistics data:', statistics);
     console.log('Error state:', error);
-  }, [loading, statistics, error]);
+    console.log('Feedback data:', feedback); // 피드백 데이터를 콘솔에 출력
+  }, [loading, statistics, error, feedback]);
 
-  // 임시 피드백 데이터 (나중에 실제 데이터로 대체해야 함)
-  const feedbackData = [
-    {
-      roomName: '스터디룸 이름1',
-      date: '2024-07-21',
-      subject: '프로젝트',
-      roomId: 1,
-    },
-    {
-      roomName: '보안 스터디',
-      date: '2024-06-12',
-      subject: '보안',
-      roomId: 2,
-    },
-  ];
-
-  // 설명 데이터
-  const explanations = {
-    delivery:
-      '발표력이 낮으면 발표력이 낮아지고, 신뢰성이 떨어질 수 있어요. 이로 인해 청중을 설득하기 어려워집니다.',
-    expression:
-      '표현력이 낮으면 청중의 이해도가 낮아지고, 발표의 신뢰성이 떨어질 수 있어요. 이로 인해 청중을 설득하기 어려워집니다.',
-    logic:
-      '논리성이 낮으면 발표의 이해도가 낮아지고, 발표의 신뢰성이 떨어질 수 있어요. 이로 인해 청중을 설득하기 어려워집니다.',
-    preparation:
-      '준비성이 낮으면 발표의 신뢰성이 떨어질 수 있어요. 이로 인해 청중을 설득하기 어려워집니다.',
-    suitability:
-      '적합성이 낮으면 발표의 신뢰성이 떨어질 수 있어요. 이로 인해 청중을 설득하기 어려워집니다.',
-  };
-
+  // studyRoomId를 기준으로 중복 제거
+  const uniqueFeedback = feedback.reduce((acc, current) => {
+    const x = acc.find((item) => item.studyRoomId === current.studyRoomId);
+    if (!x) {
+      return acc.concat([current]);
+    } else {
+      return acc;
+    }
+  }, []);
   return (
     <div>
       <h1>통계 페이지</h1>
@@ -75,7 +62,6 @@ const StatisticsPage = () => {
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        {/* 평가 점수 섹션 */}
         <div>
           <h2>평가 점수</h2>
           <ChartContainer>
@@ -84,12 +70,14 @@ const StatisticsPage = () => {
                 <RadarChart data={statistics} />
               </div>
             )}
-            <ExplanationSection explanations={explanations} />
+            <ExplanationSection />
           </ChartContainer>
         </div>
 
         {/* 피드백 모아보기 섹션 */}
-        <FeedbackSection feedbackData={feedbackData} />
+        {feedbackLoading && <p>Loading feedback...</p>}
+        {feedbackError && <p>Error: {feedbackError}</p>}
+        <FeedbackSection feedbackData={uniqueFeedback} />
       </div>
     </div>
   );

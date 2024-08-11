@@ -1,19 +1,24 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, Box, Divider } from '@mui/material';
 import CustomSelect from '../../molecules/CustomSelect';
 import CustomSlider from '../../molecules/CustomSlider';
 import { useSelector, useDispatch } from 'react-redux';
 import { base64ToBlob } from '../../../hooks/voice';
 import { textToSpeechApi, uploadAudioApi } from '../../../apis/voice';
-import {
-  registerGuideline,
-  updateVoiceSetting,
-} from '../../../store/actions/soloActions';
+import { registerGuideline } from '../../../store/actions/soloActions';
 
 const VoiceTab = () => {
   const dispatch = useDispatch();
+  const [selectedVoiceModel, setSelectedVoiceModel] = useState(0);
+  const [additionalVoice, setAdditionalVoice] = useState(0);
   let soloPreset = useSelector((state) => state.solo);
   let scriptIdx = 0;
+  const additionalSetting = [
+    '여성(고음)',
+    '여성(저음)',
+    '남성(고음)',
+    '남성(저음)',
+  ];
   const param = {
     voice: {
       languageCode: 'ko-KR',
@@ -76,7 +81,8 @@ const VoiceTab = () => {
     // 내 음성모델을 고른 경우
     if (voiceSetting.current.model === 4) {
       // 성별, 높낮이에 따라 음성 선택해야 함.
-      param.voice.name = soloPreset.voiceModel[1];
+      console.log('내 음성모델 선택');
+      param.voice.name = soloPreset.voiceModel[additionalVoice];
     }
 
     textToSpeechApi(
@@ -87,6 +93,7 @@ const VoiceTab = () => {
           if (voiceSetting.current.model === 4) {
             uploadAudio(data.audioContent)
               .then((base64) => {
+                console.log(base64);
                 dispatch(
                   registerGuideline(scriptIdx, base64, voiceSetting.current)
                 );
@@ -109,9 +116,11 @@ const VoiceTab = () => {
           if (voiceSetting.current.model === 4) {
             uploadAudio(data.audioContent)
               .then((base64) => {
-                let audioBlob = base64ToBlob(base64, 'wav');
+                console.log(base64);
+                // let audioBlob = base64ToBlob(base64, 'wav');
                 var audioFile = new Audio();
-                audioFile.src = window.URL.createObjectURL(audioBlob);
+                audioFile.src = base64;
+                // audioFile.src = window.URL.createObjectURL(audioBlob);
                 audioFile.play();
               })
               .catch((error) => {
@@ -141,8 +150,22 @@ const VoiceTab = () => {
         }))}
         onChange={(value) => {
           voiceSetting.current.model = value;
+          setSelectedVoiceModel(value); // 음성모델 선택 시 상태 업데이트
         }}
       />
+      {selectedVoiceModel === 4 && (
+        <CustomSelect
+          label='추가 음성 설정'
+          options={additionalSetting.map((item, index) => ({
+            value: index,
+            label: item,
+          }))}
+          onChange={(value) => {
+            setAdditionalVoice(value);
+          }}
+          style={{ marginTop: '10px' }}
+        />
+      )}
       <CustomSelect
         label='스크립트 선택'
         options={soloPreset.script.map((item, index) => ({

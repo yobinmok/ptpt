@@ -17,28 +17,12 @@ const FeedbackItemContainer = styled.div`
   }
 `;
 
-const FeedbackItemText = styled.div`
-  display: flex;
-  flex-direction: column;
+const FeedbackItemText = styled.span`
+  flex: 1;
+  text-align: left; /* 왼쪽 정렬 */
 `;
 
-const FeedbackItemTitle = styled.h3`
-  margin: 0;
-  font-size: 16px;
-`;
-
-const FeedbackItemDate = styled.p`
-  margin: 0;
-  color: #888;
-`;
-
-const FeedbackItemSubject = styled.p`
-  margin: 0;
-  color: #555;
-`;
-
-// FeedbackListItem 컴포넌트 정의
-const FeedbackListItem = ({ roomName, date, subject, roomId }) => {
+const FeedbackListItem = ({ roomName, subject, roomId }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -47,15 +31,8 @@ const FeedbackListItem = ({ roomName, date, subject, roomId }) => {
 
   return (
     <FeedbackItemContainer onClick={handleClick}>
-      <FeedbackItemText>
-        <FeedbackItemTitle>{roomName}</FeedbackItemTitle>
-      </FeedbackItemText>
-      <FeedbackItemText>
-        <FeedbackItemDate>{date}</FeedbackItemDate>
-      </FeedbackItemText>
-      <FeedbackItemText>
-        <FeedbackItemSubject>{subject}</FeedbackItemSubject>
-      </FeedbackItemText>
+      <FeedbackItemText>{roomName}</FeedbackItemText>
+      <FeedbackItemText>{subject}</FeedbackItemText>
     </FeedbackItemContainer>
   );
 };
