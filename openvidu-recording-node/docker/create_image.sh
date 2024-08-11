@@ -5,4 +5,4 @@ if [ $# -eq 0 ]; then
 fi
 
 pushd ../
-docker build --pull --no-cache --rm=true -f ./Dockerfile -t "$1" .
+docker build --pull --no-cache --rm=true -f openvidu-recording-node/docker/Dockerfile -t "$1" .
