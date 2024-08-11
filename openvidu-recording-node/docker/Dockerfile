@@ -8,6 +8,7 @@ RUN npm --prefix /opt/openvidu-recording-node/openvidu-recording-node install
 
 WORKDIR /opt/openvidu-recording-node/openvidu-recording-node
 
+RUN ls
 COPY docker/entrypoint.sh .
 
 ENTRYPOINT [ "./entrypoint.sh" ]
