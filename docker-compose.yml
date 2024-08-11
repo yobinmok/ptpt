@@ -40,7 +40,7 @@ services:
       - "3306"
 
   mongo:
-    image: mongo:7.0.12
+    image: mongodb/mongodb-community-server:7.0.12
     container_name: mongo
     restart: unless-stopped
     environment:
