@@ -1,13 +1,14 @@
 import { RecordOV } from '../util/http-commons';
 const axios = RecordOV();
 const { VITE_NODE_API_URL } = import.meta.env;
+const { VITE_API_URL } = import.meta.env;
 
 // start recording
 export const startRecording = async (sessionName) => {
   try {
     const response = await axios.post(
       // var SERVE R_PORT = process.env.SERVER_PORT || 5002;
-      `${VITE_NODE_API_URL}/api/api/recording/start`,
+      `${VITE_API_URL}/api/recording/start`,
       {
         session: sessionName, // sessionId
         outputMode: 'COMPOSED',
@@ -25,7 +26,7 @@ export const stopRecording = async (recordSessionId) => {
   try {
     const response = await axios.post(
       // zip 형식으로 저장
-      `${VITE_NODE_API_URL}/recording-node/api/recording/stop`,
+      `${VITE_API_URL}/api/recording/stop`,
       {
         // start response의 id 값(not sessionId) -> id가 영상마다 고유한 id
         recording: recordSessionId,
@@ -40,7 +41,7 @@ export const stopRecording = async (recordSessionId) => {
 export const getRecording = (recordSessionId) => {
   try {
     const response = axios.get(
-      `${VITE_NODE_API_URL}/recording-node/api/recording/get/${recordSessionId}`
+      `${VITE_API_URL}/api/recording/get/${recordSessionId}`
     );
     return response;
   } catch (error) {
