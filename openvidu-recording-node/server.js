@@ -6,7 +6,7 @@ var OpenViduRole = require("openvidu-node-client").OpenViduRole;
 const cors = require("cors");
 
 // For demo purposes we ignore self-signed certificate
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "1";
 
 // Node imports
 var express = require("express");
