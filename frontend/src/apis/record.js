@@ -16,7 +16,7 @@ export const startRecording = async (sessionName) => {
         hasVideo: true,
       }
     );
-    console.log('start record : ' + response)
+    console.log('start record : ' + response.data)
     return response;
   } catch (error) {
     console.log('start recording error : ' + error);
@@ -33,7 +33,7 @@ export const stopRecording = async (recordSessionId) => {
         recording: recordSessionId,
       }
     );
-    console.log('stop record : ' + response)
+    console.log('stop record : ' + response.data)
     return response;
   } catch (error) {
     console.log('stop recording error : ' + error);
@@ -45,7 +45,7 @@ export const getRecording = (recordSessionId) => {
     const response = axios.get(
       `${VITE_API_URL}/api/recording/get/${recordSessionId}`
     );
-    console.log('get record : ' + response)
+    console.log('get record : ' + response.data)
     return response;
   } catch (error) {
     console.log('get recording error : ' + error);
