@@ -83,8 +83,9 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-//                        .requestMatchers("/**").permitAll()
-                        .requestMatchers("/member/{nickname}", "/member/modify").permitAll()
+//                        .requestMatchers("/", "/member/{nickname}", "/member/modify").permitAll()
+//                        .requestMatchers("/**").hasRole("USER")
+                        .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated());
 
         //세션 설정 : STATELESS
@@ -92,14 +93,6 @@ public class SecurityConfig {
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        // 인증되지 않은 요청에 대한 처리
-        http
-                .exceptionHandling(exceptionHandling -> exceptionHandling
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            // 홈 페이지로 리디렉션
-                            response.sendRedirect("/");
-                        })
-                );
 
         return http.build();
     }

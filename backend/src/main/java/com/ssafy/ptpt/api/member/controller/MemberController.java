@@ -113,7 +113,7 @@ public class MemberController {
                     @ApiResponse(responseCode = "401",
                             description = "수정 실패")
             })
-    public ResponseEntity<String> modifyMemberInfo(@RequestPart(name = "memberUpdateRequest") MemberUpdateRequest memberUpdateRequest,
+    public ResponseEntity<MemberUpdateRequest> modifyMemberInfo(@RequestPart(name = "memberUpdateRequest") MemberUpdateRequest memberUpdateRequest,
                                                  @RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
 
         String oauthId = "";
@@ -149,7 +149,7 @@ public class MemberController {
         }
 
         int complete = memberService.modifyMemberInfo(memberUpdateRequest);
-        return complete == 1 ? ResponseEntity.ok().body(oauthId) : ResponseEntity.badRequest().build();
+        return complete == 1 ? ResponseEntity.ok().body(memberUpdateRequest) : ResponseEntity.badRequest().build();
     }
 
 
