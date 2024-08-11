@@ -35,6 +35,9 @@ public class StudyRoomListResponse {
     // 익명여부
     private int anonymity;
 
+    // 호스트 ID
+    private Long memberId;
+
     // StudyRoom 객체를 StudyRoomListResponse 로 변환하는 정적 메서드
     public static StudyRoomListResponse from(StudyRoom studyRoom) {
         StudyRoomListResponse studyRoomListResponse = new StudyRoomListResponse();
@@ -47,6 +50,7 @@ public class StudyRoomListResponse {
         studyRoomListResponse.subject = studyRoom.getSubject();
         studyRoomListResponse.description = studyRoom.getDescription();
         studyRoomListResponse.anonymity = studyRoom.getAnonymity();
+        studyRoomListResponse.memberId = studyRoom.getMemberId();
 
         return studyRoomListResponse;
     }
