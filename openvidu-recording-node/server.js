@@ -20,13 +20,13 @@ var SERVER_PORT = process.env.SERVER_PORT || 3000;
 // Environment variable: URL where our OpenVidu server is listening
 var OPENVIDU_URL =
   // process.env.OPENVIDU_URL || process.argv[2] || "http://localhost:4443";
-  "https://i11b207.p.ssafy.io";
+  "https://i11b207.p.ssafy.io/openvidu";
 // Environment variable: secret shared with our OpenVidu server
 var OPENVIDU_SECRET =
   process.env.OPENVIDU_SECRET || process.argv[3] || "MY_SECRET";
 
 var useSSL = process.env.USE_SSL === "false" ? false : true;
-useSSL = true;
+// useSSL = true;
 
 // Entrypoint to OpenVidu Node Client SDK
 var OV = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
