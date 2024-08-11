@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getProfile } from '../../../apis/auth';
 import { trainModelApi } from '../../../apis/voice';
-import { useDispatch } from 'react-redux';
 import { setLoading } from '../../../store/actions/voiceModelActions';
+import {
+  Box,
+  Typography,
+  Button,
+  CircularProgress,
+  Input,
+} from '@mui/material';
 
 const VoiceModelPage = () => {
   const dispatch = useDispatch();
@@ -11,7 +17,6 @@ const VoiceModelPage = () => {
   const loading = useSelector((state) => state.voiceModel.loading);
   const [file, setFile] = useState(null);
   const [voiceModelCreated, setVoiceModelCreated] = useState(false);
-  // const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,21 +57,39 @@ const VoiceModelPage = () => {
   };
 
   return (
-    <div>
-      <h1>음성 모델 페이지</h1>
+    <Box sx={{ padding: 2 }}>
+      <h1>음성 모델</h1>
       {voiceModelCreated ? (
-        <div>음성 모델이 등록되어 있습니다.</div>
+        <Typography variant='body1'>음성 모델이 등록되어 있습니다.</Typography>
       ) : (
-        <p>No voice model available.</p>
+        <Typography variant='body1'>
+          자신의 목소리가 담긴 음성 파일을 업로드 해주세요. <br />
+          음성 파일의 길이는 <b>약 10분</b>을 권장하며, <br />
+          음성 모델 학습에는 <b>10분 이상</b> 소요됩니다.
+        </Typography>
       )}
-      <div>
-        <input type='file' onChange={handleFileChange} />
-        <button onClick={handleFileUpload} disabled={loading}>
-          {loading ? 'Uploading...' : 'Upload Voice Model'}
-        </button>
-        {loading && <div>Loading...</div>} {/* 로딩 표시 */}
-      </div>
-    </div>
+      <Box sx={{ marginTop: 2 }}>
+        {/* 파일 입력 필드 */}
+        <Box sx={{ marginBottom: 2 }}>
+          <Input type='file' onChange={handleFileChange} />
+        </Box>
+        {/* 버튼 */}
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={handleFileUpload}
+          disabled={loading}
+        >
+          {loading ? '생성중...' : '음성 모델 생성'}
+        </Button>
+        {loading && (
+          <Box sx={{ display: 'flex', alignItems: 'center', marginTop: 2 }}>
+            <CircularProgress size={24} sx={{ marginRight: 2 }} />
+            <Typography variant='body2'>Loading...</Typography>
+          </Box>
+        )}
+      </Box>
+    </Box>
   );
 };
 

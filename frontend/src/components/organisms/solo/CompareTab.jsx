@@ -21,9 +21,13 @@ const CompareTab = () => {
           value: item.guideline,
           label: item.title,
         }))}
-        onChange={(base64) => {
-          let audioBlob = base64ToBlob(base64, 'wav');
-          setGuide(window.URL.createObjectURL(audioBlob));
+        onChange={(src) => {
+          if (!src.startsWith('http')) {
+            let audioBlob = base64ToBlob(src, 'wav');
+            setGuide(window.URL.createObjectURL(audioBlob));
+          } else {
+            setGuide(src);
+          }
         }}
       />
       <CustomSelect
