@@ -120,9 +120,9 @@ public class VoiceModelController {
         File originalFile = new File(folder, saveFileName);
         String voicePath = saveFolder + File.separator + saveFileName;
         audio.transferTo(originalFile);
-        System.out.println(saveFolder);
+        System.out.println(voicePath);
 
-        return voiceModelService.processTraining("vm" + oauthId, saveFolder)
+        return voiceModelService.processTraining("vm" + oauthId, voicePath)
                 .map(response -> {
                     System.out.println("음성모델 생성!");
                     System.out.println(response);
