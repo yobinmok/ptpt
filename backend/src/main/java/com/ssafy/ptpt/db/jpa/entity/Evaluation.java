@@ -18,7 +18,7 @@ public class Evaluation {
     private Long evaluationId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "studyroom_id")
+    @JoinColumn(name = "study_room_id")
     private StudyRoom studyRoom;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -40,6 +40,7 @@ public class EvaluationService {
         // 스터디 룸이 종료가 된다면 참가자 리스트를 관리하기 때문에 참여한 멤버는 1명만 조회될 예정
         StudyRoom studyRoom = entryListRepository.findStudyRoomByMemberId(slave.getMemberId());
 
+        System.out.println(studyRoom.toString());
         // 발표한 사람의 평가를 입력하는 로직
         Evaluation evaluation = new Evaluation(
                 studyRoom,

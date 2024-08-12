@@ -5,19 +5,17 @@ import { Box } from '@mui/material';
 import IconButton from '../atoms/IconButton';
 import { toggleSidebar, selectTab, clearTab } from '../../store/actions/room';
 import { adminParticipants } from '../../apis/room';
-import moment from 'moment';
 import useInterval from '../../util/useInterval';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useRef } from 'react';
-import { setPresentationTime } from '../../store/actions/room';
 
 const MultiSidebar = ({ tabItem }) => {
   const dispatch = useDispatch();
   const selectedTab = useSelector((state) => state.room.selectedTab);
   const isSidebarOpen = useSelector((state) => state.room.isSidebarOpen);
-  // 현재 시간을 저장하기 위함 -> moment.js
-  const [realTime, setRealTime] = useState(moment());
+  // 현재 시간을 저장하기 위함 -> Date library 이용
+  const [realTime, setRealTime] = useState(new Date());
   const studyRoomId = useSelector((state) => state.room.roomId);
   const presentationTime = useSelector((state) => state.room.presentationTime);
   const participants = useSelector((state) => state.participant.participants);
@@ -25,42 +23,30 @@ const MultiSidebar = ({ tabItem }) => {
   const nickname = useSelector((state) => state.auth.user.nickname);
   const hasExecuteRef = useRef(false);
 
-  // dispatch(setPresentationTime('2024-08-07T15:37'));
-  // hasExecuteRef.current = false;
-  // const response = adminParticipants(studyRoomId, participants);
-
   // 시간 호출
   useEffect(() => {
-    setRealTime(moment());
+    setRealTime(new Date());
     hasExecuteRef.current = false;
   }, [presentationTime]);
   useInterval(() => {
-    setRealTime(moment());
-    console.log('222222222222222222');
-    console.log(moment(realTime).isAfter(moment(presentationTime)));
-    console.log(moment());
-    console.log(moment(presentationTime).add(1, 'minute'));
+    setRealTime(new Date());
     if (
       !hasExecuteRef.current &&
-      moment(realTime).isAfter(moment(presentationTime).add(1, 'minute')) &&
+      realTime.getTime() - new Date(presentationTime).getTime() >= 0 &&
       presentationTime
     ) {
       // 시간이 지나면 api호출
-      console.log('1111111111111111111');
-      console.log(hostNickname);
-      console.log(nickname);
       if (hostNickname === nickname) {
         const response = adminParticipants(studyRoomId, participants);
       }
       hasExecuteRef.current = true;
     }
-  }, 10000); // 1초마다 확인
+  }, 5000); // 1초마다 확인
 
   // 탭 클릭 시 호출되는 핸들러
   const handleTabClick = (index) => {
     if (selectedTab === index) {
       dispatch(toggleSidebar());
-      // dispatch(clearTab());
     } else {
       dispatch(selectTab(index));
       if (!isSidebarOpen) {
