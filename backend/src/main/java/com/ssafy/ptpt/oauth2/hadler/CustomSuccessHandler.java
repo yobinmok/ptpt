@@ -66,9 +66,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         Member member = memberRepository.findByOauthId(oauthId);
         if(member.getNickname() == null){
             System.out.println(" 닉네임 설정 페이지로 이동 ");
-            response.sendRedirect(REACT_SERVER + "userinfo?" + oauthId);
+            response.sendRedirect(REACT_SERVER + "userinfo?oauthId=" + oauthId);
         }else{
-            response.sendRedirect(REACT_SERVER + "?" + oauthId);
+            response.sendRedirect(REACT_SERVER + "?oauthId=" + oauthId);
         }
 
     }
