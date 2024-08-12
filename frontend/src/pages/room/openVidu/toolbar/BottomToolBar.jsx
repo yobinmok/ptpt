@@ -20,15 +20,6 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import IconButton from '@mui/material/IconButton';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
-import { clearParticipants } from '../../../../store/actions/participant';
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Button,
-  Typography,
-} from '@mui/material';
 
 class ToolbarComponent2 extends Component {
   constructor(props) {
@@ -251,11 +242,5 @@ const mapStateToProps = (state) => ({
   recordSessionId: state.room.recordSessionId,
 });
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    clearParticipants: () => dispatch(clearParticipants()),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ToolbarComponent2);
+export default connect(mapStateToProps)(ToolbarComponent2);
 // export default ToolbarComponent2;

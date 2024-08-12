@@ -1,11 +1,8 @@
-// actions/participants.js
-
 import {
   CHECK_PARTICIPANTS,
   SET_PARTICIPANTS,
   USE_PARTICIPANTS,
   EVAL_PARTICIPANTS,
-  CLEAR_PARTICIPANTS,
 } from '../types/participant';
 
 const setParticipants = (data) => {
@@ -28,15 +25,4 @@ const isParticipantsEval = (nickname) => {
   };
 };
 
-const clearParticipants = () => {
-  return {
-    type: CLEAR_PARTICIPANTS,
-  };
-};
-
-export {
-  setParticipants,
-  useParticipants,
-  isParticipantsEval,
-  clearParticipants,
-};
+export { setParticipants, useParticipants, isParticipantsEval };
