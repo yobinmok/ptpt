@@ -37,12 +37,14 @@ public class VoiceModelController {
     private String UPLOAD_PATH;
     private final VoiceModelService voiceModelService;
 
+    @Value("${audioFile.preTrain}")
+    private String PRETRAIN_UPLOAD_PATH;
+
     @Value("${external.api.base}")
     private String externalApiBase;
 
     @PostMapping("/refresh")
     public void inferRefresh()throws IOException {
-        System.out.println("??????????????????????/");
         WebClient webClient = WebClient.create(externalApiBase);
         ObjectMapper mapper = new ObjectMapper();
 
@@ -99,13 +101,12 @@ public class VoiceModelController {
     }
 
 
-    @Value("${audioFile.preTrain}")
-    private String PRETRAIN_UPLOAD_PATH;
+
     @PostMapping("/train")
     @Operation(summary = "음성모델 생성", description = "음성모델을 학습하여 생성합니다. 학습 전 데이터 저장 경로: src\\preTrain\\ [OauthId], 생성된 음성모델 저장 경로: RVC1006Nvidia\\assets\\weights\\vm[OauthId].pth")
-    public ResponseEntity<?> voiceModelTrain(@RequestPart(name="audio") MultipartFile audio, @RequestPart(name="oauthId") String oauthId) throws IOException {
+    public Mono<ResponseEntity<String>> voiceModelTrain(@RequestPart(name="audio") MultipartFile audio, @RequestPart(name="oauthId") String oauthId) throws IOException {
         if (audio.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File is empty");
+            return Mono.just(ResponseEntity.badRequest().body("파일이 비어있습니다."));
         }
 
         // 1. 원본 파일 (PRETRAIN DATA) 저장
@@ -114,35 +115,86 @@ public class VoiceModelController {
         if (!folder.exists()) {
             folder.mkdirs();
         }
-        String originalFileName = audio.getOriginalFilename();
+
         String saveFileName = "preTrainAudio.mp3";
         File originalFile = new File(folder, saveFileName);
+        String voicePath = saveFolder + File.separator + saveFileName;
         audio.transferTo(originalFile);
         System.out.println(saveFolder);
 
+        return voiceModelService.processTraining("vm" + oauthId, saveFolder)
+                .map(response -> {
+                    System.out.println("음성모델 생성!");
+                    System.out.println(response);
+                    return ResponseEntity.ok(response);
+                })
+                .onErrorResume(error -> {
+                    System.err.println("오류: " + error.getMessage());
+                    return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("오류가 발생했습니다."));
+                });
         // 폴더 경로와 파일 경로를 JSON 데이터에 포함시키는 로직
-        String folderPath = folder.getAbsolutePath();
-
-        // 2. JSON 데이터 생성 및 API 호출
-        String filePath = originalFile.getAbsolutePath();
-        try {
-            for (int i = 0; i < 4; i++) {
-                String jsonPayload = createJsonPayload(folderPath, oauthId);
-                ResponseEntity<String> response = callExternalApi(jsonPayload, externalApiTrain);
-                System.out.println(response);
-                if (response == null || response.getStatusCode() != HttpStatus.OK) {
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process the request at step " + (i + 1));
-                }
-
-                System.out.println("API call " + (i + 1) + " completed successfully.");
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception occurred: " + e.getMessage());
-        }
-
-        voiceModelService.updateVoiceModelCreated(oauthId);
-        return new ResponseEntity<>(HttpStatus.OK);
+//        String folderPath = folder.getAbsolutePath();
+//
+//        // 2. JSON 데이터 생성 및 API 호출
+//        String filePath = originalFile.getAbsolutePath();
+//        try {
+//            for (int i = 0; i < 4; i++) {
+//                String jsonPayload = createJsonPayload(folderPath, oauthId);
+//                ResponseEntity<String> response = callExternalApi(jsonPayload, externalApiTrain);
+//                System.out.println(response);
+//                if (response == null || response.getStatusCode() != HttpStatus.OK) {
+//                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process the request at step " + (i + 1));
+//                }
+//
+//                System.out.println("API call " + (i + 1) + " completed successfully.");
+//            }
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception occurred: " + e.getMessage());
+//        }
+//
+//        voiceModelService.updateVoiceModelCreated(oauthId);
+//        return new ResponseEntity<>(HttpStatus.OK);
     }
+//    public ResponseEntity<?> voiceModelTrain(@RequestPart(name="audio") MultipartFile audio, @RequestPart(name="oauthId") String oauthId) throws IOException {
+//        if (audio.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File is empty");
+//        }
+//
+//        // 1. 원본 파일 (PRETRAIN DATA) 저장
+//        String saveFolder = PRETRAIN_UPLOAD_PATH + File.separator + oauthId;
+//        File folder = new File(saveFolder);
+//        if (!folder.exists()) {
+//            folder.mkdirs();
+//        }
+//        String originalFileName = audio.getOriginalFilename();
+//        String saveFileName = "preTrainAudio.mp3";
+//        File originalFile = new File(folder, saveFileName);
+//        audio.transferTo(originalFile);
+//        System.out.println(saveFolder);
+//
+//        // 폴더 경로와 파일 경로를 JSON 데이터에 포함시키는 로직
+//        String folderPath = folder.getAbsolutePath();
+//
+//        // 2. JSON 데이터 생성 및 API 호출
+//        String filePath = originalFile.getAbsolutePath();
+//        try {
+//            for (int i = 0; i < 4; i++) {
+//                String jsonPayload = createJsonPayload(folderPath, oauthId);
+//                ResponseEntity<String> response = callExternalApi(jsonPayload, externalApiTrain);
+//                System.out.println(response);
+//                if (response == null || response.getStatusCode() != HttpStatus.OK) {
+//                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process the request at step " + (i + 1));
+//                }
+//
+//                System.out.println("API call " + (i + 1) + " completed successfully.");
+//            }
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception occurred: " + e.getMessage());
+//        }
+//
+//        voiceModelService.updateVoiceModelCreated(oauthId);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
     public String createJsonPayload(String folderPath, String oauthId) {
         ObjectMapper mapper = new ObjectMapper();
