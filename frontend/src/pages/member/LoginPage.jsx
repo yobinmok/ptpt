@@ -33,10 +33,11 @@ const LoginPage = () => {
   //     - "login": 기존 세션이 있더라도 사용자에게 카카오 계정 로그인 화면을 보여줍니다.
   //        이 옵션을 사용하면 사용자가 매번 로그인을 하도록 유도할 수 있습니다.
   //     -  (기본값: "none"): 기본적으로 사용자에게 로그인 화면을 표시하지 않고 인가 코드를 발급받습니다.
-  const kakaoLink = `http://localhost:8080/login/oauth2/code/kakao`;
+  const kakaoLink = 'http://localhost:8080/oauth2/authorization/kakao';
 
   // 구글 로그인 URL 생성
-  const googleLink = `http://localhost:8080/login/oauth2/code/google`;
+
+  const googleLink = 'http://localhost:8080/oauth2/authorization/google';
 
   // 카카오 로그인 핸들러 함수
   const kakaoLoginHandler = () => {

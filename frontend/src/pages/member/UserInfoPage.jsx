@@ -132,7 +132,6 @@ const UserInfoPage = () => {
       console.error('ddddd', error);
       throw error;
     }
-    dispatch(setAuth(token, memberUpdateRequest));
     // response가 없으므로 무조건 메인으로 이동
     navigate('/');
   };

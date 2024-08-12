@@ -13,7 +13,7 @@ function Axios() {
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
     },
-    credentials: 'include',
+    withCredentials: true, // 쿠키를 포함하여 요청
   });
 
   return instance;
@@ -25,7 +25,7 @@ function AxiosMulti() {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
-    credentials: 'include',
+    withCredentials: true, // 쿠키를 포함하여 요청
   });
 
   return instance;
