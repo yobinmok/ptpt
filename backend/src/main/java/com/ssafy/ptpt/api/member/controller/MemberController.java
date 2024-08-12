@@ -7,6 +7,8 @@ import com.ssafy.ptpt.api.member.response.MemberInfoResponse;
 import com.ssafy.ptpt.api.member.response.MemberProfileResponse;
 import com.ssafy.ptpt.api.member.response.MemberStatisticResponse;
 import com.ssafy.ptpt.api.member.service.MemberService;
+import com.ssafy.ptpt.db.jpa.entity.Member;
+import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
 import com.ssafy.ptpt.oauth2.dto.CustomOAuth2User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,6 +35,7 @@ import java.io.IOException;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     @Value("${imageFile.path}")
     private String IMAGE_UPLOAD_PATH;
@@ -126,8 +129,15 @@ public class MemberController {
             System.out.println("현재 사용자: " + currentUsername);
             oauthId = customOAuth2User.getOauthId();
             memberUpdateRequest.setOauthId(oauthId);
+
+            Member member = memberRepository.findByOauthId(oauthId);
+            member.setOauthId(oauthId);
+            member.setNickname(memberUpdateRequest.getNickname());
+            member.setMemberPicture(memberUpdateRequest.getMemberPicture());
+
         } else {
             System.out.println("인증 정보가 없습니다.");
+            return ResponseEntity.badRequest().build();
         }
 
 
@@ -149,8 +159,10 @@ public class MemberController {
             memberUpdateRequest.setMemberPicture(imageUrl);
         }
 
+
+
         int complete = memberService.modifyMemberInfo(memberUpdateRequest);
-        return complete == 1 ? ResponseEntity.ok().body(memberUpdateRequest) : ResponseEntity.badRequest().build();
+        return complete == 1 ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
 
