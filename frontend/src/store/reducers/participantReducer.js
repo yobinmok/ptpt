@@ -23,6 +23,13 @@ const participantReducer = (state = initialState, action) => {
         ...state,
         evaluateParticipants: [...state.evaluateParticipants, action.payload],
       };
+
+    case 'CLEAR_PARTICIPANTS':
+      return {
+        ...state,
+        participants: [],
+        evaluateParticipants: [],
+      };
     default:
       return state;
   }
