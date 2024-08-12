@@ -126,6 +126,7 @@ public class VoiceModelController {
                 .map(response -> {
                     System.out.println("음성모델 생성!");
                     System.out.println(response);
+                    voiceModelService.updateVoiceModelCreated(oauthId);
                     return ResponseEntity.ok(response);
                 })
                 .onErrorResume(error -> {
