@@ -14,11 +14,11 @@ import java.util.Optional;
 
 public interface StudyRoomRepository extends JpaRepository<StudyRoom, Long> {
 
-    Page<StudyRoom> findByStudyRoomTitle(String studyRoomTitle, Pageable pageable);
+    Page<StudyRoom> findByStudyRoomTitleContainingAndIsCompleted(String studyRoomTitle, int isCompleted, Pageable pageable);
     StudyRoom findByStudyRoomId(Long studyRoomId);
     Page<StudyRoom> findByMemberId(Long memberId, Pageable pageable);
     StudyRoom findByStudyRoomIdAndMemberId(Long studyRoomId, Long memberId);
-
+    Page<StudyRoom> findByIsCompleted(int isCompleted, Pageable pageable);
 
     @Modifying
     @Query("UPDATE StudyRoom s SET s.presentationHost = :memberId WHERE s.studyRoomId = :studyRoomId AND s.isCompleted = 0")
