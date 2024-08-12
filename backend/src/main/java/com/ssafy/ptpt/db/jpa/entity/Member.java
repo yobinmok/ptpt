@@ -61,6 +61,7 @@ public class Member {
         this.isWithdraw = isWithdraw;
         this.withdrawTime = withdrawTime;
         this.profile = new Profile(this);
+//        this.role = new Role(this);
     }
 
     public Member(String oauthId, String username, String name, String roleType) {

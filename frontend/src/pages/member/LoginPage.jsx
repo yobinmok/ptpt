@@ -30,12 +30,12 @@ const LoginPage = () => {
 
   // 카카오 로그인 핸들러 함수
   const kakaoLoginHandler = () => {
-    window.location.href = kakaoLink;
+    window.location.href = KAKAO_LINK;
   };
 
   // 구글 로그인 핸들러 함수
   const googleLoginHandler = () => {
-    window.location.href = googleLink;
+    window.location.href = GOOGLE_LINK;
   };
 
   return (

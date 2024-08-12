@@ -13,7 +13,6 @@ function Axios() {
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
     },
-    withCredentials: true, // 쿠키를 포함하여 요청
   });
 
   return instance;
@@ -25,7 +24,6 @@ function AxiosMulti() {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
-    withCredentials: true, // 쿠키를 포함하여 요청
   });
 
   return instance;
@@ -50,7 +48,7 @@ function Google_STT() {
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
     },
-    withCredentials: true, // 쿠키를 포함하여 요청
+    credentials: 'include',
   });
 
   return instance;
@@ -62,7 +60,7 @@ function RecordOV() {
     headers: {
       'Content-Type': 'application/json',
     },
-    withCredentials: true, // 쿠키를 포함하여 요청
+    credentials: 'include',
   });
 
   return instance;

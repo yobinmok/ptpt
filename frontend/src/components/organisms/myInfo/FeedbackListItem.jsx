@@ -24,7 +24,7 @@ const FeedbackItemText = styled.span`
 
 const FeedbackListItem = ({ roomName, subject, roomId }) => {
   const navigate = useNavigate();
-
+  
   const handleClick = () => {
     navigate(`/myinfo/statistics/evaluation/feedBack/${roomId}`);
   };

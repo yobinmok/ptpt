@@ -55,20 +55,50 @@ function App() {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/auth' element={<AuthPage />} />
         <Route path='/auth/kakao' element={<KakaoAuthPage />} />
-        <Route path='/userinfo' element={<UserInfoPage />} />
-        <Route path='/practice' element={<PracticePage />} />
-        <Route path='/solo' element={<SoloPage />} />
-        <Route path='/multi/:roomId' element={<MultiPage />} />
-        <Route path='/myinfo/*' element={<MyInfoPage />} />
-        <Route path='/createroom' element={<CreateRoom />} />
-        <Route path='/room/detail' element={<VideoRoomComponent />} />
-        <Route path='room/list' element={<RoomListPage />} />
-        <Route path='/room/:roomId' element={<RoomDetail />} />
-        <Route path='/test' element={<VoiceTestPage />} />
+        <Route
+          path='/userinfo'
+          element={<PrivateRoute compoenent={<UserInfoPage />} />}
+        />
+        <Route
+          path='/practice'
+          element={<PrivateRoute compoenent={<PracticePage />} />}
+        />
+        <Route
+          path='/solo'
+          element={<PrivateRoute compoenent={<SoloPage />} />}
+        />
+        <Route
+          path='/multi/:roomId'
+          element={<PrivateRoute compoenent={<MultiPage />} />}
+        />
+        <Route
+          path='/myinfo/*'
+          element={<PrivateRoute compoenent={<MyInfoPage />} />}
+        />
+        <Route
+          path='/createroom'
+          element={<PrivateRoute compoenent={<CreateRoom />} />}
+        />
+        <Route
+          path='/room/detail'
+          element={<PrivateRoute compoenent={<VideoRoomComponent />} />}
+        />
+        <Route
+          path='room/list'
+          element={<PrivateRoute compoenent={<RoomListPage />} />}
+        />
+        <Route
+          path='/room/:roomId'
+          element={<PrivateRoute compoenent={<RoomDetail />} />}
+        />
+        <Route
+          path='/test'
+          element={<PrivateRoute compoenent={<VoiceTestPage />} />}
+        />
         <Route
           path='/myinfo/statistics/evaluation/feedBack/:roomId'
-          element={<FeedbackDetail />}
-        />{' '}
+          element={<PrivateRoute compoenent={<FeedbackDetail />} />}
+        />
         {/* 피드백 상세 페이지 라우트 */}
       </Routes>
     </div>

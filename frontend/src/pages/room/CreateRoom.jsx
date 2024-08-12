@@ -5,7 +5,11 @@ import { setRoomSession } from '../../store/actions/room';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { createStudyRoom } from '../../apis/room';
-import { setHost } from '../../store/actions/room';
+import {
+  setPresentationTime,
+  setHost,
+  setAnonymous,
+} from '../../store/actions/room';
 import { saveMultiPreset } from '../../store/actions/multiAction';
 import {
   Box,
@@ -41,19 +45,15 @@ const CreateRoom = ({ onSave, onClose, item }) => {
   maxDateTime.setHours(20);
 
   // 방에 입장하기 위한 세션 정보
-  console.log(
-    'create isside : ' + useSelector((state) => state.room.isSidebarOpen)
-  );
   const onHandleEnterRoom = (roomId) => {
     const sessionData = {
       sessionName: `Session${roomId}`,
       roomId,
     };
-    // console.log('create room ' + this.sessionData);
     dispatch(setRoomSession(sessionData));
     dispatch(setHost(nickname));
-    // navigate('/room/detail');
-    // navigate('/multi');
+    dispatch(setPresentationTime(roomInfo.roomtime));
+    dispatch(setAnonymous(roomInfo.roomhidden));
     navigate(`/multi/${roomId}`);
   };
 
@@ -144,6 +144,13 @@ const CreateRoom = ({ onSave, onClose, item }) => {
       setShowPassword(false);
     }
   }, [roomInfo.roomopen]);
+
+  const onBlur = () => {
+    setRoomInfo((prev) => ({
+      ...prev,
+      presentationTime: roomInfo.roomtime,
+    }));
+  };
   return (
     <>
       <CreateRoomBlock>
@@ -186,6 +193,7 @@ const CreateRoom = ({ onSave, onClose, item }) => {
             InputLabelProps={{ shrink: true }}
             onChange={onRoomInfoInput}
             value={roomInfo.roomtime}
+            onBlur={onBlur}
           />
 
           <FormControl component='fieldset' margin='normal'>

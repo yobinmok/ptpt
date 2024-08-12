@@ -1,5 +1,3 @@
-// actions/participants.js
-
 import {
   CHECK_PARTICIPANTS,
   SET_PARTICIPANTS,
