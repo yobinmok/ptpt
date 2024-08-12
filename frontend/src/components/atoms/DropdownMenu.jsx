@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
-import ListIcon from '@mui/icons-material/List';
-const DropdownMenu = ({ options, onSelect }) => {
+
+const DropdownMenu = ({ Icon, options, onSelect, info }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
 
@@ -19,13 +20,13 @@ const DropdownMenu = ({ options, onSelect }) => {
   };
   return (
     <div>
-      <Tooltip title='가이드라인 선택'>
+      <Tooltip title={info}>
         <IconButton
           aria-controls={open ? 'simple-menu' : undefined}
           aria-haspopup='true'
           onClick={handleClick}
         >
-          <ListIcon />
+          <Icon />
         </IconButton>
       </Tooltip>
       <Menu

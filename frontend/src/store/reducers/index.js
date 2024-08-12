@@ -27,6 +27,7 @@ const persistConfig = {
     'statistics',
     'participant',
     'feedback',
+    'multi',
   ], // 저장할 상태만 선택
 };
 

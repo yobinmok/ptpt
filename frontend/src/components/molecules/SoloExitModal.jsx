@@ -26,7 +26,6 @@ export const ExitModal = ({ open, handleClose }) => {
     title: title || '제목', // 사용자가 입력한 제목
     createdTime: createdTime,
     isCompleted: false,
-    presentationSheet: '',
     script: soloPreset.script.map(({ guideline, ...rest }) => rest),
   };
 

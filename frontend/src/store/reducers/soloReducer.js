@@ -86,6 +86,11 @@ const soloReducer = (state = initialState, action) => {
         ...state,
         voiceModel: [...state.voiceModel, 'vm' + action.payload + '.pth'],
       };
+    case 'REGISTER_PRESENTATION_SHEET':
+      return {
+        ...state,
+        presentationSheet: action.payload,
+      };
     default:
       return state;
   }

@@ -5,10 +5,14 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import LockIcon from '@mui/icons-material/Lock';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { setRoomSession } from '../../store/actions/room';
+import {
+  setRoomSession,
+  setAnonymous,
+  setHost,
+  setPresentationTime,
+} from '../../store/actions/room';
+import { saveMultiPreset } from '../../store/actions/multiAction';
 import { checkStudyRoomPW } from '../../apis/room';
-import { setAnonymous } from '../../store/actions/room';
-import { setPresentationTime } from '../../store/actions/room';
 const { VITE_API_URL } = import.meta.env;
 
 const Card = styled.div`
@@ -57,6 +61,7 @@ const RoomListItem = ({
   presentationTime,
   anonymity,
   studyRoomPw,
+  hostNickname,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -73,6 +78,8 @@ const RoomListItem = ({
 
   const handleJoin = async () => {
     if (studyRoomPw === '') {
+      dispatch(setHost(hostNickname));
+      savePreset();
       setRoomInfo(studyRoomId);
       return;
     } else {
@@ -80,12 +87,27 @@ const RoomListItem = ({
       const response = await checkStudyRoomPW(studyRoomId, password);
       console.log(response);
       if (response.status == '200') {
+        dispatch(setHost(hostNickname));
+        savePreset();
         setRoomInfo(studyRoomId);
       } else {
         alert('비밀번호 오류');
         return;
       }
     }
+  };
+
+  const savePreset = () => {
+    const preset = {
+      roomname: studyRoomTitle,
+      roomtopic: subject,
+      roomcomment: description,
+      roompw: studyRoomPw,
+      roomopen: isPublic,
+      roomtime: presentationTime,
+      roomhidden: anonymity,
+    };
+    dispatch(saveMultiPreset(preset));
   };
 
   useEffect(() => {

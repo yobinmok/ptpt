@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Box, Button, Slider, Typography } from '@mui/material';
+import { Box, Button, List, Slider, Typography } from '@mui/material';
 import PlayIcon from '@mui/icons-material/PlayCircleFilledWhiteOutlined';
 import PauseIcon from '@mui/icons-material/PauseCircleOutlined';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
@@ -8,8 +8,8 @@ import DropdownMenu from '../atoms/DropdownMenu';
 import { useSelector } from 'react-redux';
 import { base64ToBlob } from '../../hooks/voice';
 import AudioRecorder from './AudioRecorder';
-import { useNavigate } from 'react-router-dom';
 import { ExitModal } from './SoloExitModal';
+import ListIcon from '@mui/icons-material/List';
 
 const BottomBar = () => {
   const audioRef = useRef(null);
@@ -133,15 +133,19 @@ const BottomBar = () => {
         {/* Left: DropdownMenu */}
         <Box sx={{ flexGrow: 0 }}>
           <DropdownMenu
+            info='가이드라인 선택'
+            Icon={ListIcon}
             options={guideline.map((item) => ({
               value: item.guideline,
               label: item.title,
             }))}
-            onSelect={(base64) => {
-              const src = window.URL.createObjectURL(
-                base64ToBlob(base64, 'wav')
-              );
-              setAudioSrc(src);
+            onSelect={(src) => {
+              if (!src.startsWith('http')) {
+                let audioBlob = base64ToBlob(src, 'wav');
+                setAudioSrc(window.URL.createObjectURL(audioBlob));
+              } else {
+                setAudioSrc(src);
+              }
             }}
           />
         </Box>
