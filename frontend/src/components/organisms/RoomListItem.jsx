@@ -65,8 +65,6 @@ const RoomListItem = ({
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  dispatch(setPresentationTime(presentationTime));
-  dispatch(setAnonymous(anonymity));
 
   const [showModal, setShowModal] = useState(false);
   const [password, setPassword] = useState('');
@@ -79,6 +77,8 @@ const RoomListItem = ({
   const handleJoin = async () => {
     if (studyRoomPw === '') {
       dispatch(setHost(hostNickname));
+      dispatch(setPresentationTime(presentationTime));
+      dispatch(setAnonymous(anonymity));
       savePreset();
       setRoomInfo(studyRoomId);
       return;
@@ -88,6 +88,8 @@ const RoomListItem = ({
       console.log(response);
       if (response.status == '200') {
         dispatch(setHost(hostNickname));
+        dispatch(setPresentationTime(presentationTime));
+        dispatch(setAnonymous(anonymity));
         savePreset();
         setRoomInfo(studyRoomId);
       } else {
