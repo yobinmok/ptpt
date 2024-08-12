@@ -42,6 +42,14 @@ public class VoiceModelService {
     @Value("${external.api.upload}")
     private String UPLOAD;
 
+    @Value("${external.api.preprocess}")
+    private String PREPROCESS;
+    @Value("${external.api.extract}")
+    private String EXTRACT;
+    @Value("${external.api.train}")
+    private String TRAIN;
+
+
     @Autowired
     public VoiceModelService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper, MemberRepository memberRepository) {
         this.webClient = webClientBuilder.build();
@@ -49,14 +57,78 @@ public class VoiceModelService {
         this.memberRepository = memberRepository;
     }
 
-    public Mono<String> uploadAudioFile(String ttsPath) {
-        String resultPath = "https://i11b207.p.ssafy.io" + ttsPath.substring(ttsPath.indexOf("/uploads"));
+    public Mono<String> trainPreprocess(String audioPath, String vmName) {
+        // JSON 객체 생성
+        ObjectNode jsonObject = objectMapper.createObjectNode();
+        ArrayNode jsonArray = objectMapper.createArrayNode();
+        jsonArray.add(audioPath);
+        jsonArray.add(vmName);
+        jsonArray.add("40k");
+        jsonArray.add(64);
+        jsonObject.set("data", jsonArray);
+
+        return webClient.post()
+                .uri(PREPROCESS)
+                .bodyValue(jsonObject)
+                .retrieve()
+                .bodyToMono(String.class);
+    }
+
+    public Mono<String> extractFeature(String vmName) {
+        // JSON 객체 생성
+        ObjectNode jsonObject = objectMapper.createObjectNode();
+        ArrayNode jsonArray = objectMapper.createArrayNode();
+        jsonArray.add("4");
+        jsonArray.add(64);
+        jsonArray.add("rmvpe_gpu");
+        jsonArray.add("true");
+        jsonArray.add(vmName);
+        jsonArray.add("v2");
+        jsonArray.add("4");
+        jsonObject.set("data", jsonArray);
+
+        return webClient.post()
+                .uri(EXTRACT)
+                .bodyValue(jsonObject)
+                .retrieve()
+                .bodyToMono(String.class);
+    }
+
+    public Mono<String> train(String vmName) {
+        // JSON 객체 생성
+        ObjectNode jsonObject = objectMapper.createObjectNode();
+        ArrayNode jsonArray = objectMapper.createArrayNode();
+        jsonArray.add(vmName);
+        jsonArray.add("40k");
+        jsonArray.add("ture");
+        jsonArray.add(0);
+        jsonArray.add(30);
+        jsonArray.add(20);
+        jsonArray.add(3);
+        jsonArray.add("Yes");
+        jsonArray.add("assets/pretrained_v2/f0G40k.pth");
+        jsonArray.add("assets/pretrained_v2/f0D40k.pth");
+        jsonArray.add("4");
+        jsonArray.add("Yes");
+        jsonArray.add("Yes");
+        jsonArray.add("v2");
+        jsonObject.set("data", jsonArray);
+
+        return webClient.post()
+                .uri(TRAIN)
+                .bodyValue(jsonObject)
+                .retrieve()
+                .bodyToMono(String.class);
+    }
+
+    public Mono<String> uploadAudioFile(String audioPath, boolean trainFlag) {
+        String resultPath = "https://i11b207.p.ssafy.io" + audioPath.substring(audioPath.indexOf("/uploads"));
         System.out.println("uploadAudioFile: " + resultPath);
         // JSON 객체 생성
         ObjectNode jsonObject = objectMapper.createObjectNode();
         ArrayNode jsonArray = objectMapper.createArrayNode();
         jsonArray.add(resultPath);
-        jsonArray.add(false); // convert 시에는 false
+        jsonArray.add(trainFlag); // convert: false, train: true
         jsonObject.set("data", jsonArray);
 
         return webClient.post()
@@ -111,7 +183,7 @@ public class VoiceModelService {
     }
 
     public Mono<String> processVoiceConversion(String voiceModel, String ttsPath) {
-        return uploadAudioFile(ttsPath)
+        return uploadAudioFile(ttsPath, false)
                 .flatMap(uploadResponse -> {
                     String uploadPath;
                     try {
@@ -189,5 +261,27 @@ public class VoiceModelService {
         Member member = memberRepository.findByOauthId(oauthId);
         member.setVoiceModelCreated(1);
         memberRepository.save(member);
+    }
+
+    public Mono<String> processTraining(String vmName, String voicePath) {
+        return uploadAudioFile(voicePath, true)
+                .flatMap(uploadResponse -> {
+                    String uploadPath;
+                    try {
+                        JsonNode rootNode = objectMapper.readTree(uploadResponse);
+                        uploadPath = rootNode.path("data").get(0).asText();
+                    } catch (JsonProcessingException e) {
+                        return Mono.error(new RuntimeException(e));
+                    }
+                    System.out.println("upload 경로 확인: " + uploadPath);
+                    return trainPreprocess(uploadPath, vmName)
+                            .flatMap(preprocessResponse -> extractFeature(vmName))
+                            .flatMap(extractResponse -> train(vmName))
+                            .flatMap(trainResponse -> Mono.just("완료"));
+                })
+                .onErrorResume(error -> {
+                    System.err.println("오류 발생: " + error.getMessage());
+                    return Mono.just("처리 중 오류 발생");
+                });
     }
 }
