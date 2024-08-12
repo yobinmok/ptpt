@@ -40,28 +40,6 @@ public class VoiceModelController {
     @Value("${audioFile.preTrain}")
     private String PRETRAIN_UPLOAD_PATH;
 
-    @Value("${external.api.base}")
-    private String externalApiBase;
-
-    @PostMapping("/refresh")
-    public void inferRefresh()throws IOException {
-        WebClient webClient = WebClient.create(externalApiBase);
-        ObjectMapper mapper = new ObjectMapper();
-
-        ObjectNode rootNode = mapper.createObjectNode();
-
-        ArrayNode dataNode = mapper.createArrayNode();
-
-        rootNode.set("data", dataNode);
-        Mono<String> response = webClient.post()
-                .uri("/run/infer_refresh")
-                .bodyValue(rootNode)
-                .retrieve()
-                .bodyToMono(String.class);
-
-        response.subscribe(System.out::println);
-    }
-
     @PostMapping("/audio")
     @Operation(summary = "음성 변환")
     public Mono<ResponseEntity<String>> getTtsVoice(
@@ -100,8 +78,6 @@ public class VoiceModelController {
                 });
     }
 
-
-
     @PostMapping("/train")
     @Operation(summary = "음성모델 생성", description = "음성모델을 학습하여 생성합니다. 학습 전 데이터 저장 경로: src\\preTrain\\ [OauthId], 생성된 음성모델 저장 경로: RVC1006Nvidia\\assets\\weights\\vm[OauthId].pth")
     public Mono<ResponseEntity<String>> voiceModelTrain(@RequestPart(name="audio") MultipartFile audio, @RequestPart(name="oauthId") String oauthId) throws IOException {
@@ -133,117 +109,5 @@ public class VoiceModelController {
                     System.err.println("오류: " + error.getMessage());
                     return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("오류가 발생했습니다."));
                 });
-        // 폴더 경로와 파일 경로를 JSON 데이터에 포함시키는 로직
-//        String folderPath = folder.getAbsolutePath();
-//
-//        // 2. JSON 데이터 생성 및 API 호출
-//        String filePath = originalFile.getAbsolutePath();
-//        try {
-//            for (int i = 0; i < 4; i++) {
-//                String jsonPayload = createJsonPayload(folderPath, oauthId);
-//                ResponseEntity<String> response = callExternalApi(jsonPayload, externalApiTrain);
-//                System.out.println(response);
-//                if (response == null || response.getStatusCode() != HttpStatus.OK) {
-//                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process the request at step " + (i + 1));
-//                }
-//
-//                System.out.println("API call " + (i + 1) + " completed successfully.");
-//            }
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception occurred: " + e.getMessage());
-//        }
-//
-//        voiceModelService.updateVoiceModelCreated(oauthId);
-//        return new ResponseEntity<>(HttpStatus.OK);
     }
-//    public ResponseEntity<?> voiceModelTrain(@RequestPart(name="audio") MultipartFile audio, @RequestPart(name="oauthId") String oauthId) throws IOException {
-//        if (audio.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File is empty");
-//        }
-//
-//        // 1. 원본 파일 (PRETRAIN DATA) 저장
-//        String saveFolder = PRETRAIN_UPLOAD_PATH + File.separator + oauthId;
-//        File folder = new File(saveFolder);
-//        if (!folder.exists()) {
-//            folder.mkdirs();
-//        }
-//        String originalFileName = audio.getOriginalFilename();
-//        String saveFileName = "preTrainAudio.mp3";
-//        File originalFile = new File(folder, saveFileName);
-//        audio.transferTo(originalFile);
-//        System.out.println(saveFolder);
-//
-//        // 폴더 경로와 파일 경로를 JSON 데이터에 포함시키는 로직
-//        String folderPath = folder.getAbsolutePath();
-//
-//        // 2. JSON 데이터 생성 및 API 호출
-//        String filePath = originalFile.getAbsolutePath();
-//        try {
-//            for (int i = 0; i < 4; i++) {
-//                String jsonPayload = createJsonPayload(folderPath, oauthId);
-//                ResponseEntity<String> response = callExternalApi(jsonPayload, externalApiTrain);
-//                System.out.println(response);
-//                if (response == null || response.getStatusCode() != HttpStatus.OK) {
-//                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process the request at step " + (i + 1));
-//                }
-//
-//                System.out.println("API call " + (i + 1) + " completed successfully.");
-//            }
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception occurred: " + e.getMessage());
-//        }
-//
-//        voiceModelService.updateVoiceModelCreated(oauthId);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
-
-    public String createJsonPayload(String folderPath, String oauthId) {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode rootNode = mapper.createObjectNode();
-
-        ArrayNode dataNode = mapper.createArrayNode();
-        dataNode.add("vm"+oauthId); //저장할 VoiceModel 이름
-        dataNode.add("40k");
-        dataNode.add("true");
-        dataNode.add(folderPath);
-        dataNode.add(0);
-        dataNode.add(14);
-        dataNode.add("rmvpe_gpu");
-        dataNode.add(30); //이 값 만큼의 epoch마다 저장됨 (학습 횟수보다 큰 값으로 설정).
-        dataNode.add(20); //학습 횟수
-        dataNode.add(3);
-        dataNode.add("Yes");
-        dataNode.add("assets/pretrained_v2/f0G40k.pth");
-        dataNode.add("assets/pretrained_v2/f0D40k.pth");
-        dataNode.add("0");
-        dataNode.add("Yes");
-        dataNode.add("Yes");
-        dataNode.add("v2");
-        dataNode.add("0-0");
-
-
-        rootNode.set("data", dataNode);
-        System.out.println(rootNode.toString());
-
-        return rootNode.toString();
-    }
-
-
-
-    private ResponseEntity<String> callExternalApi(String jsonPayload, String api) {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-
-        HttpEntity<String> requestEntity = new HttpEntity<>(jsonPayload, headers);
-
-        try {
-            return restTemplate.exchange(api, HttpMethod.POST, requestEntity, String.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
 }
