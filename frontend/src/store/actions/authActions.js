@@ -15,10 +15,44 @@ export const logOut = () => ({
   type: LOG_OUT,
 });
 
+// -------------------- 추가된 코드 시작 --------------------
+
+// // 쿠키에서 JWT 토큰을 가져오는 함수
+// const getJwtTokenFromCookie = () => {
+//   const cookieValue = document.cookie
+//     .split('; ')
+//     .find(row => row.startsWith('Authorization='))
+//     ?.split('=')[1];
+//   return cookieValue || null;
+// };
+
+// // 로그인 비동기 액션 생성자
+// export const login = (credentials) => async (dispatch) => {
+//   try {
+//     const response = await instance.post('/member/signin', credentials); // 로그인 엔드포인트 호출
+
+//     // 로그인 후 쿠키에서 JWT 토큰 가져오기
+//     const token = getJwtTokenFromCookie(); // 쿠키에서 토큰 가져오기
+
+//     if (token) {
+//       const userInfoResponse = await instance.get('/member/me'); // 사용자 정보 요청
+//       const user = userInfoResponse.data;
+//       dispatch(setAuth(token, user));
+//     } else {
+//       console.error('JWT 토큰이 쿠키에 없습니다.');
+//     }
+//   } catch (error) {
+//     console.error('Error logging in:', error);
+//   }
+// };
+
+// -------------------- 추가된 코드 끝 --------------------
+
 // 로그인 비동기 액션 생성자
 export const login = (credentials) => async (dispatch) => {
   try {
     const response = await instance.post('/member/signin', credentials); // 로그인 엔드포인트 수정
+    // const token = getJwtTokenFromCookie(); // 쿠키에서 토큰 가져오기
     const { token, user } = response.data;
     dispatch(setAuth(token, user));
   } catch (error) {

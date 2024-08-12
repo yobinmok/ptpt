@@ -58,7 +58,7 @@ const FeedbackDetail = () => {
       ) : (
         feedback.map((item, index) => (
           <FeedbackItem key={index}>
-            <FeedbackTitle>{item.nickname}</FeedbackTitle>
+            <FeedbackTitle>작성자 닉네임 : {item.nickname}</FeedbackTitle>
             <FeedbackComment>코멘트: {item.commentContent}</FeedbackComment>
             <FeedbackScore>발표력: {item.delivery}</FeedbackScore>
             <FeedbackScore>표현력: {item.expression}</FeedbackScore>

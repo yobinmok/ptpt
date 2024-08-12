@@ -39,10 +39,10 @@ function App() {
         <Route path='room/list' element={<RoomListPage />} />
         <Route path='/room/:roomId' element={<RoomDetail />} />
         <Route path='/test' element={<VoiceTestPage />} />
-        <Route
+        {/* <Route
           path='/myinfo/statistics/evaluation/feedBack/:roomId'
           element={<FeedbackDetail />}
-        />{' '}
+        />{' '} */}
         {/* 피드백 상세 페이지 라우트 */}
       </Routes>
     </div>
