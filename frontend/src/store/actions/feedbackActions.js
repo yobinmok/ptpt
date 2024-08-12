@@ -7,16 +7,23 @@ import {
 
 const instance = Axios();
 
-export const fetchFeedback = (oauthId) => async (dispatch) => {
+export const fetchFeedback = (oauthId, page) => async (dispatch) => {
   dispatch({ type: FEEDBACK_REQUEST });
 
   try {
     // 1. 스터디룸 정보를 가져옵니다.
-    const studyRoomResponse = await instance.post('/studyRoom/search', {
-      oauthId,
-    });
+    const studyRoomResponse = await instance.post('/studyRoom/search',
+      { oauthId }, 
+      {
+        params: {
+          page: page,
+          size: 10,
+          sort: 'studyRoomId',
+        }, 
+      }
+    );
 
-    const studyRooms = studyRoomResponse.data;
+    const studyRooms = studyRoomResponse.data.content;
 
     // 2. 스터디룸 정보를 바탕으로 각 스터디룸의 피드백을 가져옵니다.
     const feedbackPromises = studyRooms.map((room) =>

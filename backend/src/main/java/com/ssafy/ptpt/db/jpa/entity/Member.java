@@ -22,6 +22,8 @@ public class Member {
     private String memberPicture;
     private String oauthProvider;
 
+    private String name;
+    private String username;
     @Column(name = "oauth_id", nullable = false, unique = true)
     private String oauthId;
     private String oauthEmail;
@@ -36,8 +38,9 @@ public class Member {
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Profile profile;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Role role;
+//    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private Role role;
+    private String role;
 
     @OneToMany(mappedBy = "member")
     private List<Evaluation> evaluation;
@@ -45,7 +48,7 @@ public class Member {
     public Member(String oauthId) {
         this.oauthId = oauthId;
         this.profile = new Profile(this);
-        this.role = new Role(this);
+//        this.role = new Role(this);
     }
 
     public Member(String nickname, String memberPicture, String oauthProvider, String oauthId, String oauthEmail, Timestamp registerTime, int isWithdraw, Timestamp withdrawTime) {
@@ -58,7 +61,15 @@ public class Member {
         this.isWithdraw = isWithdraw;
         this.withdrawTime = withdrawTime;
         this.profile = new Profile(this);
-        this.role = new Role(this);
+//        this.role = new Role(this);
+    }
+
+    public Member(String oauthId, String username, String name, String roleType) {
+        this.oauthId = oauthId;
+        this.username = username;
+        this.name = name;
+        this.role = roleType;
+        this.profile = new Profile(this);
     }
 
     // 탈퇴여부가 1이면 정지회원
