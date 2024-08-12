@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ToolbarComponent.css';
 import { useSelector, connect } from 'react-redux';
@@ -24,7 +24,7 @@ import StopCircleIcon from '@mui/icons-material/StopCircle';
 class ToolbarComponent2 extends Component {
   constructor(props) {
     super(props);
-    this.state = { fullscreen: false };
+    this.state = { fullscreen: false, openModal: false };
     this.camStatusChanged = this.camStatusChanged.bind(this);
     this.micStatusChanged = this.micStatusChanged.bind(this);
     this.screenShare = this.screenShare.bind(this);
@@ -35,6 +35,8 @@ class ToolbarComponent2 extends Component {
     this.toggleChat = this.toggleChat.bind(this);
     this.startRecord = this.startRecord.bind(this);
     this.stopRecord = this.stopRecord.bind(this);
+    this.handleModalOpen = this.handleModalOpen.bind(this);
+    this.handleModalClose = this.handleModalClose.bind(this);
   }
 
   openStatusChanged() {
@@ -80,6 +82,14 @@ class ToolbarComponent2 extends Component {
 
   stopRecord() {
     this.props.stopRecord();
+  }
+
+  handleModalOpen() {
+    this.setState({ openModal: true });
+  }
+
+  handleModalClose() {
+    this.setState({ openModal: close });
   }
 
   render() {
@@ -178,8 +188,10 @@ class ToolbarComponent2 extends Component {
             </IconButton>
           )}
 
-          <IconButton id='navChatButton' onClick={this.leaveSession}>
-            <ExitBtn />
+          {/* <IconButton id='navChatButton' onClick={this.leaveSession}> */}
+          <IconButton id='navChatButton'>
+            {/* <ExitBtn openModal={this.state.openModal} /> */}
+            <MultiExitModal leaveSession={this.leaveSession} />
           </IconButton>
         </div>
 
@@ -189,30 +201,33 @@ class ToolbarComponent2 extends Component {
   }
 }
 
-function ExitBtn() {
-  let navigate = useNavigate();
-
+function ExitBtn({ openModal }) {
+  const [open, setOpen] = useState(false);
   const handleExit = () => {
+    setOpen(true);
     // 발표 프리셋 저장하는 모달 띄우기
-
-    navigate('/');
+    // navigate('/');
   };
 
   return (
-    <Tooltip title='회의 나가기' placement='top'>
-      <IconButton
-        onClick={handleExit}
-        id='navLeaveButton'
-        style={{
-          color: 'white',
-          backgroundColor: 'red',
-          borderRadius: '5px',
-          top: '-2px',
-        }}
-      >
-        <ExitToAppIcon fontSize='small' />
-      </IconButton>
-    </Tooltip>
+    <div>
+      <Tooltip title='회의 나가기' placement='top'>
+        <IconButton
+          onClick={handleExit}
+          id='navLeaveButton'
+          style={{
+            color: 'white',
+            backgroundColor: 'red',
+            borderRadius: '5px',
+            top: '-2px',
+          }}
+        >
+          <ExitToAppIcon fontSize='small' />
+        </IconButton>
+      </Tooltip>
+      {/* {openModal ? <MultiExitModal /> : <></>} */}
+      {open ? <MultiExitModal /> : {}}
+    </div>
   );
 }
 const mapStateToProps = (state) => ({

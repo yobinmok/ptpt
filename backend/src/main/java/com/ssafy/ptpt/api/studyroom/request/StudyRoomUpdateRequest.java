@@ -12,7 +12,7 @@ public class StudyRoomUpdateRequest {
 
     // 방 이름
     @NotBlank(message = "이름은 필수")
-    private String StudyRoomTitle;
+    private String studyRoomTitle;
 
     private int isPublic;
 
