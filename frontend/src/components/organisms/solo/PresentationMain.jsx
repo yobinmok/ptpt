@@ -2,14 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Button, Box } from '@mui/material';
 import { Worker, Viewer, SpecialZoomLevel } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerPresentationSheet } from '../../../store/actions/soloActions';
+
 const PresentationMain = () => {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const [containerHeight, setContainerHeight] = useState(
     window.innerHeight - 180
-    // 높이 처리 다시!!!@!@!@@@@@!@!!!!!!!!!
   ); // 초기 높이 계산
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -19,9 +23,6 @@ const PresentationMain = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [error, setError] = useState(null);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];

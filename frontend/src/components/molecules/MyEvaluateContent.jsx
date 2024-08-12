@@ -70,11 +70,11 @@ const MyEvaluateContent = () => {
 
   return (
     <div>
-      <Box sx={{ padding: 0 }}>
+      <Box sx={{ padding: 2 }}>
         <Typography variant='h5' gutterBottom>
-          내 평가
+          평가 점수
         </Typography>
-        <Box sx={{ marginBottom: 3 }}>
+        <Box sx={{ marginBottom: 5 }}>
           <MultiRadarChart data={myEvaluate} />
         </Box>
         <Box>

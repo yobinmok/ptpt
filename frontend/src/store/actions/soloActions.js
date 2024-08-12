@@ -9,10 +9,16 @@ import {
   REGISTER_VOICERECORD,
   INIT_PRESET,
   ADD_VOICEMODEL,
+  REGISTER_PRESENTATION_SHEET,
 } from '../types/soloTypes';
 
 // 액션 생성자(dispatch 인수로 사용)
 // 혼자 하기 프리셋 업데이트 관련
+export const registerPresentationSheet = (sheet) => ({
+  type: REGISTER_PRESENTATION_SHEET,
+  payload: sheet,
+});
+
 export const initPreset = (preset) => ({
   type: INIT_PRESET,
   payload: preset,
