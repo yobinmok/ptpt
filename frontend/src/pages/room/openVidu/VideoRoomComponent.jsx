@@ -624,10 +624,11 @@ class VideoRoomComponent extends Component {
   async startRecord() {
     this.props.setIsRecording(); //false -> true
     const response = await startRecording(this.props.openviduSessionId);
-    this.props.setRecordSessionId(response.data.id); // 더 필요한 정보가 있으면 추후 저장
+    this.props.setRecordSessionId(response.data); // 더 필요한 정보가 있으면 추후 저장
   }
 
   async stopRecord() {
+    console.log("STOPRECORD SESSION ID : " + this.props.recordSessionId);
     const response = await stopRecording(this.props.recordSessionId);
     this.props.setIsRecording();
 

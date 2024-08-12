@@ -96,6 +96,7 @@ class ToolbarComponent2 extends Component {
     const localUser = this.props.user;
     const isSideTab = this.props.isSideTab; // true이면 열린거
     const isRecord = this.props.isRecord;
+    const isRes = this.props.recordSessionId; // null이 아니면, startRecord의 response가 온 것
     return (
       <Toolbar
         className='toolbar'
@@ -181,7 +182,11 @@ class ToolbarComponent2 extends Component {
               </Tooltip>
             </IconButton>
           ) : (
-            <IconButton className='navButton' onClick={this.stopRecord}>
+            <IconButton
+              className='navButton'
+              onClick={this.stopRecord}
+              disabled={isRes === null} // isRes가 null일 때 버튼을 비활성화
+            >
               <Tooltip title='녹화 중지' placement='top'>
                 <StopCircleIcon />
               </Tooltip>
@@ -233,6 +238,8 @@ function ExitBtn({ openModal }) {
 const mapStateToProps = (state) => ({
   isSideTab: state.room.isSidebarOpen,
   isRecord: state.room.isRecord,
+  // 아래 값은 startRecord의 response로 id가 저장되기 때문에, 아래 값이 null이 아니면 startRecord의 response가 왔다는 뜻
+  recordSessionId: state.room.recordSessionId,
 });
 
 export default connect(mapStateToProps)(ToolbarComponent2);
