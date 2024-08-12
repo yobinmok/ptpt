@@ -9,7 +9,6 @@ import com.ssafy.ptpt.api.member.response.MemberProfileResponse;
 import com.ssafy.ptpt.api.member.response.MemberStatisticResponse;
 import com.ssafy.ptpt.db.jpa.entity.*;
 import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
-import com.ssafy.ptpt.db.jpa.repository.ProfileRepository;
 import com.ssafy.ptpt.db.jpa.repository.StatisticRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final ProfileRepository profileRepository;
     private final JPAQueryFactory jpaQueryFactory;
     private final StatisticRepository statisticRepository;
 
@@ -69,19 +67,23 @@ public class MemberService {
     // 사용자 정보 수정 기능
     public int modifyMemberInfo(MemberUpdateRequest memberUpdateRequest) {
 
+        System.out.println(memberUpdateRequest.getMemberPicture());
+        System.out.println(memberUpdateRequest.getNickname());
+        System.out.println(memberUpdateRequest.getOauthId());
+        System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
         Member existingMember = memberRepository.findByOauthId(memberUpdateRequest.getOauthId());
 
         if (memberUpdateRequest.getNickname() == null || memberUpdateRequest.getNickname().isEmpty()) {
-            memberUpdateRequest.setNickname(existingMember.getNickname());
+            existingMember.setNickname(memberUpdateRequest.getNickname());
         }
 
         if (memberUpdateRequest.getMemberPicture() == null || memberUpdateRequest.getMemberPicture().isEmpty()) {
-            memberUpdateRequest.setMemberPicture(existingMember.getMemberPicture());
+            existingMember.setMemberPicture(memberUpdateRequest.getMemberPicture());
         }
 
-        return memberRepository.modifyMemberInfo(memberUpdateRequest.getOauthId(),
-                                                    memberUpdateRequest.getNickname(),
-                                                    memberUpdateRequest.getMemberPicture());
+        return memberRepository.modifyMemberInfo(existingMember.getOauthId(),
+                existingMember.getNickname(),
+                existingMember.getMemberPicture());
     }
 
     // 사용자 신고횟수 조회 로직 추가

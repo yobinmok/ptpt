@@ -150,8 +150,7 @@ public class StudyRoomService {
         for (String nickname : nicknameList) {
             Member member = memberRepository.findByNickname(nickname);
             StudyRoom studyRoom = studyRoomRepository.findByStudyRoomId(studyRoomCreateEntryRequest.getStudyRoomId());
-            EntryList entry = new EntryList(studyRoom,
-                                                member.getMemberId());
+            EntryList entry = new EntryList(studyRoom, member.getMemberId());
             entryList.add(entry);
         }
 
