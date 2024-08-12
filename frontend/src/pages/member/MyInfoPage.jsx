@@ -34,6 +34,8 @@ const MyInfoPage = () => {
   // Null 체크 추가
   const oauthId = user ? user.oauthId : 'Unknown';
 
+  console.log('MyInfoPage Rendered');
+  console.log('User:', user);
   console.log('OAuth ID:', oauthId); // 콘솔 로그 추가
   return (
     <Container>

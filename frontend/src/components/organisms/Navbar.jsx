@@ -64,7 +64,7 @@ function Navbar() {
       </LeftContainer>
       <div>
         {isAuthenticated
-          ? `현재 로그인 상태입니다. 닉네임: ${user?.nickname || 'Unknown'}`
+          ? `현재 로그인 상태입니다.`
           : '현재 로그아웃 상태입니다.'}
       </div>
       <RightContainer>

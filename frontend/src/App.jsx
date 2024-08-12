@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -21,32 +22,62 @@ import VideoRoomComponent from './pages/room/openVidu/VideoRoomComponent';
 import RoomListPage from './pages/RoomListPage';
 import RoomDetail from './pages/room/RoomDetail';
 import { setOauthId, setAuth } from './store/actions/authActions'; // 추가된 부분
+import PrivateRoute from './routes/PrivateRoute';
 
 function App() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
-    // URL에서 oauthId 가져오기
-    const urlParams = new URLSearchParams(window.location.search);
-    const oauthId = urlParams.get('oauthId');
+    let user = null;
+    let oauthId = null;
 
-    // 쿠키에서 JWT 토큰 가져오기
     const token = document.cookie
       .split('; ')
       .find((row) => row.startsWith('Authorization='))
       ?.split('=')[1];
 
-    // oauthId와 토큰을 Redux에 저장
-    if (oauthId) {
-      dispatch(setOauthId(oauthId));
-    }
+    console.log('Extracted JWT Token:', token);
+
     if (token) {
-      dispatch(setAuth(token, null)); // user 정보는 추후에 필요한 경우만 추가
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split('')
+            .map(function (c) {
+              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            })
+            .join('')
+        );
+
+        user = JSON.parse(jsonPayload);
+        oauthId = user.oauthId; // OAuth ID 추출
+        console.log('Decoded User Info:', user);
+        console.log('OAuth ID:', oauthId); // OAuth ID 출력
+      } catch (error) {
+        console.error('Failed to decode JWT token:', error);
+      }
     }
 
-    // 콘솔에 출력
-    console.log('JWT Token:', token);
-    console.log('OAuth ID:', oauthId);
-  }, [dispatch]);
+    if (oauthId) {
+      console.log('Dispatching OAuth ID:', oauthId); // 추가된 로그
+      dispatch(setOauthId(oauthId)); // 상태에 OAuth ID 저장
+    }
+    if (token) {
+      dispatch(setAuth(token, user)); // 상태에 JWT 토큰과 사용자 정보 저장
+    }
+
+    // 인증 상태에 따라 리디렉션
+    if (token && oauthId) {
+      if (window.location.pathname === '/login') {
+        navigate('/'); // 현재 위치가 로그인 페이지일 경우에만 메인 페이지로 이동
+      }
+    } else if (!token) {
+      navigate('/login'); // 로그인 페이지로 이동
+    }
+  }, [dispatch, navigate]);
+
   return (
     <div className='App' style={{ paddingTop: '64px' }}>
       <Nav />
@@ -57,47 +88,49 @@ function App() {
         <Route path='/auth/kakao' element={<KakaoAuthPage />} />
         <Route
           path='/userinfo'
-          element={<PrivateRoute compoenent={<UserInfoPage />} />}
+          element={<PrivateRoute component={<UserInfoPage />} />}
         />
         <Route
           path='/practice'
-          element={<PrivateRoute compoenent={<PracticePage />} />}
+          element={<PrivateRoute component={<PracticePage />} />}
         />
         <Route
           path='/solo'
-          element={<PrivateRoute compoenent={<SoloPage />} />}
+          element={<PrivateRoute component={<SoloPage />} />}
         />
         <Route
           path='/multi/:roomId'
-          element={<PrivateRoute compoenent={<MultiPage />} />}
+          element={<PrivateRoute component={<MultiPage />} />}
         />
         <Route
           path='/myinfo/*'
-          element={<PrivateRoute compoenent={<MyInfoPage />} />}
+          element={<PrivateRoute component={<MyInfoPage />} />}
         />
+        <Route path='/myinfo' element={<MyInfoPage />} />
+
         <Route
           path='/createroom'
-          element={<PrivateRoute compoenent={<CreateRoom />} />}
+          element={<PrivateRoute component={<CreateRoom />} />}
         />
         <Route
           path='/room/detail'
-          element={<PrivateRoute compoenent={<VideoRoomComponent />} />}
+          element={<PrivateRoute component={<VideoRoomComponent />} />}
         />
         <Route
           path='room/list'
-          element={<PrivateRoute compoenent={<RoomListPage />} />}
+          element={<PrivateRoute component={<RoomListPage />} />}
         />
         <Route
           path='/room/:roomId'
-          element={<PrivateRoute compoenent={<RoomDetail />} />}
+          element={<PrivateRoute component={<RoomDetail />} />}
         />
         <Route
           path='/test'
-          element={<PrivateRoute compoenent={<VoiceTestPage />} />}
+          element={<PrivateRoute component={<VoiceTestPage />} />}
         />
         <Route
           path='/myinfo/statistics/evaluation/feedBack/:roomId'
-          element={<PrivateRoute compoenent={<FeedbackDetail />} />}
+          element={<PrivateRoute component={<FeedbackDetail />} />}
         />
         {/* 피드백 상세 페이지 라우트 */}
       </Routes>

@@ -15,14 +15,11 @@ const initialState = {
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_AUTH:
-      if (!action.user) {
-        console.error('User data is missing in action:', action);
-      }
       return {
         ...state,
-        isAuthenticated: true,
+        isAuthenticated: !!action.token, // token이 존재하면 true로 설정
         token: action.token,
-        user: action.user, // user 객체를 상태에 저장
+        user: action.user,
       };
     case SET_OAUTH_ID:
       console.log('SET_OAUTH_ID Action:', action); // 콘솔 로그 추가

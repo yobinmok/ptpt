@@ -24,17 +24,14 @@ export const logOut = () => ({
 // 로그인 비동기 액션 생성자
 export const login = (credentials) => async (dispatch) => {
   try {
-    // 로그인 요청 및 응답으로 토큰과 사용자 정보를 받음
-    const response = await instance.post('/member/signin', credentials); // 로그인 엔드포인트 호출
-    console.log('Login response:'); // 응답 데이터 확인
-
+    const response = await instance.post('/member/signin', credentials);
+    console.log('Login response:', response.data);
     const { token, user } = response.data;
 
-    // 토큰과 사용자 정보가 존재하는지 확인
     if (token && user) {
       dispatch(setAuth(token, user));
     } else {
-      console.error('User data or token is missing in the response.');
+      console.error('Failed to get token or user from response.');
     }
   } catch (error) {
     console.error('Error logging in:', error);
@@ -45,6 +42,10 @@ export const login = (credentials) => async (dispatch) => {
 export const logout = () => async (dispatch) => {
   try {
     await instance.post('/member/signout'); // 로그아웃 엔드포인트 호출
+
+    // 쿠키에서 JWT 토큰 삭제
+    document.cookie = 'Authorization=; Max-Age=0; path=/;';
+
     dispatch(logOut()); // Redux 상태에서 사용자 정보 제거
   } catch (error) {
     console.error('Error logging out:', error);

@@ -25,8 +25,8 @@ const ButtonGroup = styled.div`
 const LoginPage = () => {
   const VITE_API_URL = import.meta.env.VITE_API_URL;
 
-  const kakaoLink = `${VITE_API_URL}/oauth2/authorization/kakao`;
-  const googleLink = `${VITE_API_URL}/oauth2/authorization/google`;
+  const KAKAO_LINK = `${VITE_API_URL}/oauth2/authorization/kakao`;
+  const GOOGLE_LINK = `${VITE_API_URL}/oauth2/authorization/google`;
 
   // 카카오 로그인 핸들러 함수
   const kakaoLoginHandler = () => {
