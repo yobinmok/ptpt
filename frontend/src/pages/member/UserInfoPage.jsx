@@ -125,6 +125,7 @@ const UserInfoPage = () => {
     try {
       const response = await updateProfile(profileData);
       if (response) {
+        dispatch(setAuth(token, response));
         console.log('성공', response);
       }
     } catch (error) {
