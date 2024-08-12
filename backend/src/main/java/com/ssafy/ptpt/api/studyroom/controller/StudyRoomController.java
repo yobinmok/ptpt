@@ -15,6 +15,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,28 +44,27 @@ public class StudyRoomController {
     }
 
     //스터디룸 검색
-    //TODO : 사용자가 선택한 항목의 키워드를 입력받아 검색할수 있도록 수정예정
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping("/search/{studyRoomTitle}")
     @Operation(summary = "스터디룸 검색", description = "대기실 화면에서 스터디룸을 검색 할수 있습니다.")
-    public ResponseEntity<StudyRoomInfoResponse> findByRoomTitle(@PathVariable("studyRoomTitle") String studyRoomTitle) {
-        StudyRoomInfoResponse studyRoomInfoResponse = studyRoomService.findByStudyRoomTitle(studyRoomTitle);
+    public ResponseEntity<Page<StudyRoomInfoResponse>> findByRoomTitle(@PathVariable("studyRoomTitle") String studyRoomTitle, Pageable pageable) {
+        Page<StudyRoomInfoResponse> studyRoomInfoResponse = studyRoomService.findByStudyRoomTitle(studyRoomTitle, pageable);
         return ResponseEntity.ok().body(studyRoomInfoResponse);
     }
 
-    //스터디룸 조회
+    //스터디룸 사용자로 조회
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(hidden = true)))
     })
     @PostMapping("/search")
     @Operation(summary = "사용자 스터디룸 조회", description = "프로필에서 사용자의 스터디룸을 확인할수 있습니다.")
-    public ResponseEntity<List<StudyRoomInfoResponse>> findByOauthId(@RequestBody MemberOauthIdRequest MemberOauthIdRequest) {
+    public ResponseEntity<Page<StudyRoomInfoResponse>> findByOauthId(@RequestBody MemberOauthIdRequest MemberOauthIdRequest, Pageable pageable) {
         Member member = memberRepository.findByOauthId(MemberOauthIdRequest.getOauthId());
-        List<StudyRoomInfoResponse> studyRoomInfoResponse = studyRoomService.findByMemberId(member.getMemberId());
+        Page<StudyRoomInfoResponse> studyRoomInfoResponse = studyRoomService.findByMemberId(member.getMemberId(), pageable);
         return ResponseEntity.ok().body(studyRoomInfoResponse);
     }
 
@@ -83,12 +84,11 @@ public class StudyRoomController {
 
 
     //스터디룸 리스트 전체 조회
-    //페이징 처리 전  -----------------------------------------
     @GetMapping
     @Operation(summary = "스터디룸 전체 조회", description = "대기실 화면에 있는 스터디룸의 리스트를 확인할수 있습니다.")
-    public ResponseEntity<List<StudyRoomListResponse>> findBySearchRequest(){
-        List<StudyRoomListResponse> body = studyRoomService.findBySearchRequest();
-        return ResponseEntity.ok().body(body);
+    public ResponseEntity<Page<StudyRoomListResponse>> findBySearchRequest(Pageable pageable){
+        Page<StudyRoomListResponse> studyRoom = studyRoomService.findBySearchRequest(null, null, pageable);
+        return ResponseEntity.ok(studyRoom);
     }
 
     // 스터디룸 비밀번호 확인

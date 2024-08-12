@@ -41,11 +41,12 @@ services:
 
   mongo:
     image: mongo:7.0.12
-    container_name: mongo
+    container_name: mongodb-container
     restart: unless-stopped
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: 1234
+      MONGODB_INITDB_DATABASE: pt2_db
+      MONGODB_INITDB_ROOT_USERNAME: root
+      MONGODB_INITDB_ROOT_PASSWORD: 1234
     volumes:
       - /shared/data/mongo:/data/db
     expose:

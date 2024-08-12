@@ -17,6 +17,7 @@ import {
   FormLabel,
   TextField,
 } from '@mui/material';
+import { savePreset } from '../../apis/preset';
 
 const CreateRoomBlock = styled.div`
   height: 510px;
@@ -26,11 +27,12 @@ const ProfileWrapper = styled.div`
   margin: 30px 0px;
 `;
 
-const CreateRoom = ({ onSave, onClose }) => {
+const CreateRoom = ({ onSave, onClose, item }) => {
   // user정보 불러와야함
   // const user = useSelector((state) => state.user.data.oauth_id);
   const nickname = useSelector((state) => state.auth.user.nickname);
   const userId = useSelector((state) => state.auth.user.oauthId);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const minDateTime = new Date();
@@ -67,6 +69,21 @@ const CreateRoom = ({ onSave, onClose }) => {
   });
   const [showPassword, setShowPassword] = useState(false);
 
+  // 저장한 스터니룸에서 모달 띄우는 경우 초기값 설정
+  useEffect(() => {
+    if (item) {
+      setRoomInfo({
+        roomname: item.studyRoomTitle || '',
+        roomtopic: item.subject || '',
+        roomcomment: item.description || '',
+        roompw: item.studyRoomPw || '',
+        roomopen: item.isPublic ? '0' : '1',
+        roomtime: item.presentationTime || '',
+        roomhidden: item.anonymity || 0,
+      });
+    }
+  }, [item]);
+
   const onRoomInfoInput = (e) => {
     setRoomInfo({ ...roomInfo, [e.target.name]: e.target.value });
     console.log(roomInfo);
@@ -84,6 +101,32 @@ const CreateRoom = ({ onSave, onClose }) => {
     // const user = 789;
     const response = await createStudyRoom(userId, roomInfo);
     dispatch(saveMultiPreset(roomInfo));
+
+    // TODO: Multi Preset 저장 테스트 추후 삭제
+    // const multiPreset = {
+    //   studyRoomTitle: '방 제목 테스트',
+    //   studyRoomPw: 1234,
+    //   isPublic: true,
+    //   presentationTime: '오후 7:00',
+    //   subject: '방 주제 테스트!',
+    //   description: '방 설명',
+    //   anonymity: 0,
+    // };
+    // const param = {
+    //   oauthId: userId,
+    //   presetType: 'multi',
+    //   presetData: multiPreset,
+    // };
+    // savePreset(
+    //   param,
+    //   (res) => {
+    //     console.log(res);
+    //   },
+    //   (err) => {
+    //     console.log(err);
+    //   }
+    // );
+    // END TODO
     onHandleEnterRoom(response); // roomId를 props
   };
 

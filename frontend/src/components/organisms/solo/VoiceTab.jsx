@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Button, Box, Divider } from '@mui/material';
 import CustomSelect from '../../molecules/CustomSelect';
 import CustomSlider from '../../molecules/CustomSlider';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useSelector, useDispatch } from 'react-redux';
 import { base64ToBlob } from '../../../hooks/voice';
 import { textToSpeechApi, uploadAudioApi } from '../../../apis/voice';
@@ -11,6 +12,7 @@ const VoiceTab = () => {
   const dispatch = useDispatch();
   const [selectedVoiceModel, setSelectedVoiceModel] = useState(0);
   const [additionalVoice, setAdditionalVoice] = useState(0);
+  const [loading, setLoading] = useState(false);
   let soloPreset = useSelector((state) => state.solo);
   let scriptIdx = 0;
   const additionalSetting = [
@@ -67,6 +69,7 @@ const VoiceTab = () => {
   };
 
   const textToSpeech = (registerFlag) => {
+    setLoading(true);
     const text = soloPreset.script[scriptIdx].content;
     param.voice.name = soloPreset.voiceModel[voiceSetting.current.model];
     param.audioConfig.pitch = voiceSetting.current.tone;
@@ -81,6 +84,7 @@ const VoiceTab = () => {
     // 내 음성모델을 고른 경우
     if (voiceSetting.current.model === 4) {
       // 성별, 높낮이에 따라 음성 선택해야 함.
+      console.log('내 음성모델 선택');
       param.voice.name = soloPreset.voiceModel[additionalVoice];
     }
 
@@ -92,6 +96,7 @@ const VoiceTab = () => {
           if (voiceSetting.current.model === 4) {
             uploadAudio(data.audioContent)
               .then((base64) => {
+                console.log(base64);
                 dispatch(
                   registerGuideline(scriptIdx, base64, voiceSetting.current)
                 );
@@ -114,9 +119,9 @@ const VoiceTab = () => {
           if (voiceSetting.current.model === 4) {
             uploadAudio(data.audioContent)
               .then((base64) => {
-                let audioBlob = base64ToBlob(base64, 'wav');
+                console.log(base64);
                 var audioFile = new Audio();
-                audioFile.src = window.URL.createObjectURL(audioBlob);
+                audioFile.src = base64;
                 audioFile.play();
               })
               .catch((error) => {
@@ -129,6 +134,7 @@ const VoiceTab = () => {
             audioFile.play();
           }
         }
+        setLoading(false);
       },
       (res) => {
         console.log(res.response.data.error);
@@ -216,8 +222,9 @@ const VoiceTab = () => {
           variant='contained'
           color='secondary'
           onClick={() => textToSpeech(false)}
+          disabled={loading}
         >
-          ▶ &nbsp;재생
+          {loading ? <CircularProgress size={24} color='inherit' /> : '▶ 재생'}
         </Button>
         <Button
           onClick={() => {
@@ -225,8 +232,9 @@ const VoiceTab = () => {
           }}
           variant='contained'
           color='secondary'
+          disabled={loading}
         >
-          등록
+          {loading ? <CircularProgress size={24} color='inherit' /> : '등록'}
         </Button>
       </Box>
     </>

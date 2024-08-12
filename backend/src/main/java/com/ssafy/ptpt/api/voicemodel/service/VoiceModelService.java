@@ -1,5 +1,6 @@
 package com.ssafy.ptpt.api.voicemodel.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -9,15 +10,20 @@ import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Base64;
+import java.nio.file.StandardOpenOption;
 
 @Service
 @RequiredArgsConstructor
@@ -26,10 +32,15 @@ public class VoiceModelService {
     private final WebClient webClient;
     private final ObjectMapper objectMapper;
     private final MemberRepository memberRepository;
+
     @Value("${external.api.convert}")
-    private String CONVERT; // 추후 application.yml 파일에 추가 예정
+    private String CONVERT;
+
     @Value("${external.api.select}")
     private String SELECT;
+
+    @Value("${external.api.upload}")
+    private String UPLOAD;
 
     @Autowired
     public VoiceModelService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper, MemberRepository memberRepository) {
@@ -38,15 +49,48 @@ public class VoiceModelService {
         this.memberRepository = memberRepository;
     }
 
+    public Mono<String> uploadAudioFile(String ttsPath) {
+        String resultPath = "https://i11b207.p.ssafy.io" + ttsPath.substring(ttsPath.indexOf("/uploads"));
+        System.out.println("uploadAudioFile: " + resultPath);
+        // JSON 객체 생성
+        ObjectNode jsonObject = objectMapper.createObjectNode();
+        ArrayNode jsonArray = objectMapper.createArrayNode();
+        jsonArray.add(resultPath);
+        jsonArray.add(false); // convert 시에는 false
+        jsonObject.set("data", jsonArray);
+
+        return webClient.post()
+                .uri(UPLOAD)
+                .bodyValue(jsonObject)
+                .retrieve()
+                .bodyToMono(String.class);
+    }
+
+    public Mono<String> inferChangeVoice(String vmName) {
+        System.out.println("in inferChangeVoice");
+
+        // JSON 객체 생성
+        ObjectNode jsonObject = objectMapper.createObjectNode();
+        ArrayNode jsonArray = objectMapper.createArrayNode();
+        jsonArray.add(vmName);
+        jsonArray.add(0.33);
+        jsonArray.add(0.33);
+        jsonObject.set("data", jsonArray);
+
+        return webClient.post()
+                .uri(SELECT)
+                .bodyValue(jsonObject)
+                .retrieve()
+                .bodyToMono(String.class);
+    }
+
     public Mono<String> inferConvert(String ttsPath) {
         System.out.println("in inferConvert");
-        String resultPath = "https://i11b207.p.ssafy.io" + ttsPath.substring(ttsPath.indexOf("/uploads"));
-        System.out.println(resultPath);
         // JSON 객체 생성
         ObjectNode jsonObject = objectMapper.createObjectNode();
         ArrayNode jsonArray = objectMapper.createArrayNode();
         jsonArray.add(0);
-        jsonArray.add(resultPath); // "C:\\Users\\SSAFY\\Desktop\\src\\tts.wav"
+        jsonArray.add(ttsPath);
         jsonArray.add(0);
         jsonArray.addNull();
         jsonArray.add("rmvpe");
@@ -66,60 +110,83 @@ public class VoiceModelService {
                 .bodyToMono(String.class);
     }
 
-    public Mono<String> inferChangeVoice(String fileName) {
-        System.out.println("in inferChangeVoice");
-
-        // JSON 객체 생성
-        ObjectNode jsonObject = objectMapper.createObjectNode();
-        ArrayNode jsonArray = objectMapper.createArrayNode();
-        jsonArray.add(fileName);
-        jsonArray.add(0.33);
-        jsonArray.add(0.33);
-        jsonObject.set("data", jsonArray);
-
-        return webClient.post()
-                .uri(SELECT)
-                .bodyValue(jsonObject)
-                .retrieve()
-                .bodyToMono(String.class);
-    }
-
-    // 음성 변환 프로세스를 체이닝하는 메서드
-    public Mono<String> processVoiceConversion(String fileName, String ttsPath) {
-        return inferChangeVoice(fileName)
-                .flatMap(response -> inferConvert(ttsPath))
-                .flatMap(response -> {
-                    ObjectMapper objectMapper = new ObjectMapper();
+    public Mono<String> processVoiceConversion(String voiceModel, String ttsPath) {
+        return uploadAudioFile(ttsPath)
+                .flatMap(uploadResponse -> {
+                    String uploadPath;
                     try {
-                        JsonNode rootNode = objectMapper.readTree(response); // JSON 문자열을 JsonNode로 변환
-                        JsonNode dataNode = rootNode.path("data").get(1); // data 배열의 두 번째 요소 가져오기
-                        String filePath = dataNode.path("name").asText(); // name 값 추출
-                        System.out.println("data[1].name: " + filePath);
-                        return Mono.just(convertFileToBase64(filePath));
-                    } catch (Exception e) {
-                        return Mono.error(e);
+                        JsonNode rootNode = objectMapper.readTree(uploadResponse);
+                        uploadPath = rootNode.path("data").get(0).asText();
+                    } catch (JsonProcessingException e) {
+                        return Mono.error(new RuntimeException(e));
                     }
+                    System.out.println("upload 경로 확인: " + uploadPath);
+                    return inferChangeVoice(voiceModel)
+                            .flatMap(changeVoiceResponse -> inferConvert(uploadPath))
+                            .flatMap(convertResponse -> {
+                                try {
+                                    JsonNode rootNode = objectMapper.readTree(convertResponse);
+                                    JsonNode dataNode = rootNode.path("data").get(1);
+                                    String filePath = dataNode.path("name").asText();
+                                    String httpPath = "http://175.209.203.185:7897/file=" + filePath;
+                                    System.out.println("httpPath: " + httpPath);
+                                    String resultPath = addPrefixToFilename(ttsPath, "result_");
+                                    return downloadFile(httpPath, resultPath)
+                                            .then(Mono.just("https://i11b207.p.ssafy.io" + resultPath.substring(resultPath.indexOf("/uploads"))));
+                                } catch (Exception e) {
+                                    return Mono.error(e);
+                                }
+                            });
                 })
                 .onErrorResume(error -> {
                     System.err.println("오류 발생: " + error.getMessage());
                     return Mono.just("처리 중 오류 발생");
                 });
-
     }
 
-    public String convertFileToBase64(String filePath) throws IOException {
-        Path path = Paths.get(filePath); // 파일을 바이트 배열로 읽기
-        byte[] fileBytes = Files.readAllBytes(path);
+    public String addPrefixToFilename(String ttsPath, String prefix) {
+        // 마지막 슬래시('/')의 위치를 찾기
+        int lastSlashIndex = ttsPath.lastIndexOf("/");
 
-        // 바이트 배열을 Base64 형식으로 인코딩
-        return Base64.getEncoder().encodeToString(fileBytes);
+        // 파일 경로를 두 부분으로 나누고, prefix를 파일명 앞에 추가
+        String directory = ttsPath.substring(0, lastSlashIndex + 1);
+        String filename = ttsPath.substring(lastSlashIndex + 1);
+
+        // 새 파일 경로를 만들어 반환
+        return directory + prefix + filename;
     }
 
 
+    // WebClient를 사용하여 파일을 다운로드하는 함수
+    public Mono<Void> downloadFile(String fileUrl, String outputFilePath) {
+        return webClient.get()
+                .uri(fileUrl)
+                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_OCTET_STREAM_VALUE)
+                .retrieve()
+                .bodyToFlux(DataBuffer.class)
+                .flatMap(dataBuffer -> {
+                    try {
+                        Path path = Paths.get(outputFilePath);
+                        if (Files.notExists(path)) {
+                            Files.createFile(path);
+                        }
+                        try (OutputStream outputStream = Files.newOutputStream(path, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
+                            byte[] bytes = new byte[dataBuffer.readableByteCount()];
+                            dataBuffer.read(bytes);
+                            outputStream.write(bytes);
+                            return Mono.empty();
+                        }
+                    } catch (IOException e) {
+                        return Mono.error(e);
+                    } finally {
+                        // release the data buffer
+                        DataBufferUtils.release(dataBuffer);
+                    }
+                }).then();
+    }
 
     public void updateVoiceModelCreated(String oauthId) {
         Member member = memberRepository.findByOauthId(oauthId);
-
         member.setVoiceModelCreated(1);
         memberRepository.save(member);
     }
