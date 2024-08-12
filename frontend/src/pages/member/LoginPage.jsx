@@ -30,6 +30,8 @@ const LoginPage = () => {
   const KAKAO_LINK = import.meta.env.VITE_KAKAO_LINK;
   const GOOGLE_LINK = import.meta.env.VITE_GOOGLE_LINK;
 
+
+  console.log("KAKAO_LINK IS " + KAKAO_LINK);
   // 카카오 로그인 URL 생성
   //   - prompt: 로그인 화면을 강제로 표시하도록 설정
   //     - "login": 기존 세션이 있더라도 사용자에게 카카오 계정 로그인 화면을 보여줍니다.
