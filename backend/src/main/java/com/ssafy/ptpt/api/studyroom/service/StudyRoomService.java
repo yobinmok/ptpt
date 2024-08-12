@@ -74,16 +74,6 @@ public class StudyRoomService {
                 });
     }
 
-//    // 방 리스트 전체 조회 - 페이징 전
-//    public List<StudyRoomListResponse> findBySearchRequest() {
-//        List<StudyRoom> studyRoomList = studyRoomRepository.findAll();
-//
-//        // 결과를 변환하여 List 반환
-//        return studyRoomList.stream()
-//                .map(StudyRoomListResponse::from)
-//                .collect(Collectors.toList());
-//    }
-
 
     //방 생성
     @Transactional
@@ -149,10 +139,8 @@ public class StudyRoomService {
     @Transactional
     public int studyRoomExit(StudyRoomStatusRequest studyRoomStatusRequest) {
         Member member = memberRepository.findByNickname(studyRoomStatusRequest.getNickname());
-        StudyRoom studyRoom = studyRoomRepository.findByStudyRoomIdAndMemberId(studyRoomStatusRequest.getStudyRoomId(),
-                member.getMemberId());
         return studyRoomRepository.deleteByStudyRoomIdAndOauthId(studyRoomStatusRequest.getStudyRoomId()
-                , studyRoom.getMemberId());
+                , member.getMemberId());
     }
 
     // 스터디룸 입장 참가자 저장
