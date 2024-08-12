@@ -2,22 +2,6 @@ import { Axios } from '../util/http-commons';
 const { VITE_API_URL } = import.meta.env;
 const axios = Axios();
 
-// 엑세스 토큰 요청 함수
-// export const fetchAccessToken = async (authorizationCode, provider) => {
-//   try {
-//     const response = await axios.post(
-//       `${import.meta.env.VITE_BACKEND_URL}/oauth/${provider}`,
-//       {
-//         code: authorizationCode,
-//       }
-//     );
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error fetching access token:', error);
-//     throw error;
-//   }
-// };
-
 export const createStudyRoom = async (userId, roomInfo) => {
   try {
     const response = await axios.post(`/studyRoom`, {
@@ -47,7 +31,7 @@ export const detailStudyRoom = async (path) => {
   }
 };
 
-export const loadRoomList = async () => {
+export const loadRoomList = async (page) => {
   try {
     await Axios.post;
     const response = await axios.get(`/studyRoom`, {
@@ -63,7 +47,7 @@ export const loadRoomList = async () => {
   }
 };
 
-export const searchByStudyRoomName = async (studyRoomTitle) => {
+export const searchByStudyRoomName = async (studyRoomTitle, page) => {
   try {
     const response = await axios.get(`/studyRoom/search/${studyRoomTitle}`, {
       params: {
