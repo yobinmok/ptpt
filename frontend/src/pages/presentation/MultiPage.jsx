@@ -10,13 +10,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toggleSidebar, selectTab, clearTab } from '../../store/actions/room';
 import EvaluteTab from '../../components/organisms/multi/EvaluateTab';
 import ParticipantsTab from '../../components/organisms/multi/ParticipantsTab';
-import ToolbarComponent from '../room/openVidu/toolbar/ToolbarComponent';
+import MultiSetting from '../../components/molecules/MultiSetting';
 
 const MultiPage = () => {
   const tabItem = [
     { icon: PersonIcon, text: '참가자', content: <ParticipantsTab /> },
     { icon: ChecklistIcon, text: '평가', content: <EvaluteTab /> },
-    { icon: SettingsIcon, text: '설정', content: '수정' },
+    { icon: SettingsIcon, text: '설정', content: <MultiSetting /> },
   ];
   const dispatch = useDispatch();
   const isSidebarOpen = useSelector((state) => state.room.isSidebarOpen);
@@ -44,27 +44,6 @@ const MultiPage = () => {
   return (
     <>
       <Box display='flex' flexDirection='row' height='calc(100vh - 64px)'>
-        {/* 컨텐츠 영역 */}
-        {/* <Box display='flex' flexDirection='column' flexGrow={5}>
-          <VideoRoomComponent />
-          <Box
-            flex={1}
-            p={2}
-            sx={{
-              backgroundColor: '#f0f0f0',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            화상 채팅
-            <Box backgroundColor='black'></Box>
-          </Box>
-
-          <Box height={60} sx={{ margin: '10px', backgroundColor: '#d9d9d9' }}>
-            {' '}
-            하단바
-          </Box>
-        </Box> */}
         <Box
           flex={1}
           p={2}
@@ -75,7 +54,6 @@ const MultiPage = () => {
             overflow: 'hidden',
           }}
         >
-          {/* VideoRoomComponent의 너비를 조정하여 Sidebar 너비를 고려하도록 설정 */}
           <Box
             flex={1}
             sx={{

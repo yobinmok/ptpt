@@ -9,6 +9,18 @@ import FeedbackDetail from '../../components/organisms/myInfo/FeedbackDetail';
 import { useSelector } from 'react-redux';
 const Container = styled.div`
   display: flex;
+  padding: 0px 150px;
+  @media (max-width: 1200px) {
+    padding: 0px 100px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0px 50px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0px 20px;
+  }
 `;
 
 const MyInfoContent = styled.div`

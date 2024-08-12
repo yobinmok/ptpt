@@ -134,10 +134,8 @@ public class StudyRoomService {
     @Transactional
     public int studyRoomExit(StudyRoomStatusRequest studyRoomStatusRequest) {
         Member member = memberRepository.findByNickname(studyRoomStatusRequest.getNickname());
-        StudyRoom studyRoom = studyRoomRepository.findByStudyRoomIdAndMemberId(studyRoomStatusRequest.getStudyRoomId(),
-                member.getMemberId());
         return studyRoomRepository.deleteByStudyRoomIdAndOauthId(studyRoomStatusRequest.getStudyRoomId()
-                , studyRoom.getMemberId());
+                , member.getMemberId());
     }
 
     // 스터디룸 입장 참가자 저장
