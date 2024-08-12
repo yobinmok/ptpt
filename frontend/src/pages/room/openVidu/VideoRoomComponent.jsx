@@ -631,6 +631,7 @@ class VideoRoomComponent extends Component {
   }
 
   async stopRecord() {
+    console.log("STOPRECORD SESSION ID : " + this.props.recordSessionId);
     const response = await stopRecording(this.props.recordSessionId);
     this.props.setIsRecording();
 
