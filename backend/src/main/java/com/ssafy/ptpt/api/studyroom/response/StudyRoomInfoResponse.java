@@ -15,15 +15,15 @@ public class StudyRoomInfoResponse {
     private String studyRoomTitle;
     private String subject;
 
-    // 호스트 ID
-    private Long memberId;
+    // 호스트 닉네임
+    private String hostNickname;
 
-    public static StudyRoomInfoResponse from(StudyRoom studyRoom){
+    public static StudyRoomInfoResponse from(StudyRoom studyRoom, String hostNickname){
         StudyRoomInfoResponse studyRoomInfoResponse = new StudyRoomInfoResponse();
         studyRoomInfoResponse.studyRoomId = studyRoom.getStudyRoomId();
         studyRoomInfoResponse.studyRoomTitle = studyRoom.getStudyRoomTitle();
         studyRoomInfoResponse.subject = studyRoom.getSubject();
-        studyRoomInfoResponse.memberId = studyRoom.getMemberId();
+        studyRoomInfoResponse.hostNickname = hostNickname;
 
         return studyRoomInfoResponse;
     }
