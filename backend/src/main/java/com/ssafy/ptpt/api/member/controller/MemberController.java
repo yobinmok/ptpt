@@ -13,7 +13,9 @@ import com.ssafy.ptpt.oauth2.dto.CustomOAuth2User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,31 +43,17 @@ public class MemberController {
     private String IMAGE_UPLOAD_PATH;
 
     // TODO : 테스팅 해보기
-//    @GetMapping("/login")
-//    public ResponseEntity<MemberInfoResponse> getUserInfo() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        // 인증이 되어 있지 않거나 인증 객체가 null인 경우
-//        if (authentication == null || !authentication.isAuthenticated()) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//        }
-//
-//        // 인증된 사용자 정보 가져오기
-//        Object principal = authentication.getPrincipal();
-//        MemberInfoResponse userInfoResponse;
-//
-//        UserDetails userDetails = null;
-//        if (principal instanceof UserDetails) {
-//            userDetails = (UserDetails) principal;
-//            // UserDetails에서 사용자 정보를 가져와서 Response 객체에 담기
-//            userInfoResponse = new MemberInfoResponse(userDetails.getUsername());
-//        } else {
-//            // 인증된 사용자 정보가 UserDetails 타입이 아닌 경우 처리
-//            userInfoResponse = new MemberInfoResponse(userDetails.getUsername());
-//        }
-//
-//        return ResponseEntity.ok(userInfoResponse);
-//    }
+    @GetMapping("/signout")
+    public ResponseEntity<Void> getUserInfo(HttpServletResponse response) {
+        Cookie cookie = new Cookie("Authorization", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok().build();
+    }
+
 
     @PostMapping("/auth/kakao")
     public ResponseEntity<?> kakaoAuthVerify() {
