@@ -5,4 +5,3 @@ export const USE_PARTICIPANTS = 'USE_PARTICIPANTS'; // 탭을 통해 참가자 �
 
 // 평가확인 목록
 export const EVAL_PARTICIPANTS = 'EVAL_PARTICIPANTS';
-export const CLEAR_PARTICIPANTS = 'CLEAR_PARTICIPANTS';
