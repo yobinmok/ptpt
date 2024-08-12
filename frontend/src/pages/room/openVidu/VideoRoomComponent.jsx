@@ -13,7 +13,10 @@ import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { setParticipants } from '../../../store/actions/participant';
+import {
+  setParticipants,
+  clearParticipants,
+} from '../../../store/actions/participant';
 import ToolbarComponent2 from './toolbar/BottomToolBar';
 import {
   setOpenviduSessionId,

@@ -54,15 +54,6 @@ const RecommendInnerWrapper = styled.div`
   background-color: ${(props) => props.backgroundcolor};
 `;
 
-const RecommendLetter = styled.p`
-  font-size: ${(props) => props.size};
-  background-color: black;
-  color: ${(props) => props.color};
-  margin-top: ${(props) => props.margintop};
-  margin-bottom: ${(props) => props.marginbottom};
-  background-color: ${(props) => props.backgroundcolor};
-`;
-
 const LiButton = styled.button`
   background-color: transparent;
   cursor: pointer;
@@ -200,9 +191,7 @@ const RoomListPage = () => {
                 <RoomListItem {...room} key={index} />
               ))
             ) : currentList.length === 0 ? (
-              <RecommendLetter color={'#EAF1FF'}>
-                최근에 만들어진 방이 없어요.
-              </RecommendLetter>
+              <Typography>생성된 방이 없습니다</Typography>
             ) : (
               currentList.map((room, index) => (
                 <RoomListItem {...room} key={index} />

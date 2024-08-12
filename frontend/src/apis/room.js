@@ -2,22 +2,6 @@ import { Axios } from '../util/http-commons';
 const { VITE_API_URL } = import.meta.env;
 const axios = Axios();
 
-// 엑세스 토큰 요청 함수
-// export const fetchAccessToken = async (authorizationCode, provider) => {
-//   try {
-//     const response = await axios.post(
-//       `${import.meta.env.VITE_BACKEND_URL}/oauth/${provider}`,
-//       {
-//         code: authorizationCode,
-//       }
-//     );
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error fetching access token:', error);
-//     throw error;
-//   }
-// };
-
 export const createStudyRoom = async (userId, roomInfo) => {
   try {
     const response = await axios.post(`/studyRoom`, {
@@ -53,7 +37,7 @@ export const loadRoomList = async (page) => {
     const response = await axios.get(`/studyRoom`, {
       params: {
         page: page,
-        size: 1,
+        size: 10,
         sort: 'studyRoomId',
       },
     });
@@ -68,7 +52,7 @@ export const searchByStudyRoomName = async (studyRoomTitle, page) => {
     const response = await axios.get(`/studyRoom/search/${studyRoomTitle}`, {
       params: {
         page: page,
-        size: 1,
+        size: 10,
         sort: 'studyRoomId',
       },
     });
@@ -139,6 +123,7 @@ export const adminParticipants = async (studyRoomId, participants) => {
 };
 
 // 참가자 신고 및 발표자 지정 api
+// 참가자 신고
 export const reportParticipants = async (nickname) => {
   try {
     const response = await axios.post(`member/report`, {
@@ -149,6 +134,7 @@ export const reportParticipants = async (nickname) => {
   }
 };
 
+// 발표자 등록
 export const assignationParticipants = async (studyRoomId, nickname) => {
   try {
     const response = await axios.post(`studyRoom/assignation`, {
@@ -157,5 +143,51 @@ export const assignationParticipants = async (studyRoomId, nickname) => {
     });
   } catch (error) {
     console.log('assignation error : ' + error);
+  }
+};
+
+// 스터디룸 퇴장 및 종료
+// 스터디룸 퇴장 -> 개인이 나갈 때
+export const exitRoom = (studyRoomId, nickname) => {
+  try {
+    const response = axios.delete(`studyRoom/exit`, {
+      data: { studyRoomId: studyRoomId, nickname: nickname },
+    });
+    console.log('------------exit room response---------- ');
+    console.log(response.data);
+    return response;
+  } catch (error) {
+    console.log('exit room error : ' + error);
+  }
+};
+
+// 종료 -> 참가자가 0명일 때
+export const clearRoom = (studyRoomId) => {
+  try {
+    const response = axios.post(`studyRoom/clear`, {
+      studyRoomId: studyRoomId,
+    });
+    console.log('------------clear room response---------- ');
+    console.log(response.data);
+  } catch (error) {
+    console.log('clear room error : ' + error);
+  }
+};
+
+// 방 정보 수정
+export const modifyStudyRoomInfo = (studyRoomId, studyRoomInfo) => {
+  try {
+    const response = axios.put(`studyRoom/${studyRoomId}`, {
+      isPublic: studyRoomInfo.isPublic,
+      studyRoomPw: studyRoomInfo.studyRoomPw,
+      presentationTime: studyRoomInfo.presentationTime,
+      subject: studyRoomInfo.subject,
+      description: studyRoomInfo.description,
+      anonymity: studyRoomInfo.anonymity,
+      studyRoomTitle: studyRoomInfo.studyRoomTitle,
+    });
+    return response;
+  } catch (error) {
+    console.log('modify room error : ' + error);
   }
 };

@@ -25,9 +25,7 @@ const roomReducer = (state = initialState, action) => {
       };
     case 'CLEAR_ROOM_SESSION':
       return {
-        // ...state,
-        sessionName: null,
-        roomId: null,
+        ...initialState,
       };
     case 'TOGGLE_SIDEBAR':
       return {

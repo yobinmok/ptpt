@@ -50,7 +50,7 @@ const EvaluateContent = ({}) => {
         anonymity: isAnonymous,
       }));
     }
-  }, [isAnonymous]);
+  }, [isAnonymous, participants]);
 
   const onEvaluateInfoInput = (e) => {
     setEvaluateInfo({ ...evaluateInfo, [e.target.name]: e.target.value });

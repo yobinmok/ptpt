@@ -26,7 +26,7 @@ const EvaluteTab = () => {
         variant='contained'
         color='primary'
         onClick={onHandleClickMyEvaluateTab}
-        sx={{ marginRight: '8px' }}
+        sx={{ marginRight: '8px', marginBottom: '10px' }}
       >
         내평가
       </Button>
@@ -34,27 +34,16 @@ const EvaluteTab = () => {
         variant='contained'
         color='primary'
         onClick={onHandleClickEvaluateTab}
-        sx={{ marginRight: '8px' }}
+        sx={{ marginRight: '8px', marginBottom: '10px' }}
       >
         평가하기
       </Button>
       {/* 평가항목은 따로 컴포넌트 화 */}
-      <Container sx={{ height: '500px', flex: 2, overflowX: 'auto' }}>
-        {isMyEvaluate ? (
-          // <Button variant='contained' color='primary'>
-          //   내평가
-          // </Button>
-          <MyEvaluateContent />
-        ) : (
-          <EvaluateContent />
-        )}
+      <Container
+        sx={{ height: '500px', width: '100%', flex: 2, overflowX: 'auto' }}
+      >
+        {isMyEvaluate ? <MyEvaluateContent /> : <EvaluateContent />}
       </Container>
-      {/* <Container sx={{ height: '500px', flex: 2, overflowX: 'auto' }}>
-        {isMyEvaluate && <MyEvaluateContent />}
-      </Container>
-      <Container sx={{ height: '500px', flex: 2, overflowX: 'auto' }}>
-        {!isMyEvaluate && <EvaluateContent />}
-      </Container> */}
     </div>
   );
 };
