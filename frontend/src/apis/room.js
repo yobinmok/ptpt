@@ -47,7 +47,7 @@ export const detailStudyRoom = async (path) => {
   }
 };
 
-export const loadRoomList = async () => {
+export const loadRoomList = async (page) => {
   try {
     await Axios.post;
     const response = await axios.get(`/studyRoom`, {
@@ -63,7 +63,7 @@ export const loadRoomList = async () => {
   }
 };
 
-export const searchByStudyRoomName = async (studyRoomTitle) => {
+export const searchByStudyRoomName = async (studyRoomTitle, page) => {
   try {
     const response = await axios.get(`/studyRoom/search/${studyRoomTitle}`, {
       params: {
