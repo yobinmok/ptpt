@@ -270,8 +270,10 @@ public class VoiceModelService {
                     try {
                         JsonNode rootNode = objectMapper.readTree(uploadResponse);
                         uploadPath = rootNode.path("data").get(0).asText();
+                        int lastIdx = uploadPath.lastIndexOf('/');
+                        uploadPath = uploadPath.substring(0, lastIdx + 1);
                         System.out.println("upload 경로 확인: " + uploadPath);
-                    } catch (JsonProcessingException e) {
+                    }catch (JsonProcessingException e) {
                         return Mono.error(new RuntimeException(e));
                     }
                     return trainPreprocess(uploadPath, vmName)
