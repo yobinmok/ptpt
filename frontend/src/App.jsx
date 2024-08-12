@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import store from './store/store';
 import MainPage from './pages/MainPage';
 import LoginPage from './pages/member/LoginPage';
@@ -19,8 +20,33 @@ import CreateRoom from './pages/room/CreateRoom';
 import VideoRoomComponent from './pages/room/openVidu/VideoRoomComponent';
 import RoomListPage from './pages/RoomListPage';
 import RoomDetail from './pages/room/RoomDetail';
+import { setOauthId, setAuth } from './store/actions/authActions'; // 추가된 부분
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    // URL에서 oauthId 가져오기
+    const urlParams = new URLSearchParams(window.location.search);
+    const oauthId = urlParams.get('oauthId');
+
+    // 쿠키에서 JWT 토큰 가져오기
+    const token = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith('Authorization='))
+      ?.split('=')[1];
+
+    // oauthId와 토큰을 Redux에 저장
+    if (oauthId) {
+      dispatch(setOauthId(oauthId));
+    }
+    if (token) {
+      dispatch(setAuth(token, null)); // user 정보는 추후에 필요한 경우만 추가
+    }
+
+    // 콘솔에 출력
+    console.log('JWT Token:', token);
+    console.log('OAuth ID:', oauthId);
+  }, [dispatch]);
   return (
     <div className='App' style={{ paddingTop: '64px' }}>
       <Nav />

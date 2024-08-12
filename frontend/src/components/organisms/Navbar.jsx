@@ -8,8 +8,6 @@ import {
   setAuth,
   demoLogin,
   demoLogout,
-  kakaoLogout,
-  googleLogout,
 } from '../../store/actions/authActions';
 
 import {
@@ -25,7 +23,6 @@ function Navbar() {
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth?.isAuthenticated); // ?. 연산자를 사용하여 null 체크
   const user = useSelector((state) => state.auth?.user);
-  const accessToken = useSelector((state) => state.auth.token);
 
   console.log('isAuthenticated:', isAuthenticated); // 상태가 변경될 때마다 출력 확인
   console.log('user:', user); // 상태가 변경될 때마다 출력 확인
@@ -39,8 +36,8 @@ function Navbar() {
   // 로그아웃 핸들러: 로그아웃 액션을 디스패치하여 상태를 변경합니다.
   const handleLogout = async () => {
     try {
-      await axios.put('/member/signout'); // 서버에 로그아웃 요청
-      dispatch(logout());
+      await axios.get('/member/signout'); // 서버에 로그아웃 요청 (GET 요청으로 변경)
+      dispatch(logout()); // Redux 상태에서 사용자 정보 제거
       navigate('/'); // 메인 페이지로 리디렉션
     } catch (error) {
       console.error('Error logging out:', error);
@@ -59,12 +56,6 @@ function Navbar() {
     dispatch(demoLogout()); // Demo 로그아웃 액션 생성자 호출
   };
 
-  // Kakao 로그아웃 핸들러
-  const handleKakaoLogout = () => {
-    if (accessToken) {
-      dispatch(kakaoLogout(accessToken));
-    }
-  };
   return (
     <StyledNavbar>
       <LeftContainer>
@@ -73,7 +64,7 @@ function Navbar() {
       </LeftContainer>
       <div>
         {isAuthenticated
-          ? `현재 로그인 상태입니다. 닉네임: ${user.nickname}`
+          ? `현재 로그인 상태입니다. 닉네임: ${user?.nickname || 'Unknown'}`
           : '현재 로그아웃 상태입니다.'}
       </div>
       <RightContainer>
@@ -92,8 +83,6 @@ function Navbar() {
             <button onClick={handleLogout}>Logout</button>
             {/* Demo 로그아웃 버튼 */}
             <button onClick={handleDemoLogout}>Demo Logout</button>
-            {/* Kakao 로그아웃 버튼 */}
-            <button onClick={handleKakaoLogout}>Kakao Logout</button>
           </>
         ) : (
           <>
