@@ -122,6 +122,7 @@ const UserInfoPage = () => {
     );
     profileData.append('image', profilePicture);
 
+    console.log(memberUpdateRequest)
     try {
       const response = await updateProfile(profileData);
       if (response) {

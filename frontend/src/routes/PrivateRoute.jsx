@@ -12,7 +12,10 @@ import LoginPage from '../pages/member/LoginPage';
 
 const PrivateRoute = () => {
   const isAuth = useSelector((state) => state.auth.isAuthenticated);
-  return isAuth ? <Outlet /> : <Navigate to='/login' />;
+  console.log('----------');
+  console.log(isAuth);
+  // return isAuth ? Component : <Navigate to='/login' />;
+  return isAuth ? Component : <Navigate to='/' />;
 };
 
 export default PrivateRoute;
