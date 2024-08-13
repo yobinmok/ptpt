@@ -23,6 +23,7 @@ const EvaluateContent = ({}) => {
   const studyRoomId = useSelector((state) => state.room.roomId);
   const isAnonymous = useSelector((state) => state.room.isAnonymous);
   const participants = useSelector((state) => state.participant.participants);
+  const isStart = useSelector((state) => state.room.isStart);
   // 평가한 사람 등록
   const evaluateParticipants = useSelector(
     (state) => state.participant.evaluateParticipants
@@ -168,6 +169,7 @@ const EvaluateContent = ({}) => {
           variant='contained'
           color='primary'
           onClick={onHandleSubmit}
+          disabled={isStart===false}
           sx={{ mt: '10px', marginRight: '8px' }}
         >
           평가 제출하기

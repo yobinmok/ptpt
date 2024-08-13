@@ -11,6 +11,7 @@ const ParticipantsTab = () => {
   const nickname = useSelector((state) => state.auth.user.nickname);
   const participants = useSelector((state) => state.participant.participants);
   const hostNickname = useSelector((state) => state.room.hostId);
+  const user = useSelector((state) => state.auth.user);
   const participantsWithoutMe = participants.filter(
     (participant) => participant !== nickname
   );
