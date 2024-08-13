@@ -9,17 +9,21 @@ import FeedbackDetail from '../../components/organisms/myInfo/FeedbackDetail';
 import { useSelector } from 'react-redux';
 const Container = styled.div`
   display: flex;
-  padding: 0px 150px;
+  margin: 0px 150px;
+  margin-top: 30px; /* 상단 여백 추가 */
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
+
   @media (max-width: 1200px) {
-    padding: 0px 100px;
+    margin: 0px 100px;
   }
 
   @media (max-width: 768px) {
-    padding: 0px 50px;
+    margin: 0px 50px;
   }
 
   @media (max-width: 480px) {
-    padding: 0px 20px;
+    margin: 0px 20px;
   }
 `;
 

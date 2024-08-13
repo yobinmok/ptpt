@@ -175,6 +175,7 @@ const UserInfoPage = () => {
             variant='contained'
             color='secondary'
             disabled={!isNicknameValid}
+            onClick={handleFormSubmit}
           >
             회원가입
           </Button>

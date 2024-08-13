@@ -39,7 +39,7 @@ const ProfileNameContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 10px; /* 이름과 아이콘 사이의 간격 설정 */
-  margin: 0;
+  margin-top: 10px;
 `;
 
 // 프로필 이름 스타일
