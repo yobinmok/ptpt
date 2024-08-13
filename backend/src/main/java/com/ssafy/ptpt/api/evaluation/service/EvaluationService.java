@@ -101,7 +101,6 @@ public class EvaluationService {
         QEvaluation evaluation = QEvaluation.evaluation;
         QComment comment = QComment.comment;
 
-        System.out.println("함수 들어옴");
         return jpaQueryFactory.select(
                         Projections.bean(
                                 FeedBackInfoResponse.class,
