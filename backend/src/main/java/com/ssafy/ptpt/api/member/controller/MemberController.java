@@ -107,25 +107,25 @@ public class MemberController {
     public ResponseEntity<MemberUpdateRequest> modifyMemberInfo(@RequestPart(name = "memberUpdateRequest") MemberUpdateRequest memberUpdateRequest,
                                                                 @RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
 
-        String oauthId = "";
-        // 현재 인증된 사용자 정보 가져오기
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof CustomOAuth2User) {
-            CustomOAuth2User customOAuth2User = (CustomOAuth2User) authentication.getPrincipal();
-            String currentUsername = customOAuth2User.getUsername();
-            System.out.println("현재 사용자: " + currentUsername);
-            oauthId = customOAuth2User.getOauthId();
-            memberUpdateRequest.setOauthId(oauthId);
-
-            Member member = memberRepository.findByOauthId(oauthId);
-            member.setOauthId(oauthId);
-            member.setNickname(memberUpdateRequest.getNickname());
-            member.setMemberPicture(memberUpdateRequest.getMemberPicture());
-
-        } else {
-            System.out.println("인증 정보가 없습니다.");
-            return ResponseEntity.badRequest().build();
-        }
+//        String oauthId = "";
+//        // 현재 인증된 사용자 정보 가져오기
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication != null && authentication.getPrincipal() instanceof CustomOAuth2User) {
+//            CustomOAuth2User customOAuth2User = (CustomOAuth2User) authentication.getPrincipal();
+//            String currentUsername = customOAuth2User.getUsername();
+//            System.out.println("현재 사용자: " + currentUsername);
+//            oauthId = customOAuth2User.getOauthId();
+//            memberUpdateRequest.setOauthId(oauthId);
+//
+//            Member member = memberRepository.findByOauthId(oauthId);
+//            member.setOauthId(oauthId);
+//            member.setNickname(memberUpdateRequest.getNickname());
+//            member.setMemberPicture(memberUpdateRequest.getMemberPicture());
+//
+//        } else {
+//            System.out.println("인증 정보가 없습니다.");
+//            return ResponseEntity.badRequest().build();
+//        }
 
 
         // 이미지파일 입력이 있을 경우 이미지를 서버에 저장

@@ -73,11 +73,12 @@ public class MemberService {
         System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
         Member existingMember = memberRepository.findByOauthId(memberUpdateRequest.getOauthId());
 
-        if (memberUpdateRequest.getNickname() == null || memberUpdateRequest.getNickname().isEmpty()) {
+        System.out.println(existingMember);
+        if (memberUpdateRequest.getNickname() != null) {
             existingMember.setNickname(memberUpdateRequest.getNickname());
         }
 
-        if (memberUpdateRequest.getMemberPicture() == null || memberUpdateRequest.getMemberPicture().isEmpty()) {
+        if (memberUpdateRequest.getMemberPicture() != null) {
             existingMember.setMemberPicture(memberUpdateRequest.getMemberPicture());
         }
 
