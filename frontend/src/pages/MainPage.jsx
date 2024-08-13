@@ -51,6 +51,7 @@ const MainPage = () => {
     );
   };
 
+
   return (
     <Container isAuthenticated={isAuthenticated}>
       <Overlay />

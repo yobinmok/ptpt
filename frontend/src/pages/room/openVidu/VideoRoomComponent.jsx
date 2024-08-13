@@ -650,9 +650,9 @@ class VideoRoomComponent extends Component {
 
     return (
       <div
-      // style={{ height: '100vh', width: '100%', display: 'flex' }}
-      // className='container'
-      // id='container'
+      style={{ height: '100vh', width: '100%', display: 'flex' }}
+      className='container'
+      id='container'
       >
         <ToolbarComponent2
           sessionId={mySessionId}
