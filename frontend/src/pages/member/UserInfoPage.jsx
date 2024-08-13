@@ -116,6 +116,8 @@ const UserInfoPage = () => {
     const memberUpdateRequest = {
       oauthId: oauthId,
       nickname: nickname,
+      memberPicture: '/profileImage/defaultImage.png',
+      voiceModelCreated: 0,
     };
     profileData.append(
       'memberUpdateRequest',
@@ -123,14 +125,15 @@ const UserInfoPage = () => {
         type: 'application/json',
       })
     );
+    if (profilePicture)
+      memberUpdateRequest.memberPicture =
+        '/profileImage/' + oauthId + '.' + profilePicture.name.split('.').pop();
     profileData.append('image', profilePicture);
 
     console.log(memberUpdateRequest);
     try {
       const response = await updateProfile(profileData);
-      if (response) {
-        console.log('성공', response);
-      }
+      console.log('성공', response);
     } catch (error) {
       console.error('ddddd', error);
       throw error;

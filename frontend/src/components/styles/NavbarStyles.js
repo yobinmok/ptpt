@@ -46,5 +46,4 @@ export const ProfileImage = styled.img`
   height: 40px;
   border-radius: 50%;
   cursor: pointer;
-  margin-left: 10px;
 `;
