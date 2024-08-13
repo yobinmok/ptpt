@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setAuth } from '../../store/actions/authActions';
 import { checkNicknameDuplicate, updateProfile } from '../../apis/auth';
 import {
@@ -70,13 +70,16 @@ const UserInfoPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { token, memberId } = location.state || {};
+  const params = new URLSearchParams(window.location.search);
+
+  // oauthId 값을 추출
+  const oauthId = params.get('oauthId');
   const [nickname, setNickname] = useState('');
   const [profilePicture, setProfilePicture] = useState(null);
   const [voiceModel, setVoiceModel] = useState(null);
   const [nicknameMessage, setNicknameMessage] = useState('');
   const [isNicknameValid, setIsNicknameValid] = useState(false);
-
+  const token = useSelector((state) => state.auth.token);
   const handleNicknameChange = (e) => {
     setNickname(e.target.value);
     setNicknameMessage('');
@@ -97,8 +100,10 @@ const UserInfoPage = () => {
     const profileData = new FormData();
 
     const memberUpdateRequest = {
-      oauthId: memberId,
+      oauthId: oauthId,
       nickname: nickname,
+      memberPicture: '/profileImage/defaultImage.png',
+      voiceModelCreated: 0,
     };
     profileData.append(
       'memberUpdateRequest',
@@ -106,13 +111,15 @@ const UserInfoPage = () => {
         type: 'application/json',
       })
     );
+    if (profilePicture)
+      memberUpdateRequest.memberPicture =
+        '/profileImage/' + oauthId + '.' + profilePicture.name.split('.').pop();
     profileData.append('image', profilePicture);
 
+    console.log(memberUpdateRequest);
     try {
       const response = await updateProfile(profileData);
-      if (response) {
-        console.log('성공', response);
-      }
+      console.log('성공', response);
     } catch (error) {
       console.error('ddddd', error);
       throw error;

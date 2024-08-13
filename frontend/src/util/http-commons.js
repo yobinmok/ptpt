@@ -47,6 +47,7 @@ function Google_STT() {
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
     },
+    credentials: 'include',
   });
 
   return instance;
@@ -58,6 +59,7 @@ function RecordOV() {
     headers: {
       'Content-Type': 'application/json',
     },
+    credentials: 'include',
   });
 
   return instance;

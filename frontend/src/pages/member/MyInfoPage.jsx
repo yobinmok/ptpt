@@ -40,9 +40,15 @@ const MyInfoContent = styled.div`
   padding: 20px;
   background: #f9f9f9;
 `;
-console.log('--------------');
 const MyInfoPage = () => {
-  console.log(useSelector((state) => state.auth.user.oauthId));
+  const user = useSelector((state) => state.auth.user);
+
+  // Null 체크 추가
+  const oauthId = user ? user.oauthId : 'Unknown';
+
+  console.log('MyInfoPage Rendered');
+  console.log('User:', user);
+  console.log('OAuth ID:', oauthId); // 콘솔 로그 추가
   return (
     <Container>
       <MyInfoSidebar />
