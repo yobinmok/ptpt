@@ -33,8 +33,14 @@ function App() {
     console.log(paramOauthId);
     const fetchData = async () => {
       try {
+        const user = {
+          oauthId: paramOauthId,
+          nickname: profile.nickname,
+          memberPicture: profile.memberPicture,
+          voiceModelCreated: profile.voiceModelCreated,
+        };
         const profile = await getProfile(paramOauthId);
-        dispatch(setAuth('token', profile));
+        dispatch(setAuth('token', user));
       } catch (error) {
         console.error('Error fetching profile:', error);
       }
