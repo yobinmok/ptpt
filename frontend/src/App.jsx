@@ -92,23 +92,7 @@ function App() {
       dispatch(setAuth(token, user)); // 상태에 JWT 토큰과 사용자 정보 저장
     }
 
-    console.log('@@@@@@');
     console.log(token, oauthId);
-    // // 인증 상태에 따라 리디렉션
-    // if (token && oauthId) {
-    //   if (window.location.pathname === '/login') {
-    //     navigate('/'); // q현재 위치가 로그인 페이지일 경우에만 메인 페이지로 이동
-    //   }
-    // } else if (!token) {
-    //   navigate('/userinfo'); // 로그인 페이지로 이동
-    // }
-    if (logined != 'ok') {
-      if (window.location.pathname === '/login') {
-        navigate('/'); // 현재 위치가 로그인 페이지일 경우에만 메인 페이지로 이동
-      }
-    } else {
-      navigate('/userinfo', { state: { token: token, memberId: oauthId } }); // 로그인 페이지로 이동
-    }
   }, [dispatch]);
 
   return (
