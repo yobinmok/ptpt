@@ -1,8 +1,6 @@
-import { useNavigate } from 'react-router-dom';
 import React, { useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import store from './store/store';
 import MainPage from './pages/MainPage';
 import LoginPage from './pages/member/LoginPage';
 import AuthPage from './pages/member/AuthPage';
@@ -23,11 +21,11 @@ import RoomListPage from './pages/RoomListPage';
 import RoomDetail from './pages/room/RoomDetail';
 import { setOauthId, setAuth } from './store/actions/authActions'; // 추가된 부분
 import PrivateRoute from './routes/PrivateRoute';
-
+import { getProfile } from './apis/auth';
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  useEffect(() => {
+  useEffect(async () => {
     let user = null;
     let oauthId = null;
 
@@ -41,7 +39,7 @@ function App() {
       .find((row) => row.startsWith('logined='))
       ?.split('=')[1];
 
-    console.log(logined)
+    console.log(logined);
     console.log('Extracted JWT Token:', token);
     if (token) {
       try {
@@ -56,7 +54,7 @@ function App() {
             .join('')
         );
 
-        console.log(base64Url)
+        console.log(base64Url);
         user = JSON.parse(jsonPayload);
         oauthId = user.oauthId; // OAuth ID 추출
         console.log('Decoded User Info:', user);
@@ -74,24 +72,30 @@ function App() {
       dispatch(setAuth(token, user)); // 상태에 JWT 토큰과 사용자 정보 저장
     }
 
-    console.log("@@@@@@")
-    console.log(token, oauthId)
-    // // 인증 상태에 따라 리디렉션
-    // if (token && oauthId) {
-    //   if (window.location.pathname === '/login') {
-    //     navigate('/'); // q현재 위치가 로그인 페이지일 경우에만 메인 페이지로 이동
-    //   }
-    // } else if (!token) {
-    //   navigate('/userinfo'); // 로그인 페이지로 이동
-    // }
-    if(logined != 'ok'){
+    console.log('@@@@@@');
+    console.log(token, oauthId);
+
+    if (logined != 'ok') {
       if (window.location.pathname === '/login') {
         navigate('/'); // 현재 위치가 로그인 페이지일 경우에만 메인 페이지로 이동
       }
-    }else{
-        navigate('/userinfo', {state: { token: token, memberId: oauthId }}); // 로그인 페이지로 이동
+    } else {
+      navigate('/userinfo', { state: { token: token, memberId: oauthId } }); // 로그인 페이지로 이동
     }
   }, [dispatch]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const profile = await getProfile(oauthId);
+        dispatch(setAuth(token, profile));
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+
+    fetchData();
+  }, [oauthId]);
 
   return (
     <div className='App' style={{ paddingTop: '64px' }}>

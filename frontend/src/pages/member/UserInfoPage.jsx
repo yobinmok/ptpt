@@ -122,7 +122,7 @@ const UserInfoPage = () => {
     );
     profileData.append('image', profilePicture);
 
-    console.log(memberUpdateRequest)
+    console.log(memberUpdateRequest);
     try {
       const response = await updateProfile(profileData);
       if (response) {
