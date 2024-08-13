@@ -19,6 +19,7 @@ import CreateRoom from './pages/room/CreateRoom';
 import VideoRoomComponent from './pages/room/openVidu/VideoRoomComponent';
 import RoomListPage from './pages/RoomListPage';
 import RoomDetail from './pages/room/RoomDetail';
+import PrivateRoute from './routes/PrivateRoute';
 
 function App() {
   return (
@@ -30,19 +31,21 @@ function App() {
         <Route path='/auth' element={<AuthPage />} />
         <Route path='/auth/kakao' element={<KakaoAuthPage />} />
         <Route path='/userinfo' element={<UserInfoPage />} />
-        <Route path='/practice' element={<PracticePage />} />
-        <Route path='/solo' element={<SoloPage />} />
-        <Route path='/multi/:roomId' element={<MultiPage />} />
-        <Route path='/myinfo/*' element={<MyInfoPage />} />
-        <Route path='/createroom' element={<CreateRoom />} />
-        <Route path='/room/detail' element={<VideoRoomComponent />} />
-        <Route path='room/list' element={<RoomListPage />} />
-        <Route path='/room/:roomId' element={<RoomDetail />} />
-        <Route path='/test' element={<VoiceTestPage />} />
-        <Route
-          path='/myinfo/statistics/evaluation/feedBack/:roomId'
-          element={<FeedbackDetail />}
-        />{' '}
+        <Route element={<PrivateRoute />}>
+          <Route path='/practice' element={<PracticePage />} />
+          <Route path='/solo' element={<SoloPage />} />
+          <Route path='/multi/:roomId' element={<MultiPage />} />
+          <Route path='/myinfo/*' element={<MyInfoPage />} />
+          <Route path='/createroom' element={<CreateRoom />} />
+          <Route path='/room/detail' element={<VideoRoomComponent />} />
+          <Route path='room/list' element={<RoomListPage />} />
+          <Route path='/room/:roomId' element={<RoomDetail />} />
+          <Route path='/test' element={<VoiceTestPage />} />
+          <Route
+            path='/myinfo/statistics/evaluation/feedBack/:roomId'
+            element={<FeedbackDetail />}
+          />{' '}
+        </Route>
         {/* 피드백 상세 페이지 라우트 */}
       </Routes>
     </div>
