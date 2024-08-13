@@ -57,7 +57,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String token = jwtUtil.createJwt(username, role, oauthId, 60*60*60L);
 
         response.addCookie(createCookie("Authorization", token));
-        response.sendRedirect(REACT_SERVER + "userinfo");
+        response.sendRedirect(REACT_SERVER + "userinfo?oauthId=" + oauthId);
     }
 
     private Cookie createCookie(String key, String value) {
@@ -67,7 +67,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         //cookie.setSecure(true);
         cookie.setPath("/");
         
-        cookie.setHttpOnly(true);
+//        cookie.setHttpOnly(true);
 
         return cookie;
     }
