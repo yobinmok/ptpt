@@ -86,52 +86,22 @@ function App() {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/auth' element={<AuthPage />} />
         <Route path='/auth/kakao' element={<KakaoAuthPage />} />
-        <Route
-          path='/userinfo'
-          element={<PrivateRoute component={<UserInfoPage />} />}
-        />
-        <Route
-          path='/practice'
-          element={<PrivateRoute component={<PracticePage />} />}
-        />
-        <Route
-          path='/solo'
-          element={<PrivateRoute component={<SoloPage />} />}
-        />
-        <Route
-          path='/multi/:roomId'
-          element={<PrivateRoute component={<MultiPage />} />}
-        />
-        <Route
-          path='/myinfo/*'
-          element={<PrivateRoute component={<MyInfoPage />} />}
-        />
-        <Route path='/myinfo' element={<MyInfoPage />} />
-
-        <Route
-          path='/createroom'
-          element={<PrivateRoute component={<CreateRoom />} />}
-        />
-        <Route
-          path='/room/detail'
-          element={<PrivateRoute component={<VideoRoomComponent />} />}
-        />
-        <Route
-          path='room/list'
-          element={<PrivateRoute component={<RoomListPage />} />}
-        />
-        <Route
-          path='/room/:roomId'
-          element={<PrivateRoute component={<RoomDetail />} />}
-        />
-        <Route
-          path='/test'
-          element={<PrivateRoute component={<VoiceTestPage />} />}
-        />
-        <Route
-          path='/myinfo/statistics/evaluation/feedBack/:roomId'
-          element={<PrivateRoute component={<FeedbackDetail />} />}
-        />
+        <Route path='/userinfo' element={<UserInfoPage />} />
+        <Route element={<PrivateRoute />}>
+          <Route path='/practice' element={<PracticePage />} />
+          <Route path='/solo' element={<SoloPage />} />
+          <Route path='/multi/:roomId' element={<MultiPage />} />
+          <Route path='/myinfo/*' element={<MyInfoPage />} />
+          <Route path='/createroom' element={<CreateRoom />} />
+          <Route path='/room/detail' element={<VideoRoomComponent />} />
+          <Route path='room/list' element={<RoomListPage />} />
+          <Route path='/room/:roomId' element={<RoomDetail />} />
+          <Route path='/test' element={<VoiceTestPage />} />
+          <Route
+            path='/myinfo/statistics/evaluation/feedBack/:roomId'
+            element={<FeedbackDetail />}
+          />{' '}
+        </Route>
         {/* 피드백 상세 페이지 라우트 */}
       </Routes>
     </div>
