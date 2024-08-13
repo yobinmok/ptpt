@@ -4,20 +4,24 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setAuth } from '../../store/actions/authActions';
 import { checkNicknameDuplicate, updateProfile } from '../../apis/auth';
-
+import {
+  NicknameInput,
+  ModalHeader,
+} from '../../components/molecules/ProfileEditModal';
+import { Button } from '@mui/material';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: calc(100vh - 64px);
   background-color: #f9f9f9;
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  width: 300px;
+  width: 350px;
   gap: 10px;
   padding: 20px;
   background-color: white;
@@ -29,24 +33,6 @@ const Input = styled.input`
   padding: 8px;
   font-size: 16px;
   margin-bottom: 10px;
-`;
-
-const Button = styled.button`
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-
-  &:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
 `;
 
 const FileInput = styled.input`
@@ -64,7 +50,7 @@ const NicknameContainer = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   width: 100%;
 `;
 
@@ -152,28 +138,37 @@ const UserInfoPage = () => {
   return (
     <Container>
       <Form onSubmit={handleFormSubmit}>
-        <h2>Enter Your Information</h2>
+        <ModalHeader>사용자 정보를 입력해주세요</ModalHeader>
         <NicknameContainer>
-          <Input
+          <NicknameInput
             type='text'
-            placeholder='Nickname'
+            placeholder='닉네임을 입력하세요'
             value={nickname}
             onChange={handleNicknameChange}
             required
           />
-          <Button type='button' onClick={handleNicknameCheck}>
-            Check
+          <Button
+            variant='contained'
+            color='secondary'
+            onClick={handleNicknameCheck}
+            sx={{ marginLeft: '10px' }}
+          >
+            중복확인
           </Button>
         </NicknameContainer>
         {nicknameMessage && (
           <Message $isError={!isNicknameValid}>{nicknameMessage}</Message>
         )}
-        <Label>Profile Picture</Label>
+        <Label>프로필 사진</Label>
         <FileInput type='file' onChange={handleProfilePictureChange} />
-        <Label>Voice Model</Label>
+        <Label>음성 모델</Label>
         <FileInput type='file' onChange={handleVoiceModelChange} />
         <ButtonContainer>
-          <Button type='submit' disabled={!isNicknameValid}>
+          <Button
+            variant='contained'
+            color='secondary'
+            disabled={!isNicknameValid}
+          >
             회원가입
           </Button>
         </ButtonContainer>

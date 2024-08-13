@@ -23,6 +23,18 @@ const Container = styled.div`
   }
 `;
 
+const WelcomeMessage = styled.div`
+  font-size: 18px;
+  line-height: 1.5;
+  color: #333;
+  text-align: center;
+  margin-top: 20px;
+
+  br {
+    margin-bottom: 10px;
+  }
+`;
+
 const MyInfoContent = styled.div`
   flex: 1;
   padding: 20px;
@@ -43,7 +55,15 @@ const MyInfoPage = () => {
           />
           <Route path='saved-rooms' element={<SavedRoomsPage />} />
           <Route path='voice-model' element={<VoiceModelPage />} />
-          <Route path='/' element={<div>Welcome to My Info</div>} />
+          <Route
+            path='/'
+            element={
+              <WelcomeMessage>
+                <h3>Welcome to My Info</h3>
+                <br /> 좌측 탭을 선택해주세요!
+              </WelcomeMessage>
+            }
+          />
         </Routes>
       </MyInfoContent>
     </Container>

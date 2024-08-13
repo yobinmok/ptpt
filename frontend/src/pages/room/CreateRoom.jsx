@@ -23,19 +23,11 @@ import {
 } from '@mui/material';
 import { savePreset } from '../../apis/preset';
 
-const CreateRoomBlock = styled.div`
-  height: 510px;
-`;
-
-const ProfileWrapper = styled.div`
-  margin: 30px 0px;
-`;
-
 const CreateRoom = ({ onSave, onClose, item }) => {
   // user정보 불러와야함
   // const user = useSelector((state) => state.user.data.oauth_id);
-  const nickname = useSelector((state) => state.auth.user.nickname);
-  const userId = useSelector((state) => state.auth.user.oauthId);
+  const nickname = ''; //useSelector((state) => state.auth.user.nickname);
+  const userId = ''; //useSelector((state) => state.auth.user.oauthId);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -153,101 +145,96 @@ const CreateRoom = ({ onSave, onClose, item }) => {
   };
   return (
     <>
-      <CreateRoomBlock>
-        <ProfileWrapper>
-          <TextField
-            name='roomname'
-            label='방 이름'
-            fullWidth
-            margin='normal'
-            onChange={onRoomInfoInput}
-            value={roomInfo.roomname}
-          />
-          <TextField
-            name='roomtopic'
-            label='방 주제'
-            fullWidth
-            margin='normal'
-            onChange={onRoomInfoInput}
-            value={roomInfo.roomtopic}
-          />
-          <TextField
-            name='roomcomment'
-            label='방 설명'
-            fullWidth
-            margin='normal'
-            onChange={onRoomInfoInput}
-            value={roomInfo.roomcomment}
-          />
-          <TextField
-            name='roomtime'
-            label='시작 시간'
-            fullWidth
-            type='datetime-local'
-            margin='normal'
-            // inputProps={{ min: `${today}T00:00`, max: `${today}T23:59` }}
-            inputProps={{
-              min: minDateTime.toISOString().slice(0, 16),
-              max: maxDateTime.toISOString().slice(0, 16),
-            }}
-            InputLabelProps={{ shrink: true }}
-            onChange={onRoomInfoInput}
-            value={roomInfo.roomtime}
-            onBlur={onBlur}
-          />
+      <TextField
+        name='roomname'
+        label='방 이름'
+        fullWidth
+        margin='normal'
+        onChange={onRoomInfoInput}
+        value={roomInfo.roomname}
+      />
+      <TextField
+        name='roomtopic'
+        label='방 주제'
+        fullWidth
+        margin='normal'
+        onChange={onRoomInfoInput}
+        value={roomInfo.roomtopic}
+      />
+      <TextField
+        name='roomcomment'
+        label='방 설명'
+        fullWidth
+        margin='normal'
+        onChange={onRoomInfoInput}
+        value={roomInfo.roomcomment}
+      />
+      <TextField
+        name='roomtime'
+        label='시작 시간'
+        fullWidth
+        type='datetime-local'
+        margin='normal'
+        // inputProps={{ min: `${today}T00:00`, max: `${today}T23:59` }}
+        inputProps={{
+          min: minDateTime.toISOString().slice(0, 16),
+          max: maxDateTime.toISOString().slice(0, 16),
+        }}
+        InputLabelProps={{ shrink: true }}
+        onChange={onRoomInfoInput}
+        value={roomInfo.roomtime}
+        onBlur={onBlur}
+      />
 
-          <FormControl component='fieldset' margin='normal'>
-            <FormLabel component='legend'>방의 공개 여부</FormLabel>
-            <RadioGroup
-              row
-              name='roomopen'
-              value={roomInfo.roomopen}
-              onChange={onRoomInfoInput}
-            >
-              <FormControlLabel value='0' control={<Radio />} label='공개' />
-              <FormControlLabel value='1' control={<Radio />} label='비공개' />
-            </RadioGroup>
-          </FormControl>
-          <br />
-          {showPassword && (
-            <TextField
-              name='roompw'
-              label='비밀번호'
-              // fullWidth
-              margin='normal'
-              onChange={onRoomInfoInput}
-              value={roomInfo.roompw}
-            />
-          )}
-          <br />
-          <FormControl component='fieldset' margin='normal'>
-            <FormLabel component='legend'>평가 익명 여부</FormLabel>
-            <RadioGroup
-              row
-              name='roomhidden'
-              value={String(roomInfo.roomhidden)}
-              onChange={onRoomInfoInput}
-            >
-              <FormControlLabel value='0' control={<Radio />} label='익명' />
-              <FormControlLabel value='1' control={<Radio />} label='공개' />
-            </RadioGroup>
-          </FormControl>
-          <br />
-          <Box mt={2} display='flex' justifyContent='flex-end' gap={1}>
-            <Button
-              variant='contained'
-              color='primary'
-              onClick={handleSave}
-              sx={{ marginRight: '8px' }}
-            >
-              저장
-            </Button>
-            <Button variant='contained' onClick={onClose}>
-              닫기
-            </Button>
-          </Box>
-        </ProfileWrapper>
-      </CreateRoomBlock>
+      <FormControl component='fieldset' margin='normal'>
+        <FormLabel component='legend'>방의 공개 여부</FormLabel>
+        <RadioGroup
+          row
+          name='roomopen'
+          value={roomInfo.roomopen}
+          onChange={onRoomInfoInput}
+        >
+          <FormControlLabel value='0' control={<Radio />} label='공개' />
+          <FormControlLabel value='1' control={<Radio />} label='비공개' />
+        </RadioGroup>
+      </FormControl>
+      <br />
+      {showPassword && (
+        <TextField
+          name='roompw'
+          label='비밀번호'
+          sx={{ marginBottom: '10px' }}
+          onChange={onRoomInfoInput}
+          value={roomInfo.roompw}
+        />
+      )}
+      <br />
+      <FormControl component='fieldset'>
+        <FormLabel component='legend'>평가 익명 여부</FormLabel>
+        <RadioGroup
+          row
+          name='roomhidden'
+          value={String(roomInfo.roomhidden)}
+          onChange={onRoomInfoInput}
+        >
+          <FormControlLabel value='0' control={<Radio />} label='익명' />
+          <FormControlLabel value='1' control={<Radio />} label='공개' />
+        </RadioGroup>
+      </FormControl>
+      <br />
+      <Box mt={2} display='flex' justifyContent='center' gap={1}>
+        <Button
+          variant='contained'
+          color='secondary'
+          onClick={handleSave}
+          sx={{ marginRight: '30px' }}
+        >
+          저장
+        </Button>
+        <Button color='neutral' variant='contained' onClick={onClose}>
+          닫기
+        </Button>
+      </Box>
     </>
   );
 };

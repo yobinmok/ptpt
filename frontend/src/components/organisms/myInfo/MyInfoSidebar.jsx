@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import MyInfoSidebarOption from '../../molecules/MyInfoSidebarOption';
 import ProfileEditModal from '../../molecules/ProfileEditModal';
 import ProfileImageEditModal from '../../molecules/ProfileImageEditModal';
+import { Edit } from '@mui/icons-material'; // MUI 아이콘 라이브러리에서 연필 아이콘 가져오기
 
 // 사이드바 컨테이너 스타일
 const SidebarContainer = styled.div`
@@ -33,10 +34,27 @@ const ProfileImage = styled.img`
   object-fit: cover;
 `;
 
+// 프로필 이름 및 아이콘을 포함하는 컨테이너 스타일
+const ProfileNameContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px; /* 이름과 아이콘 사이의 간격 설정 */
+  margin: 0;
+`;
+
 // 프로필 이름 스타일
 const ProfileName = styled.h2`
   font-size: 20px;
   margin: 0;
+`;
+
+// 연필 아이콘 스타일
+const EditIcon = styled(Edit)`
+  cursor: pointer;
+  color: #b1b1b1; /* 아이콘 색상 설정 */
+  &:hover {
+    color: #7a7a7a; /* 아이콘 호버 색상 설정 */
+  }
 `;
 
 // 파일 업로드 입력 스타일 (숨김)
@@ -81,10 +99,13 @@ const MyInfoSidebar = () => {
           alt='Profile'
           onClick={handleImageClick}
         />
-        {/* 프로필 이름 (닉네임이 없으면 '닉네임 없음' 표시) */}
-        <ProfileName>{nickname || '닉네임 없음'}</ProfileName>
+        {/* 프로필 이름 및 아이콘 */}
+        <ProfileNameContainer>
+          <ProfileName>{nickname || '닉네임 없음'}</ProfileName>
+          <EditIcon onClick={handleOpenModal} />
+        </ProfileNameContainer>
         {/* 프로필 수정 모달 열기 버튼 */}
-        <button onClick={handleOpenModal}>Edit profile</button>
+        {/* <button onClick={handleOpenModal}>닉네임 수정</button> */}
       </ProfileSection>
       {/* 사이드바 옵션들 */}
       <MyInfoSidebarOption to='/myinfo/statistics' icon='📊'>

@@ -11,6 +11,7 @@ import {
   MenuItem,
   FormControlLabel,
   Checkbox,
+  Typography,
 } from '@mui/material';
 import CreateRoom from './room/CreateRoom';
 import Modal from '../components/molecules/RoomCreateModal';
@@ -65,7 +66,7 @@ const RoomListPage = () => {
   }, []); // 빈 배열을 추가하여 useEffect가 처음 렌더링될 때 한 번만 실행되도록 설정
 
   const [currentList, setCurrentList] = useState([]);
-  // const [searchList, setSearchList] = useState({});
+  const [searchList, setSearchList] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchType, setSearchType] = useState('roomname'); // 검색 유형 상태
   const [searchName, setSearchName] = useState(''); // 검색어 상태
