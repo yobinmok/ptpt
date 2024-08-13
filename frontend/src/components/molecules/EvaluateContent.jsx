@@ -28,7 +28,6 @@ const EvaluateContent = ({}) => {
     (state) => state.participant.evaluateParticipants
   );
   // 자기 자신을 제외한 참가자 목록을 평가지에 올림
-  // const userId = 'G41';
   // 평가를 등록할 때 master의 정보는 nickname으로 전송, 참가자 목록에서 nickname을 통해 자기 자신 제외
   const nickname = useSelector((state) => state.auth.user.nickname);
 

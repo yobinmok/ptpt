@@ -8,8 +8,8 @@ import {
 const initialState = {
   isAuthenticated: false,
   token: null,
-  user: null,
-  oauthId: null,
+  user: null, 
+  oauthId: null, 
 };
 
 const authReducer = (state = initialState, action) => {
