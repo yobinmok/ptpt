@@ -25,7 +25,7 @@ import { getProfile } from './apis/auth';
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  useEffect(async () => {
+  useEffect(() => {
     let user = null;
     let oauthId = null;
 
@@ -34,12 +34,12 @@ function App() {
       .find((row) => row.startsWith('Authorization='))
       ?.split('=')[1];
 
-    const logined = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('logined='))
-      ?.split('=')[1];
+    // const logined = document.cookie
+    //   .split('; ')
+    //   .find((row) => row.startsWith('logined='))
+    //   ?.split('=')[1];
 
-    console.log(logined);
+    // console.log(logined);
     console.log('Extracted JWT Token:', token);
     if (token) {
       try {
@@ -74,28 +74,7 @@ function App() {
 
     console.log('@@@@@@');
     console.log(token, oauthId);
-
-    if (logined != 'ok') {
-      if (window.location.pathname === '/login') {
-        navigate('/'); // 현재 위치가 로그인 페이지일 경우에만 메인 페이지로 이동
-      }
-    } else {
-      navigate('/userinfo', { state: { token: token, memberId: oauthId } }); // 로그인 페이지로 이동
-    }
   }, [dispatch]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const profile = await getProfile(oauthId);
-        dispatch(setAuth(token, profile));
-      } catch (error) {
-        console.error('Error fetching profile:', error);
-      }
-    };
-
-    fetchData();
-  }, [oauthId]);
 
   return (
     <div className='App' style={{ paddingTop: '64px' }}>
