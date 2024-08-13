@@ -26,8 +26,8 @@ import { savePreset } from '../../apis/preset';
 const CreateRoom = ({ onSave, onClose, item }) => {
   // user정보 불러와야함
   // const user = useSelector((state) => state.user.data.oauth_id);
-  const nickname = ''; //useSelector((state) => state.auth.user.nickname);
-  const userId = ''; //useSelector((state) => state.auth.user.oauthId);
+  const nickname = useSelector((state) => state.auth.user.nickname);
+  const userId = useSelector((state) => state.auth.user.oauthId);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
