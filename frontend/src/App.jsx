@@ -1,8 +1,6 @@
-import { useNavigate } from 'react-router-dom';
 import React, { useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import store from './store/store';
 import MainPage from './pages/MainPage';
 import LoginPage from './pages/member/LoginPage';
 import AuthPage from './pages/member/AuthPage';
@@ -23,10 +21,30 @@ import RoomListPage from './pages/RoomListPage';
 import RoomDetail from './pages/room/RoomDetail';
 import { setOauthId, setAuth } from './store/actions/authActions'; // 추가된 부분
 import PrivateRoute from './routes/PrivateRoute';
-
+import { getProfile } from './apis/auth';
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const params = new URLSearchParams(window.location.search);
+  // oauthId 값을 추출
+  const paramOauthId = params.get('oauthId');
+
+  useEffect(() => {
+    console.log(paramOauthId);
+    const fetchData = async () => {
+      try {
+        const profile = await getProfile(paramOauthId);
+        dispatch(setAuth('token', profile));
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+
+    if (paramOauthId) {
+      fetchData();
+    }
+  }, [paramOauthId]);
+
   useEffect(() => {
     let user = null;
     let oauthId = null;
@@ -112,10 +130,6 @@ function App() {
           <Route path='room/list' element={<RoomListPage />} />
           <Route path='/room/:roomId' element={<RoomDetail />} />
           <Route path='/test' element={<VoiceTestPage />} />
-          <Route
-            path='/myinfo/statistics/evaluation/feedBack/:roomId'
-            element={<FeedbackDetail />}
-          />{' '}
         </Route>
         {/* 피드백 상세 페이지 라우트 */}
       </Routes>

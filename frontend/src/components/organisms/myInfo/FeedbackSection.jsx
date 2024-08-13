@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { fetchFeedback } from '../../../store/actions/feedbackActions';
 import FeedbackListItem from './FeedbackListItem';
 
 const Divider = styled.hr`
@@ -11,40 +13,74 @@ const Divider = styled.hr`
 const FeedbackListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px; /* 항목 간격을 조금 더 넓힘 */
 `;
 
-const FeedbackHeader = styled.div`
+const FeedbackSectionContainer = styled.div`
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+`;
+
+const LabelContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 10px 0;
+  margin-bottom: 10px;
   font-weight: bold;
 `;
 
-const FeedbackLabel = styled.span`
-  flex: 1; /* 텍스트를 균등하게 분배 */
+const Label = styled.span`
+  flex: 1;
+  text-align: left;
 `;
 
-const FeedbackSection = ({ feedbackData }) => {
+const FeedbackSection = () => {
+  const dispatch = useDispatch();
+  const oauthId = useSelector((state) => state.auth.user.oauthId);
+  const feedbackData = useSelector((state) => state.feedback.feedbackList);
+  const loading = useSelector((state) => state.feedback.loading);
+  const error = useSelector((state) => state.feedback.error);
+
+  useEffect(() => {
+    if (oauthId) {
+      dispatch(fetchFeedback(oauthId, 1));
+    }
+  }, [dispatch, oauthId]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+
+  // 스터디룸별로 피드백을 그룹화
+  const groupedFeedback = feedbackData.reduce((acc, feedback) => {
+    if (!acc[feedback.studyRoomId]) {
+      acc[feedback.studyRoomId] = {
+        studyRoomTitle: feedback.studyRoomTitle,
+        subject: feedback.subject,
+        studyRoomId: feedback.studyRoomId,
+      };
+    }
+    return acc;
+  }, {});
+
   return (
-    <div>
+    <FeedbackSectionContainer>
       <h2>피드백 모아보기</h2>
       <Divider />
-      <FeedbackHeader>
-        <FeedbackLabel>스터디룸 이름</FeedbackLabel>
-        <FeedbackLabel>주제</FeedbackLabel>
-      </FeedbackHeader>
+      <LabelContainer>
+        <Label>스터디룸 제목</Label>
+        <Label>주제</Label>
+      </LabelContainer>
       <FeedbackListContainer>
-        {feedbackData.map((feedback) => (
+        {Object.values(groupedFeedback).map((room, index) => (
           <FeedbackListItem
-            key={feedback.studyRoomId}
-            roomName={feedback.studyRoomTitle}
-            subject={feedback.subject}
-            roomId={feedback.studyRoomId}
+            key={`${room.studyRoomId}-${index}`}
+            roomName={room.studyRoomTitle}
+            subject={room.subject}
+            studyRoomId={room.studyRoomId}
           />
         ))}
       </FeedbackListContainer>
-    </div>
+    </FeedbackSectionContainer>
   );
 };
 

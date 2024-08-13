@@ -22,6 +22,7 @@ const ChartContainer = styled.div`
 
 const StatisticsPage = () => {
   const dispatch = useDispatch();
+
   const [page, setPage] = useState(0); // 페이지 상태
   const { loading, statistics, error } = useSelector(
     (state) => state.statistics
@@ -57,8 +58,7 @@ const StatisticsPage = () => {
   //   }
   // }, []);
   // console.log(uniqueFeedback)
-  const uniqueFeedback = feedback
-
+  const uniqueFeedback = feedback;
 
   // 페이지네이션을 위한 다음 페이지로 이동하는 함수
   const handleNextPage = () => {
@@ -69,7 +69,6 @@ const StatisticsPage = () => {
   const handlePreviousPage = () => {
     setPage((prevPage) => (prevPage > 0 ? prevPage - 1 : 0));
   };
-
 
   return (
     <div>
@@ -96,7 +95,13 @@ const StatisticsPage = () => {
         <FeedbackSection feedbackData={uniqueFeedback} />
 
         {/* 페이지네이션 버튼 추가 */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: '20px',
+          }}
+        >
           <button onClick={handlePreviousPage} disabled={page === 0}>
             Previous
           </button>
@@ -104,7 +109,6 @@ const StatisticsPage = () => {
             Next
           </button>
         </div>
-
       </div>
     </div>
   );
