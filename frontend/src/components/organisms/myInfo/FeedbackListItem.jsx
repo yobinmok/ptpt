@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-// 피드백 항목 스타일 정의
 const FeedbackItemContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -19,14 +18,15 @@ const FeedbackItemContainer = styled.div`
 
 const FeedbackItemText = styled.span`
   flex: 1;
-  text-align: left; /* 왼쪽 정렬 */
+  text-align: left;
 `;
 
-const FeedbackListItem = ({ roomName, subject, roomId }) => {
+const FeedbackListItem = ({ roomName, subject, studyRoomId }) => {
   const navigate = useNavigate();
-  
+
   const handleClick = () => {
-    navigate(`/myinfo/statistics/evaluation/feedBack/${roomId}`);
+    console.log('Navigating to study room ID:', studyRoomId);
+    navigate(`/myinfo/statistics/evaluation/feedBack/${studyRoomId}`);
   };
 
   return (
