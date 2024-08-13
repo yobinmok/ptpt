@@ -10,19 +10,25 @@ const SoloRoomTab = () => {
   const soloRoom = savedRooms.filter((preset) => preset.presetType === 'solo');
   console.log(savedRooms);
 
-  const handleItemClick = (item) => {
-    console.log('Clicked item:', item);
+  const handleItemClick = (preset) => {
+    const item = {
+      ...preset.presetData,
+      presetId: preset.presetId,
+    };
+    console.log('Clicked item with presetId:', item);
     dispatch(initPreset(item));
     navigate('/solo');
   };
+
   return (
     <>
       {soloRoom.length > 0 ? (
         soloRoom.map((preset) => (
           <SoloRoomItem
             key={preset.presetId}
+            id={preset.presetId}
             item={preset.presetData}
-            onClick={handleItemClick}
+            onClick={() => handleItemClick(preset)}
           />
         ))
       ) : (

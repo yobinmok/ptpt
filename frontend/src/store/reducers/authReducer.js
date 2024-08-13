@@ -8,8 +8,8 @@ import {
 const initialState = {
   isAuthenticated: false,
   token: null,
-  user: null, 
-  oauthId: null, 
+  user: null,
+  oauthId: null,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -19,7 +19,10 @@ const authReducer = (state = initialState, action) => {
         ...state,
         isAuthenticated: !!action.token, // token이 존재하면 true로 설정
         token: action.token,
-        user: action.user,
+        user: {
+          ...state.user,
+          ...action.user,
+        },
       };
     case SET_OAUTH_ID:
       console.log('SET_OAUTH_ID Action:', action); // 콘솔 로그 추가
