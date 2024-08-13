@@ -25,6 +25,26 @@ import { getProfile } from './apis/auth';
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const params = new URLSearchParams(window.location.search);
+  // oauthId 값을 추출
+  const paramOauthId = params.get('oauthId');
+
+  useEffect(() => {
+    console.log(paramOauthId);
+    const fetchData = async () => {
+      try {
+        const profile = await getProfile(paramOauthId);
+        dispatch(setAuth('token', profile));
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+
+    if (paramOauthId) {
+      fetchData();
+    }
+  }, [paramOauthId]);
+
   useEffect(() => {
     let user = null;
     let oauthId = null;
@@ -34,12 +54,6 @@ function App() {
       .find((row) => row.startsWith('Authorization='))
       ?.split('=')[1];
 
-    // const logined = document.cookie
-    //   .split('; ')
-    //   .find((row) => row.startsWith('logined='))
-    //   ?.split('=')[1];
-
-    // console.log(logined);
     console.log('Extracted JWT Token:', token);
     if (token) {
       try {
