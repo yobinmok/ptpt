@@ -48,7 +48,6 @@ public class Member {
     public Member(String oauthId) {
         this.oauthId = oauthId;
         this.profile = new Profile(this);
-//        this.role = new Role(this);
     }
 
     public Member(String nickname, String memberPicture, String oauthProvider, String oauthId, String oauthEmail, Timestamp registerTime, int isWithdraw, Timestamp withdrawTime) {
@@ -61,7 +60,6 @@ public class Member {
         this.isWithdraw = isWithdraw;
         this.withdrawTime = withdrawTime;
         this.profile = new Profile(this);
-//        this.role = new Role(this);
     }
 
     public Member(String oauthId, String username, String name, String roleType) {
