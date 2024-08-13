@@ -25,6 +25,32 @@ import { getProfile } from './apis/auth';
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const params = new URLSearchParams(window.location.search);
+  // oauthId 값을 추출
+  const paramOauthId = params.get('oauthId');
+
+  useEffect(() => {
+    console.log(paramOauthId);
+    const fetchData = async () => {
+      try {
+        const profile = await getProfile(paramOauthId);
+        const user = {
+          oauthId: paramOauthId,
+          nickname: profile.nickname,
+          memberPicture: profile.memberPicture,
+          voiceModelCreated: profile.voiceModelCreated,
+        };
+        dispatch(setAuth('token', user));
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+
+    if (paramOauthId) {
+      fetchData();
+    }
+  }, [paramOauthId]);
+
   useEffect(() => {
     let user = null;
     let oauthId = null;
@@ -34,12 +60,6 @@ function App() {
       .find((row) => row.startsWith('Authorization='))
       ?.split('=')[1];
 
-    // const logined = document.cookie
-    //   .split('; ')
-    //   .find((row) => row.startsWith('logined='))
-    //   ?.split('=')[1];
-
-    // console.log(logined);
     console.log('Extracted JWT Token:', token);
     if (token) {
       try {
@@ -68,9 +88,9 @@ function App() {
       console.log('Dispatching OAuth ID:', oauthId); // 추가된 로그
       dispatch(setOauthId(oauthId)); // 상태에 OAuth ID 저장
     }
-    if (token) {
-      dispatch(setAuth(token, user)); // 상태에 JWT 토큰과 사용자 정보 저장
-    }
+    // if (token) {
+    //   dispatch(setAuth(token, user)); // 상태에 JWT 토큰과 사용자 정보 저장
+    // }
 
     console.log('@@@@@@');
     console.log(token, oauthId);
