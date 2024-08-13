@@ -17,6 +17,8 @@ import {
 } from '@mui/material';
 import CreateRoom from './room/CreateRoom';
 import Modal from '../components/molecules/RoomCreateModal';
+import { askGpt } from '../apis/gpt';
+import GptResponseModal from '../components/molecules/GPTModal';
 
 const SearchContainer = styled.div`
   display: flex;
@@ -120,6 +122,15 @@ const RoomListPage = () => {
     setCurrentList([...response.data.content]);
   };
 
+  const [gptOpen, setGptOpen] = useState(false);
+  const [gptRes, setGptRes] = useState("")
+  const handleGPT = async (question) => {
+    const response = await askGpt(question);
+    setGptOpen(true);
+    console.log(response);
+    setGptRes(response);
+  }
+
   return (
     <>
       <div>
@@ -166,6 +177,16 @@ const RoomListPage = () => {
             <Button variant='contained' color='primary' onClick={handleSearch}>
               검색
             </Button>
+
+            <button onClick={() => handleGPT('한국 노래 추천해줘')}>Ask GPT</button>
+
+      {gptOpen && (
+        <GptResponseModal
+          open={gptOpen}
+          onClose={() => setGptOpen(false)}
+          response={gptResponse}
+        />
+      )}
           </SearchContainer>
           <div>
             <ButtonContainer>

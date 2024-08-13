@@ -16,6 +16,7 @@ const MyEvaluateContent = () => {
   const [myComment, setMyComment] = useState([]);
   const studyRoomId = useSelector((state) => state.room.roomId);
   const userId = useSelector((state) => state.auth.user.oauthId);
+  const anonymity = useSelector((state) => state.room.isAnonymous)
   // oauth_id로 내 평가 호출해오기
   const getMyEval = async () => {
     try {
@@ -23,7 +24,6 @@ const MyEvaluateContent = () => {
       console.log(response);
       if (response) {
         // 익명 여부와 평가 길이
-        // anonymity = response[0].anonymity;
         const totalEvaluate = response.reduce(
           (acc, curr) => ({
             delivery: acc.delivery + curr.delivery,
@@ -85,9 +85,11 @@ const MyEvaluateContent = () => {
               elevation={4}
               sx={{ padding: 2, marginBottom: 2 }}
             >
-                <Typography variant='subtitle1' gutterBottom>
-                  {comment.nickname}
-                </Typography>
+                {anonymity==1 && ( // 1이 공개이므로, 이 때만 표시
+                  <Typography variant='subtitle1' gutterBottom>
+                    {comment.nickname}
+                  </Typography>
+                )}
 
               <Divider />
               <Typography variant='body1'>{comment.commentContent}</Typography>
