@@ -88,9 +88,9 @@ function App() {
       console.log('Dispatching OAuth ID:', oauthId); // 추가된 로그
       dispatch(setOauthId(oauthId)); // 상태에 OAuth ID 저장
     }
-    if (token) {
-      dispatch(setAuth(token, user)); // 상태에 JWT 토큰과 사용자 정보 저장
-    }
+    // if (token) {
+    //   dispatch(setAuth(token, user)); // 상태에 JWT 토큰과 사용자 정보 저장
+    // }
 
     console.log('@@@@@@');
     console.log(token, oauthId);
