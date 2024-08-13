@@ -23,19 +23,10 @@ const ButtonGroup = styled.div`
 `;
 
 const LoginPage = () => {
-  const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
-  const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
-  const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-  const GOOGLE_REDIRECT_URI = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
-  const KAKAO_LINK = import.meta.env.VITE_KAKAO_LINK;
-  const GOOGLE_LINK = import.meta.env.VITE_GOOGLE_LINK;
+  const VITE_API_URL = import.meta.env.VITE_API_URL;
 
-  // 카카오 로그인 URL 생성
-  //   - prompt: 로그인 화면을 강제로 표시하도록 설정
-  //     - "login": 기존 세션이 있더라도 사용자에게 카카오 계정 로그인 화면을 보여줍니다.
-  //        이 옵션을 사용하면 사용자가 매번 로그인을 하도록 유도할 수 있습니다.
-  //     -  (기본값: "none"): 기본적으로 사용자에게 로그인 화면을 표시하지 않고 인가 코드를 발급받습니다.
-
+  const KAKAO_LINK = `${VITE_API_URL}/oauth2/authorization/kakao`;
+  const GOOGLE_LINK = `${VITE_API_URL}/oauth2/authorization/google`;
 
   // 카카오 로그인 핸들러 함수
   const kakaoLoginHandler = () => {
