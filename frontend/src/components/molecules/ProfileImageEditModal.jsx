@@ -3,63 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateProfile } from '../../apis/auth';
 import { updateProfilePicture } from '../../store/actions/userActions';
 import styled from 'styled-components';
-
-// 모달의 배경을 어둡게 만드는 오버레이 스타일
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-`;
-
-// 모달의 콘텐츠 스타일
-const ModalContent = styled.div`
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-// 모달의 헤더 스타일
-const ModalHeader = styled.h3`
-  margin: 0;
-  text-align: center;
-`;
-
-// 모달의 버튼 스타일
-const ModalButton = styled.button`
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-
-  &:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
-`;
+import { Button } from '@mui/material';
+import { ModalOverlay, ModalContent, ModalHeader } from './ProfileEditModal';
 
 // 파일 선택 버튼 스타일 (label 사용)
 const FileLabel = styled.label`
   display: inline-block;
   padding: 10px;
-  background-color: #007bff;
+  background-color: #639d82;
   color: white;
   border: none;
   border-radius: 4px;
@@ -67,7 +18,7 @@ const FileLabel = styled.label`
   text-align: center;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #4e8065;
   }
 `;
 
@@ -83,8 +34,9 @@ const FileName = styled.div`
   color: #333;
   text-align: center;
 `;
+
 const CancelButton = styled.button`
-  background-color: #dc3545;
+  background-color: #639d82;
   color: white;
   padding: 5px 10px;
   border-radius: 5px;
@@ -100,12 +52,28 @@ const FileNameContainer = styled.div`
   margin-top: 10px;
 `;
 
-// ProfileImageEditModal 컴포넌트 정의
+// 이미지 미리보기 스타일
+const ImagePreview = styled.img`
+  max-width: 100px;
+  max-height: 100px;
+  border-radius: 8px;
+`;
+
+// 이미지 미리보기 컨테이너 스타일
+const ImagePreviewContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+`;
+
 const ProfileImageEditModal = ({ onClose, oauthId }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileName, setFileName] = useState('');
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(
+    '/default_profile.png'
+  );
 
   // 파일 선택 시 호출되는 핸들러
   const handleFileChange = (event) => {
@@ -113,11 +81,20 @@ const ProfileImageEditModal = ({ onClose, oauthId }) => {
     if (file) {
       setSelectedFile(file);
       setFileName(file.name);
+
+      // 이미지 미리보기 URL 생성
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreviewUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
+
   const handleCancel = () => {
     setSelectedFile(null);
     setFileName('');
+    setImagePreviewUrl('/default_profile.png'); // 기본 이미지로 리셋
   };
 
   // 저장 버튼 클릭 시 호출되는 핸들러
@@ -154,27 +131,43 @@ const ProfileImageEditModal = ({ onClose, oauthId }) => {
   return (
     <ModalOverlay>
       <ModalContent>
-        <ModalHeader>Change Profile Picture</ModalHeader>
+        <ModalHeader>새로운 프로필 사진을 선택하세요</ModalHeader>
+        {/* 이미지 미리보기 컨테이너 */}
+        <ImagePreviewContainer>
+          <ImagePreview src={imagePreviewUrl} alt='미리보기' />
+        </ImagePreviewContainer>
         <FileInput
           type='file'
           id='fileInput'
           accept='image/*'
           onChange={handleFileChange}
         />
-        <FileLabel htmlFor='fileInput'>Choose File</FileLabel>
-        <FileNameContainer>
+        <FileLabel htmlFor='fileInput'>이미지 선택</FileLabel>
+        {/* <FileNameContainer>
           <FileName>Selected file: {fileName}</FileName>
           {selectedFile && (
             <CancelButton onClick={handleCancel}>Cancel</CancelButton>
           )}
-        </FileNameContainer>
+        </FileNameContainer> */}
         <div
-          style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '20px',
+            marginTop: '10px',
+          }}
         >
-          <ModalButton onClick={handleSave} disabled={!selectedFile}>
-            Save
-          </ModalButton>
-          <ModalButton onClick={onClose}>Cancel</ModalButton>
+          <Button
+            color='secondary'
+            variant='contained'
+            onClick={handleSave}
+            disabled={!selectedFile}
+          >
+            저장
+          </Button>
+          <Button color='neutral' variant='contained' onClick={onClose}>
+            닫기
+          </Button>
         </div>
       </ModalContent>
     </ModalOverlay>

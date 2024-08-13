@@ -6,9 +6,10 @@ import {
 } from '../../store/actions/userActions';
 import { updateProfile, checkNicknameDuplicate } from '../../apis/auth';
 import styled from 'styled-components';
+import { Button, Modal } from '@mui/material';
 
 // 모달의 배경을 어둡게 만드는 오버레이 스타일
-const ModalOverlay = styled.div`
+export const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -22,25 +23,23 @@ const ModalOverlay = styled.div`
 `;
 
 // 모달의 콘텐츠 스타일
-const ModalContent = styled.div`
+export const ModalContent = styled.div`
   background: #ffffff;
   padding: 20px;
   border-radius: 8px;
-  width: 300px;
+  width: 350px;
   display: flex;
+  justify-content: center;
   flex-direction: column;
   gap: 10px;
 `;
 
 // 모달의 헤더 스타일
-const ModalHeader = styled.h3`
-  margin: 0;
-  text-align: center;
-`;
-
-// 모달의 버튼 스타일
-const ModalButton = styled.button`
-  margin-top: 10px;
+export const ModalHeader = styled.div`
+  font-weight: bold;
+  font-size: 18px;
+  margin: 10px 0px;
+  // text-align: center;
 `;
 
 // 닉네임 입력 섹션 스타일
@@ -51,14 +50,16 @@ const NicknameSection = styled.div`
 `;
 
 // 닉네임 입력 필드 스타일
-const NicknameInput = styled.input`
+export const NicknameInput = styled.input`
   flex: 1;
-  padding: 8px;
+  padding: 10px;
   font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 `;
 
 // 중복 확인 결과 스타일
-const CheckResult = styled.div`
+export const CheckResult = styled.div`
   color: ${(props) => (props.$isAvailable ? 'green' : 'red')};
   font-size: 14px;
   text-align: center;
@@ -86,19 +87,19 @@ const ProfileEditModal = ({ onClose, oauthId }) => {
     try {
       const response = await checkNicknameDuplicate(tempNickname);
       if (response === '입력한 닉네임 사용 가능.') {
-        setCheckResult('Nickname is available.');
+        setCheckResult('사용 가능한 닉네임입니다.');
         setIsAvailable(true);
       } else {
-        setCheckResult('Nickname is already taken.');
+        setCheckResult('이미 사용 중인 닉네임입니다.');
         setIsAvailable(false);
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        setCheckResult('Nickname is already taken.');
+        setCheckResult('이미 사용중인 닉네임입니다.');
         setIsAvailable(false);
       } else {
         console.error('Error checking nickname:', error);
-        setCheckResult('Error checking nickname.');
+        setCheckResult('다시 시도해주세요.');
         setIsAvailable(false);
       }
     }
@@ -138,7 +139,7 @@ const ProfileEditModal = ({ onClose, oauthId }) => {
   return (
     <ModalOverlay>
       <ModalContent>
-        <ModalHeader>Edit Profile</ModalHeader>
+        <ModalHeader>수정할 닉네임을 적어주세요</ModalHeader>
         {/* 닉네임 입력 섹션 */}
         <NicknameSection>
           <NicknameInput
@@ -149,9 +150,15 @@ const ProfileEditModal = ({ onClose, oauthId }) => {
               setCheckResult(null);
               setIsAvailable(false);
             }}
-            placeholder='Enter new nickname'
+            placeholder='닉네임을 입력해주세요'
           />
-          <button onClick={handleNicknameCheck}>Check</button>
+          <Button
+            variant='outlined'
+            color='secondary'
+            onClick={handleNicknameCheck}
+          >
+            중복확인
+          </Button>
         </NicknameSection>
         {/* 중복 확인 결과 표시 */}
         {checkResult && (
@@ -159,14 +166,26 @@ const ProfileEditModal = ({ onClose, oauthId }) => {
         )}
         {/* 모달 하단 버튼 섹션 */}
         <div
-          style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '20px',
+            marginTop: '10px',
+          }}
         >
           {/* 닉네임 저장 버튼 */}
-          <ModalButton onClick={handleSave} disabled={!isAvailable}>
-            Save
-          </ModalButton>
+          <Button
+            color='secondary'
+            variant='contained'
+            onClick={handleSave}
+            disabled={!isAvailable}
+          >
+            저장
+          </Button>
           {/* 모달 닫기 버튼 */}
-          <ModalButton onClick={onClose}>Cancel</ModalButton>
+          <Button color='neutral' variant='contained' onClick={onClose}>
+            닫기
+          </Button>
         </div>
       </ModalContent>
     </ModalOverlay>

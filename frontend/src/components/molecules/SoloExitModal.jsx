@@ -66,7 +66,9 @@ export const ExitModal = ({ open, handleClose }) => {
             paddingTop: '40px',
           }}
         >
-          <div>발표 연습에 사용한 데이터를 저장하시겠습니까?</div>
+          <div style={{ marginBottom: '5px' }}>
+            발표 연습에 사용한 데이터를 저장하시겠습니까?
+          </div>
           <div>저장한 정보는 내 정보에서 확인할 수 있습니다.</div>
           <StyledInput
             type='text'
@@ -110,7 +112,7 @@ export const ExitModal = ({ open, handleClose }) => {
 // Styled Component for the input
 const StyledInput = styled.input`
   border: 1px solid #ccc;
-  border-radius: 10px;
+  border-radius: 5px;
   padding: 10px 12px;
   width: 100%;
   max-width: 400px;
