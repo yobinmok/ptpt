@@ -55,6 +55,9 @@ public class EvaluationController {
     @PostMapping("/feedBack")
     @Operation(summary = "사용자 평가 조회")
     public ResponseEntity<List<FeedBackInfoResponse>> findStudyRoomMemberEvaluationByOauthId(@RequestBody @Valid FeedBackSearchRequest feedBackSearchRequest){
+        System.out.println("111111111111111111111111");
+        System.out.println(feedBackSearchRequest.getStudyRoomId());
+        System.out.println(feedBackSearchRequest.getOauthId());
         List<FeedBackInfoResponse> feedBackInfoResponses = evaluationService.findFeedBackByStudyRoomIdAndOauthId(feedBackSearchRequest);
         return ResponseEntity.ok().body(feedBackInfoResponses);
     }
