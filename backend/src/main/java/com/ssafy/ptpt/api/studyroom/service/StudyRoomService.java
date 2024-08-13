@@ -1,12 +1,15 @@
 package com.ssafy.ptpt.api.studyroom.service;
 
+import com.ssafy.ptpt.api.evaluation.service.EvaluationService;
 import com.ssafy.ptpt.api.studyroom.request.*;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomInfoResponse;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomListResponse;
 import com.ssafy.ptpt.db.jpa.entity.EntryList;
+import com.ssafy.ptpt.db.jpa.entity.Evaluation;
 import com.ssafy.ptpt.db.jpa.entity.Member;
 import com.ssafy.ptpt.db.jpa.entity.StudyRoom;
 import com.ssafy.ptpt.db.jpa.repository.EntryListRepository;
+import com.ssafy.ptpt.db.jpa.repository.EvaluationRepository;
 import com.ssafy.ptpt.db.jpa.repository.MemberRepository;
 import com.ssafy.ptpt.db.jpa.repository.StudyRoomRepository;
 import com.ssafy.ptpt.exception.NotFoundException;
@@ -14,6 +17,7 @@ import com.ssafy.ptpt.exception.NotMatchException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -32,6 +37,7 @@ public class StudyRoomService {
     private final StudyRoomRepository studyRoomRepository;
     private final MemberRepository memberRepository;
     private final EntryListRepository entryListRepository;
+    private final EvaluationRepository evaluationRepository;
 
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -50,14 +56,24 @@ public class StudyRoomService {
     // 사용자 방 조회 - 페이징 적용
     public Page<StudyRoomInfoResponse> findByMemberId(Long memberId, Pageable pageable) {
         // 아이디를 통해 정보를 조회해온다
+        List<Long> studyRoomList = evaluationRepository.findByMemberId(memberId);
 
-        return studyRoomRepository.findByMemberId(memberId, pageable)
-                .map(studyRoom -> {
-                    String hostNickname = memberRepository.findById(studyRoom.getMemberId())
-                            .map(Member::getNickname)
-                            .orElse("Unknown");
-                    return StudyRoomInfoResponse.from(studyRoom, hostNickname);
-                });
+        List<StudyRoomInfoResponse> studyRoomInfoResponseList = new ArrayList<>();
+        for (Long studyRoomId : studyRoomList) {
+            StudyRoom studyRoom = studyRoomRepository.findByStudyRoomId(studyRoomId);
+            Optional<Member> member = memberRepository.findById(studyRoom.getMemberId());
+
+            if (member.isPresent()) {
+                StudyRoomInfoResponse studyRoomInfoResponse = StudyRoomInfoResponse.from(studyRoom, member.get().getNickname());
+                studyRoomInfoResponseList.add(studyRoomInfoResponse);
+            }
+        }
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), studyRoomInfoResponseList.size());
+        List<StudyRoomInfoResponse> pagedList = studyRoomInfoResponseList.subList(start, end);
+
+        return new PageImpl<>(pagedList, pageable, studyRoomInfoResponseList.size());
     }
 
     // 방 리스트 전체 조회 - 페이징 적용
