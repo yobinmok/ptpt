@@ -8,7 +8,7 @@ import MultiRoomTab from './MultiRoomTab';
 const SavedRoomsPage = () => {
   const dispatch = useDispatch();
   const [selectedOption, setSelectedOption] = useState('alone'); // 선택된 옵션 상태
-  const oauthId = useSelector((state) => state.auth.user.oauthId); // 사용자 ID 가져오기
+  const oauthId = useSelector((state) => state.auth.oauthId); // 사용자 ID 가져오기
   const savedRooms = useSelector((state) => state.savedRooms); // Redux 상태에서 저장된 스터디룸 가져오기
 
   useEffect(() => {
@@ -23,6 +23,7 @@ const SavedRoomsPage = () => {
       }
     };
 
+    console.log(oauthId);
     fetchPresetList();
   }, [oauthId]);
 

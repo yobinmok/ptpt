@@ -36,6 +36,7 @@ function Google() {
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
     },
+    withCredentials: true, // 쿠키를 포함하여 요청
   });
 
   return instance;
@@ -47,6 +48,7 @@ function Google_STT() {
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
     },
+    credentials: 'include',
   });
 
   return instance;
@@ -58,6 +60,7 @@ function RecordOV() {
     headers: {
       'Content-Type': 'application/json',
     },
+    credentials: 'include',
   });
 
   return instance;

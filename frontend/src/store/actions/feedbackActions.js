@@ -12,16 +12,18 @@ export const fetchFeedback = (oauthId, page) => async (dispatch) => {
 
   try {
     // 1. 스터디룸 정보를 가져옵니다.
-    const studyRoomResponse = await instance.post('/studyRoom/search',
-      { oauthId }, 
+    const studyRoomResponse = await instance.post(
+      '/studyRoom/search',
+      { oauthId },
       {
         params: {
           page: page,
           size: 10,
           sort: 'studyRoomId',
-        }, 
+        },
       }
     );
+    console.log('Study Room Response:', studyRoomResponse.data);
 
     const studyRooms = studyRoomResponse.data.content;
 
