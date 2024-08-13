@@ -41,7 +41,7 @@ export const login = (credentials) => async (dispatch) => {
 // 로그아웃 비동기 액션 생성자
 export const logout = () => async (dispatch) => {
   try {
-    await instance.post('/member/signout'); // 로그아웃 엔드포인트 호출
+    await instance.get('/member/signout'); // 로그아웃 엔드포인트 호출
 
     // 쿠키에서 JWT 토큰 삭제
     document.cookie = 'Authorization=; Max-Age=0; path=/;';
