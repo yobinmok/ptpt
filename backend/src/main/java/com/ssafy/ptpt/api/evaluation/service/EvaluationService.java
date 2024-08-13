@@ -57,7 +57,7 @@ public class EvaluationService {
 
         // 코멘트 등록 로직
         // 평가하는 사람의 값이 필요함
-        Member master = memberRepository.findByNickname(evaluationCreateRequest.getSlave());
+        Member master = memberRepository.findByNickname(evaluationCreateRequest.getMaster());
         Comment comment = new Comment(evaluation,
                 master.getNickname(),
                 evaluationCreateRequest.getCommentContent(),
@@ -65,7 +65,7 @@ public class EvaluationService {
 
         commentRepository.save(comment);
 
-        Optional<Statistic> optionalStatistic = statisticRepository.findById(master.getMemberId());
+        Optional<Statistic> optionalStatistic = statisticRepository.findById(slave.getMemberId());
 
         if (optionalStatistic.isPresent()) {
             // 데이터가 있다면 업데이트 처리
@@ -116,7 +116,7 @@ public class EvaluationService {
                                 comment.anonymity
                         )
                 ).from(evaluation)
-                .leftJoin(evaluation.comment, comment)
+                .innerJoin(evaluation.comment, comment)
                 .where(evaluation.studyRoom.studyRoomId.eq(feedBackSearchRequest.getStudyRoomId())
                         .and(evaluation.member.oauthId.eq(feedBackSearchRequest.getOauthId())))
                 .fetch();
