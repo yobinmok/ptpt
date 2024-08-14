@@ -1,33 +1,11 @@
-import { useState, useEffect, useReducer } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import LockIcon from '@mui/icons-material/Lock';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { useState, useEffect } from 'react';
 
-const MultiRoomListItem = ({ item, onClick }) => {
-  // onClick 시 방 만들기 모달 띄우기
-  return (
-    <>
-      <Card onClick={onClick}>
-        <CardImage>
-          {!item.isPublic ? (
-            <LockOpenIcon style={{ position: 'absolute', top: 8, right: 8 }} />
-          ) : (
-            <LockIcon style={{ position: 'absolute', top: 8, right: 8 }} />
-          )}
-        </CardImage>
-        <CardContent>
-          <RoomTitle>{item.studyRoomTitle}</RoomTitle>
-          <RoomSubject>{item.subject}</RoomSubject>
-          <RoomSubject>{item.presentationTime}</RoomSubject>
-        </CardContent>
-      </Card>
-    </>
-  );
-};
-
-const Card = styled.div`
+// 스타일 정의
+export const Card = styled.div`
   position: relative;
   width: calc(
     33.333% - 20px
@@ -44,24 +22,55 @@ const Card = styled.div`
   margin: 10px; // 각 카드 간에 10px 간격 유지
 `;
 
-const CardImage = styled.div`
+export const CardImage = styled.div`
   position: relative;
   height: 60%;
   background-color: #f0f0f0;
+  background-image: ${({ imageUrl }) => `url(${imageUrl})`}; // 배경 이미지 설정
+  background-size: cover; // 이미지 크기 조정
+  background-position: center; // 이미지 위치 조정
 `;
 
-const CardContent = styled.div`
+export const CardContent = styled.div`
   padding: 16px;
 `;
 
-const RoomTitle = styled.h2`
+export const RoomTitle = styled.h2`
   font-size: 18px;
   margin: 0 0 8px 0;
 `;
 
-const RoomSubject = styled.p`
+export const RoomSubject = styled.p`
   font-size: 14px;
   margin: 0;
 `;
+
+// 컴포넌트 정의
+const MultiRoomListItem = ({ item, onClick }) => {
+  const [imageUrl, setImageUrl] = useState('');
+
+  useEffect(() => {
+    // 1부터 5까지의 숫자 중 랜덤 선택
+    const randomNum = Math.floor(Math.random() * 4) + 1;
+    setImageUrl(`/img_thumbnail${randomNum}.jpg`);
+  }, []);
+
+  return (
+    <Card onClick={onClick}>
+      <CardImage imageUrl={imageUrl}>
+        {!item.isPublic ? (
+          <LockOpenIcon style={{ position: 'absolute', top: 8, right: 8 }} />
+        ) : (
+          <LockIcon style={{ position: 'absolute', top: 8, right: 8 }} />
+        )}
+      </CardImage>
+      <CardContent>
+        <RoomTitle>{item.studyRoomTitle}</RoomTitle>
+        <RoomSubject>{item.subject}</RoomSubject>
+        <RoomSubject>{item.presentationTime}</RoomSubject>
+      </CardContent>
+    </Card>
+  );
+};
 
 export default MultiRoomListItem;

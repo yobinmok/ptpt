@@ -13,44 +13,13 @@ import {
 } from '../../store/actions/room';
 import { saveMultiPreset } from '../../store/actions/multiAction';
 import { checkStudyRoomPW } from '../../apis/room';
-const { VITE_API_URL } = import.meta.env;
-
-const Card = styled.div`
-  position: relative;
-  width: calc(
-    33.333% - 20px
-  ); // 카드가 3개씩 배치되도록 설정, 각 카드 간에 20px 간격 유지
-  max-width: 300px; // 최대 너비 설정
-  min-width: 250px; // 최소 너비 설정
-  height: 200px;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin: 10px; // 각 카드 간에 10px 간격 유지
-`;
-
-const CardImage = styled.div`
-  position: relative;
-  height: 60%;
-  background-color: #f0f0f0;
-`;
-
-const CardContent = styled.div`
-  padding: 16px;
-`;
-
-const RoomTitle = styled.h2`
-  font-size: 18px;
-  margin: 0 0 8px 0;
-`;
-
-const RoomSubject = styled.p`
-  font-size: 14px;
-  margin: 0;
-`;
+import {
+  Card,
+  CardImage,
+  CardContent,
+  RoomTitle,
+  RoomSubject,
+} from './MultiRoomListItem';
 
 const RoomListItem = ({
   studyRoomTitle,
@@ -73,6 +42,14 @@ const RoomListItem = ({
 
   const handleOpen = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
+
+  const [imageUrl, setImageUrl] = useState('');
+
+  useEffect(() => {
+    // 1부터 5까지의 숫자 중 랜덤 선택
+    const randomNum = Math.floor(Math.random() * 4) + 1;
+    setImageUrl(`/img_thumbnail${randomNum}.jpg`);
+  }, []);
 
   const handleJoin = async () => {
     if (studyRoomPw === '') {
@@ -136,7 +113,7 @@ const RoomListItem = ({
   return (
     <>
       <Card onClick={handleOpen}>
-        <CardImage>
+        <CardImage imageUrl={imageUrl}>
           {!isPublic ? (
             <LockOpenIcon style={{ position: 'absolute', top: 8, right: 8 }} />
           ) : (

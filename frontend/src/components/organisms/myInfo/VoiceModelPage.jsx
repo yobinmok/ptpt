@@ -60,7 +60,10 @@ const VoiceModelPage = () => {
     <Box sx={{ padding: 2 }}>
       <h1>음성 모델</h1>
       {voiceModelCreated ? (
-        <Typography variant='body1'>음성 모델이 등록되어 있습니다.</Typography>
+        <Typography variant='body1'>
+          음성 모델이 등록되었습니다! <br />내 목소리로 가이드라인을
+          만들어보세요!
+        </Typography>
       ) : (
         <Typography variant='body1'>
           자신의 목소리가 담긴 음성 파일을 업로드 해주세요. <br />
