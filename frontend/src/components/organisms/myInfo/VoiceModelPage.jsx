@@ -57,8 +57,8 @@ const VoiceModelPage = () => {
   };
 
   return (
-    <Box sx={{ padding: 2 }}>
-      <h1>음성 모델</h1>
+    <Box>
+      <h2>음성 모델</h2>
       {voiceModelCreated ? (
         <Typography variant='body1'>
           음성 모델이 등록되었습니다! <br />내 목소리로 가이드라인을
@@ -79,7 +79,7 @@ const VoiceModelPage = () => {
         {/* 버튼 */}
         <Button
           variant='contained'
-          color='primary'
+          color='secondary'
           onClick={handleFileUpload}
           disabled={loading}
         >

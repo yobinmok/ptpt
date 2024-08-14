@@ -33,7 +33,7 @@ const SavedRoomsPage = () => {
 
   return (
     <div>
-      <h1>저장한 스터디룸</h1>
+      <h2>저장한 스터디룸</h2>
 
       {/* 옵션 선택 */}
       <div

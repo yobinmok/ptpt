@@ -10,13 +10,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toggleSidebar, selectTab, clearTab } from '../../store/actions/room';
 import EvaluteTab from '../../components/organisms/multi/EvaluateTab';
 import ParticipantsTab from '../../components/organisms/multi/ParticipantsTab';
-import MultiSetting from '../../components/molecules/MultiSetting';
+import SettingsPage from '../../components/molecules/MultiSettingSide';
 
 const MultiPage = () => {
   const tabItem = [
     { icon: PersonIcon, text: '참가자', content: <ParticipantsTab /> },
     { icon: ChecklistIcon, text: '평가', content: <EvaluteTab /> },
-    { icon: SettingsIcon, text: '설정', content: <MultiSetting /> },
+    { icon: SettingsIcon, text: '설정', content: <SettingsPage /> },
   ];
   const dispatch = useDispatch();
   const isSidebarOpen = useSelector((state) => state.room.isSidebarOpen);
