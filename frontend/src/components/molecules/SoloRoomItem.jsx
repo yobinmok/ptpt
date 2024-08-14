@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { Box, Typography, Button } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DropdownMenu from '../atoms/DropdownMenu';
+import { deletePreset } from '../../apis/preset';
+
 const StyledBox = styled(Box)`
   cursor: pointer;
   border: 1px solid gray;
@@ -15,16 +17,33 @@ const StyledBox = styled(Box)`
   justify-content: space-between;
 `;
 
-const SoloRoomItem = ({ item, onClick }) => {
+const SoloRoomItem = ({ id, item, onClick }) => {
   const [isCompleted, setIsCompleted] = useState(item.isCompleted);
 
-  const handleClick = () => {
+  const handleClick = (event) => {
+    // DropdownMenu에서 클릭한 경우 이벤트를 중단
+    event.stopPropagation();
+    if (event.defaultPrevented) return;
     onClick(item);
   };
 
   const toggleCompletionStatus = (event) => {
     event.stopPropagation();
     setIsCompleted((prev) => !prev);
+  };
+
+  const handleDropdownSelect = (event, selectedItem) => {
+    event.stopPropagation();
+    console.log('Dropdown selected:', selectedItem);
+    deletePreset(
+      id,
+      (res) => {
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   };
 
   return (
@@ -58,9 +77,8 @@ const SoloRoomItem = ({ item, onClick }) => {
               label: '삭제하기',
             },
           ]}
-          onSelect={(item) => {
-            console.log(item);
-          }}
+          onSelect={handleDropdownSelect}
+          info='더보기'
         />
       </Box>
     </StyledBox>

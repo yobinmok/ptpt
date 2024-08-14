@@ -79,7 +79,7 @@ const RoomListItem = ({
       dispatch(setHost(hostNickname));
       dispatch(setPresentationTime(presentationTime));
       dispatch(setAnonymous(anonymity));
-      savePreset();
+      saveMultiPresetState();
       setRoomInfo(studyRoomId);
       return;
     } else {
@@ -90,7 +90,7 @@ const RoomListItem = ({
         dispatch(setHost(hostNickname));
         dispatch(setPresentationTime(presentationTime));
         dispatch(setAnonymous(anonymity));
-        savePreset();
+        saveMultiPresetState();
         setRoomInfo(studyRoomId);
       } else {
         alert('비밀번호 오류');
@@ -99,7 +99,7 @@ const RoomListItem = ({
     }
   };
 
-  const savePreset = () => {
+  const saveMultiPresetState = () => {
     const preset = {
       roomname: studyRoomTitle,
       roomtopic: subject,

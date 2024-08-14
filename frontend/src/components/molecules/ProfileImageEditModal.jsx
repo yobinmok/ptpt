@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateProfile } from '../../apis/auth';
-import { updateProfilePicture } from '../../store/actions/userActions';
+import { setAuth } from '../../store/actions/authActions';
 import styled from 'styled-components';
 import { Button } from '@mui/material';
 import { ModalOverlay, ModalContent, ModalHeader } from './ProfileEditModal';
@@ -72,9 +72,14 @@ const ProfileImageEditModal = ({ onClose, oauthId }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileName, setFileName] = useState('');
   const [imagePreviewUrl, setImagePreviewUrl] = useState(
-    '/default_profile.png'
+    'https://i11b207.p.ssafy.io/uploads/profileImage/defaultImage.png'
   );
 
+  useEffect(() => {
+    setImagePreviewUrl(
+      'https://i11b207.p.ssafy.io/uploads' + user.memberPicture
+    );
+  }, [user]);
   // 파일 선택 시 호출되는 핸들러
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -114,14 +119,16 @@ const ProfileImageEditModal = ({ onClose, oauthId }) => {
           })
         );
         profileData.append('image', selectedFile);
-
+        if (selectedFile)
+          memberUpdateRequest.memberPicture =
+            '/profileImage/' +
+            oauthId +
+            '.' +
+            selectedFile.name.split('.').pop();
         const response = await updateProfile(profileData);
         console.log('Profile image update response:', response);
-        if (response) {
-          dispatch(updateProfilePicture(response.memberPicture)); // Redux 상태 업데이트
-          dispatch(setProfileImage(response.memberPicture)); // 전역 상태에 이미지 URL 저장
-          onClose(); // 모달 닫기
-        }
+        dispatch(setAuth('token', memberUpdateRequest));
+        onClose(); // 모달 닫기
       } catch (error) {
         console.error('Error updating profile image:', error);
       }

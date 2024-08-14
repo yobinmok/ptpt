@@ -1,6 +1,7 @@
 // 리듀서: store에 들어갈 state와 state를 바꿀 함수 정의
 // state와 state를 바꿀 함수를 정의하는 곳
 const initialState = {
+  presetId: null,
   voiceModel: [
     'ko-KR-Standard-A',
     'ko-KR-Standard-B',
@@ -11,7 +12,7 @@ const initialState = {
   script: [], // { title: '디폴트', content: '안녕하세요 기본값입니다.' }
   // {title: "", content: "", voiceSetting: {model: 0, tone: 3, speakingRate: 2}} 리스트 형식 -> 불러올 때는 인덱스 사용
   voiceRecord: [], // 내 녹음본
-  guideline: [], // 가이드라인 [오디오 태그의 src값 저장..?ㅠ]
+  guideline: [], // 가이드라인
   isRecording: false,
   expectedQuestion: false,
   createdTime: null,
@@ -75,6 +76,7 @@ const soloReducer = (state = initialState, action) => {
       }
       return {
         ...state,
+        presetId: action.payload.presetId,
         title: action.payload.title,
         createdTime: action.payload.createdTime,
         isCompleted: action.payload.isCompleted,
