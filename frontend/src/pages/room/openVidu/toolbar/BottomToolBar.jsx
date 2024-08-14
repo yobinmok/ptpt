@@ -97,6 +97,7 @@ class ToolbarComponent2 extends Component {
     const isSideTab = this.props.isSideTab; // true이면 열린거
     const isRecord = this.props.isRecord;
     const isRes = this.props.recordSessionId; // null이 아니면, startRecord의 response가 온 것
+    const isStart = this.props.isStart;
     return (
       <Toolbar
         className='toolbar'
@@ -176,7 +177,7 @@ class ToolbarComponent2 extends Component {
             )}
           </IconButton>
           {!isRecord ? (
-            <IconButton className='navButton' onClick={this.startRecord}>
+            <IconButton className='navButton' onClick={this.startRecord} disabled={isStart === false}>
               <Tooltip title='녹화 시작' placement='top'>
                 <PlayCircleFilledWhiteIcon />
               </Tooltip>
@@ -240,6 +241,7 @@ const mapStateToProps = (state) => ({
   isRecord: state.room.isRecord,
   // 아래 값은 startRecord의 response로 id가 저장되기 때문에, 아래 값이 null이 아니면 startRecord의 response가 왔다는 뜻
   recordSessionId: state.room.recordSessionId,
+  isStart: state.room.isStart,
 });
 
 export default connect(mapStateToProps)(ToolbarComponent2);

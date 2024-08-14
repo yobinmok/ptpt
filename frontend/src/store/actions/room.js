@@ -58,10 +58,9 @@ const setAnonymous = (isAnonymous) => {
 };
 
 // 지금 안쓰고 있음
-const isStartPresantation = (flag) => {
+const isStartPresantation = () => {
   return {
     type: IS_START_PRESANTATION,
-    flag,
   };
 };
 

@@ -32,6 +32,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final NumberPath<Integer> memberReportCount = createNumber("memberReportCount", Integer.class);
 
+    public final StringPath name = createString("name");
+
     public final StringPath nickname = createString("nickname");
 
     public final StringPath oauthEmail = createString("oauthEmail");
@@ -44,7 +46,9 @@ public class QMember extends EntityPathBase<Member> {
 
     public final DateTimePath<java.sql.Timestamp> registerTime = createDateTime("registerTime", java.sql.Timestamp.class);
 
-    public final QRole role;
+    public final StringPath role = createString("role");
+
+    public final StringPath username = createString("username");
 
     public final NumberPath<Integer> voiceModelCreated = createNumber("voiceModelCreated", Integer.class);
 
@@ -69,7 +73,6 @@ public class QMember extends EntityPathBase<Member> {
     public QMember(Class<? extends Member> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.profile = inits.isInitialized("profile") ? new QProfile(forProperty("profile"), inits.get("profile")) : null;
-        this.role = inits.isInitialized("role") ? new QRole(forProperty("role"), inits.get("role")) : null;
     }
 
 }
