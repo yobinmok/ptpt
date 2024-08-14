@@ -9,7 +9,7 @@ import useInterval from '../../util/useInterval';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useRef } from 'react';
-import MultiStartModal from '../molecules/MuliStartModal';
+import MultiStartModal from '../molecules/MultiStartModal';
 import { isStartPresantation } from '../../store/actions/room';
 
 const MultiSidebar = ({ tabItem }) => {

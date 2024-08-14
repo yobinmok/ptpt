@@ -135,10 +135,6 @@ const RoomListPage = () => {
     setGptRes(response);
   }
 
-  const handleGPTClose = () => {
-    setGptOpen(false);
-  }
-
   return (
     <>
       <div>
