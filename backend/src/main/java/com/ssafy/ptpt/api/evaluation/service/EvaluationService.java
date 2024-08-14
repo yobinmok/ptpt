@@ -97,6 +97,7 @@ public class EvaluationService {
     // 코멘트도 가져와야 하자너
     @Transactional
     public List<FeedBackInfoResponse> findFeedBackByStudyRoomIdAndOauthId(FeedBackSearchRequest feedBackSearchRequest) {
+        Member member = memberRepository.findByOauthId(feedBackSearchRequest.getOauthId());
         QEvaluation evaluation = QEvaluation.evaluation;
         QComment comment = QComment.comment;
 
@@ -116,10 +117,12 @@ public class EvaluationService {
                                 comment.anonymity
                         )
                 ).from(evaluation)
-                .innerJoin(evaluation.comment, comment)
-                .where(evaluation.studyRoom.studyRoomId.eq(feedBackSearchRequest.getStudyRoomId())
-                        .and(evaluation.member.oauthId.eq(feedBackSearchRequest.getOauthId())))
+                .innerJoin(comment)
+                .on(evaluation.evaluationId.eq(comment.evaluation.evaluationId))
+                .where(evaluation.member.nickname.eq(member.getNickname()))
                 .fetch();
+
+
     }
 
     // 평가 삭제
