@@ -49,3 +49,58 @@ export const Content = styled.div.withConfig({
   opacity: ${(props) => (props.isVisible ? 1 : 0)};
   transition: opacity 1s ease-in-out;
 `;
+
+// 개별 프로젝트 카드를 위한 스타일 정의
+export const ProjectCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8); /* 흰색 반투명 배경 */
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 800px;
+  transition:
+    transform 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
+
+  &:hover {
+    transform: translateY(-10px);
+    opacity: 0.9;
+  }
+`;
+
+// 프로젝트 이미지 스타일 정의
+export const ProjectImage = styled.img`
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-bottom: 20px;
+`;
+
+// 프로젝트 제목 및 설명 스타일 정의
+export const ProjectTitle = styled.h2`
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+`;
+
+export const ProjectDescription = styled.p`
+  font-size: 16px;
+  color: #777;
+  text-align: center;
+`;
+
+// 링크 버튼 스타일 정의
+export const ProjectLink = styled.a`
+  margin-top: 10px;
+  font-size: 16px;
+  color: #007bff;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;

@@ -106,7 +106,8 @@ export const DropdownItem = styled(Link)`
   text-decoration: none;
   display: block;
   width: 100%; /* 아이템이 드롭다운 메뉴의 폭에 꽉 차도록 설정 */
-
+  font-size: 15px; /* 텍스트 크기를 16px로 설정 */
+  // color: #76abae;
   &:hover {
     background-color: #f1f1f1;
   }
@@ -121,7 +122,8 @@ export const LogoutButton = styled.button`
   border: none;
   text-align: center;
   cursor: pointer;
-
+  font-size: 15px; /* 텍스트 크기를 16px로 설정 */
+  color: #dc143c;
   &:hover {
     background-color: #f1f1f1;
   }
