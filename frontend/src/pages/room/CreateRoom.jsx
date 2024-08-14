@@ -135,7 +135,7 @@ const CreateRoom = ({ onSave, onClose, item }) => {
       />
       <TextField
         name='roomtopic'
-        label='방 주제을 입력하세요'
+        label='방 주제를 입력하세요'
         fullWidth
         margin='normal'
         onChange={onRoomInfoInput}
@@ -182,9 +182,8 @@ const CreateRoom = ({ onSave, onClose, item }) => {
       {showPassword && (
         <TextField
           name='roompw'
-          label='비밀번호'
+          label='비밀번호를 입력하세요'
           error={roomInfo.roompw === "" ? true : false }              
-        helperText="방 비밀번호를 입력하세요"
           sx={{ marginBottom: '10px' }}
           onChange={onRoomInfoInput}
           value={roomInfo.roompw}
