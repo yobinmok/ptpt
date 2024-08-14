@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { takeMyEvaluate } from '../../apis/room';
 import MultiRadarChart from '../organisms/myInfo/MultiRadarChart';
 import { Box, Typography, Paper, Divider } from '@mui/material';
+import { setEvaluations } from '../../store/actions/evaluationActions';
 
 const MyEvaluateContent = () => {
   const [myEvaluate, setMyEvaluate] = useState({
@@ -16,13 +17,15 @@ const MyEvaluateContent = () => {
   const [myComment, setMyComment] = useState([]);
   const studyRoomId = useSelector((state) => state.room.roomId);
   const userId = useSelector((state) => state.auth.user.oauthId);
-  const anonymity = useSelector((state) => state.room.isAnonymous)
+  const [isEval, setIsEval] = useState(false);
+  const anonymity = useSelector((state) => state.room.isAnonymous) // 익명 여부
   // oauth_id로 내 평가 호출해오기
   const getMyEval = async () => {
     try {
       const response = await takeMyEvaluate(studyRoomId, userId);
       console.log(response);
-      if (response) {
+      if (response && response.length > 0) {
+        setIsEval(false);
         // 익명 여부와 평가 길이
         const totalEvaluate = response.reduce(
           (acc, curr) => ({
@@ -57,6 +60,9 @@ const MyEvaluateContent = () => {
         console.log(myEvaluate);
         setMyComment(comments);
       }
+      else{
+        setIsEval(true);
+      }
     } catch (error) {
       console.log('get my evaluate error : ' + error);
     }
@@ -68,15 +74,16 @@ const MyEvaluateContent = () => {
 
   return (
     <div>
-      <Box sx={{ padding: 2 }}>
+      {!isEval ? (
+      <Box sx={{ width: '100%' }}>
         <Typography variant='h5' gutterBottom>
           평가 점수
         </Typography>
-        <Box sx={{ marginBottom: 5 }}>
+        <Box sx={{ marginBottom: 5, width: '100%', height:'200px' }}>
           <MultiRadarChart data={myEvaluate} />
         </Box>
         <Box>
-          <Typography variant='h6' gutterBottom>
+          <Typography variant='h5' gutterBottom>
             코멘트
           </Typography>
           {myComment.map((comment, index) => (
@@ -85,9 +92,13 @@ const MyEvaluateContent = () => {
               elevation={4}
               sx={{ padding: 2, marginBottom: 2 }}
             >
-                {anonymity==1 && ( // 1이 공개이므로, 이 때만 표시
+                {anonymity==1 ? ( // 1이 공개이므로, 이 때만 표시
                   <Typography variant='subtitle1' gutterBottom>
                     {comment.nickname}
+                  </Typography>
+                ):(
+                  <Typography variant='subtitle1' gutterBottom>
+                    익명
                   </Typography>
                 )}
 
@@ -97,6 +108,11 @@ const MyEvaluateContent = () => {
           ))}
         </Box>
       </Box>
+      ):(
+        <Typography variant='h5' gutterBottom>
+          아직 평가가 없습니다
+        </Typography>
+      )}
     </div>
   );
 };

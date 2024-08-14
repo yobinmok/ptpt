@@ -38,18 +38,11 @@ const EvaluateContent = ({}) => {
 
   // 익명 평가이면, master 공백으로 넘김
   useEffect(() => {
-    if (isAnonymous === 0) {
       setEvaluateInfo((prevInfo) => ({
         ...prevInfo,
         anonymity: isAnonymous,
         master: nickname,
       }));
-    } else {
-      setEvaluateInfo((prevInfo) => ({
-        ...prevInfo,
-        anonymity: isAnonymous,
-      }));
-    }
   }, [isAnonymous, participants]);
 
   const onEvaluateInfoInput = (e) => {

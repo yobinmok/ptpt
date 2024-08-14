@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import soloImage from '../../assets/images/solo.png';
 import { initPreset } from '../../store/actions/soloActions';
 import { useDispatch } from 'react-redux';
+
 // 버튼 컨테이너 스타일
-const ButtonContainer = styled.div`
+export const ButtonContainer = styled.div`
   position: relative;
   width: 45%; // 버튼 너비
   height: 500px; // 버튼 높이
@@ -20,15 +20,33 @@ const ButtonContainer = styled.div`
 `;
 
 // 이미지 스타일
-const Image = styled.img`
+export const Image = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 10px; // 모서리 둥글게
+  transition: opacity 0.3s ease;
+`;
+
+// 딤 효과를 위한 오버레이 스타일
+export const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3); // 검은색 반투명 오버레이
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+
+  // 마우스를 올렸을 때 오버레이를 더 어둡게 함
+  ${ButtonContainer}:hover & {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
 `;
 
 // 라벨 스타일
-const Label = styled.span`
+export const Label = styled.span`
   position: absolute;
   bottom: 10px;
   left: 50%;
@@ -36,7 +54,7 @@ const Label = styled.span`
   color: white;
   font-size: 24px;
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); // 그림자 효과
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); // 그림자 효과
 `;
 
 const SoloOptionButton = () => {
@@ -51,7 +69,8 @@ const SoloOptionButton = () => {
 
   return (
     <ButtonContainer onClick={handleClick}>
-      <Image src={soloImage} alt='혼자 하기' />
+      <Image src={'/img_solo.jpg'} alt='혼자 하기' />
+      <Overlay />
       <Label>혼자 하기</Label>
     </ButtonContainer>
   );
