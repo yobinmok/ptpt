@@ -33,14 +33,7 @@ export const fetchFeedback = (oauthId, page) => async (dispatch) => {
   try {
     const studyRoomResponse = await instance.post(
       '/studyRoom/search',
-      { oauthId },
-      {
-        params: {
-          page: page,
-          size: 10,
-          sort: 'studyRoomId',
-        },
-      }
+      { oauthId } // 페이징 파라미터 제거
     );
 
     const studyRooms = studyRoomResponse.data.content;
