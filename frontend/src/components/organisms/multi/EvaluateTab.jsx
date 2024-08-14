@@ -1,8 +1,7 @@
-import { Slider, Button } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import EvaluateContent from '../../molecules/EvaluateContent';
-import { Box, Container } from '@mui/material';
+import { Box, Container, Slider, Button, ButtonGroup } from '@mui/material';
 import MyEvaluateContent from '../../molecules/MyEvaluateContent';
 // import MyEvaluateContent from '../../molecules/MyEvaluateContent';
 
@@ -22,11 +21,17 @@ const EvaluteTab = () => {
 
   return (
     <div>
+      <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+    >
+      <ButtonGroup >
       <Button
         variant='contained'
         color='primary'
         onClick={onHandleClickMyEvaluateTab}
-        sx={{ marginRight: '8px', marginBottom: '10px' }}
+        sx={{ marginRight: '8px', marginBottom: '20px' }}
       >
         내평가
       </Button>
@@ -34,10 +39,12 @@ const EvaluteTab = () => {
         variant='contained'
         color='primary'
         onClick={onHandleClickEvaluateTab}
-        sx={{ marginRight: '8px', marginBottom: '10px' }}
+        sx={{ marginRight: '8px', marginBottom: '20px' }}
       >
         평가하기
       </Button>
+      </ButtonGroup>
+      </Box>
       {/* 평가항목은 따로 컴포넌트 화 */}
       <Container
         sx={{ height: '500px', width: '100%', flex: 2, overflowX: 'auto' }}
