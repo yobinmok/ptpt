@@ -85,40 +85,19 @@ const CreateRoom = ({ onSave, onClose, item }) => {
     // e.preventDefault();
     // 방 이름 유효성 검사
     if (roomInfo.roomname.length === 0) {
-      console.log('방 이름이 없습니다.');
-      alert('방 제목 설정 ');
+      alert('방 제목을 설정해주세요 ');
+      return;
+    } else if(roomInfo.roomtopic.length === 0) {
+      alert("방 주제를 설정해주세요")
+      return;
+    } else if(roomInfo.roomtime.length === 0) {
+      alert("시작 시간을 알려주세요")
       return;
     }
     // axios -> 방 생성 api 실행
     // const user = 789;
     const response = await createStudyRoom(userId, roomInfo);
     dispatch(saveMultiPreset(roomInfo));
-
-    // TODO: Multi Preset 저장 테스트 추후 삭제
-    // const multiPreset = {
-    //   studyRoomTitle: '방 제목 테스트',
-    //   studyRoomPw: 1234,
-    //   isPublic: true,
-    //   presentationTime: '오후 7:00',
-    //   subject: '방 주제 테스트!',
-    //   description: '방 설명',
-    //   anonymity: 0,
-    // };
-    // const param = {
-    //   oauthId: userId,
-    //   presetType: 'multi',
-    //   presetData: multiPreset,
-    // };
-    // savePreset(
-    //   param,
-    //   (res) => {
-    //     console.log(res);
-    //   },
-    //   (err) => {
-    //     console.log(err);
-    //   }
-    // );
-    // END TODO
     onHandleEnterRoom(response); // roomId를 props
   };
 
@@ -147,27 +126,24 @@ const CreateRoom = ({ onSave, onClose, item }) => {
     <>
       <TextField
         name='roomname'
-        label='방 이름'
+        label='방 제목을 입력하세요'
         fullWidth
         margin='normal'
-        error={roomInfo.roomname === "" ? true : false }              
-        helperText="방 제목을 입력하세요"
         onChange={onRoomInfoInput}
         value={roomInfo.roomname}
+        autoFocus
       />
       <TextField
         name='roomtopic'
-        label='방 주제'
+        label='방 주제를 입력하세요'
         fullWidth
         margin='normal'
-        error={roomInfo.roomtopic === "" ? true : false }              
-        helperText="방 주제을 입력하세요"
         onChange={onRoomInfoInput}
         value={roomInfo.roomtopic}
       />
       <TextField
         name='roomcomment'
-        label='방 설명'
+        label='방 설명을 입력해주세요'
         fullWidth
         margin='normal'
         onChange={onRoomInfoInput}
@@ -179,7 +155,6 @@ const CreateRoom = ({ onSave, onClose, item }) => {
         fullWidth
         type='datetime-local'
         margin='normal'
-        error={roomInfo.roomtime === "" ? true : false }              
         helperText="방 시간을 입력하세요"
         inputProps={{
           min: minDateTime.toISOString().slice(0, 16),
@@ -207,9 +182,8 @@ const CreateRoom = ({ onSave, onClose, item }) => {
       {showPassword && (
         <TextField
           name='roompw'
-          label='비밀번호'
+          label='비밀번호를 입력하세요'
           error={roomInfo.roompw === "" ? true : false }              
-        helperText="방 비밀번호를 입력하세요"
           sx={{ marginBottom: '10px' }}
           onChange={onRoomInfoInput}
           value={roomInfo.roompw}
