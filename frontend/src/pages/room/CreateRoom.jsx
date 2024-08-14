@@ -129,7 +129,6 @@ const CreateRoom = ({ onSave, onClose, item }) => {
         label='방 이름'
         fullWidth
         margin='normal'
-        error={roomInfo.roomname === "" ? true : false }
         helperText="방 제목을 입력하세요"
         onChange={onRoomInfoInput}
         value={roomInfo.roomname}
@@ -140,7 +139,6 @@ const CreateRoom = ({ onSave, onClose, item }) => {
         label='방 주제'
         fullWidth
         margin='normal'
-        error={roomInfo.roomtopic === "" ? true : false }
         helperText="방 주제을 입력하세요"
         onChange={onRoomInfoInput}
         value={roomInfo.roomtopic}
@@ -159,7 +157,6 @@ const CreateRoom = ({ onSave, onClose, item }) => {
         fullWidth
         type='datetime-local'
         margin='normal'
-        error={roomInfo.roomtime === "" ? true : false }
         helperText="방 시간을 입력하세요"
         inputProps={{
           min: minDateTime.toISOString().slice(0, 16),
