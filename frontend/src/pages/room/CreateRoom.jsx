@@ -126,26 +126,24 @@ const CreateRoom = ({ onSave, onClose, item }) => {
     <>
       <TextField
         name='roomname'
-        label='방 이름'
+        label='방 제목을 입력하세요'
         fullWidth
         margin='normal'
-        helperText="방 제목을 입력하세요"
         onChange={onRoomInfoInput}
         value={roomInfo.roomname}
         autoFocus
       />
       <TextField
         name='roomtopic'
-        label='방 주제'
+        label='방 주제을 입력하세요'
         fullWidth
         margin='normal'
-        helperText="방 주제을 입력하세요"
         onChange={onRoomInfoInput}
         value={roomInfo.roomtopic}
       />
       <TextField
         name='roomcomment'
-        label='방 설명'
+        label='방 설명을 입력해주세요'
         fullWidth
         margin='normal'
         onChange={onRoomInfoInput}
