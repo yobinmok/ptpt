@@ -28,6 +28,7 @@ export const fetchFeedbackDetail =
 
 export const fetchFeedback = (oauthId, page) => async (dispatch) => {
   dispatch({ type: FEEDBACK_REQUEST });
+  console.log('Using OAuth ID:', oauthId); // 요청 전에 oauthId 값을 확인합니다.
 
   try {
     const studyRoomResponse = await instance.post(
@@ -46,6 +47,7 @@ export const fetchFeedback = (oauthId, page) => async (dispatch) => {
     console.log('Study Room Response:', studyRooms);
 
     if (studyRooms.length === 0) {
+      console.log('No study rooms found for this user.');
       dispatch({ type: FEEDBACK_SUCCESS, payload: [] });
       return;
     }
@@ -76,7 +78,15 @@ export const fetchFeedback = (oauthId, page) => async (dispatch) => {
 
     dispatch({ type: FEEDBACK_SUCCESS, payload: allFeedback });
   } catch (error) {
+    if (error.response && error.response.status === 500) {
+      // 500 에러가 발생한 경우
+      dispatch({
+        type: FEEDBACK_FAILURE,
+        payload: '저장된 스터디룸이 없습니다.',
+      });
+    } else {
+      dispatch({ type: FEEDBACK_FAILURE, payload: error.message });
+    }
     console.error('Failed to fetch feedback:', error);
-    dispatch({ type: FEEDBACK_FAILURE, payload: error.message });
   }
 };
