@@ -101,6 +101,12 @@ public class EvaluationService {
         QEvaluation evaluation = QEvaluation.evaluation;
         QComment comment = QComment.comment;
 
+        return getFeedBackInfoResponses(feedBackSearchRequest, evaluation, comment, member);
+    }
+
+    private List<FeedBackInfoResponse> getFeedBackInfoResponses(FeedBackSearchRequest feedBackSearchRequest, QEvaluation evaluation, QComment comment, Member member) {
+        System.out.println("feedBackSearchRequest: " + feedBackSearchRequest);
+        System.out.println(feedBackSearchRequest.getStudyRoomId());
         return jpaQueryFactory.select(
                         Projections.bean(
                                 FeedBackInfoResponse.class,
@@ -119,10 +125,8 @@ public class EvaluationService {
                 ).from(evaluation)
                 .innerJoin(comment)
                 .on(evaluation.evaluationId.eq(comment.evaluation.evaluationId))
-                .where(evaluation.member.nickname.eq(member.getNickname()))
+                .where(evaluation.member.nickname.eq(member.getNickname()).and(evaluation.studyRoom.studyRoomId.eq(feedBackSearchRequest.getStudyRoomId())))
                 .fetch();
-
-
     }
 
     // 평가 삭제

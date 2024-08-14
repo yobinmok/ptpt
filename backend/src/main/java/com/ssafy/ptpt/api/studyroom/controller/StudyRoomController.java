@@ -1,5 +1,8 @@
 package com.ssafy.ptpt.api.studyroom.controller;
 
+import com.ssafy.ptpt.api.evaluation.request.FeedBackSearchRequest;
+import com.ssafy.ptpt.api.evaluation.response.FeedBackInfoResponse;
+import com.ssafy.ptpt.api.evaluation.service.EvaluationService;
 import com.ssafy.ptpt.api.member.request.MemberOauthIdRequest;
 import com.ssafy.ptpt.api.studyroom.request.*;
 import com.ssafy.ptpt.api.studyroom.response.StudyRoomInfoResponse;
@@ -30,6 +33,7 @@ public class StudyRoomController {
 
     private final StudyRoomService studyRoomService;
     private final MemberRepository memberRepository;
+    private final EvaluationService evaluationService;
 
     //방 생성
     @ApiResponses(value = {
@@ -183,4 +187,10 @@ public class StudyRoomController {
         return ResponseEntity.ok().build();
     }
 
+//    @PostMapping("/feedBack")
+//    @Operation(summary = "사용자 평가 조회")
+//    public ResponseEntity<List<FeedBackInfoResponse>> findStudyRoomMemberEvaluationByOauthId(@RequestBody @Valid FeedBackSearchRequest feedBackSearchRequest){
+//        List<FeedBackInfoResponse> feedBackInfoResponses = evaluationService.findFeedBackByStudyRoomIdAndOauthId(feedBackSearchRequest);
+//        return ResponseEntity.ok().body(feedBackInfoResponses);
+//    }
 }
