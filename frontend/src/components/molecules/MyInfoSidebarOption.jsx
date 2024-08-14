@@ -2,6 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
+const StyledNavLink = styled(NavLink)`
+  text-decoration: none;
+  color: black;
+`;
+
 const Option = styled.div`
   display: flex;
   align-items: center;
@@ -30,12 +35,15 @@ const Label = styled.span`
 
 const MyInfoSidebarOption = ({ to, icon, children }) => {
   return (
-    <NavLink to={to} className={({ isActive }) => (isActive ? 'active' : '')}>
+    <StyledNavLink
+      to={to}
+      className={({ isActive }) => (isActive ? 'active' : '')}
+    >
       <Option>
         <Icon>{icon}</Icon>
         <Label>{children}</Label>
       </Option>
-    </NavLink>
+    </StyledNavLink>
   );
 };
 

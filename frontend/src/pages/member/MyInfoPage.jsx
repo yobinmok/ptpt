@@ -1,3 +1,4 @@
+// MyInfoPage.js
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
@@ -6,20 +7,34 @@ import StatisticsPage from '../../components/organisms/myInfo/StatisticsPage';
 import SavedRoomsPage from '../../components/organisms/myInfo/SavedRoomsPage';
 import VoiceModelPage from '../../components/organisms/myInfo/VoiceModelPage';
 import FeedbackDetail from '../../components/organisms/myInfo/FeedbackDetail';
-import { useSelector } from 'react-redux';
+
 const Container = styled.div`
   display: flex;
-  padding: 0px 150px;
+  margin: 0px 150px;
+  margin-top: 30px; /* 상단 여백 추가 */
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
+
   @media (max-width: 1200px) {
-    padding: 0px 100px;
+    margin: 0px 100px;
   }
-
   @media (max-width: 768px) {
-    padding: 0px 50px;
+    margin: 0px 50px;
   }
-
   @media (max-width: 480px) {
-    padding: 0px 20px;
+    margin: 0px 20px;
+  }
+`;
+
+const WelcomeMessage = styled.div`
+  font-size: 18px;
+  line-height: 1.5;
+  color: #333;
+  text-align: center;
+  margin-top: 20px;
+
+  br {
+    margin-bottom: 10px;
   }
 `;
 
@@ -28,18 +43,11 @@ const MyInfoContent = styled.div`
   padding: 20px;
   background: #f9f9f9;
 `;
+
 const MyInfoPage = () => {
-  const user = useSelector((state) => state.auth.user);
-
-  // Null 체크 추가
-  const oauthId = user ? user.oauthId : 'Unknown';
-
-  console.log('MyInfoPage Rendered');
-  console.log('User:', user);
-  console.log('OAuth ID:', oauthId); // 콘솔 로그 추가
   return (
     <Container>
-      <MyInfoSidebar />
+      <MyInfoSidebar /> {/* 고정된 사이드바 */}
       <MyInfoContent>
         <Routes>
           <Route path='statistics' element={<StatisticsPage />} />
@@ -49,7 +57,15 @@ const MyInfoPage = () => {
           />
           <Route path='saved-rooms' element={<SavedRoomsPage />} />
           <Route path='voice-model' element={<VoiceModelPage />} />
-          <Route path='/' element={<div>Welcome to My Info</div>} />
+          <Route
+            path='/'
+            element={
+              <WelcomeMessage>
+                <h3>Welcome to My Info</h3>
+                <br /> 좌측 탭을 선택해주세요!
+              </WelcomeMessage>
+            }
+          />
         </Routes>
       </MyInfoContent>
     </Container>

@@ -7,7 +7,7 @@ const initialState = {
   editFlag: null,
   // 발표 관련
   isAnonymous: 0,
-  isStart: false, // false : 진행 전 혹은 종료?, true : 진행 중
+  isStart: false, // 참가자가 등록된 후 버튼 활성화를 위한 상태
   presentationTime: null,
   hostId: null,
   // 녹화관련

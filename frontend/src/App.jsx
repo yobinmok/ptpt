@@ -60,6 +60,12 @@ function App() {
       .find((row) => row.startsWith('Authorization='))
       ?.split('=')[1];
 
+    const logined = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith('logined='))
+      ?.split('=')[1];
+
+    console.log(logined);
     console.log('Extracted JWT Token:', token);
     if (token) {
       try {
@@ -92,7 +98,6 @@ function App() {
     //   dispatch(setAuth(token, user)); // 상태에 JWT 토큰과 사용자 정보 저장
     // }
 
-    console.log('@@@@@@');
     console.log(token, oauthId);
   }, [dispatch]);
 
@@ -115,10 +120,6 @@ function App() {
           <Route path='room/list' element={<RoomListPage />} />
           <Route path='/room/:roomId' element={<RoomDetail />} />
           <Route path='/test' element={<VoiceTestPage />} />
-          <Route
-            path='/myinfo/statistics/evaluation/feedBack/:roomId'
-            element={<FeedbackDetail />}
-          />{' '}
         </Route>
         {/* 피드백 상세 페이지 라우트 */}
       </Routes>

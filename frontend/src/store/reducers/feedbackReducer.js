@@ -6,7 +6,7 @@ import {
 
 const initialState = {
   loading: false,
-  feedback: [],
+  feedbackList: [], // 피드백 데이터를 저장하는 배열
   error: null,
 };
 
@@ -22,7 +22,8 @@ const feedbackReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        feedback: action.payload,
+        feedback: action.payload, // 데이터를 Redux 상태에 저장
+        feedbackList: action.payload, // 성공적으로 데이터를 가져왔을 때 상태 업데이트
       };
     case FEEDBACK_FAILURE:
       return {

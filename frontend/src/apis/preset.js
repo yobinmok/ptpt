@@ -6,6 +6,14 @@ function savePreset(param, success, fail) {
   axios.post('/preset', param).then(success).catch(fail);
 }
 
+function modifyPreset(presetId, param, success, fail) {
+  axios.put(`/preset/${presetId}`, param).then(success).catch(fail);
+}
+
+function deletePreset(presetId, success, fail) {
+  axios.delete(`/preset/${presetId}`).then(success).catch(fail);
+}
+
 async function getPresetList(param) {
   try {
     const response = await axios.post('/preset/search', param);
@@ -15,4 +23,4 @@ async function getPresetList(param) {
   }
 }
 
-export { savePreset, getPresetList };
+export { savePreset, modifyPreset, deletePreset, getPresetList };

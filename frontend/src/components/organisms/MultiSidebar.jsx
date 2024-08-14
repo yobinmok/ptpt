@@ -9,6 +9,8 @@ import useInterval from '../../util/useInterval';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useRef } from 'react';
+import MultiStartModal from '../molecules/MultiStartModal';
+import { isStartPresantation } from '../../store/actions/room';
 
 const MultiSidebar = ({ tabItem }) => {
   const dispatch = useDispatch();
@@ -16,6 +18,7 @@ const MultiSidebar = ({ tabItem }) => {
   const isSidebarOpen = useSelector((state) => state.room.isSidebarOpen);
   // 현재 시간을 저장하기 위함 -> Date library 이용
   const [realTime, setRealTime] = useState(new Date());
+  const [modalOpen, setModalOpen] = useState(false);
   const studyRoomId = useSelector((state) => state.room.roomId);
   const presentationTime = useSelector((state) => state.room.presentationTime);
   const participants = useSelector((state) => state.participant.participants);
@@ -26,22 +29,24 @@ const MultiSidebar = ({ tabItem }) => {
   // 시간 호출
   useEffect(() => {
     setRealTime(new Date());
-    hasExecuteRef.current = false;
   }, [presentationTime]);
+  
   useInterval(() => {
     setRealTime(new Date());
     if (
       !hasExecuteRef.current &&
-      realTime.getTime() - new Date(presentationTime).getTime() >= 0 &&
-      presentationTime
+      realTime.getTime() - new Date(presentationTime).getTime() >= 0
     ) {
-      // 시간이 지나면 api호출
-      if (hostNickname === nickname) {
-        const response = adminParticipants(studyRoomId, participants);
-      }
-      hasExecuteRef.current = true;
+      // 시간이 지나면 참가자 등록 modal 표시
+      if(hostNickname === nickname){
+        adminParticipants(studyRoomId, participants)
+    }
+    setModalOpen(true);
+    dispatch(isStartPresantation()); // 시작 시간이 되면 평가가 되도록 구현
+      hasExecuteRef.current = true; // default로 시간 지나면 검사 X
     }
   }, 5000); // 1초마다 확인
+
 
   // 탭 클릭 시 호출되는 핸들러
   const handleTabClick = (index) => {
@@ -69,6 +74,14 @@ const MultiSidebar = ({ tabItem }) => {
           isSelected={selectedTab === index}
         />
       ))}
+      {modalOpen && (
+        <MultiStartModal
+        open={modalOpen}
+        onClose={() => 
+          setModalOpen(false)
+        }
+        />
+      )}
     </Box>
   );
 };
