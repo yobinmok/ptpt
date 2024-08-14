@@ -52,7 +52,7 @@ const MyInfoPage = () => {
         <Routes>
           <Route path='statistics' element={<StatisticsPage />} />
           <Route
-            path='statistics/evaluation/feedBack/:roomId'
+            path='statistics/evaluation/feedBack/:studyRoomId'
             element={<FeedbackDetail />}
           />
           <Route path='saved-rooms' element={<SavedRoomsPage />} />
