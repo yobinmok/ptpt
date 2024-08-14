@@ -18,7 +18,7 @@ const MyEvaluateContent = () => {
   const studyRoomId = useSelector((state) => state.room.roomId);
   const userId = useSelector((state) => state.auth.user.oauthId);
   const [isEval, setIsEval] = useState(false);
-  const anonymity = useSelector((state) => state.room.isAnonymous) // 익명 여부
+  const anonymity = useSelector((state) => state.room.isAnonymous); // 익명 여부
   // oauth_id로 내 평가 호출해오기
   const getMyEval = async () => {
     try {
@@ -59,8 +59,7 @@ const MyEvaluateContent = () => {
         setMyEvaluate(averageEvaluate);
         console.log(myEvaluate);
         setMyComment(comments);
-      }
-      else{
+      } else {
         setIsEval(true);
       }
     } catch (error) {
@@ -75,43 +74,56 @@ const MyEvaluateContent = () => {
   return (
     <div>
       {!isEval ? (
-      <Box sx={{ width: '100%' }}>
-        <Typography variant='h5' gutterBottom>
-          평가 점수
-        </Typography>
-        <Box sx={{ marginBottom: 5, width: '100%', height:'200px' }}>
-          <MultiRadarChart data={myEvaluate} />
-        </Box>
-        <Box>
-          <Typography variant='h5' gutterBottom>
-            코멘트
-          </Typography>
-          {myComment.map((comment, index) => (
-            <Paper
-              key={index}
-              elevation={4}
-              sx={{ padding: 2, marginBottom: 2 }}
+        <Box sx={{ width: '100%' }}>
+          <div style={{ fontSize: '20px', fontWeight: 'bold' }}>평가 점수</div>
+          <Box sx={{ marginBottom: 5, width: '100%', height: '200px' }}>
+            <MultiRadarChart data={myEvaluate} />
+          </Box>
+          <Box>
+            <div
+              style={{
+                fontSize: '20px',
+                fontWeight: 'bold',
+                marginBottom: '10px',
+              }}
             >
-                {anonymity==1 ? ( // 1이 공개이므로, 이 때만 표시
+              코멘트
+            </div>
+
+            {myComment.map((comment, index) => (
+              <Paper
+                key={index}
+                elevation={4}
+                sx={{ padding: 2, marginBottom: 2 }}
+              >
+                {anonymity == 1 ? ( // 1이 공개이므로, 이 때만 표시
                   <Typography variant='subtitle1' gutterBottom>
                     {comment.nickname}
                   </Typography>
-                ):(
+                ) : (
                   <Typography variant='subtitle1' gutterBottom>
                     익명
                   </Typography>
                 )}
 
-              <Divider />
-              <Typography variant='body1'>{comment.commentContent}</Typography>
-            </Paper>
-          ))}
+                <Divider />
+                <Typography variant='body1'>
+                  {comment.commentContent}
+                </Typography>
+              </Paper>
+            ))}
+          </Box>
         </Box>
-      </Box>
-      ):(
-        <Typography variant='h5' gutterBottom>
+      ) : (
+        <div
+          style={{
+            fontSize: '20px',
+            fontWeight: 'bold',
+            marginBottom: '10px',
+          }}
+        >
           아직 평가가 없습니다
-        </Typography>
+        </div>
       )}
     </div>
   );
