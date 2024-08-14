@@ -13,17 +13,10 @@
       DialogContent,
       DialogActions,
       Button,
+      Typography
     } from '@mui/material';
     
     const MultiStartModal = ({ open, onClose }) => {
-        // const dispatch = useDispatch();
-        // const studyRoomId = useSelector((state) => state.room.roomId);
-        // const participants = useSelector((state) => state.participant.participants);
-        // const registParticipants = () => {
-        //     adminParticipants(studyRoomId, participants)
-        //     onClose()
-        // }
-
         useEffect(()=>{
           if(open){
             const timer = setTimeout(() => {
@@ -39,18 +32,36 @@
 
 
       return (
-        <Dialog open={open} onClose={onClose}> 
-          <DialogTitle>연습을 시작하겠습니까?</DialogTitle>
-          <DialogActions>
-          <Button
-            variant='contained'
-            color='secondary'
-            onClick={handleStart}
-          >
-            시작
-          </Button>
-          </DialogActions>
-        </Dialog>
+        // <Dialog open={open} onClose={onClose}> 
+        //   <DialogTitle>연습을 시작하겠습니까?</DialogTitle>
+        //   <DialogContent>3초뒤 자동으로 닫힙니다</DialogContent>
+        //   <DialogActions>
+        //   <Button
+        //     variant='contained'
+        //     color='secondary'
+        //     onClick={handleStart}
+        //   >
+        //     시작
+        //   </Button>
+        //   </DialogActions>
+        // </Dialog>
+        <Dialog open={open} onClose={onClose}>
+      <DialogTitle>
+        <Typography variant="h6">연습을 시작하겠습니까?</Typography>
+      </DialogTitle>
+      <DialogContent>
+        <Typography variant="body1">3초 뒤 자동으로 닫힙니다</Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleStart}
+        >
+          시작
+        </Button>
+      </DialogActions>
+    </Dialog>
       );
     };
     
