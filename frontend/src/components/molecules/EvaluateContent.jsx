@@ -1,12 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import CustomSlider from './CustomSlider';
-import { TextField, Box, Divider, Button, Tooltip } from '@mui/material';
+import { TextField, Box, Divider, Button } from '@mui/material';
 import { submitEvaluate } from '../../apis/room';
 import { useSelector, useDispatch } from 'react-redux';
 import CustomSelect from './CustomSelect';
 import { isParticipantsEval } from '../../store/actions/participant';
-import InfoIcon from '@mui/icons-material/InfoOutlined';
 import CustomTooltip from './CustomTooltip';
 
 const EvaluateContent = ({}) => {
@@ -83,7 +82,10 @@ const EvaluateContent = ({}) => {
         }}
       />
 
-      <CustomTooltip text='전달력' tooltipTitle='전달력 설명' />
+      <CustomTooltip
+        text='전달력'
+        tooltipTitle='발표 내용이 자연스럽고 명확하게 전달되는지를 평가합니다.'
+      />
       <CustomSlider
         defaultValue={50}
         step={5}
@@ -95,7 +97,10 @@ const EvaluateContent = ({}) => {
         }}
       />
 
-      <CustomTooltip text='표현력' tooltipTitle='전달력 설명' />
+      <CustomTooltip
+        text='표현력'
+        tooltipTitle='발표 내용을 얼마나 효과적으로 표현하는지를 평가합니다.'
+      />
       <CustomSlider
         defaultValue={50}
         step={5}
@@ -107,7 +112,10 @@ const EvaluateContent = ({}) => {
         }}
       />
 
-      <CustomTooltip text='적합성' tooltipTitle='전달력 설명' />
+      <CustomTooltip
+        text='적합성'
+        tooltipTitle='발표 주제에 부합하는 내용인지를 평가합니다.'
+      />
       <CustomSlider
         defaultValue={50}
         step={5}
@@ -119,7 +127,10 @@ const EvaluateContent = ({}) => {
         }}
       />
 
-      <CustomTooltip text='논리성' tooltipTitle='전달력 설명' />
+      <CustomTooltip
+        text='논리성'
+        tooltipTitle='발표 내용의 구조와 논리적 흐름을 평가합니다.'
+      />
       <CustomSlider
         defaultValue={50}
         step={5}
@@ -131,7 +142,10 @@ const EvaluateContent = ({}) => {
         }}
       />
 
-      <CustomTooltip text='준비성' tooltipTitle='전달력 설명' />
+      <CustomTooltip
+        text='준비성'
+        tooltipTitle='발표 준비가 얼마나 철저히 이루어졌는지를 평가합니다.'
+      />
       <CustomSlider
         defaultValue={50}
         step={5}

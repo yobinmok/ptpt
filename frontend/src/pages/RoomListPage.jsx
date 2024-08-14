@@ -8,41 +8,29 @@ import { loadRoomList } from '../apis/room';
 import {
   Button,
   TextField,
-  MenuItem,
-  FormControlLabel,
-  Checkbox,
   Typography,
   Pagination,
   Stack,
 } from '@mui/material';
 import CreateRoom from './room/CreateRoom';
 import Modal from '../components/molecules/RoomCreateModal';
-import { askGpt } from '../apis/gpt';
-import GptResponseModal from '../components/molecules/GPTModal';
+import { InputAdornment } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search'; // MUI 아이콘 사용 시
 
 const SearchContainer = styled.div`
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+`;
+
+const CenterContainer = styled.div`
+  display: flex;
   justify-content: center;
   align-items: center;
+  flex-grow: 1; /* 남은 공간을 차지하게 함 */
   gap: 16px;
-  margin-bottom: 20px;
-`;
-
-const ButtonContainer = styled.div`
-  position: relative;
-  width: 100%;
-  height: 60px; // 버튼 컨테이너의 높이
-  display: flex;
-  justify-content: end; // 기본적으로 버튼을 좌측 정렬
-`;
-
-const StyledButton = styled(Button)`
-  position: absolute;
-  right: 0; // 오른쪽 끝으로 위치
-  transform: translateX(
-    calc(0.67% - 106px)
-  ); // 중간에서 2/3 지점으로 이동 (16px은 버튼의 여백을 고려)
-  margin-right: 16px; // 버튼과 컨테이너 오른쪽 끝 사이의 간격
 `;
 
 const RecommendInnerWrapper = styled.div`
@@ -54,12 +42,6 @@ const RecommendInnerWrapper = styled.div`
   justify-content: center;
   width: 100%;
   background-color: ${(props) => props.backgroundcolor};
-`;
-
-const LiButton = styled.button`
-  background-color: transparent;
-  cursor: pointer;
-  color: cornflowerblue;
 `;
 
 const RoomListPage = () => {
@@ -108,99 +90,65 @@ const RoomListPage = () => {
     }
   };
 
-  const handleTopicChange = (topic) => {
-    setSelectedTopics((prevTopics) =>
-      prevTopics.includes(topic)
-        ? prevTopics.filter((t) => t !== topic)
-        : [...prevTopics, topic]
-    );
-  };
-
   const handleChange = async (event, value) => {
     setPage(value);
     const response = await loadRoomList(value - 1);
     setCurrentList([...response.data.content]);
   };
 
-  // gpt
-
-  const [gptOpen, setGptOpen] = useState(false);
-  const [gptRes, setGptRes] = useState('');
-  const handleGPT = async (question) => {
-    const response = await askGpt(question);
-    setGptOpen(true);
-    console.log(response);
-    setGptRes(response);
-  };
-
   return (
     <>
       <div>
-        <div>
-          <div>
-            <h1>방 목록</h1>
-          </div>
+        <div style={{ padding: '0px 230px' }}>
+          <h2>스터디룸 목록</h2>
           <SearchContainer>
-            <TextField
-              select
-              label='검색 유형'
-              value={searchType}
-              onChange={(e) => setSearchType(e.target.value)}
-              sx={{ minWidth: 120 }}
-            >
-              <MenuItem value='roomname'>제목</MenuItem>
-              <MenuItem value='subject'>주제</MenuItem>
-            </TextField>
-
-            {searchType === 'roomname' ? (
+            <CenterContainer>
               <TextField
-                label='검색어'
                 value={searchName}
+                size='small'
                 onChange={(e) => setSearchName(e.target.value)}
-                sx={{ minWidth: 300 }}
+                sx={{
+                  minWidth: 300,
+                  height: 40, // 높이 맞춤
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#c4c4c4', // 기본 border 색상
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#c4c4c4', // hover 시 border 색상
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#c4c4c4', // 포커스 시 border 색상
+                    },
+                  },
+                }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position='start'>
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
               />
-            ) : (
-              <div>
-                {['웹', 'ros', 'ai'].map((topic) => (
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={selectedTopics.includes(topic)}
-                        onChange={() => handleTopicChange(topic)}
-                      />
-                    }
-                    label={topic}
-                    key={topic}
-                  />
-                ))}
-              </div>
-            )}
 
-            <Button variant='contained' color='primary' onClick={handleSearch}>
-              검색
+              <Button
+                variant='contained'
+                color='secondary'
+                onClick={handleSearch}
+              >
+                검색
+              </Button>
+            </CenterContainer>
+
+            <Button
+              onClick={handleModalOpen}
+              variant='contained'
+              color='secondary'
+            >
+              방 만들기
             </Button>
-            <button onClick={() => handleGPT('한국 노래 추천해줘')}>
-              Ask GPT
-            </button>
-
-            {gptOpen && (
-              <GptResponseModal
-                open={gptOpen}
-                onClose={() => setGptOpen(false)}
-                response={gptResponse}
-              />
-            )}
           </SearchContainer>
           <div>
-            <ButtonContainer>
-              <StyledButton
-                onClick={handleModalOpen}
-                variant='contained'
-                color='primary'
-              >
-                방 생성하기
-              </StyledButton>
-            </ButtonContainer>
             <Modal
               open={isModalOpen}
               onClose={handleModalClose}
@@ -230,7 +178,6 @@ const RoomListPage = () => {
             justifyContent='center' // 가운데 정렬
             sx={{ marginTop: '20px', marginBottom: '20px' }}
           >
-            <Typography>Page: {page}</Typography>
             <Pagination count={totalPage} page={page} onChange={handleChange} />
           </Stack>
         </div>
