@@ -40,6 +40,14 @@ const StatisticsPage = () => {
     }
   }, [dispatch, oauthId, page]);
 
+  // evaluateQuantity: 0;
+  // statisticId: 1;
+  // totalDelivery: 0;
+  // totalExpression: 0;
+  // totalLogic: 0;
+  // totalPreparation: 0;
+  // totalSuitability: 0;
+
   useEffect(() => {
     console.log('Loading state:', loading);
     console.log('Statistics data:', statistics);
@@ -59,7 +67,7 @@ const StatisticsPage = () => {
 
   return (
     <div>
-      <h1>통계 페이지</h1>
+      <h2>통계</h2>
       <Divider />
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
@@ -72,7 +80,7 @@ const StatisticsPage = () => {
                 <RadarChart data={statistics} />
               </div>
             )}
-            <ExplanationSection />
+            <ExplanationSection data={statistics} />
           </ChartContainer>
         </div>
 
@@ -82,7 +90,7 @@ const StatisticsPage = () => {
         <FeedbackSection feedbackData={uniqueFeedback} />
 
         {/* 페이지네이션 버튼 추가 */}
-        <div
+        {/* <div
           style={{
             display: 'flex',
             justifyContent: 'center',
@@ -95,7 +103,7 @@ const StatisticsPage = () => {
           <button onClick={handleNextPage} disabled={feedback.length === 0}>
             Next
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );
