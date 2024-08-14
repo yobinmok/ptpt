@@ -29,6 +29,10 @@ const Text = styled.div`
 `;
 
 const ExplanationSection = ({ data }) => {
+  if (!data) {
+    return null;
+  }
+
   const explain = {
     totalDelivery: {
       name: '전달력',
