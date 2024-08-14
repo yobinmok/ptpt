@@ -148,8 +148,8 @@ const RoomListItem = ({
           <h2>제목 | {studyRoomTitle}</h2>
           <p>방 설명 | {description}</p>
           <p>방 주제 | {subject}</p>
-          <p>🕒 {presentationTime}</p>
-          {isPublic && (
+          <p>🕒 {presentationTime.replace('T', ' ')}</p>
+          {isPublic === 1 && (
             <div>
               <input
                 type='password'
@@ -171,7 +171,7 @@ const RoomListItem = ({
               onClick={handleJoin}
               disabled={isJoinDisabled}
               color='secondary'
-              sx={{ marginRight: '10px' }} // 버튼 사이 간격 설정
+              sx={{ marginRight: '20px' }} // 버튼 사이 간격 설정
             >
               참가
             </Button>

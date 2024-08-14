@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import togetherImage from '../../assets/images/together.png';
 import { ButtonContainer, Image, Label, Overlay } from './SoloOptionButton';
 
 const MultiOptionButton = () => {
