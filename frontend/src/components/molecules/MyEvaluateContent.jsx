@@ -5,6 +5,7 @@ import { takeMyEvaluate } from '../../apis/room';
 import MultiRadarChart from '../organisms/myInfo/MultiRadarChart';
 import { Box, Typography, Paper, Divider } from '@mui/material';
 import { setEvaluations } from '../../store/actions/evaluationActions';
+import FeedbackIcon from '@mui/icons-material/Feedback';
 
 const MyEvaluateContent = () => {
   const [myEvaluate, setMyEvaluate] = useState({
@@ -117,11 +118,21 @@ const MyEvaluateContent = () => {
       ) : (
         <div
           style={{
-            fontSize: '20px',
-            fontWeight: 'bold',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '16px',
             marginBottom: '10px',
+            flexDirection: 'column',
           }}
         >
+          <FeedbackIcon
+            style={{
+              fontSize: '60px', // 아이콘 크기 키우기
+              marginBottom: '10px',
+              color: '#B0B0B0', // 진한 회색 색상
+            }}
+          />
           아직 평가가 없습니다
         </div>
       )}

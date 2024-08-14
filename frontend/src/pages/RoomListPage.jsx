@@ -136,45 +136,15 @@ const RoomListPage = () => {
   return (
     <>
       <div>
-        <div>
-          <div>
-            <h1>방 목록</h1>
-          </div>
+        <div style={{ padding: '0px 230px' }}>
+          <h2>스터디룸 목록</h2>
           <SearchContainer>
             <TextField
-              select
-              label='검색 유형'
-              value={searchType}
-              onChange={(e) => setSearchType(e.target.value)}
-              sx={{ minWidth: 120 }}
-            >
-              <MenuItem value='roomname'>제목</MenuItem>
-              <MenuItem value='subject'>주제</MenuItem>
-            </TextField>
-
-            {searchType === 'roomname' ? (
-              <TextField
-                label='검색어'
-                value={searchName}
-                onChange={(e) => setSearchName(e.target.value)}
-                sx={{ minWidth: 300 }}
-              />
-            ) : (
-              <div>
-                {['웹', 'ros', 'ai'].map((topic) => (
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={selectedTopics.includes(topic)}
-                        onChange={() => handleTopicChange(topic)}
-                      />
-                    }
-                    label={topic}
-                    key={topic}
-                  />
-                ))}
-              </div>
-            )}
+              label='검색어'
+              value={searchName}
+              onChange={(e) => setSearchName(e.target.value)}
+              sx={{ minWidth: 300 }}
+            />
 
             <Button variant='contained' color='primary' onClick={handleSearch}>
               검색
