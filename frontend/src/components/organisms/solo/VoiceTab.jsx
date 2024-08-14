@@ -18,8 +18,8 @@ const VoiceTab = () => {
   const additionalSetting = [
     '여성(고음)',
     '여성(저음)',
-    '남성(고음)',
     '남성(저음)',
+    '남성(고음)',
   ];
   const param = {
     voice: {

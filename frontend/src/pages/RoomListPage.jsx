@@ -122,18 +122,16 @@ const RoomListPage = () => {
     setCurrentList([...response.data.content]);
   };
 
-
   // gpt
-  
 
   const [gptOpen, setGptOpen] = useState(false);
-  const [gptRes, setGptRes] = useState("")
+  const [gptRes, setGptRes] = useState('');
   const handleGPT = async (question) => {
     const response = await askGpt(question);
     setGptOpen(true);
     console.log(response);
     setGptRes(response);
-  }
+  };
 
   return (
     <>
@@ -181,15 +179,17 @@ const RoomListPage = () => {
             <Button variant='contained' color='primary' onClick={handleSearch}>
               검색
             </Button>
-            <button onClick={() => handleGPT('한국 노래 추천해줘')}>Ask GPT</button>
+            <button onClick={() => handleGPT('한국 노래 추천해줘')}>
+              Ask GPT
+            </button>
 
-      {gptOpen && (
-        <GptResponseModal
-          open={gptOpen}
-          onClose={() => setGptOpen(false)}
-          response={gptResponse}
-        />
-      )}
+            {gptOpen && (
+              <GptResponseModal
+                open={gptOpen}
+                onClose={() => setGptOpen(false)}
+                response={gptResponse}
+              />
+            )}
           </SearchContainer>
           <div>
             <ButtonContainer>
