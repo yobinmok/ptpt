@@ -12,7 +12,7 @@ export const Card = styled.div`
   ); // 카드가 3개씩 배치되도록 설정, 각 카드 간에 20px 간격 유지
   max-width: 300px; // 최대 너비 설정
   min-width: 250px; // 최소 너비 설정
-  height: 200px;
+  height: 240px;
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -24,7 +24,7 @@ export const Card = styled.div`
 
 export const CardImage = styled.div`
   position: relative;
-  height: 60%;
+  height: 45%;
   background-color: #f0f0f0;
   background-image: ${({ imageUrl }) => `url(${imageUrl})`}; // 배경 이미지 설정
   background-size: cover; // 이미지 크기 조정
@@ -35,14 +35,26 @@ export const CardContent = styled.div`
   padding: 16px;
 `;
 
-export const RoomTitle = styled.h2`
-  font-size: 18px;
+export const RoomTitle = styled.h3`
+  font-size: 17px;
   margin: 0 0 8px 0;
 `;
 
 export const RoomSubject = styled.p`
   font-size: 14px;
+  margin: 0px;
+  padding: 2px 0px;
+`;
+
+export const Tag = styled.p`
+  font-size: 14px;
   margin: 0;
+  border: 1px solid #97c5b1; /* 테두리 색상 */
+  background-color: #e4f1ec; /* 배경색 */
+  border-radius: 10px;
+  padding: 8px;
+  margin: 5px 0px;
+  display: inline-block;
 `;
 
 // 컴포넌트 정의
@@ -57,17 +69,19 @@ const MultiRoomListItem = ({ item, onClick }) => {
 
   return (
     <Card onClick={onClick}>
-      <CardImage imageUrl={imageUrl}>
-        {!item.isPublic ? (
-          <LockOpenIcon style={{ position: 'absolute', top: 8, right: 8 }} />
-        ) : (
-          <LockIcon style={{ position: 'absolute', top: 8, right: 8 }} />
-        )}
-      </CardImage>
+      <CardImage imageUrl={imageUrl} />
       <CardContent>
+        {!item.isPublic ? (
+          <LockOpenIcon style={{ position: 'absolute', top: 118, right: 8 }} />
+        ) : (
+          <LockIcon style={{ position: 'absolute', top: 118, right: 8 }} />
+        )}
         <RoomTitle>{item.studyRoomTitle}</RoomTitle>
-        <RoomSubject>{item.subject}</RoomSubject>
-        <RoomSubject>{item.presentationTime}</RoomSubject>
+        <RoomSubject>{item.description}</RoomSubject>
+        <RoomSubject style={{ color: '#757575' }}>
+          {item.presentationTime.replace('T', ' ')}
+        </RoomSubject>
+        <Tag>{item.subject}</Tag>
       </CardContent>
     </Card>
   );

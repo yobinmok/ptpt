@@ -19,6 +19,7 @@ import {
   CardContent,
   RoomTitle,
   RoomSubject,
+  Tag,
 } from './MultiRoomListItem';
 
 const RoomListItem = ({
@@ -113,17 +114,21 @@ const RoomListItem = ({
   return (
     <>
       <Card onClick={handleOpen}>
-        <CardImage imageUrl={imageUrl}>
-          {!isPublic ? (
-            <LockOpenIcon style={{ position: 'absolute', top: 8, right: 8 }} />
-          ) : (
-            <LockIcon style={{ position: 'absolute', top: 8, right: 8 }} />
-          )}
-        </CardImage>
+        <CardImage imageUrl={imageUrl} />
         <CardContent>
+          {!isPublic ? (
+            <LockOpenIcon
+              style={{ position: 'absolute', top: 118, right: 8 }}
+            />
+          ) : (
+            <LockIcon style={{ position: 'absolute', top: 118, right: 8 }} />
+          )}
           <RoomTitle>{studyRoomTitle}</RoomTitle>
-          <RoomSubject>{subject}</RoomSubject>
-          <RoomSubject>{presentationTime}</RoomSubject>
+          <RoomSubject>{description}</RoomSubject>
+          <RoomSubject style={{ color: '#757575' }}>
+            {presentationTime.replace('T', ' ')}
+          </RoomSubject>
+          <Tag>{subject}</Tag>
         </CardContent>
       </Card>
       <Modal open={showModal} onClose={handleClose}>
@@ -135,15 +140,15 @@ const RoomListItem = ({
             transform: 'translate(-50%, -50%)',
             width: 400,
             bgcolor: 'background.paper',
-            border: '2px solid #000',
             boxShadow: 24,
-            p: 4,
+            padding: '10px 20px',
+            borderRadius: '10px',
           }}
         >
-          <h2>{studyRoomTitle}</h2>
-          <p>{description}</p>
-          <p>{subject}</p>
-          <p>{presentationTime}</p>
+          <h2>제목 | {studyRoomTitle}</h2>
+          <p>방 설명 | {description}</p>
+          <p>방 주제 | {subject}</p>
+          <p>🕒 {presentationTime}</p>
           {isPublic && (
             <div>
               <input
@@ -154,16 +159,26 @@ const RoomListItem = ({
               />
             </div>
           )}
-          <Button
-            variant='contained'
-            onClick={handleJoin}
-            disabled={isJoinDisabled}
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              marginTop: '20px', // 버튼과 내용 사이 간격 추가
+            }}
           >
-            참가
-          </Button>
-          <Button variant='contained' onClick={handleClose}>
-            닫기
-          </Button>
+            <Button
+              variant='contained'
+              onClick={handleJoin}
+              disabled={isJoinDisabled}
+              color='secondary'
+              sx={{ marginRight: '10px' }} // 버튼 사이 간격 설정
+            >
+              참가
+            </Button>
+            <Button color='neutral' variant='contained' onClick={handleClose}>
+              닫기
+            </Button>
+          </Box>
         </Box>
       </Modal>
     </>
