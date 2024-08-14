@@ -62,9 +62,11 @@ public class StudyRoomController {
     })
     @PostMapping("/search")
     @Operation(summary = "사용자 스터디룸 조회", description = "프로필에서 사용자의 스터디룸을 확인할수 있습니다.")
-    public ResponseEntity<Page<StudyRoomInfoResponse>> findByOauthId(@RequestBody MemberOauthIdRequest MemberOauthIdRequest, Pageable pageable) {
-        Member member = memberRepository.findByOauthId(MemberOauthIdRequest.getOauthId());
+    public ResponseEntity<Page<StudyRoomInfoResponse>> findByOauthId(@RequestBody MemberOauthIdRequest memberOauthIdRequest, Pageable pageable) {
+        Member member = memberRepository.findByOauthId(memberOauthIdRequest.getOauthId());
+
         Page<StudyRoomInfoResponse> studyRoomInfoResponse = studyRoomService.findByMemberId(member.getMemberId(), pageable);
+
         return ResponseEntity.ok().body(studyRoomInfoResponse);
     }
 
