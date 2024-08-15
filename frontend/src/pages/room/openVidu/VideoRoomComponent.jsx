@@ -35,30 +35,30 @@ import {
   Typography,
 } from '@mui/material';
 
-const StyledLayoutBounds = styled.div`
-  background-color: rgba(0, 0, 0, 0.3);
-  display: flex;
-  flex-wrap: wrap;
-  right: 0;
-  height: 100%;
-  min-width: 100px !important;
-  width: 100%;
-  overflow-y: hidden;
-  background-size: cover;
-  background-repeat: no-repeat;
-`;
-
 // const StyledLayoutBounds = styled.div`
-//   display: grid;
-//   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-//   grid-gap: 10px;
-//   height: 100%;
-//   width: 100%;
 //   background-color: rgba(0, 0, 0, 0.3);
+//   display: flex;
+//   flex-wrap: wrap;
+//   right: 0;
+//   height: 100%;
+//   min-width: 100px !important;
+//   width: 80%;
 //   overflow-y: hidden;
 //   background-size: cover;
 //   background-repeat: no-repeat;
 // `;
+
+const StyledLayoutBounds = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 10px;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  overflow-y: hidden;
+  background-size: cover;
+  background-repeat: no-repeat;
+`;
 
 const StyledTool = styled.div`
   width: 100%,
@@ -650,9 +650,9 @@ class VideoRoomComponent extends Component {
 
     return (
       <div
-      style={{ height: '100vh', width: '100%', display: 'flex' }}
-      className='container'
-      id='container'
+      // style={{ height: '100vh', width: '100%', display: 'flex' }}
+      // className='container'
+      // id='container'
       >
         <ToolbarComponent2
           sessionId={mySessionId}
@@ -678,10 +678,12 @@ class VideoRoomComponent extends Component {
           showDialog={this.state.showExtensionDialog}
           cancelClicked={this.closeDialogExtension}
         />
-        {/* <StyledLayoutBounds id="layout"> */}
-        <StyledLayoutBounds id="layout" style={{ width: '100%', display: 'flex', overflow: 'hidden', }}
+        {/* <StyledLayoutBounds id="layout" className="bounds"> */}
+        <StyledLayoutBounds
+          id='layout'
+          style={{ height: '100vh', width: '100%', display: 'flex' }}
           className='container'
->
+        >
           {localUser !== undefined &&
             localUser.getStreamManager() !== undefined && (
               <div className='OT_root OT_publisher custom-class' id='localUser'>
@@ -714,9 +716,6 @@ class VideoRoomComponent extends Component {
         >
           <DialogTitle id='alert-dialog-title'>{'녹화 파일 URL'}</DialogTitle>
           <DialogContent>
-          <Typography variant='h6'>
-              해당 링크에 녹화된 영상이 있습니다
-            </Typography>
             <Typography variant='body1'>
               <a
                 href={this.state.fileUrl}
@@ -728,7 +727,7 @@ class VideoRoomComponent extends Component {
             </Typography>
           </DialogContent>
           <DialogActions>
-            <Button variant='contained' onClick={this.handleCloseModal} color='primary'>
+            <Button onClick={this.handleCloseModal} color='primary'>
               닫기
             </Button>
           </DialogActions>
