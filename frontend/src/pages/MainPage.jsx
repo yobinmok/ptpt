@@ -25,12 +25,13 @@ const MainPage = () => {
         <ProjectTextWrapper>
           <ProjectTitle>발표 연습, 이제 더 이상 걱정하지 마세요!</ProjectTitle>
           <ProjectDescription>
-            발표를 준비하면서 느꼈던 부담, 이제 AI가 함께합니다.
+            발표를 준비하면서 느꼈던 부담, 이제 PTPT가 함께합니다.
           </ProjectDescription>
           <ProjectDescription>
-            PTPT는 여러분의 스피치를 분석하고 개선점을 제안하여
-            <br />
-            완벽한 발표를 도울 것입니다.
+            PTPT는 여러분의 발표를 분석하고
+          </ProjectDescription>
+          <ProjectDescription>
+            개선점을 제안하여 완벽한 발표를 도울 것입니다.
           </ProjectDescription>
           <ProjectDescription>
             지금 바로 시작해서 자신감 있는 발표자가 되어보세요!
@@ -57,8 +58,10 @@ const MainPage = () => {
             혼자서도 언제 어디서나 발표 연습이 가능합니다.
           </ProjectDescription>
           <ProjectDescription>
-            AI가 제공하는 스크립트와 음성 분석 기능을 활용해, <br />
-            여러분의 발표를 완벽하게 다듬어보세요.
+            PTPT가 제공하는 스크립트와 음성 분석 기능을 활용해,
+          </ProjectDescription>
+          <ProjectDescription>
+            여러분의 발표를 실제와 같이 완벽하게 연습해보세요!
           </ProjectDescription>
           <ProjectDescription>
             스피치 톤, 속도, 표현력까지 세밀하게 조정할 수 있습니다.
@@ -84,14 +87,12 @@ const MainPage = () => {
           </ProjectDescription>
           <ProjectDescription>
             친구들과 함께, 또는 새로운 사람들과 스터디를 구성하여
-            <br /> 발표 연습을 진행해보세요.
           </ProjectDescription>
           <ProjectDescription>
-            서로의 발표를 평가하고, 피드백을 주고받으며 <br />더 나은 발표자가
-            될 수 있습니다.
+            실전과 같은 발표 연습을 진행하고 평가해보세요.
           </ProjectDescription>
           <ProjectDescription>
-            함께하면 더 즐겁고 효과적입니다.
+            피드백을 주고 받으며 더 나은 발표자가 되어봅시다!
           </ProjectDescription>
           <ProjectLink as={Link} to='/room/list'>
             같이 연습하기
