@@ -650,9 +650,9 @@ class VideoRoomComponent extends Component {
 
     return (
       <div
-      style={{ height: '100vh', width: '100%', display: 'flex' }}
-      className='container'
-      id='container'
+      // style={{ height: '100vh', width: '100%', display: 'flex' }}
+      // className='container'
+      // id='container'
       >
         <ToolbarComponent2
           sessionId={mySessionId}
@@ -716,9 +716,6 @@ class VideoRoomComponent extends Component {
         >
           <DialogTitle id='alert-dialog-title'>{'녹화 파일 URL'}</DialogTitle>
           <DialogContent>
-          <Typography variant='h6'>
-              해당 링크에 녹화된 영상이 있습니다
-            </Typography>
             <Typography variant='body1'>
               <a
                 href={this.state.fileUrl}

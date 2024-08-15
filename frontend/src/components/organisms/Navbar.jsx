@@ -21,8 +21,6 @@ import {
   LogoutButton,
   LogoImage,
   Letter,
-  letterVariants,
-  hoverVariants,
 } from '../styles/NavbarStyles';
 
 function Navbar() {
@@ -50,6 +48,9 @@ function Navbar() {
   // 드롭다운 토글
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
+  };
+  const closeDropdown = () => {
+    setDropdownOpen(false);
   };
 
   const text = 'Login';
@@ -84,10 +85,12 @@ function Navbar() {
                   transition={{ duration: 0.3 }}
                 />
               </DropdownButton>
-              <DropdownMenu $isOpen={isDropdownOpen}>
-                <DropdownItem to='/myinfo'>내 정보</DropdownItem>
-                <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
-              </DropdownMenu>
+              {isDropdownOpen && (
+                <DropdownMenu>
+                  <DropdownItem to='/myinfo'>내 정보</DropdownItem>
+                  <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
+                </DropdownMenu>
+              )}
             </DropdownContainer>
           </>
         ) : (

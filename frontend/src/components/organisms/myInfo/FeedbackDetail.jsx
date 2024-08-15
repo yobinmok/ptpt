@@ -2,109 +2,86 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFeedbackDetail } from '../../../store/actions/feedbackActions';
 import { useParams, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-
-const FeedbackDetailContainer = styled.div`
-  padding: 20px;
-  border: 1px solid #e0e0e0;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-  position: relative; /* 추가: 버튼을 오른쪽 끝에 배치하기 위해 사용 */
-`;
-
-const FeedbackItem = styled.div`
-  margin-bottom: 20px;
-`;
-
-const FeedbackTitle = styled.h3`
-  margin: 0;
-  font-size: 18px;
-`;
-
-const FeedbackComment = styled.p`
-  margin: 5px 0;
-`;
-
-const FeedbackScore = styled.p`
-  margin: 5px 0;
-  font-weight: bold;
-`;
-
-const AuthorLabel = styled.span`
-  background-color: #d9edf7;
-  color: #31708f;
-  padding: 3px 7px;
-  border-radius: 3px;
-  font-size: 12px;
-  margin-left: 10px;
-`;
-
-const BackButton = styled.button`
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  padding: 5px 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button } from '@mui/material';
+import { useTable } from 'react-table';
 
 const FeedbackDetail = () => {
-  const { studyRoomId } = useParams(); // URL에서 studyRoomId를 가져옴
+  const { studyRoomId } = useParams();
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // navigate 훅 추가
-  const feedbackDetail = useSelector((state) => state.feedback.feedback); // Redux 상태에서 데이터 가져오기
+  const navigate = useNavigate();
+  const feedbackDetail = useSelector((state) => state.feedback.feedback);
   const loading = useSelector((state) => state.feedback.loading);
   const error = useSelector((state) => state.feedback.error);
   const oauthId = useSelector((state) => state.auth.user.oauthId);
 
   useEffect(() => {
-    console.log('OAuth ID:', oauthId); // oauthId 확인
-    console.log('Study Room ID:', studyRoomId); // studyRoomId 확인
-
     if (oauthId && studyRoomId) {
       dispatch(fetchFeedbackDetail(oauthId, studyRoomId));
     }
   }, [dispatch, oauthId, studyRoomId]);
 
-  console.log('Feedback Detail data:', feedbackDetail); // 데이터를 확인하는 로그 추가
-
   const handleBackClick = () => {
-    navigate('/myinfo/statistics'); // 통계 페이지로 이동
+    navigate('/myinfo/statistics');
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  const columns = React.useMemo(
+    () => [
+      { Header: '작성자', accessor: 'nickname' },
+      { Header: '발표력', accessor: 'delivery' },
+      { Header: '표현력', accessor: 'expression' },
+      { Header: '논리성', accessor: 'logic' },
+      { Header: '준비성', accessor: 'preparation' },
+      { Header: '적합성', accessor: 'suitability' },
+      { Header: '코멘트', accessor: 'commentContent' },
+    ],
+    []
+  );
+
+  const data = React.useMemo(() => feedbackDetail || [], [feedbackDetail]);
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
+
+  if (loading) return <Typography>Loading...</Typography>;
+  if (error) return <Typography color="error">Error: {error}</Typography>;
 
   return (
-    <FeedbackDetailContainer>
-      <h2>피드백 상세</h2>
-      <BackButton onClick={handleBackClick}>뒤로</BackButton>
-      {feedbackDetail && feedbackDetail.length > 0 ? (
-        feedbackDetail.map((item, index) => (
-          <FeedbackItem key={index}>
-            <FeedbackTitle>
-              <AuthorLabel>작성자</AuthorLabel> {item.nickname}
-              {/* 작성자 라벨 추가 */}
-            </FeedbackTitle>
-            <FeedbackComment>코멘트: {item.commentContent}</FeedbackComment>
-            <FeedbackScore>발표력: {item.delivery}</FeedbackScore>
-            <FeedbackScore>표현력: {item.expression}</FeedbackScore>
-            <FeedbackScore>논리성: {item.logic}</FeedbackScore>
-            <FeedbackScore>준비성: {item.preparation}</FeedbackScore>
-            <FeedbackScore>적합성: {item.suitability}</FeedbackScore>
-          </FeedbackItem>
-        ))
-      ) : (
-        <p>피드백이 없습니다.</p>
-      )}
-    </FeedbackDetailContainer>
+    <Paper sx={{ padding: 2 }}>
+      <Typography variant="h5" gutterBottom>
+        피드백 상세
+      </Typography>
+      <Button variant="contained" color="primary" onClick={handleBackClick} sx={{ mb: 2 }}>
+        뒤로
+      </Button>
+      <TableContainer component={Paper}>
+        <Table {...getTableProps()}>
+          <TableHead>
+            {headerGroups.map(headerGroup => (
+              <TableRow key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                  <TableCell key={column.id} {...column.getHeaderProps()}>
+                    {column.render('Header')}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableHead>
+          <TableBody {...getTableBodyProps()}>
+            {rows.map(row => {
+              prepareRow(row);
+              return (
+                <TableRow key={row.id} {...row.getRowProps()}>
+                  {row.cells.map(cell => (
+                    <TableCell key={cell.column.id} {...cell.getCellProps()}>
+                      {cell.render('Cell')}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Paper>
   );
 };
 

@@ -23,38 +23,37 @@ export const ButtonContainer = styled.div`
 export const Image = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 10px; // 모서리 둥글게
   transition: opacity 0.3s ease;
 `;
 
-// 딤 효과를 위한 오버레이 스타일
 export const Overlay = styled.div`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.3); // 검은색 반투명 오버레이
+  background-color: rgba(0, 0, 0, 0.2); // 검은색 반투명 오버레이
   border-radius: 10px;
   transition: background-color 0.3s ease;
 
   // 마우스를 올렸을 때 오버레이를 더 어둡게 함
   ${ButtonContainer}:hover & {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.4);
   }
 `;
 
 // 라벨 스타일
 export const Label = styled.span`
   position: absolute;
-  bottom: 10px;
+  bottom: 15px;
   left: 50%;
   transform: translateX(-50%);
   color: white;
   font-size: 24px;
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); // 그림자 효과
+  // text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); // 그림자 효과
 `;
 
 const SoloOptionButton = () => {
@@ -69,7 +68,7 @@ const SoloOptionButton = () => {
 
   return (
     <ButtonContainer onClick={handleClick}>
-      <Image src={'/img_solo.jpg'} alt='혼자 하기' />
+      <Image src={'/solobutton.svg'} alt='혼자 하기' />
       <Overlay />
       <Label>혼자 하기</Label>
     </ButtonContainer>
