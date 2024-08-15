@@ -12,7 +12,7 @@ const MultiOptionButton = () => {
 
   return (
     <ButtonContainer onClick={handleClick}>
-      <Image src={'img_multi.webp'} alt='같이 하기' />
+      <Image src={'/multibutton.svg'} alt='같이 하기' />
       <Overlay />
       <Label>같이 하기</Label>
     </ButtonContainer>
