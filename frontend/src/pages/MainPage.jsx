@@ -38,7 +38,7 @@ const MainPage = () => {
           </ProjectDescription>
 
           <ProjectLink as={Link} to='/practice'>
-            서비스 알아보기
+            시작하기
           </ProjectLink>
         </ProjectTextWrapper>
       </Content>

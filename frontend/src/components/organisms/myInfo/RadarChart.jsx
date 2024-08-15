@@ -22,7 +22,7 @@ ChartJS.register(
 
 const RadarChart = ({ data }) => {
   const chartData = {
-    labels: ['발표력', '표현력', '논리력', '준비성', '적합성'],
+    labels: ['전달력', '표현력', '논리력', '준비성', '적합성'],
     datasets: [
       {
         label: '평균 점수',

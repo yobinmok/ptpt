@@ -37,18 +37,18 @@ export default function CustomOption({ participant }) {
       console.log('발표자 지정 호출');
       //   reportParticipants -> nickname
       // oauthId로 post할 수 없음 -> 신고자는 상대방의 oauthId를 알 수 없다
-      const response = assignationParticipants(studyRoomId, person);
+      assignationParticipants(studyRoomId, person);
     } else if (option === '신고') {
       console.log('신고');
       //assignationParticipants -> studyroomId, nickname
-      const response = reportParticipants(person);
+      reportParticipants(person);
     }
   };
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleClose = () => { 
     setAnchorEl(null);
   };
 

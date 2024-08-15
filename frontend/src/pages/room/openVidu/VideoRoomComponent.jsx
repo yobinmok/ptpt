@@ -716,6 +716,9 @@ class VideoRoomComponent extends Component {
         >
           <DialogTitle id='alert-dialog-title'>{'녹화 파일 URL'}</DialogTitle>
           <DialogContent>
+          <Typography variant='h6'>
+              해당 링크에 녹화된 영상이 있습니다
+            </Typography>
             <Typography variant='body1'>
               <a
                 href={this.state.fileUrl}
@@ -727,7 +730,7 @@ class VideoRoomComponent extends Component {
             </Typography>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleCloseModal} color='primary'>
+            <Button variant='contained' onClick={this.handleCloseModal} color='primary'>
               닫기
             </Button>
           </DialogActions>

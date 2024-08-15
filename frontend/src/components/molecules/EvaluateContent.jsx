@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import CustomSlider from './CustomSlider';
 import { TextField, Box, Divider, Button } from '@mui/material';
@@ -6,6 +6,7 @@ import { submitEvaluate } from '../../apis/room';
 import { useSelector, useDispatch } from 'react-redux';
 import CustomSelect from './CustomSelect';
 import { isParticipantsEval } from '../../store/actions/participant';
+import CustomTooltip from './CustomTooltip';
 
 const EvaluateContent = ({}) => {
   const [evaluateInfo, setEvaluateInfo] = useState({
@@ -38,18 +39,11 @@ const EvaluateContent = ({}) => {
 
   // 익명 평가이면, master 공백으로 넘김
   useEffect(() => {
-    if (isAnonymous === 0) {
-      setEvaluateInfo((prevInfo) => ({
-        ...prevInfo,
-        anonymity: isAnonymous,
-        master: nickname,
-      }));
-    } else {
-      setEvaluateInfo((prevInfo) => ({
-        ...prevInfo,
-        anonymity: isAnonymous,
-      }));
-    }
+    setEvaluateInfo((prevInfo) => ({
+      ...prevInfo,
+      anonymity: isAnonymous,
+      master: nickname,
+    }));
   }, [isAnonymous, participants]);
 
   const onEvaluateInfoInput = (e) => {
@@ -88,7 +82,10 @@ const EvaluateContent = ({}) => {
         }}
       />
 
-      <p>전달력</p>
+      <CustomTooltip
+        text='전달력'
+        tooltipTitle='발표 내용이 자연스럽고 명확하게 전달되는지를 평가합니다.'
+      />
       <CustomSlider
         defaultValue={50}
         step={5}
@@ -99,7 +96,11 @@ const EvaluateContent = ({}) => {
           evaluateInfo.delivery = newValue;
         }}
       />
-      <p>표현럭</p>
+
+      <CustomTooltip
+        text='표현력'
+        tooltipTitle='발표 내용을 얼마나 효과적으로 표현하는지를 평가합니다.'
+      />
       <CustomSlider
         defaultValue={50}
         step={5}
@@ -110,7 +111,11 @@ const EvaluateContent = ({}) => {
           evaluateInfo.expression = newValue;
         }}
       />
-      <p>적합성</p>
+
+      <CustomTooltip
+        text='적합성'
+        tooltipTitle='발표 주제에 부합하는 내용인지를 평가합니다.'
+      />
       <CustomSlider
         defaultValue={50}
         step={5}
@@ -121,7 +126,11 @@ const EvaluateContent = ({}) => {
           evaluateInfo.suitability = newValue;
         }}
       />
-      <p>논리성</p>
+
+      <CustomTooltip
+        text='논리성'
+        tooltipTitle='발표 내용의 구조와 논리적 흐름을 평가합니다.'
+      />
       <CustomSlider
         defaultValue={50}
         step={5}
@@ -132,7 +141,11 @@ const EvaluateContent = ({}) => {
           evaluateInfo.logic = newValue;
         }}
       />
-      <p>준비성</p>
+
+      <CustomTooltip
+        text='준비성'
+        tooltipTitle='발표 준비가 얼마나 철저히 이루어졌는지를 평가합니다.'
+      />
       <CustomSlider
         defaultValue={50}
         step={5}
@@ -144,8 +157,9 @@ const EvaluateContent = ({}) => {
         }}
       />
       <Divider style={{ margin: '20px 0px' }} />
-      <p>코멘트</p>
-
+      <div style={{ margin: '15px 0px', fontWeight: 'bold', fontSize: '17px' }}>
+        코멘트
+      </div>
       <TextField
         name='commentContent'
         label='Comment'
@@ -155,26 +169,34 @@ const EvaluateContent = ({}) => {
         onChange={onEvaluateInfoInput}
         value={evaluateInfo.commentContent}
       />
-      {evaluateParticipants.includes(evaluateInfo.slave) ? (
-        <Button
-          variant='contained'
-          color='primary'
-          disabled
-          sx={{ mt: '10px', marginRight: '8px' }}
-        >
-          평가 완료
-        </Button>
-      ) : (
-        <Button
-          variant='contained'
-          color='primary'
-          onClick={onHandleSubmit}
-          disabled={isStart===false}
-          sx={{ mt: '10px', marginRight: '8px' }}
-        >
-          평가 제출하기
-        </Button>
-      )}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center', // 가로 가운데 정렬
+          alignItems: 'center',
+        }}
+      >
+        {evaluateParticipants.includes(evaluateInfo.slave) ? (
+          <Button
+            variant='contained'
+            color='primary'
+            disabled
+            sx={{ mt: '10px', marginRight: '8px' }}
+          >
+            평가 완료
+          </Button>
+        ) : (
+          <Button
+            variant='contained'
+            color='secondary'
+            onClick={onHandleSubmit}
+            disabled={isStart === false}
+            sx={{ mt: '10px', marginRight: '8px' }}
+          >
+            평가 제출하기
+          </Button>
+        )}
+      </Box>
     </div>
   );
 };

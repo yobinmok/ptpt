@@ -19,7 +19,7 @@ const ParticipantsTab = () => {
   return (
     <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
       <List>
-        <ListItem secondaryAction={<CustomOption participant={nickname} />}>
+        <ListItem>
           {nickname === hostNickname ? (
             <ListItemText primary={`${nickname}(host)`} />
           ) : (
