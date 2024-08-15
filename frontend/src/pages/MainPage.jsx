@@ -37,7 +37,7 @@ const MainPage = () => {
             지금 바로 시작해서 자신감 있는 발표자가 되어보세요!
           </ProjectDescription>
 
-          <ProjectLink as={Link} to='/about'>
+          <ProjectLink as={Link} to='/practice'>
             서비스 알아보기
           </ProjectLink>
         </ProjectTextWrapper>
