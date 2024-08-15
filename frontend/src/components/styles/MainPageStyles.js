@@ -1,61 +1,12 @@
 import styled from 'styled-components';
-import ThreeDImage from '../../assets/images/section1.png';
 
 // 컨테이너 스타일 정의
 export const Container = styled.div`
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh; /* 고정된 길이 */
-  padding: 20px;
-  background: url(${ThreeDImage}) no-repeat center center fixed;
-  background-size: cover;
-`;
-
-// 소개 섹션 스타일
-export const IntroContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   width: 100%;
-  max-width: 1200px;
-  height: 100vh;
-  padding: 40px;
-  background: transparent;
-  border-radius: 10px;
-  opacity: 1;
-  text-align: center; /* 텍스트를 중앙 정렬 */
 `;
-
-// 콘텐츠 스타일 정의 (transient props 사용)
-export const Content = styled.div`
-  display: flex;
-  flex-direction: ${(props) =>
-    props.$reverse ? 'row-reverse' : 'row'}; /* $reverse prop에 따라 정렬 */
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 1200px;
-  margin-bottom: 60px;
-  padding: 40px;
-  background: transparent; /* 배경을 투명하게 설정 */
-  border-radius: 10px;
-  opacity: 1; /* 항상 보이게 설정 */
-  transition: opacity 1s ease-in-out;
-
-  /* 추가: $reverse가 true일 때 텍스트와 이미지 간의 마진 조정 */
-  ${(props) =>
-    props.$reverse &&
-    `
-      & > ${ProjectTextWrapper} {
-        padding-left: 0;
-        padding-right: 20px; /* 텍스트와 이미지 간의 여백 */
-      }
-    `}
-`;
-
 // 개별 프로젝트 카드를 위한 스타일 정의
 export const ProjectCard = styled.div`
   display: flex;
@@ -69,15 +20,45 @@ export const ProjectCard = styled.div`
     transform 0.3s ease-in-out,
     opacity 0.3s ease-in-out;
 `;
+
 // 프로젝트 텍스트 래퍼 스타일 정의
 export const ProjectTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center; /* 수평 중앙 정렬 */
-  text-align: center; /* 텍스트 자체도 가운데 정렬 */
-  width: 60%; /* 텍스트가 차지할 넓이 */
-  padding-left: 20px; /* 이미지와 텍스트 간의 여백 */
+  align-items: flex-start; /* 수평 정렬을 왼쪽으로 설정 */
+  text-align: left; /* 텍스트 자체도 왼쪽 정렬 */
+  width: 40%; /* 텍스트가 차지할 넓이 */
+  padding-left: 10px; /* 텍스트와 이미지 간의 여백을 줄임 */
+  margin-top: -400px; /* 텍스트를 위로 올림 */
+`;
+
+// 콘텐츠 스타일 정의
+export const Content = styled.div`
+  display: flex;
+  flex-direction: ${(props) => (props.$reverse ? 'row-reverse' : 'row')};
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1600px;
+  padding: 40px;
+  background-color: ${(props) => props.$backgroundColor || 'transparent'};
+  background-image: url(${(props) => props.background || 'none'});
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  border-radius: 10px;
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+  gap: 50px; /* 여기서 간격을 원하는 크기로 설정하세요 */
+
+  /* 이미지가 더 넓게 표시되도록 설정 */
+  & > ${ProjectCard} {
+    width: 55%; /* 이미지를 더 넓게 */
+  }
+  & > ${ProjectTextWrapper} {
+    width: 45%; /* 텍스트 영역을 약간 좁게 */
+  }
 `;
 
 // 프로젝트 이미지 스타일 정의
@@ -91,21 +72,20 @@ export const ProjectImage = styled.img`
 
 // 프로젝트 제목 및 설명 스타일 정의
 export const ProjectTitle = styled.h2`
-  margin: 0;
-  font-size: 24px;
+  margin: 0 0 20px 0; /* 아래쪽 간격을 더 넓히기 위해 margin-bottom을 조정 */
+  font-size: 32px; /* 텍스트 크기 키움 */
   color: #333;
 `;
 
 export const ProjectDescription = styled.p`
-  font-size: 16px;
+  font-size: 20px; /* 텍스트 크기 키움 */
   color: #777;
-  text-align: center;
+  margin-bottom: 10px; /* 문장 간의 간격을 줄이기 위해 margin 조정 */
 `;
 
-// 링크 버튼 스타일 정의
 export const ProjectLink = styled.a`
-  margin-top: 10px;
-  font-size: 16px;
+  margin-top: 20px; /* ProjectDescription과의 간격을 늘리기 위해 margin-top을 조정 */
+  font-size: 20px; /* 텍스트 크기 키움 */
   color: #007bff;
   text-decoration: none;
 

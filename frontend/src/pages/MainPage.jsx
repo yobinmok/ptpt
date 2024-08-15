@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   Container,
   Content,
@@ -8,59 +9,92 @@ import {
   ProjectDescription,
   ProjectLink,
   ProjectTextWrapper,
-  IntroContent,
 } from '../components/styles/MainPageStyles';
-import section2Image from '../assets/images/section2.jpg';
-import section3Image from '../assets/images/section3.jpg';
 
 const MainPage = () => {
   return (
     <Container>
       {/* Section 1 */}
-      <IntroContent>
-        <h1>Section 1 / 영상?</h1>
-        <h2>Welcome to Our Site</h2>
-        <p>Please log in to access more features.</p>
-      </IntroContent>
-
-      {/* Section 2 */}
-      <Content $isVisible={true}>
+      <Content $backgroundColor='#f0f4f8'>
         <ProjectCard>
           <ProjectImage
-            src={section2Image}
+            src='/backgroundImage.svg'
             alt='AI 음성 학습을 통한 발표 연습'
           />
         </ProjectCard>
         <ProjectTextWrapper>
-          <ProjectTitle>내 목소리로 완성하는 완벽한 발표</ProjectTitle>
+          <ProjectTitle>발표 연습, 이제 더 이상 걱정하지 마세요!</ProjectTitle>
           <ProjectDescription>
-            발표 준비, 이제 더 이상 혼자가 아닙니다. AI가 여러분의 목소리를
-            학습해, 보다 정확하고 자연스러운 발표를 도와드립니다. 스크립트를
-            업로드하고, AI가 제안하는 최적의 톤과 속도로 발표를 연습해보세요.
-            당신만의 스타일을 유지하면서도, 더 자신감 있는 발표를 완성할 수
-            있습니다.
+            발표를 준비하면서 느꼈던 부담, 이제 AI가 함께합니다.
           </ProjectDescription>
-          <ProjectLink href='#'>더 알아보기</ProjectLink>
+          <ProjectDescription>
+            PTPT는 여러분의 스피치를 분석하고 개선점을 제안하여 완벽한 발표를
+            도울 것입니다.
+          </ProjectDescription>
+          <ProjectDescription>
+            지금 바로 시작해서 자신감 있는 발표자가 되어보세요!
+          </ProjectDescription>
+
+          <ProjectLink as={Link} to='/about'>
+            서비스 알아보기
+          </ProjectLink>
+        </ProjectTextWrapper>
+      </Content>
+
+      {/* Section 2 */}
+      <Content $backgroundColor='#ffffff' $reverse={true}>
+        <ProjectCard>
+          <ProjectImage
+            src='/soloImage.svg'
+            alt='AI 음성 학습을 통한 발표 연습'
+            style={{ transform: 'scaleX(-1)' }} // 이 이미지만 좌우 반전
+          />
+        </ProjectCard>
+        <ProjectTextWrapper>
+          <ProjectTitle>혼자서도 완벽한 발표 연습</ProjectTitle>
+          <ProjectDescription>
+            혼자서도 언제 어디서나 발표 연습이 가능합니다.
+          </ProjectDescription>
+          <ProjectDescription>
+            AI가 제공하는 스크립트와 음성 분석 기능을 활용해, 여러분의 발표를
+            완벽하게 다듬어보세요.
+          </ProjectDescription>
+          <ProjectDescription>
+            스피치 톤, 속도, 표현력까지 세밀하게 조정할 수 있습니다.
+          </ProjectDescription>
+          <ProjectLink as={Link} to='/solo'>
+            혼자 연습하기
+          </ProjectLink>
         </ProjectTextWrapper>
       </Content>
 
       {/* Section 3 */}
-      <Content $isVisible={true} $reverse={true}>
+      <Content $backgroundColor='#f0f4f8'>
         <ProjectCard>
           <ProjectImage
-            src={section3Image}
+            src='/multiImage.svg'
             alt='AI와 함께하는 실전 같은 발표 연습'
           />
         </ProjectCard>
         <ProjectTextWrapper>
-          <ProjectTitle>모두가 놀랄 발표, AI로 준비하세요</ProjectTitle>
+          <ProjectTitle>함께하는 발표 연습, 더 효과적으로</ProjectTitle>
           <ProjectDescription>
-            중요한 발표를 앞두고 계신가요? AI가 제공하는 모범 답안을 통해 내
-            발표를 더욱 완벽하게 다듬어보세요. 다양한 음성 모델을 활용해 실제
-            발표와 유사한 상황을 시뮬레이션하고, 내 발표를 AI의 가이드와
-            비교해볼 수 있습니다. 이제, 실전에서도 자신 있게 발표하세요.
+            발표는 혼자 하는 것이 아닙니다.
           </ProjectDescription>
-          <ProjectLink href='#'>더 알아보기</ProjectLink>
+          <ProjectDescription>
+            친구들과 함께, 또는 새로운 사람들과 스터디를 구성하여 발표 연습을
+            진행해보세요.
+          </ProjectDescription>
+          <ProjectDescription>
+            서로의 발표를 평가하고, 피드백을 주고받으며 더 나은 발표자가 될 수
+            있습니다.
+          </ProjectDescription>
+          <ProjectDescription>
+            함께하면 더 즐겁고 효과적입니다.
+          </ProjectDescription>
+          <ProjectLink as={Link} to='/room/list'>
+            같이 연습하기
+          </ProjectLink>
         </ProjectTextWrapper>
       </Content>
     </Container>
