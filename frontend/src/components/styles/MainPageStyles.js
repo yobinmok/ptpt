@@ -2,52 +2,58 @@ import styled from 'styled-components';
 import ThreeDImage from '../../assets/images/section1.png';
 
 // 컨테이너 스타일 정의
-export const Container = styled.div.withConfig({
-  shouldForwardProp: (prop) => prop !== 'isAuthenticated',
-})`
+export const Container = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: ${(props) =>
-    props.isAuthenticated
-      ? '100vh'
-      : '300vh'}; /* 길이를 로그인 상태에 따라 설정 */
+  min-height: 100vh; /* 고정된 길이 */
   padding: 20px;
   background: url(${ThreeDImage}) no-repeat center center fixed;
   background-size: cover;
 `;
 
-// 흰색 그라디언트 오버레이 정의
-export const Overlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    180deg,
-    white 0%,
-    white 49px,
-    rgba(255, 255, 255, 0) 200px
-  );
-  pointer-events: none;
-`;
-
-// 콘텐츠 스타일 정의
-export const Content = styled.div.withConfig({
-  shouldForwardProp: (prop) => prop !== 'isVisible',
-})`
-  position: relative;
-  z-index: 1;
+// 소개 섹션 스타일
+export const IntroContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
+  max-width: 1200px;
   height: 100vh;
-  opacity: ${(props) => (props.isVisible ? 1 : 0)};
+  padding: 40px;
+  background: transparent;
+  border-radius: 10px;
+  opacity: 1;
+  text-align: center; /* 텍스트를 중앙 정렬 */
+`;
+
+// 콘텐츠 스타일 정의 (transient props 사용)
+export const Content = styled.div`
+  display: flex;
+  flex-direction: ${(props) =>
+    props.$reverse ? 'row-reverse' : 'row'}; /* $reverse prop에 따라 정렬 */
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 60px;
+  padding: 40px;
+  background: transparent; /* 배경을 투명하게 설정 */
+  border-radius: 10px;
+  opacity: 1; /* 항상 보이게 설정 */
   transition: opacity 1s ease-in-out;
+
+  /* 추가: $reverse가 true일 때 텍스트와 이미지 간의 마진 조정 */
+  ${(props) =>
+    props.$reverse &&
+    `
+      & > ${ProjectTextWrapper} {
+        padding-left: 0;
+        padding-right: 20px; /* 텍스트와 이미지 간의 여백 */
+      }
+    `}
 `;
 
 // 개별 프로젝트 카드를 위한 스타일 정의
@@ -55,21 +61,23 @@ export const ProjectCard = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(255, 255, 255, 0.8); /* 흰색 반투명 배경 */
-  padding: 20px;
+  background: transparent; /* 배경을 완전히 투명하게 설정 */
   margin: 20px 0;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 80%;
   max-width: 800px;
   transition:
     transform 0.3s ease-in-out,
     opacity 0.3s ease-in-out;
-
-  &:hover {
-    transform: translateY(-10px);
-    opacity: 0.9;
-  }
+`;
+// 프로젝트 텍스트 래퍼 스타일 정의
+export const ProjectTextWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* 수평 중앙 정렬 */
+  text-align: center; /* 텍스트 자체도 가운데 정렬 */
+  width: 60%; /* 텍스트가 차지할 넓이 */
+  padding-left: 20px; /* 이미지와 텍스트 간의 여백 */
 `;
 
 // 프로젝트 이미지 스타일 정의
@@ -78,6 +86,7 @@ export const ProjectImage = styled.img`
   border-radius: 10px;
   object-fit: cover;
   margin-bottom: 20px;
+  background: transparent; /* 이미지 배경을 투명하게 설정 */
 `;
 
 // 프로젝트 제목 및 설명 스타일 정의
