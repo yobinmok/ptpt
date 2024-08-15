@@ -42,7 +42,7 @@ const StyledLayoutBounds = styled.div`
   right: 0;
   height: 100%;
   min-width: 100px !important;
-  width: 80%;
+  width: 100%;
   overflow-y: hidden;
   background-size: cover;
   background-repeat: no-repeat;
@@ -678,8 +678,10 @@ class VideoRoomComponent extends Component {
           showDialog={this.state.showExtensionDialog}
           cancelClicked={this.closeDialogExtension}
         />
-        <StyledLayoutBounds id="layout" className="bounds">
-        {/* <StyledLayoutBounds> */}
+        {/* <StyledLayoutBounds id="layout"> */}
+        <StyledLayoutBounds id="layout" style={{ width: '100%', display: 'flex', overflow: 'hidden', }}
+          className='container'
+>
           {localUser !== undefined &&
             localUser.getStreamManager() !== undefined && (
               <div className='OT_root OT_publisher custom-class' id='localUser'>
