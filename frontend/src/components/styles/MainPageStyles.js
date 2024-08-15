@@ -40,7 +40,7 @@ export const Content = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: 1600px;
+  max-width: 1400px;
   padding: 40px;
   background-color: ${(props) => props.$backgroundColor || 'transparent'};
   background-image: url(${(props) => props.background || 'none'});
