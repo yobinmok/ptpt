@@ -10,7 +10,7 @@ export const StyledNavbar = styled.div`
   align-items: center;
   justify-content: space-between;
   background: white;
-  padding: 0 80px;
+  padding: 0 200px;
   position: fixed;
   top: 0;
   left: 0;
@@ -85,16 +85,15 @@ export const DropdownButton = styled.button`
 
 // 드롭다운 메뉴
 export const DropdownMenu = styled.div`
-  display: none;
   position: absolute;
   top: 110%; /* 프로필 이미지와 드롭다운 메뉴 사이에 공백 추가 */
   left: 50%;
-  transform: translateX(-50%); /* 드롭다운 메뉴를 프로필 사진의 중앙에 맞춤 */
+  transform: translateX(-50%);
   background-color: white;
   border: 1px solid #ddd;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
   z-index: 1;
-  width: 100px; /* 드롭다운 메뉴의 폭을 100px로 설정 */
+  width: 100px;
   border-radius: 5px;
   text-align: center;
 `;
@@ -106,7 +105,8 @@ export const DropdownItem = styled(Link)`
   text-decoration: none;
   display: block;
   width: 100%; /* 아이템이 드롭다운 메뉴의 폭에 꽉 차도록 설정 */
-
+  font-size: 15px; /* 텍스트 크기를 16px로 설정 */
+  // color: #76abae;
   &:hover {
     background-color: #f1f1f1;
   }
@@ -121,7 +121,8 @@ export const LogoutButton = styled.button`
   border: none;
   text-align: center;
   cursor: pointer;
-
+  font-size: 15px; /* 텍스트 크기를 16px로 설정 */
+  color: #dc143c;
   &:hover {
     background-color: #f1f1f1;
   }
