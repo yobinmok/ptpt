@@ -730,7 +730,7 @@ class VideoRoomComponent extends Component {
             </Typography>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleCloseModal} color='primary'>
+            <Button variant='contained' onClick={this.handleCloseModal} color='primary'>
               닫기
             </Button>
           </DialogActions>
