@@ -10,14 +10,16 @@ const Container = styled.div`
   margin: 20px 150px;
   box-sizing: border-box;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Adjust shadow as needed */
-  overflow: hidden; /* Ensure rounded corners are respected for child components */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
 `;
 
 // 좌측 이미지 스타일 정의
 const LeftSide = styled.div`
-  flex: 1; /* Takes up 50% of the width */
-  background-image: url('/img_multi.webp'); /* Replace with your image URL */
+  flex: 1;
+  padding-left: 50px;
+  background-color: rgba(0, 0, 0, 0.3); /* 반투명한 검은색 배경 */
+  background-image: url('/loginbutton.svg');
   background-size: cover;
   background-position: center;
   border-top-left-radius: 10px;
@@ -26,7 +28,7 @@ const LeftSide = styled.div`
 
 // 우측 콘텐츠 스타일 정의
 const RightSide = styled.div`
-  flex: 1; /* Takes up 50% of the width */
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;

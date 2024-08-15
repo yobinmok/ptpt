@@ -29,7 +29,7 @@ export const ProjectTextWrapper = styled.div`
   align-items: flex-start; /* 수평 정렬을 왼쪽으로 설정 */
   text-align: left; /* 텍스트 자체도 왼쪽 정렬 */
   width: 40%; /* 텍스트가 차지할 넓이 */
-  padding-left: 10px; /* 텍스트와 이미지 간의 여백을 줄임 */
+  padding: 0px 20px; /* 텍스트와 이미지 간의 여백을 줄임 */
   margin-top: -400px; /* 텍스트를 위로 올림 */
 `;
 
@@ -41,7 +41,8 @@ export const Content = styled.div`
   justify-content: space-between;
   width: 100%;
   max-width: 1600px;
-  padding: 40px;
+  padding: 30px; /* 패딩 추가로 내부 여백 확보 */
+  box-sizing: border-box; /* 패딩과 너비를 포함하여 크기 계산 */
   background-color: ${(props) => props.$backgroundColor || 'transparent'};
   background-image: url(${(props) => props.background || 'none'});
   background-repeat: no-repeat;
@@ -50,17 +51,15 @@ export const Content = styled.div`
   border-radius: 10px;
   opacity: 1;
   transition: opacity 1s ease-in-out;
-  gap: 50px; /* 여기서 간격을 원하는 크기로 설정하세요 */
+  gap: 20px; /* 간격을 줄임 */
 
-  /* 이미지가 더 넓게 표시되도록 설정 */
   & > ${ProjectCard} {
-    width: 55%; /* 이미지를 더 넓게 */
+    width: 55%;
   }
   & > ${ProjectTextWrapper} {
-    width: 45%; /* 텍스트 영역을 약간 좁게 */
+    width: 45%;
   }
 `;
-
 // 프로젝트 이미지 스타일 정의
 export const ProjectImage = styled.img`
   width: 100%;
